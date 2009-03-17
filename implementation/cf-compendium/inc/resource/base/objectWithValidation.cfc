@@ -10,13 +10,15 @@
 		<!--- First Name --->
 		<cfset attr = {
 				attribute = 'firstName',
-				title = 'First Name',
 				validation = {
 					minLength = 1
 				}
 			} />
 		
 		<cfset addAttribute(argumentCollection = attr) />
+		
+		<!--- Set the bundle information for translation --->
+		<cfset setI18NBundle('i18n/cf-compendium/inc/resource/base', 'objectWithValidation') />
 		
 		<cfreturn this />
 	</cffunction>

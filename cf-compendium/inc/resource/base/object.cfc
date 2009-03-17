@@ -12,10 +12,16 @@
 		<cfargument name="i18n" type="component" required="true" />
 		<cfargument name="locale" type="string" default="en_US" />
 		
-		<cfset variables.i18n = arguments.i18n />
-		<cfset variables.locale = arguments.locale />
 		<cfset variables.instance = {} />
 		<cfset variables.attributes = {} />
+		
+		<cfset variables.i18n = {
+				i18n = arguments.i18n,
+				locale = arguments.locale,
+				bundlePath = 'cf-compendium/i18n/resource/base',
+				bundleName = 'object'
+			} />
+		
 		<cfset variables.validation = {
 				bundlePath = 'cf-compendium/i18n/resource/utility',
 				bundleName = 'validation',
@@ -30,12 +36,10 @@
 	--->
 	<cffunction name="addAttribute" access="public" returntype="void" output="false">
 		<cfargument name="attribute" type="string" required="true" />
-		<cfargument name="title" type="string" required="true" />
 		<cfargument name="defaultValue" type="any" default="" />
 		<cfargument name="validation" type="struct" default="#structNew()#" />
 		
 		<cfset variables.attributes[arguments.attribute] = {
-				title = arguments.title,
 				defaultValue = arguments.defaultValue,
 				validation = arguments.validation
 			} />
@@ -338,13 +342,18 @@
 				<cfif structKeyExists(variables.attributes, attribute) AND NOT structIsEmpty(variables.attributes[attribute].validation)>
 					<!--- Make sure that we have a validator object --->
 					<cfif NOT structKeyExists(variables, 'validator')>
-						<cfset variables.validator = variables.i18n.getValidation(variables.locale, variables.validation.bundlePath, variables.validation.bundleName, variables.validation.componentPath) />
+						<cfset variables.validator = variables.i18n.i18n.getValidation(variables.i18n.locale, variables.validation.bundlePath, variables.validation.bundleName, variables.validation.componentPath) />
+					</cfif>
+					
+					<!--- Make sure that we have a bundle object --->
+					<cfif NOT structKeyExists(variables.i18n, 'bundle')>
+						<cfset variables.i18n.bundle = variables.i18n.i18n.getResourceBundle(variables.i18n.bundlePath, variables.i18n.bundleName, variables.i18n.locale) />
 					</cfif>
 					
 					<!--- Try to validate with each of the specified tests against the validation object --->
 					<cfloop list="#structKeyList(variables.attributes[attribute].validation)#" index="i">
 						<cfinvoke component="#variables.validator#" method="#i#">
-							<cfinvokeargument name="title" value="#variables.attributes[attribute].title#" />
+							<cfinvokeargument name="title" value="#variables.i18n.bundle.getValue(attribute)#" />
 							<cfinvokeargument name="value" value="#arguments.missingMethodArguments[1]#" />
 							<cfinvokeargument name="extra" value="#variables.attributes[attribute].validation[i]#" />
 						</cfinvoke>
@@ -453,5 +462,16 @@
 		</cfswitch>
 		
 		<cfreturn output />
+	</cffunction>
+	
+	<!---
+		Used to set the bundle information for the object
+	--->
+	<cffunction name="setI18NBundle" access="public" returntype="void" output="false">
+		<cfargument name="bundlePath" type="string" required="true" />
+		<cfargument name="bundleName" type="string" required="true" />
+		
+		<cfset variables.i18n.bundlePath = arguments.bundlePath />
+		<cfset variables.i18n.bundleName = arguments.bundleName />
 	</cffunction>
 </cfcomponent>

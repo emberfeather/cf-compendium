@@ -99,9 +99,9 @@
 	--->
 	<cffunction name="getValidation" access="public" returntype="component" output="false">
 		<cfargument name="locale" type="string" default="en_US" />
-		<cfargument name="validationBundlePath" type="string" default="cf-compendium/i18n/resource/utility" />
-		<cfargument name="validationBundleName" type="string" default="validation" />
-		<cfargument name="validationComponentPath" type="string" default="cf-compendium.inc.resource.utility.validation" />
+		<cfargument name="bundlePath" type="string" default="cf-compendium/i18n/resource/utility" />
+		<cfargument name="bundleName" type="string" default="validation" />
+		<cfargument name="componentPath" type="string" default="cf-compendium.inc.resource.utility.validation" />
 		
 		<cfset var bundle = '' />
 		<cfset var format = '' />
@@ -110,16 +110,16 @@
 		<cfif NOT structKeyExists(variables.validators, arguments.locale)>
 			<cfset variables.validators[arguments.locale] = {} />
 			
-			<cfif NOT structKeyExists(variables.validators[arguments.locale], arguments.validationComponentPath)>
+			<cfif NOT structKeyExists(variables.validators[arguments.locale], arguments.componentPath)>
 				<!--- Grab the required args for a validation object --->
-				<cfset bundle = this.getResourceBundle(validationBundlePath, arguments.validationBundleName, arguments.locale) />
+				<cfset bundle = this.getResourceBundle(bundlePath, arguments.bundleName, arguments.locale) />
 				<cfset format = this.getMessageFormat(arguments.locale) />
 				
 				<!--- Create the validator object --->
-				<cfset variables.validators[arguments.locale][arguments.validationComponentPath] = createObject('component', arguments.validationComponentPath).init(bundle, format) />
+				<cfset variables.validators[arguments.locale][arguments.componentPath] = createObject('component', arguments.componentPath).init(bundle, format) />
 			</cfif>
 		</cfif>
 		
-		<cfreturn variables.validators[arguments.locale][arguments.validationComponentPath] />
+		<cfreturn variables.validators[arguments.locale][arguments.componentPath] />
 	</cffunction>
 </cfcomponent>
