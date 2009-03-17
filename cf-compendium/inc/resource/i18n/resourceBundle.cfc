@@ -13,7 +13,7 @@
 		<cfset var bundleResource = '' />
 		
 		<!--- Create object for extending --->
-		<cfset variables.theExtender = createObject('component', 'common.inc.resource.utility.extend').init() />
+		<cfset variables.theExtender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		
 		<!--- Read in the bundle --->
 		<cfset bundleResource = this.read( argumentCollection = arguments ) />

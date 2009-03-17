@@ -55,6 +55,24 @@
 	</cffunction>
 	
 	<!---
+		Tests if the value given is not under the min length
+	--->
+	<cffunction name="minLength" access="public" returntype="void" output="false">
+		<cfargument name="title" type="string" required="true" />
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="length" type="numeric" required="true" />
+		
+		<cfset var message = '' />
+		
+		<cfif len(arguments.value) LT arguments.length>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.theResourceBundle.getValue('validation.maxLength') />
+			
+			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title, arguments.length )#" />
+		</cfif>
+	</cffunction>
+	
+	<!---
 		Tests if the value given is not empty
 	--->
 	<cffunction name="notEmpty" access="public" returntype="void" output="false">

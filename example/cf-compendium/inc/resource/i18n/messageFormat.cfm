@@ -1,6 +1,6 @@
 <h1>Message Format Example</h1>
 
-<cfset theMessageFormatter = createObject('component', 'common.inc.resource.i18n.messageFormat').init() />
+<cfset theMessageFormatter = createObject('component', 'cf-compendium.inc.resource.i18n.messageFormat').init() />
 
 <cfset message = 'On {1,date,full} at {1,time,medium}, I left {2} for the {3}. I took {4,number,currency} with me. Rounded number: {4,number,integer}' />
 <cfset replacement1 = now() />

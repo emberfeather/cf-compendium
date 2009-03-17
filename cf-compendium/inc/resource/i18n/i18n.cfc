@@ -31,7 +31,7 @@
 		
 		<!--- Check if we already have one for the locale requested --->
 		<cfif NOT structKeyExists(variables.formatters, arguments.locale)>
-			<cfset variables.formatters[arguments.locale] = createObject('component', 'common.inc.resource.i18n.messageFormat').init(arguments.locale) />
+			<cfset variables.formatters[arguments.locale] = createObject('component', 'cf-compendium.inc.resource.i18n.messageFormat').init(arguments.locale) />
 		</cfif>
 		
 		<cfreturn variables.formatters[arguments.locale] />
@@ -88,7 +88,7 @@
 		<!--- Check if we already have a place for the bundle locale --->
 		<cfif NOT structKeyExists(variables.bundles[arguments.path][arguments.bundleName], arguments.bundleLocale)>
 			<!--- Create the bundle --->
-			<cfset variables.bundles[arguments.path][arguments.bundleName][arguments.bundleLocale] = createObject('component', 'common.inc.resource.i18n.resourceBundle').init(variables.baseDirectory & arguments.path, arguments.bundleName, arguments.bundleLocale) />
+			<cfset variables.bundles[arguments.path][arguments.bundleName][arguments.bundleLocale] = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init(variables.baseDirectory & arguments.path, arguments.bundleName, arguments.bundleLocale) />
 		</cfif>
 		
 		<cfreturn variables.bundles[arguments.path][arguments.bundleName][arguments.bundleLocale] />
@@ -110,7 +110,7 @@
 			<cfset theFormat = this.getMessageFormat(arguments.locale) />
 			
 			<!--- Create the validator object --->
-			<cfset variables.validators[arguments.locale] = createObject('component', 'common.inc.resource.utility.validation').init(theBundle, theFormat) />
+			<cfset variables.validators[arguments.locale] = createObject('component', 'cf-compendium.inc.resource.utility.validation').init(theBundle, theFormat) />
 		</cfif>
 		
 		<cfreturn variables.validators[arguments.locale] />

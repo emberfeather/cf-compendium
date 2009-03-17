@@ -4,7 +4,7 @@
 <cfset bundle = 'resourceBundle' />
 <cfset locale = 'en_US' />
 
-<cfset theResourceBundle = createObject('component', 'common.inc.resource.i18n.resourceBundle') />
+<cfset theResourceBundle = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle') />
 
 <h2>English</h2>
 

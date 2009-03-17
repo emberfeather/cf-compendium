@@ -9,15 +9,28 @@
 		The basic init function 
 	--->
 	<cffunction name="init" access="public" returntype="component" output="false">
-		<cfargument name="theResourceBundle" type="component" required="true" />
-		<cfargument name="theValidation" type="component" required="true" />
-		
 		<cfset variables.instance = {} />
-		
-		<cfset variables.theResourceBundle = arguments.theResourceBundle />
-		<cfset variables.theValidation = arguments.theValidation />
+		<cfset variables.attributes = {} />
 		
 		<cfreturn this />
+	</cffunction>
+	
+	<!---
+		Used to add an attribute to the object with it's meta information
+	--->
+	<cffunction name="addAttribute" access="public" returntype="void" output="false">
+		<cfargument name="attribute" type="string" required="true" />
+		<cfargument name="title" type="string" required="true" />
+		<cfargument name="defaultValue" type="any" default="" />
+		<cfargument name="validation" type="struct" default="#structNew()#" />
+		
+		<cfset variables.attributes[arguments.attribute] = {
+				title = arguments.title,
+				defaultValue = arguments.defaultValue,
+				validation = arguments.validation
+			} />
+		
+		<cfset variables.instance[arguments.attribute] = arguments.defaultValue />
 	</cffunction>
 	
 	<!---
@@ -36,7 +49,7 @@
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var exists = '' />
-		<cfset var messages = '' />
+		<cfset var messages = [] />
 		
 		<!--- Figure out the type --->
 		<cfif isXML(arguments.input)>
@@ -202,7 +215,7 @@
 		<cfset var result = '' />
 		
 		<!--- Do a regex on the name --->
-		<cfset result = reFindNoCase('^(get|set|addUnique|add|length)(.+)', arguments.missingMethodName, 1, true) />
+		<cfset result = reFindNoCase('^(get|set|addUnique|add|length|reset)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
 		<cfif NOT result.pos[1]>
@@ -245,6 +258,7 @@
 					</cfif>
 				</cfloop>
 			</cfcase>
+			
 			<cfcase value="get">
 				<cfset result = reFindNoCase('(.+)By(.*)', attribute, 1, true) />
 				
@@ -294,6 +308,7 @@
 					<cfreturn result />
 				</cfif>
 			</cfcase>
+			
 			<cfcase value="length">
 				<cfif isArray(variables.instance[attribute])>
 					<cfreturn arrayLen(variables.instance[attribute]) />
@@ -303,6 +318,11 @@
 					<cfreturn len(variables.instance[attribute]) />
 				</cfif>
 			</cfcase>
+			
+			<cfcase value="reset">
+				<cfset variables.instance[attribute] = [] />
+			</cfcase>
+			
 			<cfcase value="set">
 				<cfset variables.instance[attribute] = arguments.missingMethodArguments[1] />
 			</cfcase>

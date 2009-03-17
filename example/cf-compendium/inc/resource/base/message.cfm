@@ -1,72 +1,85 @@
 <h1>Message Examples</h1>
 <cfset theMessage = createObject('component', 'cf-compendium.inc.resource.base.message').init() />
 
-<h2>add('message')</h2>
+<h2>addMessages('message')</h2>
 
 <p>
 	Used to add a message.
 </p>
 
 <div>
-	<cfset theMessage.add('testing') />
-	add('testing')<br />
+	<cfset theMessage.addMessages('testing') />
+	addMessages('testing')<br />
 	
-	<cfset theMessage.add('testing again') />
-	add('testing again')<br />
+	<cfset theMessage.addMessages('testing again') />
+	addMessages('testing again')<br />
 	
 	messages:
-	<cfdump var="#theMessage.get()#" />
+	<cfdump var="#theMessage.getMessages()#" />
 </div>
 
-<h2>get()</h2>
+<p>
+	Used to add multiple messages.
+</p>
+
+<div>
+	<cfset theMessage.resetMessages() />
+	<cfset theMessage.addMessages('testing', 'testing again') />
+	addMessages('testing', 'testing again')<br />
+	
+	messages:
+	<cfdump var="#theMessage.getMessages()#" />
+</div>
+
+<h2>getMessages()</h2>
 
 <p>
 	Used to get the messages.
 </p>
 
 <div>
-	get()<br />
+	getMessages()<br />
 	
 	messages:
-	<cfdump var="#theMessage.get()#" />
+	<cfdump var="#theMessage.getMessages()#" />
 </div>
 
-<h2>length()</h2>
+<h2>lengthMessages()</h2>
 
 <p>
 	Used to get the number of messages.
 </p>
 
 <div>
-	Number of messages: <cfoutput>#theMessage.length()#</cfoutput>
+	Number of messages: <cfoutput>#theMessage.lengthMessages()#</cfoutput>
 </div>
 
-<h2>reset()</h2>
+<h2>resetMessages()</h2>
 
 <p>
 	Used to reset previous messages.
 </p>
 
-<cfset theMessage.reset('testing a set') />
+<cfset theMessage.resetMessages() />
 
 <div>
-	reset()<br />
+	resetMessages()<br />
 	messages:
-	<cfdump var="#theMessage.get()#" />
+	<cfdump var="#theMessage.getMessages()#" />
 </div>
 
-<h2>set('message')</h2>
+<h2>setMessages('message')</h2>
 
 <p>
 	Used to clear previous messages and set a new message to the object.
 </p>
 
 <div>
-	<cfset theMessage.set('testing a set') />
-	set('testing a set')<br />
+	<cfset theMessage.setMessages('testing a set') />
+	setMessages('testing a set')<br />
 	
 	messages:
-	<cfdump var="#theMessage.get()#" />
+	<cfdump var="#theMessage.getMessages()#" />
 </div>
 
 <h2>the object</h2>

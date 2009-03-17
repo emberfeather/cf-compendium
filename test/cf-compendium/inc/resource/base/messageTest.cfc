@@ -37,7 +37,7 @@
 		<cfset var theMessage = createObject('component', 'cf-compendium.inc.resource.base.message').init() />
 		
 		<cfset theMessage.addMessages('Testing') />
-		<cfset theMessage.reset() />
+		<cfset theMessage.resetMessages() />
 		
 		<cfset assertEquals(0, theMessage.lengthMessages()) />
 	</cffunction>

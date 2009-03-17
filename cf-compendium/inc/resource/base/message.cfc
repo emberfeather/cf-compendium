@@ -11,10 +11,12 @@
 		<cfreturn this />
 	</cffunction>
 	
-	<!--- 
-		Resets the messages.
+	<!---
+		Resets the messages then adds the new messages.
 	--->
-	<cffunction name="reset" access="public" returntype="void" output="false">
-		<cfset variables.instance.messages = arrayNew(1) />
+	<cffunction name="setMessages" access="public" returntype="void" output="false">
+		<cfset this.resetMessages() />
+		
+		<cfset this.addMessages(argumentCollection = arguments) />
 	</cffunction>
 </cfcomponent>
