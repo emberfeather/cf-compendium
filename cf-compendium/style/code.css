@@ -1,0 +1,41 @@
+/*
+	These are for the CODE snippet styling
+*/
+
+.code {
+	background-color: #FFFFE7;
+	border: 1px solid #CCCCCC;
+	overflow-x: auto;
+}
+
+.code {
+	background-color: #FFFFE7;
+	border: 1px solid #CCCCCC;
+	overflow-x: auto;
+	padding: .5em;
+}
+	
+.code pre {
+	font-family: monospace;
+	font-size: 11px;
+	line-height: 13px;
+}
+	
+.commentCodeColor,
+.commentCodeColor .cfmlCodeColor,
+.commentCodeColor .attributeCodeColor {
+	color: #999999;
+	font-style: italic;
+}
+	
+.cfmlCodeColor {
+	color: #840000;
+}
+	
+.attributeCodeColor {
+	color: #0000FF;
+}
+
+.cfmlCodeColor .attributeCodeColor {
+	color: #0000FF;
+}
