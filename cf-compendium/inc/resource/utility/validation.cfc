@@ -1,10 +1,10 @@
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returnType="component" output="false">
-		<cfargument name="theResourceBundle" type="component" required="true" />
-		<cfargument name="theMessageFormatter" type="component" required="true" />
+		<cfargument name="resourceBundle" type="component" required="true" />
+		<cfargument name="messageFormatter" type="component" required="true" />
 		
-		<cfset variables.theResourceBundle = arguments.theResourceBundle />
-		<cfset variables.theMessageFormatter = arguments.theMessageFormatter />
+		<cfset variables.resourceBundle = arguments.resourceBundle />
+		<cfset variables.messageFormatter = arguments.messageFormatter />
 		
 		<cfreturn this />
 	</cffunction>
@@ -15,25 +15,16 @@
 	<cffunction name="ID" access="public" returntype="void" output="false">
 		<cfargument name="title" type="string" required="true" />
 		<cfargument name="value" type="any" required="true" />
+		<cfargument name="extra" type="string" default="" />
 		
 		<cfset var message = '' />
 		
 		<cfif NOT isNumeric(arguments.value) OR arguments.value LT 0>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.theResourceBundle.getValue('validation.id') />
+			<cfset message = variables.resourceBundle.getValue('id') />
 			
-			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title )#" />
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.title )#" />
 		</cfif>
-	</cffunction>
-	
-	<!---
-		Used to pass through and throw validation error.
-	--->
-	<cffunction name="invalid" access="public" returntype="void" output="false">
-		<cfargument name="message" type="string" required="true" />
-		
-		<!--- Format for the message for specific locale and throw it --->
-		<cfthrow type="validation" message="#variables.theMessageFormatter.format( argumentCollection = arguments )#" />
 	</cffunction>
 	
 	<!---
@@ -42,15 +33,15 @@
 	<cffunction name="maxLength" access="public" returntype="void" output="false">
 		<cfargument name="title" type="string" required="true" />
 		<cfargument name="value" type="string" required="true" />
-		<cfargument name="length" type="numeric" required="true" />
+		<cfargument name="extra" type="numeric" required="true" />
 		
 		<cfset var message = '' />
 		
-		<cfif len(arguments.value) GT arguments.length>
+		<cfif len(arguments.value) GT arguments.extra>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.theResourceBundle.getValue('validation.maxLength') />
+			<cfset message = variables.resourceBundle.getValue('maxLength') />
 			
-			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title, arguments.length )#" />
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.title, arguments.extra )#" />
 		</cfif>
 	</cffunction>
 	
@@ -60,15 +51,15 @@
 	<cffunction name="minLength" access="public" returntype="void" output="false">
 		<cfargument name="title" type="string" required="true" />
 		<cfargument name="value" type="string" required="true" />
-		<cfargument name="length" type="numeric" required="true" />
+		<cfargument name="extra" type="numeric" required="true" />
 		
 		<cfset var message = '' />
 		
-		<cfif len(arguments.value) LT arguments.length>
+		<cfif len(arguments.value) LT arguments.extra>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.theResourceBundle.getValue('validation.maxLength') />
+			<cfset message = variables.resourceBundle.getValue('minLength') />
 			
-			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title, arguments.length )#" />
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.title, arguments.extra )#" />
 		</cfif>
 	</cffunction>
 	
@@ -78,14 +69,15 @@
 	<cffunction name="notEmpty" access="public" returntype="void" output="false">
 		<cfargument name="title" type="string" required="true" />
 		<cfargument name="value" type="string" required="true" />
+		<cfargument name="extra" type="string" default="" />
 		
 		<cfset var message = '' />
 		
 		<cfif trim(arguments.value) EQ ''>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.theResourceBundle.getValue('validation.notEmpty') />
+			<cfset message = variables.resourceBundle.getValue('notEmpty') />
 			
-			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title )#" />
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.title )#" />
 		</cfif>
 	</cffunction>
 	
@@ -95,14 +87,15 @@
 	<cffunction name="notFuture" access="public" returntype="void" output="false">
 		<cfargument name="title" type="string" required="true" />
 		<cfargument name="value" type="date" required="true" />
+		<cfargument name="extra" type="string" default="" />
 		
 		<cfset var message = '' />
 		
 		<cfif arguments.value GT now()>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.theResourceBundle.getValue('validation.notFuture') />
+			<cfset message = variables.resourceBundle.getValue('notFuture') />
 			
-			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title )#" />
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.title )#" />
 		</cfif>
 	</cffunction>
 	
@@ -112,15 +105,15 @@
 	<cffunction name="notGreaterThan" access="public" returntype="void" output="false">
 		<cfargument name="title" type="string" required="true" />
 		<cfargument name="value" type="date" required="true" />
-		<cfargument name="amount" type="numeric" required="true" />
+		<cfargument name="extra" type="numeric" required="true" />
 		
 		<cfset var message = '' />
 		
-		<cfif arguments.value GT arguments.amount>
+		<cfif arguments.value GT arguments.extra>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.theResourceBundle.getValue('validation.notGreaterThan') />
+			<cfset message = variables.resourceBundle.getValue('notGreaterThan') />
 			
-			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title, arguments.amount )#" />
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.title, arguments.extra )#" />
 		</cfif>
 	</cffunction>
 	
@@ -130,15 +123,15 @@
 	<cffunction name="notLessThan" access="public" returntype="void" output="false">
 		<cfargument name="title" type="string" required="true" />
 		<cfargument name="value" type="date" required="true" />
-		<cfargument name="amount" type="numeric" required="true" />
+		<cfargument name="extra" type="numeric" required="true" />
 		
 		<cfset var message = '' />
 		
-		<cfif arguments.value LT arguments.amount>
+		<cfif arguments.value LT arguments.extra>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.theResourceBundle.getValue('validation.notLessThan') />
+			<cfset message = variables.resourceBundle.getValue('notLessThan') />
 			
-			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title, arguments.amount )#" />
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.title, arguments.extra )#" />
 		</cfif>
 	</cffunction>
 	
@@ -148,14 +141,15 @@
 	<cffunction name="notPast" access="public" returntype="void" output="false">
 		<cfargument name="title" type="string" required="true" />
 		<cfargument name="value" type="date" required="true" />
+		<cfargument name="extra" type="string" default="" />
 		
 		<cfset var message = '' />
 		
 		<cfif arguments.value LT now()>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.theResourceBundle.getValue('validation.notPast') />
+			<cfset message = variables.resourceBundle.getValue('notPast') />
 			
-			<cfthrow type="validation" message="#variables.theMessageFormatter.format( message, arguments.title )#" />
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.title )#" />
 		</cfif>
 	</cffunction>
 </cfcomponent>

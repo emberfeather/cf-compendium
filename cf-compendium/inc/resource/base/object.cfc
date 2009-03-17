@@ -9,8 +9,18 @@
 		The basic init function 
 	--->
 	<cffunction name="init" access="public" returntype="component" output="false">
+		<cfargument name="i18n" type="component" required="true" />
+		<cfargument name="locale" type="string" default="en_US" />
+		
+		<cfset variables.i18n = arguments.i18n />
+		<cfset variables.locale = arguments.locale />
 		<cfset variables.instance = {} />
 		<cfset variables.attributes = {} />
+		<cfset variables.validation = {
+				bundlePath = 'cf-compendium/i18n/resource/utility',
+				bundleName = 'validation',
+				componentPath = 'cf-compendium.inc.resource.utility.validation'
+			} />
 		
 		<cfreturn this />
 	</cffunction>
@@ -324,6 +334,24 @@
 			</cfcase>
 			
 			<cfcase value="set">
+				<!--- Check for any validation given in the attribute meta --->
+				<cfif structKeyExists(variables.attributes, attribute) AND NOT structIsEmpty(variables.attributes[attribute].validation)>
+					<!--- Make sure that we have a validator object --->
+					<cfif NOT structKeyExists(variables, 'validator')>
+						<cfset variables.validator = variables.i18n.getValidation(variables.locale, variables.validation.bundlePath, variables.validation.bundleName, variables.validation.componentPath) />
+					</cfif>
+					
+					<!--- Try to validate with each of the specified tests against the validation object --->
+					<cfloop list="#structKeyList(variables.attributes[attribute].validation)#" index="i">
+						<cfinvoke component="#variables.validator#" method="#i#">
+							<cfinvokeargument name="title" value="#variables.attributes[attribute].title#" />
+							<cfinvokeargument name="value" value="#arguments.missingMethodArguments[1]#" />
+							<cfinvokeargument name="extra" value="#variables.attributes[attribute].validation[i]#" />
+						</cfinvoke>
+					</cfloop>
+				</cfif>
+				
+				<!--- Set the value --->
 				<cfset variables.instance[attribute] = arguments.missingMethodArguments[1] />
 			</cfcase>
 		</cfswitch>

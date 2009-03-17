@@ -99,20 +99,27 @@
 	--->
 	<cffunction name="getValidation" access="public" returntype="component" output="false">
 		<cfargument name="locale" type="string" default="en_US" />
+		<cfargument name="validationBundlePath" type="string" default="cf-compendium/i18n/resource/utility" />
+		<cfargument name="validationBundleName" type="string" default="validation" />
+		<cfargument name="validationComponentPath" type="string" default="cf-compendium.inc.resource.utility.validation" />
 		
-		<cfset var theBundle = '' />
-		<cfset var theFormat = '' />
+		<cfset var bundle = '' />
+		<cfset var format = '' />
 		
 		<!--- Check if we already have one for the locale requested --->
 		<cfif NOT structKeyExists(variables.validators, arguments.locale)>
-			<!--- Grab the required args for a validation object --->
-			<cfset theBundle = this.getResourceBundle('common', 'common', arguments.locale) />
-			<cfset theFormat = this.getMessageFormat(arguments.locale) />
+			<cfset variables.validators[arguments.locale] = {} />
 			
-			<!--- Create the validator object --->
-			<cfset variables.validators[arguments.locale] = createObject('component', 'cf-compendium.inc.resource.utility.validation').init(theBundle, theFormat) />
+			<cfif NOT structKeyExists(variables.validators[arguments.locale], arguments.validationComponentPath)>
+				<!--- Grab the required args for a validation object --->
+				<cfset bundle = this.getResourceBundle(validationBundlePath, arguments.validationBundleName, arguments.locale) />
+				<cfset format = this.getMessageFormat(arguments.locale) />
+				
+				<!--- Create the validator object --->
+				<cfset variables.validators[arguments.locale][arguments.validationComponentPath] = createObject('component', arguments.validationComponentPath).init(bundle, format) />
+			</cfif>
 		</cfif>
 		
-		<cfreturn variables.validators[arguments.locale] />
+		<cfreturn variables.validators[arguments.locale][arguments.validationComponentPath] />
 	</cffunction>
 </cfcomponent>
