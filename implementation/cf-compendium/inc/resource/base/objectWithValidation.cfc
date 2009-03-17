@@ -20,6 +20,16 @@
 		
 		<cfset addAttribute(argumentCollection = attr) />
 		
+		<!--- Last Name --->
+		<cfset attr = {
+				attribute = 'lastName',
+				form = {
+					type = 'text'
+				}
+			} />
+		
+		<cfset addAttribute(argumentCollection = attr) />
+		
 		<!--- Set the bundle information for translation --->
 		<cfset setI18NBundle('i18n/cf-compendium/inc/resource/base', 'objectWithValidation') />
 		
