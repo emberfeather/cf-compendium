@@ -358,11 +358,25 @@
 					
 					<!--- Try to validate with each of the specified tests against the validation object --->
 					<cfloop list="#structKeyList(variables.attributes[attribute].validation)#" index="i">
-						<cfinvoke component="#variables.validator#" method="#i#">
-							<cfinvokeargument name="title" value="#getAttributeLabel(attribute)#" />
-							<cfinvokeargument name="value" value="#arguments.missingMethodArguments[1]#" />
-							<cfinvokeargument name="extra" value="#variables.attributes[attribute].validation[i]#" />
-						</cfinvoke>
+						<cfif isStruct(variables.attributes[attribute].validation[i])>
+							<!--- If it is a struct we can use it as an argument collection --->
+							<cfset variables.attributes[attribute].validation[i].label = getAttributeLabel(attribute) />
+							<cfset variables.attributes[attribute].validation[i].value = arguments.missingMethodArguments />
+							
+							<cfinvoke component="#variables.validator#" method="#i#" argumentcollection="#variables.attributes[attribute].validation[i]#" />
+						<cfelseif isArray(variables.attributes[attribute].validation[i])>
+							<!--- If it is an array we can use it as an argument collection --->
+							<cfset arrayPrepend(variables.attributes[attribute].validation[i], arguments.missingMethodArguments) />
+							<cfset arrayPrepend(variables.attributes[attribute].validation[i], getAttributeLabel(attribute)) />
+							
+							<cfinvoke component="#variables.validator#" method="#i#" argumentcollection="#variables.attributes[attribute].validation[i]#" />
+						<cfelse>
+							<cfinvoke component="#variables.validator#" method="#i#">
+								<cfinvokeargument name="label" value="#getAttributeLabel(attribute)#" />
+								<cfinvokeargument name="value" value="#arguments.missingMethodArguments[1]#" />
+								<cfinvokeargument name="extra" value="#variables.attributes[attribute].validation[i]#" />
+							</cfinvoke>
+						</cfif>
 					</cfloop>
 				</cfif>
 				
