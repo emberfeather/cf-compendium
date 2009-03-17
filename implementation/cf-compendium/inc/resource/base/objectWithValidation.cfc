@@ -10,6 +10,9 @@
 		<!--- First Name --->
 		<cfset attr = {
 				attribute = 'firstName',
+				form = {
+					type = 'text'
+				},
 				validation = {
 					minLength = 1
 				}

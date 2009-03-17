@@ -4,7 +4,7 @@
 	Also has a default init function.
 	Based upon code by Hal Helms and modified from there. 
 --->
-<cfcomponent output="false">
+<cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
 	<!---
 		The basic init function 
 	--->
@@ -14,6 +14,7 @@
 		
 		<cfset variables.instance = {} />
 		<cfset variables.attributes = {} />
+		<cfset variables.attributeOrder = '' />
 		
 		<cfset variables.i18n = {
 				i18n = arguments.i18n,
@@ -38,11 +39,12 @@
 		<cfargument name="attribute" type="string" required="true" />
 		<cfargument name="defaultValue" type="any" default="" />
 		<cfargument name="validation" type="struct" default="#structNew()#" />
+		<cfargument name="form" type="struct" default="#structNew()#" />
 		
-		<cfset variables.attributes[arguments.attribute] = {
-				defaultValue = arguments.defaultValue,
-				validation = arguments.validation
-			} />
+		<cfset variables.attributes[arguments.attribute] = arguments />
+		
+		<!--- Add to the attribute order --->
+		<cfset variables.attributeOrder = listAppend(variables.attributeOrder, arguments.attribute) />
 		
 		<cfset variables.instance[arguments.attribute] = arguments.defaultValue />
 	</cffunction>
@@ -190,17 +192,26 @@
 	</cffunction>
 	
 	<!---
-		If the extend object has not been created creates it and uses it.
+		Used to get an attribute
 	--->
-	<cffunction name="extend" access="public" returntype="struct" output="false">
-		<cfargument name="defaults" type="struct" required="true" />
-		<cfargument name="original" type="struct" default="#structNew()#" />
+	<cffunction name="getAttribute" access="public" returntype="struct" output="false">
+		<cfargument name="attribute" type="string" required="true" />
 		
-		<cfif NOT structKeyExists(variables, 'theExtender')>
-			<cfset variables.theExtender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
+		<cfreturn variables.attributes[arguments.attribute] />
+	</cffunction>
+	
+	<!---
+		Used to get an attribute's label
+	--->
+	<cffunction name="getAttributeLabel" access="public" returntype="string" output="false">
+		<cfargument name="attribute" type="string" required="true" />
+		
+		<!--- Make sure that we have a bundle object --->
+		<cfif NOT structKeyExists(variables.i18n, 'bundle')>
+			<cfset variables.i18n.bundle = variables.i18n.i18n.getResourceBundle(variables.i18n.bundlePath, variables.i18n.bundleName, variables.i18n.locale) />
 		</cfif>
 		
-		<cfreturn variables.theExtender.extend( argumentCollection = arguments ) />
+		<cfreturn variables.i18n.bundle.getValue(attribute) />
 	</cffunction>
 	
 	<!---
@@ -208,7 +219,7 @@
 		through the dynamic setters and getters.
 	--->
 	<cffunction name="getAttributeList" access="public" returntype="string" output="false">
-		<cfreturn structKeyList(variables.instance) />
+		<cfreturn variables.attributeOrder />
 	</cffunction>
 	
 	<!---
@@ -345,15 +356,10 @@
 						<cfset variables.validator = variables.i18n.i18n.getValidation(variables.i18n.locale, variables.validation.bundlePath, variables.validation.bundleName, variables.validation.componentPath) />
 					</cfif>
 					
-					<!--- Make sure that we have a bundle object --->
-					<cfif NOT structKeyExists(variables.i18n, 'bundle')>
-						<cfset variables.i18n.bundle = variables.i18n.i18n.getResourceBundle(variables.i18n.bundlePath, variables.i18n.bundleName, variables.i18n.locale) />
-					</cfif>
-					
 					<!--- Try to validate with each of the specified tests against the validation object --->
 					<cfloop list="#structKeyList(variables.attributes[attribute].validation)#" index="i">
 						<cfinvoke component="#variables.validator#" method="#i#">
-							<cfinvokeargument name="title" value="#variables.i18n.bundle.getValue(attribute)#" />
+							<cfinvokeargument name="title" value="#getAttributeLabel(attribute)#" />
 							<cfinvokeargument name="value" value="#arguments.missingMethodArguments[1]#" />
 							<cfinvokeargument name="extra" value="#variables.attributes[attribute].validation[i]#" />
 						</cfinvoke>

@@ -1,7 +1,7 @@
 <!--- 
 	Used to create options for passing between objects.
 --->
-<cfcomponent displayname="Options" extends="cf-compendium.inc.resource.base.object" output="false">
+<cfcomponent displayname="Options" extends="cf-compendium.inc.resource.base.base" output="false">
 	<cffunction name="init" access="public" returntype="any" output="false">
 		<!--- Call the parent constructor --->
 		<cfset super.init() />

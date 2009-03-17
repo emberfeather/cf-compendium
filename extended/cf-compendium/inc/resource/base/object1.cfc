@@ -1,12 +1,15 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
+		<cfargument name="i18n" type="component" required="true" />
+		<cfargument name="locale" type="string" default="en_US" />
+		
 		<cfset var defaults = {
 				test = 'value',
 				foo = 'bar',
 				bubble = [ 'gum' ]
 			} />
 		
-		<cfset super.init() />
+		<cfset super.init(arguments.i18n, arguments.locale) />
 		
 		<cfset properties(defaults) />
 		

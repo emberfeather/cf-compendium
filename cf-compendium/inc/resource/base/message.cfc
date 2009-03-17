@@ -1,10 +1,13 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" displayname="Base Message" output="false">
 	<cffunction name="init" access="public" returntype="any" output="false">
+		<cfargument name="i18n" type="component" required="true" />
+		<cfargument name="locale" type="string" default="en_US" />
+		
 		<cfset var defaults = {
 				messages = []
 			} />
 		
-		<cfset super.init() />
+		<cfset super.init(arguments.i18n, arguments.locale) />
 		
 		<cfset properties(defaults) />
 		

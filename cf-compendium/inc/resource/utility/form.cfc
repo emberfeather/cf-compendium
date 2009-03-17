@@ -165,6 +165,36 @@
 		<cfthrow message="Unsupported Form Element" detail="The #arguments.element.type# type of element is currently unsupported." />
 	</cffunction>
 	
+	<!---
+		Inspects an object to generate a form
+	--->
+	<cffunction name="fromObject" access="public" returntype="void" output="false">
+		<cfargument name="object" type="component" required="true" />
+		<cfargument name="attributes" type="string" default="" />
+		
+		<cfset var attribute = '' />
+		<cfset var i = '' />
+		
+		<!--- Check if there were no attributes given -- show all --->
+		<cfif arguments.attributes EQ ''>
+			<cfset arguments.attributes = arguments.object.getAttributeList() />
+		</cfif>
+		
+		<!--- Go through each attribute and check if has form meta --->
+		<cfloop list="#arguments.attributes#" index="i">
+			<cfset attribute = arguments.object.getAttribute(i) />
+			
+			<cfif structKeyExists(attribute.form, 'type')>
+				<!--- Set some statics --->
+				<cfset attribute.form.name = i />
+				<cfset attribute.form.label = arguments.object.getAttributeLabel(i) />
+				<cfinvoke component="#arguments.object#" method="get#i#" returnvariable="attribute.form.value" />
+				
+				<cfset this.addElement(attribute.form.type, attribute.form) />
+			</cfif>
+		</cfloop>
+	</cffunction>
+	
 	<!--- 
 		Retrieve the closing form tag.
 		<p>

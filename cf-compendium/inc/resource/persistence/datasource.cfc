@@ -1,4 +1,4 @@
-<cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
+<cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
 	<cffunction name="init" access="public" returnType="component" output="false">
 		<cfset var defaults = {
 				datasource = '',
