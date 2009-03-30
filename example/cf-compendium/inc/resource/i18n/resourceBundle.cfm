@@ -1,6 +1,6 @@
 <h1>Resource Bundle Example</h1>
 
-<cfset path = expandPath('./') />
+<cfset path = expandPath('/i18n/cf-compendium/inc/resource/i18n/') />
 <cfset bundle = 'resourceBundle' />
 <cfset locale = 'en_US' />
 
