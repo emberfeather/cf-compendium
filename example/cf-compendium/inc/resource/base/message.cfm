@@ -1,5 +1,7 @@
+<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
+
 <h1>Message Examples</h1>
-<cfset theMessage = createObject('component', 'cf-compendium.inc.resource.base.message').init() />
+<cfset theMessage = createObject('component', 'cf-compendium.inc.resource.base.message').init(i18n) />
 
 <h2>addMessages('message')</h2>
 

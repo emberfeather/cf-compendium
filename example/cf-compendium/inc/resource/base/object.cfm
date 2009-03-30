@@ -1,9 +1,11 @@
+<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
+
 <h1>Object Examples</h1>
 
 <h2>addAttribute(value)</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		addTest('aValue')<br />
@@ -18,7 +20,7 @@
 <h2>addAttribute(value, [, value]...)</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		addTest('someValue', 'anotherValue', 'andAnother')<br />
@@ -33,7 +35,7 @@
 <h2>addUniqueAttribute(value)</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		addUniqueTests('someValue')<br />
@@ -53,7 +55,7 @@
 <h2>addUniqueAttribute(value, [, value]...)</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		addUniqueTests('someValue', 'anotherValue', 'andAnother', 'anotherValue')<br />
@@ -68,7 +70,7 @@
 <h2>getAttribute()</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		setTest('aValue')<br />
@@ -87,7 +89,7 @@
 <h2>getAttributesBy('RegEx')</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		addTests('aValue', 'anotherValue', 'something', 'things', 'others')<br />
@@ -108,7 +110,7 @@
 <h2>getObjectsByAttribute('RegEx')</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		theObject1 = createObject('component', 'cf-compendium.inc.resource.base.object').init()<br />
@@ -116,11 +118,11 @@
 		theObject3 = createObject('component', 'cf-compendium.inc.resource.base.object').init()<br />
 		theObject4 = createObject('component', 'cf-compendium.inc.resource.base.object').init()<br />
 		theObject5 = createObject('component', 'cf-compendium.inc.resource.base.object').init()<br />
-		<cfset theObject1 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
-		<cfset theObject2 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
-		<cfset theObject3 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
-		<cfset theObject4 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
-		<cfset theObject5 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset theObject1 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset theObject2 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset theObject3 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset theObject4 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset theObject5 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	</p>
 	
 	<p>
@@ -159,7 +161,7 @@
 <h2>getAttributeList()</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		setTest('aValue')<br />
@@ -180,7 +182,7 @@
 <h2>setAttribute()</h2>
 
 <div>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	
 	<p>
 		setTest('aValue')<br />

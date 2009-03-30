@@ -1,6 +1,7 @@
 <h1>Object</h1>
 
 <cfset theProfiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true) />
+<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
 
 <h2>Counts</h2>
 
@@ -16,7 +17,7 @@
 	<cfset theProfiler.start('createObject') />
 	
 	<cfloop from="1" to="#count#" index="i">
-		<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
 	</cfloop>
 	
 	<cfset theProfiler.stop('createObject') />
@@ -29,7 +30,7 @@
 	setExisting: <cfoutput>#count#</cfoutput>
 </p>
 
-<cfset theObject = createObject('component', 'extended.cf-compendium.inc.resource.base.object1').init() />
+<cfset theObject = createObject('component', 'implementation.cf-compendium.inc.resource.base.object1').init(i18n) />
 
 <cfloop from="1" to="#repeatCount#" index="j">
 	<cfset theProfiler.start('setExisting') />
@@ -46,7 +47,7 @@
 	getExisting: <cfoutput>#count#</cfoutput>
 </p>
 
-<cfset theObject = createObject('component', 'extended.cf-compendium.inc.resource.base.object1').init() />
+<cfset theObject = createObject('component', 'implementation.cf-compendium.inc.resource.base.object1').init(i18n) />
 <cfset theObject.setName('testing') />
 
 <cfloop from="1" to="#repeatCount#" index="j">
@@ -64,7 +65,7 @@
 	setNonExisting: <cfoutput>#count#</cfoutput>
 </p>
 
-<cfset theObject = createObject('component', 'extended.cf-compendium.inc.resource.base.object1').init() />
+<cfset theObject = createObject('component', 'implementation.cf-compendium.inc.resource.base.object1').init(i18n) />
 
 <cfloop from="1" to="#repeatCount#" index="j">
 	<cfset theProfiler.start('setNonExisting') />
@@ -81,7 +82,7 @@
 	getNonExisting: <cfoutput>#count#</cfoutput>
 </p>
 
-<cfset theObject = createObject('component', 'extended.cf-compendium.inc.resource.base.object1').init() />
+<cfset theObject = createObject('component', 'implementation.cf-compendium.inc.resource.base.object1').init(i18n) />
 <cfset theObject.setTitle('testing') />
 
 <cfloop from="1" to="#repeatCount#" index="j">
