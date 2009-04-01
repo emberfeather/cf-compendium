@@ -1,5 +1,5 @@
 <cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-<cfset object = createObject('component', 'implementation.cf-compendium.inc.resource.base.object1').init(i18n) />
+<cfset object = createObject('component', 'implementation.inc.resource.base.object1').init(i18n) />
 
 <h1>Object Examples</h1>
 

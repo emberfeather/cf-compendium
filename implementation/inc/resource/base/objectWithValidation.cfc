@@ -14,7 +14,8 @@
 					type = 'text'
 				},
 				validation = {
-					minLength = 1
+					minLength = 1,
+					maxLength = 45
 				}
 			} />
 		

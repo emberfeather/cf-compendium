@@ -140,7 +140,7 @@
 	--->
 	<cffunction name="testProperties" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'implementation.cf-compendium.inc.resource.base.object1').init(i18n) />
+		<cfset var theObject = createObject('component', 'implementation.inc.resource.base.object1').init(i18n) />
 		
 		<cfset assertEquals('value', theObject.getTest()) />
 		<cfset assertEquals('bar', theObject.getFoo()) />

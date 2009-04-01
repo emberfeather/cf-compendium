@@ -4,7 +4,7 @@
 <h2>English</h2>
 
 <cfset theForm = createObject('component', 'cf-compendium.inc.resource.utility.formStandard').init('test') />
-<cfset validatedObj = createObject('component', 'implementation.cf-compendium.inc.resource.base.objectWithValidation').init(i18n) />
+<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithValidation').init(i18n) />
 <cfset validatedObj.setFirstName('Tester') />
 
 <!--- Create the form from the object --->
@@ -15,7 +15,7 @@
 <h2>Pirate</h2>
 
 <cfset theForm = createObject('component', 'cf-compendium.inc.resource.utility.formStandard').init('test') />
-<cfset validatedObj = createObject('component', 'implementation.cf-compendium.inc.resource.base.objectWithValidation').init(i18n, 'en_PI') />
+<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithValidation').init(i18n, 'en_PI') />
 <cfset validatedObj.setFirstName('Tester') />
 
 <!--- Create the form from the object --->

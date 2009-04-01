@@ -8,7 +8,7 @@
 
 <h2>English</h2>
 
-<cfset validatedObj = createObject('component', 'implementation.cf-compendium.inc.resource.base.objectWithValidation').init(i18n) />
+<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithValidation').init(i18n) />
 
 <div>
 	<p>
@@ -26,7 +26,7 @@
 
 <h2>Pirate</h2>
 
-<cfset validatedObj = createObject('component', 'implementation.cf-compendium.inc.resource.base.objectWithValidation').init(i18n, 'en_PI') />
+<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithValidation').init(i18n, 'en_PI') />
 
 <div>
 	<p>
