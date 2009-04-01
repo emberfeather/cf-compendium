@@ -32,7 +32,7 @@
 		<cfset addAttribute(argumentCollection = attr) />
 		
 		<!--- Set the bundle information for translation --->
-		<cfset setI18NBundle('i18n/cf-compendium/inc/resource/base', 'objectWithValidation') />
+		<cfset setI18NBundle('i18n/inc/resource/base', 'objectWithValidation') />
 		
 		<cfreturn this />
 	</cffunction>
