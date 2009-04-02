@@ -1,1 +1,9 @@
-<cfdump var="#application#" />
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" >
+	<head>
+		<title>cf-compendium</title>
+	</head>
+	<body>
+		<p><a href="http://code.google.com/p/cf-compendium">cf-compendium</a></p>
+	</body>
+</html>
