@@ -9,7 +9,7 @@
 				levels = [],
 				meta = {},
 				scripts = [
-					'http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js'
+					'http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'
 				],
 				siteLink = '/',
 				siteTitle = '',
