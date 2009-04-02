@@ -2,6 +2,7 @@
 	<cffunction name="init" access="public" returnType="component" output="false">
 		<cfargument name="i18n" type="component" required="true" />
 		<cfargument name="locale" type="string" default="en_US" />
+		<cfargument name="options" type="struct" default="#structNew()#" />
 		
 		<cfset var defaults = {
 				attributes = {},
@@ -18,7 +19,7 @@
 		
 		<cfset super.init(arguments.i18n, arguments.locale) />
 		
-		<cfset properties(defaults) />
+		<cfset properties(defaults, arguments.options) />
 		
 		<cfreturn this />
 	</cffunction>
