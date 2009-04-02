@@ -80,6 +80,7 @@
 		<cfset var fileStream = '' />
 		<cfset var key = '' />
 		<cfset var keys = '' />
+		<cfset var base = '' />
 		<cfset var resourceBundle = '' />
 		
 		<!--- Normalize the path --->
