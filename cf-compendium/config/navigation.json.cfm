@@ -1,6 +1,3 @@
-/**
- * cf-compendium navigation
- */
 {
 	path: '/cf-compendium/inc/',
 	section: {
@@ -11,7 +8,7 @@
 					title: 'Tools',
 					view: {
 						style: {
-							title: 'Style'
+							title: 'Style',
 							action: {
 								markup: {
 									title: 'Markup Guide',
@@ -35,7 +32,6 @@
 				},
 				errors: {
 					title: 'Errors',
-					allow: 'Diety,Security',
 					desc: 'Error tracking and details.',
 					view: {
 						conversation: {
@@ -43,12 +39,10 @@
 							desc: 'Error Conversations grouped by similarity into conversations.',
 							action: {
 								list: {
-									title: 'List Error Conversations',
-									navTitle: 'List Conversations'
+									title: 'List Error Conversations'
 								},
 								view: {
-									title: 'View Error Conversation',
-									navTitle: ''
+									title: 'View Error Conversation'
 								}
 							}
 						},
@@ -79,18 +73,15 @@
 					view: {
 						document: {
 							title: 'Display Documentation',
-							navTitle: '',
 							action: {
 								add: {
 									title: 'Add Documentation'
 								},
 								edit: {
-									title: 'Edit Documentation',
-									navTitle: ''
+									title: 'Edit Documentation'
 								},
 								remove: {
-									title: 'Remove Documentation',
-									navTitle: ''
+									title: 'Remove Documentation'
 								}
 							}
 						}
@@ -107,22 +98,18 @@
 					view: {
 						tutorial: {
 							title: 'Display Tutorial',
-							navTitle: '',
 							action: {
 								add: {
 									title: 'Add Tutorial'
 								},
 								display: {
-									title: 'Display Tutorial',
-									navTitle: ''
+									title: 'Display Tutorial'
 								},
 								edit: {
-									title: 'Edit Tutorial',
-									navTitle: ''
+									title: 'Edit Tutorial'
 								},
 								remove: {
-									title: 'Remove Tutorial',
-									navTitle: ''
+									title: 'Remove Tutorial'
 								}
 							}
 						}

@@ -1,0 +1,7 @@
+{
+	section: {
+		support: {
+			title: 'Support'
+		}
+	}
+}

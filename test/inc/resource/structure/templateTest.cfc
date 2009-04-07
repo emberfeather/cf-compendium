@@ -4,11 +4,11 @@
 	--->
 	<cffunction name="testGetAttribute" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.setAttribute('testing', 'yippee') />
+		<cfset template.setAttribute('testing', 'yippee') />
 		
-		<cfset assertEquals('yippee', theTemplate.getAttribute('testing')) />
+		<cfset assertEquals('yippee', template.getAttribute('testing')) />
 	</cffunction>
 	
 	<!---
@@ -16,9 +16,9 @@
 	--->
 	<cffunction name="testGetAttributeSansAttribute" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset assertEquals('', theTemplate.getAttribute('testing')) />
+		<cfset assertEquals('', template.getAttribute('testing')) />
 	</cffunction>
 	
 	<!---
@@ -26,11 +26,11 @@
 	--->
 	<cffunction name="testGetBreadcrumb" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing', '/') />
+		<cfset template.addLevel('Testing', '/') />
 		
-		<cfset assertEquals('<a href="/" title=""></a> : <a href="/" title="Testing">Testing</a>', theTemplate.getBreadcrumb()) />
+		<cfset assertEquals('<a href="/" title=""></a> : <a href="/" title="Testing">Testing</a>', template.getBreadcrumb()) />
 	</cffunction>
 	
 	<!---
@@ -38,12 +38,12 @@
 	--->
 	<cffunction name="testGetBreadcrumbMulti" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing', '/') />
-		<cfset theTemplate.addLevel('More', '/') />
+		<cfset template.addLevel('Testing', '/') />
+		<cfset template.addLevel('More', '/') />
 		
-		<cfset assertEquals('<a href="/" title=""></a> : <a href="/" title="Testing">Testing</a> : <a href="/" title="More">More</a>', theTemplate.getBreadcrumb()) />
+		<cfset assertEquals('<a href="/" title=""></a> : <a href="/" title="Testing">Testing</a> : <a href="/" title="More">More</a>', template.getBreadcrumb()) />
 	</cffunction>
 	
 	<!---
@@ -52,12 +52,12 @@
 	<cffunction name="testGetBreadcrumbMultiSeparator" access="public" returntype="void" output="false">
 		<cfset var options = { separator = ' | ' } />
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing', '/') />
-		<cfset theTemplate.addLevel('More', '/') />
+		<cfset template.addLevel('Testing', '/') />
+		<cfset template.addLevel('More', '/') />
 		
-		<cfset assertEquals('<a href="/" title=""></a> | <a href="/" title="Testing">Testing</a> | <a href="/" title="More">More</a>', theTemplate.getBreadcrumb(options)) />
+		<cfset assertEquals('<a href="/" title=""></a> | <a href="/" title="Testing">Testing</a> | <a href="/" title="More">More</a>', template.getBreadcrumb(options)) />
 	</cffunction>
 	
 	<!---
@@ -65,11 +65,11 @@
 	--->
 	<cffunction name="testGetBreadcrumbSansLink" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
+		<cfset template.addLevel('Testing') />
 		
-		<cfset assertEquals('<a href="/" title=""></a> : <a href="##" title="Testing">Testing</a>', theTemplate.getBreadcrumb()) />
+		<cfset assertEquals('<a href="/" title=""></a> : <a href="##" title="Testing">Testing</a>', template.getBreadcrumb()) />
 	</cffunction>
 	
 	<!---
@@ -78,11 +78,11 @@
 	<cffunction name="testGetBreadcrumbSeparator" access="public" returntype="void" output="false">
 		<cfset var options = { separator = ' | ' } />
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing', '/') />
+		<cfset template.addLevel('Testing', '/') />
 		
-		<cfset assertEquals('<a href="/" title=""></a> | <a href="/" title="Testing">Testing</a>', theTemplate.getBreadcrumb(options)) />
+		<cfset assertEquals('<a href="/" title=""></a> | <a href="/" title="Testing">Testing</a>', template.getBreadcrumb(options)) />
 	</cffunction>
 	
 	<!---
@@ -91,12 +91,12 @@
 	<cffunction name="testGetBreadcrumbSingle" access="public" returntype="void" output="false">
 		<cfset var options = { showMultiple = false } />
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing', '/') />
-		<cfset theTemplate.addLevel('More', '/') />
+		<cfset template.addLevel('Testing', '/') />
+		<cfset template.addLevel('More', '/') />
 		
-		<cfset assertEquals('<a href="/" title=""></a> : <a href="/" title="More">More</a>', theTemplate.getBreadcrumb(options)) />
+		<cfset assertEquals('<a href="/" title=""></a> : <a href="/" title="More">More</a>', template.getBreadcrumb(options)) />
 	</cffunction>
 	
 	<!---
@@ -104,11 +104,11 @@
 	--->
 	<cffunction name="testGetHTMLTitle" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
+		<cfset template.addLevel('Testing') />
 		
-		<cfset assertEquals('Testing : ', theTemplate.getHtmlTitle()) />
+		<cfset assertEquals('Testing : ', template.getHtmlTitle()) />
 	</cffunction>
 	
 	<!---
@@ -116,12 +116,12 @@
 	--->
 	<cffunction name="testGetHTMLTitleMulti" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
-		<cfset theTemplate.addLevel('Again') />
+		<cfset template.addLevel('Testing') />
+		<cfset template.addLevel('Again') />
 		
-		<cfset assertEquals('Again : Testing : ', theTemplate.getHtmlTitle()) />
+		<cfset assertEquals('Again : Testing : ', template.getHtmlTitle()) />
 	</cffunction>
 	
 	<!---
@@ -130,12 +130,12 @@
 	<cffunction name="testGetHTMLTitleMultiSeparator" access="public" returntype="void" output="false">
 		<cfset var options = { separator = ' | ' } />
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
-		<cfset theTemplate.addLevel('Again') />
+		<cfset template.addLevel('Testing') />
+		<cfset template.addLevel('Again') />
 		
-		<cfset assertEquals('Again | Testing | ', theTemplate.getHtmlTitle(options)) />
+		<cfset assertEquals('Again | Testing | ', template.getHtmlTitle(options)) />
 	</cffunction>
 	
 	<!---
@@ -144,12 +144,12 @@
 	<cffunction name="testGetHTMLTitleSingle" access="public" returntype="void" output="false">
 		<cfset var options = { showMultiple = false } />
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
-		<cfset theTemplate.addLevel('Again') />
+		<cfset template.addLevel('Testing') />
+		<cfset template.addLevel('Again') />
 		
-		<cfset assertEquals('Again : ', theTemplate.getHtmlTitle(options)) />
+		<cfset assertEquals('Again : ', template.getHtmlTitle(options)) />
 	</cffunction>
 	
 	<!---
@@ -158,12 +158,12 @@
 	<cffunction name="testGetHTMLTitleSingleSeparator" access="public" returntype="void" output="false">
 		<cfset var options = { separator = ' | ', showMultiple = false } />
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
-		<cfset theTemplate.addLevel('Again') />
+		<cfset template.addLevel('Testing') />
+		<cfset template.addLevel('Again') />
 		
-		<cfset assertEquals('Again | ', theTemplate.getHtmlTitle(options)) />
+		<cfset assertEquals('Again | ', template.getHtmlTitle(options)) />
 	</cffunction>
 	
 	<!---
@@ -171,11 +171,11 @@
 	--->
 	<cffunction name="testGetLevel" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
+		<cfset template.addLevel('Testing') />
 		
-		<cfset assertEquals(1, theTemplate.getLevel()) />
+		<cfset assertEquals(1, template.getLevel()) />
 	</cffunction>
 	
 	<!---
@@ -183,9 +183,9 @@
 	--->
 	<cffunction name="testGetLevelSansLevel" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset assertEquals(0, theTemplate.getLevel()) />
+		<cfset assertEquals(0, template.getLevel()) />
 	</cffunction>
 	
 	<!---
@@ -193,11 +193,11 @@
 	--->
 	<cffunction name="testGetMetaHttpEquiv" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.setMeta('refresh', 5) />
+		<cfset template.setMeta('refresh', 5) />
 		
-		<cfset assertEquals('<meta http-equiv="refresh" content="5" />', theTemplate.getMeta()) />
+		<cfset assertEquals('<meta http-equiv="refresh" content="5" />', template.getMeta()) />
 	</cffunction>
 	
 	<!---
@@ -205,11 +205,11 @@
 	--->
 	<cffunction name="testGetMetaName" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.setMeta('description', 'Awesome') />
+		<cfset template.setMeta('description', 'Awesome') />
 		
-		<cfset assertEquals('<meta name="description" content="Awesome" />', theTemplate.getMeta()) />
+		<cfset assertEquals('<meta name="description" content="Awesome" />', template.getMeta()) />
 	</cffunction>
 	
 	<!---
@@ -217,11 +217,11 @@
 	--->
 	<cffunction name="testGetPageTitle" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
+		<cfset template.addLevel('Testing') />
 		
-		<cfset assertEquals('Testing', theTemplate.getPageTitle()) />
+		<cfset assertEquals('Testing', template.getPageTitle()) />
 	</cffunction>
 	
 	<!---
@@ -229,10 +229,10 @@
 	--->
 	<cffunction name="testGetPageTitleFailSansTitle" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
 		<cftry>
-			<cfset theTemplate.getPageTitle() />
+			<cfset template.getPageTitle() />
 			<cfset fail('Should not be able to getPageTitle without any titles') />
 			
 			<cfcatch type="mxunit.exception.AssertionFailedError"><cfrethrow /></cfcatch>
@@ -245,12 +245,12 @@
 	--->
 	<cffunction name="testGetPageTitleFailWithInvalidLevel" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
 		<cftry>
-			<cfset theTemplate.addLevel('Testing') />
-			<cfset theTemplate.addLevel('Multiple') />
-			<cfset theTemplate.getPageTitle(3) />
+			<cfset template.addLevel('Testing') />
+			<cfset template.addLevel('Multiple') />
+			<cfset template.getPageTitle(3) />
 			
 			<cfset fail('Should not be able to getPageTitle with an invalid level') />
 			
@@ -264,12 +264,12 @@
 	--->
 	<cffunction name="testGetPageTitleWithLevel" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addLevel('Testing') />
-		<cfset theTemplate.addLevel('Multiple') />
+		<cfset template.addLevel('Testing') />
+		<cfset template.addLevel('Multiple') />
 		
-		<cfset assertEquals('Testing', theTemplate.getPageTitle(1)) />
+		<cfset assertEquals('Testing', template.getPageTitle(1)) />
 	</cffunction>
 	
 	<!---
@@ -278,11 +278,11 @@
 	<cffunction name="testGetStyles" access="public" returntype="void" output="false">
 		<cfset var style = 'testing.css' />
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.addUniqueStyles(style) />
+		<cfset template.addUniqueStyles(style) />
 		
-		<cfset assertEquals('<link rel="stylesheet" type="text/css" href="' & style & '" />' & chr(10), theTemplate.getStyles()) />
+		<cfset assertEquals('<link rel="stylesheet" type="text/css" href="' & style & '" />' & chr(10), template.getStyles()) />
 	</cffunction>
 	
 	<!---
@@ -290,9 +290,9 @@
 	--->
 	<cffunction name="testGetStylesSanScript" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset assertEquals('', theTemplate.getStyles()) />
+		<cfset assertEquals('', template.getStyles()) />
 	</cffunction>
 	
 	<!---
@@ -300,9 +300,9 @@
 	--->
 	<cffunction name="testHasAttributeFalse" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset assertFalse(theTemplate.hasAttribute('testing')) />
+		<cfset assertFalse(template.hasAttribute('testing')) />
 	</cffunction>
 	
 	<!---
@@ -310,10 +310,10 @@
 	--->
 	<cffunction name="testHasAttributeTrue" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theTemplate = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
+		<cfset var template = createObject('component', 'cf-compendium.inc.resource.structure.template').init(i18n) />
 		
-		<cfset theTemplate.setAttribute('testing', 'yippee') />
+		<cfset template.setAttribute('testing', 'yippee') />
 		
-		<cfset assertTrue(theTemplate.hasAttribute('testing')) />
+		<cfset assertTrue(template.hasAttribute('testing')) />
 	</cffunction>
 </cfcomponent>
