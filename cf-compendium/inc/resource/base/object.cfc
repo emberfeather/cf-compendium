@@ -223,6 +223,32 @@
 	</cffunction>
 	
 	<!---
+		Used to return a list of all the keys publicly available 
+		through the dynamic setters and getters.
+	--->
+	<cffunction name="getKeyList" access="public" returntype="string" output="false">
+		<cfreturn structKeyList(variables.instance) />
+	</cffunction>
+	
+	<!---
+		Checks for the existance of an attribute
+	--->
+	<cffunction name="hasAttribute" access="public" returntype="boolean" output="false">
+		<cfargument name="attributeName" type="string" required="true" />
+		
+		<cfreturn structKeyExists(variables.attributeOrder, arguments.attributeName) />
+	</cffunction>
+	
+	<!---
+		Checks for the existance of a key
+	--->
+	<cffunction name="hasKey" access="public" returntype="boolean" output="false">
+		<cfargument name="keyName" type="string" required="true" />
+		
+		<cfreturn structKeyExists(variables.instance, arguments.attributeName) />
+	</cffunction>
+	
+	<!---
 		Used to handle dynamic setters, getters, adders, adduniquers, and getterbyers
 	--->
 	<cffunction name="onMissingMethod" access="public" returntype="any" output="false">

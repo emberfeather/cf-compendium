@@ -63,6 +63,25 @@
 	</cffunction>
 	
 	<!---
+		Test the get attribute list functionality.
+	--->
+	<cffunction name="testGetAttributeList" access="public" returntype="void" output="false">
+		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		
+		<cfset theObject.setTest('value') />
+		
+		<cfset theObject.addAttribute('testing') />
+		<cfset theObject.addAttribute('again') />
+		<cfset theObject.addAttribute('for') />
+		<cfset theObject.addAttribute('bugs') />
+		
+		<cfset theObject.setTester('value') />
+		
+		<cfset assertEquals('testing,again,for,bugs', theObject.getAttributeList()) />
+	</cffunction>
+	
+	<!---
 		Test the get by attribute functionality.
 	--->
 	<cffunction name="testGetByAttribute" access="public" returntype="void" output="false">
@@ -95,6 +114,25 @@
 		<cfset theObject.addTests(theObject1, theObject2, theObject3, theObject4, theObject5) />
 		
 		<cfset assertEquals(3, arrayLen(theObject.getTestsByTest('e$'))) />
+	</cffunction>
+	
+	<!---
+		Test the get key list functionality.
+	--->
+	<cffunction name="testGetKeyList" access="public" returntype="void" output="false">
+		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		
+		<cfset theObject.setTest('value') />
+		
+		<cfset theObject.addAttribute('testing') />
+		<cfset theObject.addAttribute('again') />
+		<cfset theObject.addAttribute('for') />
+		<cfset theObject.addAttribute('bugs') />
+		
+		<cfset theObject.setTester('value') />
+		
+		<cfset assertEquals(6, listLen(theObject.getKeyList())) />
 	</cffunction>
 	
 	<!---

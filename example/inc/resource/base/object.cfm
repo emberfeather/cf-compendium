@@ -2,7 +2,7 @@
 
 <h1>Object Examples</h1>
 
-<h2>addAttribute(value)</h2>
+<h2>addVariable(value)</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
@@ -17,7 +17,7 @@
 	</p>
 </div>
 
-<h2>addAttribute(value, [, value]...)</h2>
+<h2>addVariable(value[, value]...)</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
@@ -32,7 +32,7 @@
 	</p>
 </div>
 
-<h2>addUniqueAttribute(value)</h2>
+<h2>addUniqueVariable(value)</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
@@ -52,7 +52,7 @@
 	</p>
 </div>
 
-<h2>addUniqueAttribute(value, [, value]...)</h2>
+<h2>addUniqueVariable(value[, value]...)</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
@@ -67,7 +67,7 @@
 	</p>
 </div>
 
-<h2>getAttribute()</h2>
+<h2>getVariable()</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
@@ -86,7 +86,7 @@
 	</p>
 </div>
 
-<h2>getAttributesBy('RegEx')</h2>
+<h2>getVariablesBy('RegEx')</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
@@ -107,7 +107,7 @@
 	</p>
 </div>
 
-<h2>getObjectsByAttribute('RegEx')</h2>
+<h2>getObjectsByVariable('RegEx')</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
@@ -158,7 +158,7 @@
 	</p>
 </div>
 
-<h2>getAttributeList()</h2>
+<h2>getKeyList()</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
@@ -174,12 +174,12 @@
 	</p>
 	
 	<p>
-		getAttributeList() --&gt;
-		<cfoutput>#theObject.getAttributeList()#</cfoutput>
+		getVariableList() --&gt;
+		<cfoutput>#theObject.getKeyList()#</cfoutput>
 	</p>
 </div>
 
-<h2>setAttribute()</h2>
+<h2>setVariable()</h2>
 
 <div>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
