@@ -1,7 +1,16 @@
 {
 	section: {
+		admin: {
+			subsection: {
+				trends: {
+					title: 'Trends',
+					desc: 'Error trends.',
+				}
+			}
+		},
 		support: {
-			title: 'Support'
+			title: 'Support',
+			desc: 'Support information.'
 		}
 	}
 }
