@@ -59,10 +59,15 @@
 	<p>
 		<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 		
+		<!--- Set the url variables --->
+		<cfset theURL.set('', 'section', 'admin') />
+		<cfset theURL.set('', 'subsection', 'errors') />
+		
 		<cfset currentPage = theObject.locate(theURL) />
 	</p>
 	
 	<p>
 		<cfset currentPage.print() />
+		<cfoutput>#currentPage.getPath('/example/inc/content', 'proc')#</cfoutput>
 	</p>
 </div>

@@ -30,14 +30,15 @@
 	<!---
 		test getting the getting location
 	--->
-	
 	<cffunction name="testGetLocation" access="public" returntype="void" output="false">
 		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
 		<cfset theURL.setLocation('mylocation', 'ef=cool')>
 		<cfset assertEquals('?ef=cool', theURL.get('mylocation'))>		
 	</cffunction>
 
-	<!--- want to test getting back the correct url given a url --->
+	<!---
+		want to test getting back the correct url given a url
+	--->
 	<cffunction name="testGetMaster" access="public" returntype="void" output="false">
 		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool') />
 		

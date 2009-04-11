@@ -2,6 +2,7 @@
 	section: {
 		admin: {
 			subsection: {
+				precedence: 'errors,trends',
 				trends: {
 					title: 'Trends',
 					desc: 'Error trends.',

@@ -3,6 +3,7 @@
 		admin: {
 			title: 'Admin',
 			desc: 'Administration.',
+			precedence: 'subsection,action',
 			subsection: {
 				errors: {
 					title: 'Errors',
@@ -13,6 +14,12 @@
 							desc: 'Error Conversations grouped by similarity into conversations.',
 						}
 					}
+				}
+			},
+			action: {
+				menu: {
+					title: 'Administration Menu',
+					desc: 'Options for administration.'
 				}
 			}
 		}
