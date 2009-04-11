@@ -1,7 +1,6 @@
 <h1>Object - B Tests</h1>
 
 <cfset theProfiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true) />
-<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
 
 <h2>Counts</h2>
 
@@ -13,7 +12,7 @@
 </p>
 
 <cfsilent>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
@@ -32,7 +31,7 @@
 </p>
 
 <cfsilent>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
@@ -51,7 +50,7 @@
 </p>
 
 <cfsilent>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
@@ -70,7 +69,7 @@
 </p>
 
 <cfsilent>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
@@ -91,7 +90,7 @@
 </p>
 
 <cfsilent>
-	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 	
 	<!--- Add something to search for --->
 	<cfloop from="1" to="50" index="i">

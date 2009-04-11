@@ -1,7 +1,6 @@
 <h1>Object - A Tests</h1>
 
 <cfset theProfiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true) />
-<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
 
 <h2>Counts</h2>
 
@@ -18,7 +17,7 @@
 		<cfset theProfiler.start('createObject') />
 		
 		<cfloop from="1" to="#count#" index="i">
-			<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+			<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		</cfloop>
 		
 		<cfset theProfiler.stop('createObject') />
@@ -32,7 +31,7 @@
 	setExisting: <cfoutput>#count#</cfoutput>
 </p>
 
-<cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init(i18n) />
+<cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
@@ -51,7 +50,7 @@
 	getExisting: <cfoutput>#count#</cfoutput>
 </p>
 
-<cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init(i18n) />
+<cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 <cfset theObject.setName('testing') />
 
 <cfsilent>
@@ -71,7 +70,7 @@
 	setNonExisting: <cfoutput>#count#</cfoutput>
 </p>
 
-<cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init(i18n) />
+<cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
@@ -90,7 +89,7 @@
 	getNonExisting: <cfoutput>#count#</cfoutput>
 </p>
 
-<cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init(i18n) />
+<cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 <cfset theObject.setTitle('testing') />
 
 <cfsilent>

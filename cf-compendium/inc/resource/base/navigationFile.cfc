@@ -1,6 +1,5 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
-		
 		<!--- Store the default values for the navigation elements --->
 		<cfset variables.defaults = {
 				title = '',
@@ -56,6 +55,15 @@
 		</cfloop>
 		
 		<cfreturn false />
+	</cffunction>
+	
+	<cffunction name="locate" access="public" returntype="component" output="false">
+		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="authUser" type="component" required="false" />
+		
+		<cfset var currentPage = createObject('component', 'cf-compendium.inc.resource.structure.currentPage').init() />
+		
+		<cfreturn currentPage />
 	</cffunction>
 	
 	<cffunction name="maskNavigation" access="private" returntype="struct" output="false">

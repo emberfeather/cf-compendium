@@ -3,8 +3,7 @@
 		Test the add functionality.
 	--->
 	<cffunction name="testAdd" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.addTests('value1') />
 		<cfset theObject.addTests('value2') />
@@ -16,8 +15,7 @@
 		Test the add functionality with multiple arguments.
 	--->
 	<cffunction name="testAddMulti" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.addTests('value1', 'value2') />
 		
@@ -28,8 +26,7 @@
 		Test the add unique functionality.
 	--->
 	<cffunction name="testAddUnique" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.addUniqueTests('value1') />
 		<cfset theObject.addUniqueTests('value2') />
@@ -42,8 +39,7 @@
 		Test the add unique multi functionality.
 	--->
 	<cffunction name="testAddUniqueMulti" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.addUniqueTests('value1', 'value2', 'value2') />
 		
@@ -54,8 +50,7 @@
 		Test the get functionality.
 	--->
 	<cffunction name="testGet" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.setTest('value') />
 		
@@ -63,30 +58,10 @@
 	</cffunction>
 	
 	<!---
-		Test the get attribute list functionality.
-	--->
-	<cffunction name="testGetAttributeList" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
-		
-		<cfset theObject.setTest('value') />
-		
-		<cfset theObject.addAttribute('testing') />
-		<cfset theObject.addAttribute('again') />
-		<cfset theObject.addAttribute('for') />
-		<cfset theObject.addAttribute('bugs') />
-		
-		<cfset theObject.setTester('value') />
-		
-		<cfset assertEquals('testing,again,for,bugs', theObject.getAttributeList()) />
-	</cffunction>
-	
-	<!---
 		Test the get by attribute functionality.
 	--->
 	<cffunction name="testGetByAttribute" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.addTests('valve', 'pressure', 'release', 'control', 'flow') />
 		
@@ -97,13 +72,12 @@
 		Test the get object by attribute functionality.
 	--->
 	<cffunction name="testGetByAttribute" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
-		<cfset var theObject1 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
-		<cfset var theObject2 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
-		<cfset var theObject3 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
-		<cfset var theObject4 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
-		<cfset var theObject5 = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset var theObject1 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset var theObject2 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset var theObject3 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset var theObject4 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset var theObject5 = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject1.setTest('valve') />
 		<cfset theObject2.setTest('pressure') />
@@ -120,8 +94,7 @@
 		Test the get key list functionality.
 	--->
 	<cffunction name="testGetKeyList" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.setTest('value') />
 		
@@ -132,15 +105,14 @@
 		
 		<cfset theObject.setTester('value') />
 		
-		<cfset assertEquals(6, listLen(theObject.getKeyList())) />
+		<cfset assertEquals(3, listLen(theObject.getKeyList())) />
 	</cffunction>
 	
 	<!---
 		Test the length functionality.
 	--->
 	<cffunction name="testLengthArray" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		<cfset var temp = [0, 1, 2, 3] />
 		
 		<cfset theObject.setTest(temp) />
@@ -152,8 +124,7 @@
 		Test the length functionality.
 	--->
 	<cffunction name="testLengthSimple" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.setTest('value') />
 		
@@ -164,8 +135,7 @@
 		Test the length functionality.
 	--->
 	<cffunction name="testLengthStruct" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		<cfset var temp = { test= 1, test1 = 2 } />
 		
 		<cfset theObject.setTest(temp) />
@@ -177,8 +147,7 @@
 		Test the properties functionality.
 	--->
 	<cffunction name="testProperties" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'implementation.inc.resource.base.object1').init(i18n) />
+		<cfset var theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 		
 		<cfset assertEquals('value', theObject.getTest()) />
 		<cfset assertEquals('bar', theObject.getFoo()) />
@@ -188,8 +157,7 @@
 		Test the set functionality.
 	--->
 	<cffunction name="testSet" access="public" returntype="void" output="false">
-		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init(i18n) />
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.setTest('value') />
 		
