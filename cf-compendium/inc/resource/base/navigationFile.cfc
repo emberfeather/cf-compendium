@@ -6,6 +6,8 @@
 				title = '',
 				navTitle = '',
 				desc = '',
+				ids = '',
+				vars = '',
 				attributes = {},
 				allow = '*',
 				deny = '*',

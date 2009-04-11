@@ -116,7 +116,7 @@
 			} />
 		<cfset var extOptions = '' />
 		<cfset var i = '' />
-		<cfset var htmlTitle = '' />
+		<cfset var htmlTitle = this.getSiteTitle() />
 		<cfset var numLevels = this.getLevel() />
 		
 		<!--- Check if there are page titles --->

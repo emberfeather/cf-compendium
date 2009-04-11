@@ -215,7 +215,8 @@
 				<!--- Add the value to the struct --->
 				<cfset tempUrl[left(current, i - 1)] = right(current, len(current) - i) />
 			<cfelse>
-				<cfthrow message="Could not find a name value pair in the query string." detail="Use a = to separate the names and values and & to separate attributes in the query string." />
+				<!--- Otherwise assume it is blank --->
+				<cfset tempUrl[current] = '' />
 			</cfif>
 		</cfloop>
 		
