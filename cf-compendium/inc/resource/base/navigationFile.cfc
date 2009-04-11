@@ -5,6 +5,7 @@
 		<cfset variables.defaults = {
 				title = '',
 				navTitle = '',
+				navPosition = '',
 				desc = '',
 				ids = '',
 				vars = '',
