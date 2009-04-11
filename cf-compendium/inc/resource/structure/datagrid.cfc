@@ -16,6 +16,8 @@
 	</cffunction>
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
+		<cfargument name="data" type="any" required="true" />
+		
 		<cfreturn 'Cood data grid goes here...' />
 	</cffunction>
 </cfcomponent>
