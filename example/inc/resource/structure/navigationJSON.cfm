@@ -43,3 +43,12 @@
 		<cfdump var="#theObject.getNavigation()#" />
 	</p>
 </div>
+
+<h2>validate()</h2>
+
+<div>
+	<cfset path = expandPath('/example/inc/content') />
+	<cfset theObject.validate(path, 'proc,cont') />
+	
+	Check <cfoutput>#path#</cfoutput> for the automated creation of the structure with 'proc' and 'cont' files.
+</div>
