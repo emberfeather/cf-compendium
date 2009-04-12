@@ -35,7 +35,7 @@
 		</cfif>
 		
 		<!--- Pull in the levels from the current page --->
-		<cfloop array="#arguments.currentPage.getLevels()#" index="i">
+		<cfloop array="#variables.currentPage.getLevels()#" index="i">
 			<cfset this.addLevel(argumentCollection = i) />
 		</cfloop>
 		
