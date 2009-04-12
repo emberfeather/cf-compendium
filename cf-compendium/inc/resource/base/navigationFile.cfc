@@ -33,12 +33,12 @@
 		<!--- Check if we have to worry about the user for permissions --->
 		<cfif structKeyExists(arguments, 'authUser')>
 			<!--- Check for an actual named explicit --->
-			<cfif NOT isExplicitAllow AND isListCollistion(arguments.navigation[i][j].allow, arguments.authUser.getUserTypes())>
+			<cfif NOT isExplicitAllow AND isListCollision(arguments.element.allow, arrayToList(arguments.authUser.getUserTypes()))>
 				<cfset isExplicitAllow = true />
 			</cfif>
 			
 			<!--- Check for an actual named explicit --->
-			<cfif NOT isExplicitDeny AND isListCollistion(arguments.navigation[i][j].deny, arguments.authUser.getUserTypes())>
+			<cfif NOT isExplicitDeny AND isListCollision(arguments.element.deny, arrayToList(arguments.authUser.getUserTypes()))>
 				<cfset isExplicitDeny = true />
 			</cfif>
 		</cfif>
