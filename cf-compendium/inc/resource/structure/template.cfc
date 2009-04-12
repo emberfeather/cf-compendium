@@ -17,6 +17,7 @@
 				siteTitle = '',
 				styles = []
 			} />
+		<cfset var i = '' />
 		
 		<cfset super.init() />
 		
@@ -32,6 +33,11 @@
 		<cfelse>
 			<cfset variables.currentPage = variables.navigation.locate(theURL, this.getAuthUser()) />
 		</cfif>
+		
+		<!--- Pull in the levels from the current page --->
+		<cfloop array="#arguments.currentPage.getLevels()#" index="i">
+			<cfset this.addLevel(argumentCollection = i) />
+		</cfloop>
 		
 		<cfreturn this />
 	</cffunction>
@@ -278,16 +284,6 @@
 		<cfargument name="value" type="any" required="true" />
 		
 		<cfset variables.instance.attributes[arguments.name] = arguments.value />
-	</cffunction>
-	
-	<cffunction name="setCurrentPage" access="public" returntype="void" output="false">
-		<cfargument name="currentPage" type="component" required="true" />
-		
-		<cfset var i = '' />
-		
-		<cfloop array="#arguments.currentPage.getLevels()#" index="i">
-			<cfset addLevel(argumentCollection = i) />
-		</cfloop>
 	</cffunction>
 	
 	<!---
