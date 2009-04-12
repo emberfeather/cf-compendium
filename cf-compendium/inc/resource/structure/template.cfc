@@ -256,6 +256,16 @@
 		<cfset variables.instance.attributes[arguments.name] = arguments.value />
 	</cffunction>
 	
+	<cffunction name="setCurrentPage" access="public" returntype="void" output="false">
+		<cfargument name="currentPage" type="component" required="true" />
+		
+		<cfset var i = '' />
+		
+		<cfloop array="#arguments.currentPage.getLevels()#" index="i">
+			<cfset addLevel(argumentCollection = i) />
+		</cfloop>
+	</cffunction>
+	
 	<!---
 		Sets the meta information to the specified value
 	--->
