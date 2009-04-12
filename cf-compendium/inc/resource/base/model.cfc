@@ -116,7 +116,7 @@
 		
 		<!--- If we find don't find anything --->
 		<cfif NOT result.pos[1]>
-			<cfset super.onMissingMethod(argumentCollection = arguments) />
+			<cfreturn super.onMissingMethod(argumentCollection = arguments) />
 		</cfif>
 		
 		<!--- Find the prefix --->
