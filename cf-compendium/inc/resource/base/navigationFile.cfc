@@ -94,6 +94,69 @@
 		<cfreturn arguments.parsedNav />
 	</cffunction>
 	
+	<cffunction name="getNavigation" access="public" returntype="array" output="false">
+		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="level" type="numeric" required="true" />
+		<cfargument name="navPosition" type="string" required="true" />
+		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="authUser" type="component" required="false" />
+		
+		<cfset var currNavigation = [] />
+		
+		<!--- Clean a url variable for building links --->
+		<cfset arguments.theURL.clean('currentPage') />
+		
+		<!--- Need to traverse the url to find out the navigation --->
+		<cfif structKeyExists(arguments, 'authUser')>
+			<cfset getNavigationChild(variables.navigation, currNavigation, arguments.theURL, arguments.level, arguments.navPosition, arguments.options, arguments.authUser) />
+		<cfelse>
+			<cfset getNavigationChild(variables.navigation, currNavigation, arguments.theURL, arguments.level, arguments.navPosition, arguments.options) />
+		</cfif>
+		
+		<cfreturn currNavigation />
+	</cffunction>
+	
+	<cffunction name="getNavigationChild" access="private" returntype="void" output="false">
+		<cfargument name="navigation" type="struct" required="true" />
+		<cfargument name="currNavigation" type="array" required="true" />
+		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="level" type="numeric" required="true" />
+		<cfargument name="navPosition" type="string" required="true" />
+		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="authUser" type="component" required="false" />
+		
+		<cfset var i = '' />
+		<cfset var matched= '' />
+		
+		<!--- If we are not on the first level, find it --->
+		<cfif arguments.level GT 1>
+			<!--- Locate the page that matches the url --->
+			<cfif structKeyExists(arguments, 'authUser')>
+				<cfset matched = locateMatch(arguments.navigation, arguments.theURL, arguments.authUser) />
+			<cfelse>
+				<cfset matched = locateMatch(arguments.navigation, arguments.theURL) />
+			</cfif>
+			
+			<!--- If we didn't find it then it doesn't exist --->
+			<cfif NOT isStruct(matched.match)>
+				<cfreturn />
+			</cfif>
+			
+			<!--- Add to url --->
+			<cfset arguments.theURL.set('currentPage', lcase(matched.urlVar), lcase(matched.urlValue)) />
+			
+			<!--- Recurse --->
+			<cfif structKeyExists(arguments, 'authUser')>
+				<cfset getNavigationChild(variables.navigation, currNavigation, arguments.theURL, arguments.level - 1, arguments.navPosition, arguments.options, arguments.authUser) />
+			<cfelse>
+				<cfset getNavigationChild(variables.navigation, currNavigation, arguments.theURL, arguments.level - 1, arguments.navPosition, arguments.options) />
+			</cfif>
+		<cfelse>
+			<!--- We are on the level 1 --->
+			<cfthrow message="Incomplete: Need to figure out how to implement this correctly" />
+		</cfif>
+	</cffunction>
+	
 	<cffunction name="getNonDefaultList" access="private" returntype="string" output="false">
 		<cfargument name="defaults" type="struct" required="true" />
 		<cfargument name="navigation" type="struct" required="true" />
@@ -173,30 +236,64 @@
 		<cfargument name="authUser" type="component" required="false" />
 		
 		<cfset var i = '' />
-		<cfset var match = '' />
-		<cfset var urlValue = '' />
-		<cfset var urlVar = '' />
+		<cfset var matched = '' />
+		<cfset var nonDefaultList = getNonDefaultList(variables.defaults, arguments.navigation) />
+		<cfset var nonDefaultKeyList = '' />
+		
+		<!--- Locate the page that matches the url --->
+		<cfif structKeyExists(arguments, 'authUser')>
+			<cfset matched = locateMatch(arguments.navigation, arguments.theURL, arguments.authUser) />
+		<cfelse>
+			<cfset matched = locateMatch(arguments.navigation, arguments.theURL) />
+		</cfif>
+		
+		<!--- If we found a match add the information and recurse --->
+		<cfif isStruct(matched.match)>
+			<!--- Add to current page --->
+			<cfset arguments.theURL.set('currentPage', lcase(matched.urlVar), lcase(matched.urlValue)) />
+			<cfset arguments.currentPage.addLevel(lcase(matched.urlVar), lcase(matched.urlValue), matched.match.title, arguments.theURL.get('currentPage')) />
+			
+			<!--- Recurse --->
+			<cfif structKeyExists(arguments, 'authUser')>
+				<cfset locateChild(matched.match, currentPage, arguments.theURL, arguments.authUser) />
+			<cfelse>
+				<cfset locateChild(matched.match, currentPage, arguments.theURL) />
+			</cfif>
+		</cfif>
+	</cffunction>
+	
+	<cffunction name="locateMatch" access="private" returntype="struct" output="false">
+		<cfargument name="navigation" type="struct" required="true" />
+		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="authUser" type="component" required="false" />
+		
+		<cfset var i = '' />
+		<cfset var matched = {
+				match = '',
+				urlVar = '',
+				urlValue = ''
+			} />
 		<cfset var nonDefaultList = getNonDefaultList(variables.defaults, arguments.navigation) />
 		<cfset var nonDefaultKeyList = '' />
 		
 		<!--- Check if given an explicit element of the navigation --->
 		<cfloop list="#nonDefaultList#" index="i">
 			<!--- Found the url value to check navigation for --->
-			<cfset urlValue = arguments.theURL.search('', i) />
+			<cfset matched.urlValue = arguments.theURL.search('', i) />
 			
 			<!--- If we found a value check for a match --->
-			<cfif urlValue NEQ ''>
+			<cfif matched.urlValue NEQ ''>
 				<cfloop list="#structKeyList(arguments.navigation[i])#" index="j">
-					<cfif j EQ urlValue>
+					<cfif j EQ matched.urlValue>
 						<!--- Check if using a user --->
 						<cfif structKeyExists(arguments, 'authUser')>
-							<cfset match = checkMatch(arguments.navigation[i][j], arguments.authUser) />
+							<cfset matched.match = checkMatch(arguments.navigation[i][j], arguments.authUser) />
 						<cfelse>
-							<cfset match = checkMatch(arguments.navigation[i][j]) />
+							<cfset matched.match = checkMatch(arguments.navigation[i][j]) />
 						</cfif>
 						
 						<!--- Save the url value for later --->
-						<cfset urlVar = i />
+						<cfset matched.urlVar = i />
 						
 						<cfbreak />
 					</cfif>
@@ -204,13 +301,13 @@
 			</cfif>
 			
 			<!--- If we found a match stop looking --->
-			<cfif isStruct(match)>
+			<cfif isStruct(matched.match)>
 				<cfbreak />
 			</cfif>
 		</cfloop>
 		
 		<!--- If we didn't find a valid breadth first match look for a default --->
-		<cfif NOT isStruct(match)>
+		<cfif NOT isStruct(matched.match)>
 			<cfloop list="#nonDefaultList#" index="i">
 				<!--- Get the non-default key list --->
 				<cfset nonDefaultKeyList = getNonDefaultList(variables.defaultKeys, arguments.navigation[i]) />
@@ -219,40 +316,28 @@
 				<cfloop list="#nonDefaultKeyList#" index="j">
 					<!--- Check if using a user --->
 					<cfif structKeyExists(arguments, 'authUser') AND (arguments.navigation[i][j].defaults EQ '*' OR isListCollistion(arguments.navigation[i][j].defaults, arguments.authUser.getUserTypes()))>
-						<cfset match = checkMatch(arguments.navigation[i][j], arguments.authUser) />
+						<cfset matched.match = checkMatch(arguments.navigation[i][j], arguments.authUser) />
 					<cfelseif arguments.navigation[i][j].defaults EQ '*'>
-						<cfset match = checkMatch(arguments.navigation[i][j]) />
+						<cfset matched.match = checkMatch(arguments.navigation[i][j]) />
 					</cfif>
 					
 					<!--- Only break if we did find a valid default --->
-					<cfif isStruct(match)>
-						<cfset urlVar = i />
-						<cfset urlValue = j />
+					<cfif isStruct(matched.match)>
+						<cfset matched.urlVar = i />
+						<cfset matched.urlValue = j />
 						
 						<cfbreak />
 					</cfif>
 				</cfloop>
 				
 				<!--- Keep breaking if we found a match --->
-				<cfif isStruct(match)>
+				<cfif isStruct(matched.match)>
 					<cfbreak />
 				</cfif>
 			</cfloop>
 		</cfif>
 		
-		<!--- If we found a match add the information and recurse --->
-		<cfif isStruct(match)>
-			<!--- Add to current page --->
-			<cfset arguments.theURL.set('currentPage', lcase(urlVar), lcase(urlValue)) />
-			<cfset arguments.currentPage.addLevel(lcase(urlVar), lcase(urlValue), match.title, arguments.theURL.get('currentPage')) />
-			
-			<!--- Recurse --->
-			<cfif structKeyExists(arguments, 'authUser')>
-				<cfset locateChild(match, currentPage, arguments.theURL, arguments.authUser) />
-			<cfelse>
-				<cfset locateChild(match, currentPage, arguments.theURL) />
-			</cfif>
-		</cfif>
+		<cfreturn matched />
 	</cffunction>
 	
 	<cffunction name="maskNavigation" access="private" returntype="struct" output="false">

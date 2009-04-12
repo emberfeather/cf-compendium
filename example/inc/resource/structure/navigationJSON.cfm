@@ -44,6 +44,23 @@
 	</p>
 </div>
 
+<h2>locate(theUrl, [user])</h2>
+
+<div>
+	<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+	
+	<!--- Set the url variables --->
+	<cfset theURL.set('', 'section', 'admin') />
+	<cfset theURL.set('', 'subsection', 'errors') />
+	
+	<cfset currentPage = theObject.locate(theURL) />
+		
+	<p>
+		<cfset currentPage.print() />
+		<cfoutput>#currentPage.getPath('/example/inc/content', 'proc')#</cfoutput>
+	</p>
+</div>
+
 <h2>validate()</h2>
 
 <div>
@@ -51,23 +68,4 @@
 	<cfset theObject.validate(path, 'proc,cont') />
 	
 	Check <cfoutput>#path#</cfoutput> for the automated creation of the structure with 'proc' and 'cont' files.
-</div>
-
-<h2>locate(theUrl, [user])</h2>
-
-<div>
-	<p>
-		<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
-		
-		<!--- Set the url variables --->
-		<cfset theURL.set('', 'section', 'admin') />
-		<cfset theURL.set('', 'subsection', 'errors') />
-		
-		<cfset currentPage = theObject.locate(theURL) />
-	</p>
-	
-	<p>
-		<cfset currentPage.print() />
-		<cfoutput>#currentPage.getPath('/example/inc/content', 'proc')#</cfoutput>
-	</p>
 </div>

@@ -192,7 +192,23 @@
 		Used to retrieve the formatted navigation element.
 	--->
 	<cffunction name="getNavigation" access="public" returntype="string" output="false">
+		<cfargument name="level" type="numeric" default="1" />
+		<cfargument name="position" type="string" required="true" />
+		<cfargument name="options" type="struct" default="#structNew()#" />
+		
+		<cfset var defaults = {
+				numLevels = 1,
+				isExpanded = false,
+				groupTag = '',
+				outerTag = 'ul',
+				innerTag = 'li'
+			} />
+		<cfset var navigation = variables.navigation.getNavigation(argumentCollection = arguments) />
 		<cfset var tempHTML = '' />
+		
+		<cfset arguments.options = extend(defaults, arguments.options) />
+		
+		<!--- TODO Need to implement the getNavigation function in the navigation to correctly retrieve the structure needed for generating the html for the navigation --->
 		
 		<cfreturn tempHTML />
 	</cffunction>
