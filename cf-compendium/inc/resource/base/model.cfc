@@ -4,7 +4,7 @@
 	Also has a default init function.
 	Based upon code by Hal Helms and modified from there. 
 --->
-<cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
+<cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
 	<!---
 		The basic init function 
 	--->
