@@ -1,9 +1,12 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
 	<cffunction name="init" access="public" returnType="component" output="false">
+		<cfargument name="navigation" type="component" required="true" />
+		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		
 		<cfset var defaults = {
 				attributes = {},
+				authUser = '',
 				pageTitles = [],
 				levels = [],
 				meta = {},
@@ -18,6 +21,17 @@
 		<cfset super.init() />
 		
 		<cfset properties(defaults, arguments.options) />
+		
+		<!--- Store the navigation and url objects --->
+		<cfset variables.navigation = arguments.navigation />
+		<cfset variables.theURL = arguments.theURL />
+		
+		<!--- Get the current page object --->
+		<cfif this.getAuthUser() EQ ''>
+			<cfset variables.currentPage = variables.navigation.locate(theURL) />
+		<cfelse>
+			<cfset variables.currentPage = variables.navigation.locate(theURL, this.getAuthUser()) />
+		</cfif>
 		
 		<cfreturn this />
 	</cffunction>
@@ -196,6 +210,16 @@
 		</cfif>
 		
 		<cfreturn variables.instance.levels[arguments.level].title />
+	</cffunction>
+	
+	<!---
+		Returns the template path to include for the current page and prefix
+	--->
+	<cffunction name="getPath" access="public" returntype="string" output="false">
+		<cfargument name="basePath" type="string" required="true" />
+		<cfargument name="prefix" type="string" required="true" />
+		
+		<cfreturn variables.currentPage.getPath(argumentCollection = arguments) />
 	</cffunction>
 	
 	<!---

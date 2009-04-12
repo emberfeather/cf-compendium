@@ -3,8 +3,6 @@
 		<!--- Store the default values for the navigation elements --->
 		<cfset variables.defaults = {
 				title = '',
-				navTitle = '',
-				navPosition = '',
 				desc = '',
 				ids = '',
 				vars = '',
@@ -13,7 +11,9 @@
 				allow = '*',
 				deny = '*',
 				defaults = '*',
-				order = 'allow,deny'
+				order = 'allow,deny',
+				navTitle = '',
+				navPosition = ''
 			} />
 		<cfset variables.defaultKeys = {
 				precedence = '*'
@@ -179,6 +179,7 @@
 		<cfset var nonDefaultList = getNonDefaultList(variables.defaults, arguments.navigation) />
 		<cfset var nonDefaultKeyList = '' />
 		
+		<!--- Check if given an explicit element of the navigation --->
 		<cfloop list="#nonDefaultList#" index="i">
 			<!--- Found the url value to check navigation for --->
 			<cfset urlValue = arguments.theURL.search('', i) />
