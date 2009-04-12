@@ -28,6 +28,24 @@
 	</cffunction>
 	
 	<!---
+		Tests if the value given is a valid number
+	--->
+	<cffunction name="isNumeric" access="public" returntype="void" output="false">
+		<cfargument name="label" type="string" required="true" />
+		<cfargument name="value" type="any" required="true" />
+		<cfargument name="extra" type="string" default="" />
+		
+		<cfset var message = '' />
+		
+		<cfif NOT isNumeric(arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('isNumeric') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
+		</cfif>
+	</cffunction>
+	
+	<!---
 		Tests if the value given is not over the max length
 	--->
 	<cffunction name="maxLength" access="public" returntype="void" output="false">
@@ -148,6 +166,42 @@
 		<cfif arguments.value LT now()>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('notPast') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
+		</cfif>
+	</cffunction>
+	
+	<!---
+		Tests if the value given is a valid email address
+	--->
+	<cffunction name="validEmail" access="public" returntype="void" output="false">
+		<cfargument name="label" type="string" required="true" />
+		<cfargument name="value" type="any" required="true" />
+		<cfargument name="extra" type="string" default="" />
+		
+		<cfset var message = '' />
+		
+		<cfif NOT REFind("^[a-zA-Z][\.a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9]+([a-zA-Z0-9-][a-zA-Z0-9]+)?\.([a-z]+(\.[a-z]+)?){2,5}$", arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('validEmail') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
+		</cfif>
+	</cffunction>
+	
+	<!---
+		Tests if the value given is a valid email address
+	--->
+	<cffunction name="validURL" access="public" returntype="void" output="false">
+		<cfargument name="label" type="string" required="true" />
+		<cfargument name="value" type="any" required="true" />
+		<cfargument name="extra" type="string" default="" />
+		
+		<cfset var message = '' />
+		
+		<cfif NOT REFind("^http[s]?://", arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('validURL') />
 			
 			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
 		</cfif>

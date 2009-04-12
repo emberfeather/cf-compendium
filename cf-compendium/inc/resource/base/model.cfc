@@ -40,6 +40,7 @@
 		<cfargument name="defaultValue" type="any" default="" />
 		<cfargument name="validation" type="struct" default="#structNew()#" />
 		<cfargument name="form" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#structNew()#" />
 		
 		<cfset variables.attributes[arguments.attribute] = arguments />
 		
@@ -111,11 +112,11 @@
 		<cfset var result = '' />
 		
 		<!--- Do a regex on the name --->
-		<cfset result = reFindNoCase('^(get|set|addUnique|add|length|reset)(.+)', arguments.missingMethodName, 1, true) />
+		<cfset result = reFindNoCase('^(set)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
 		<cfif NOT result.pos[1]>
-			<cfthrow message="Function not found" detail="The component has no function with name the name #arguments.missingMethodName#" />
+			<cfset super.onMissingMethod(argumentCollection = arguments) />
 		</cfif>
 		
 		<!--- Find the prefix --->
@@ -161,10 +162,6 @@
 				<!--- Set the value --->
 				<cfset variables.instance[attribute] = arguments.missingMethodArguments[1] />
 			</cfcase>
-			
-			<cfdefaultcase>
-				<cfset super.onMissingMethod(argumentCollection = arguments) />
-			</cfdefaultcase>
 		</cfswitch>
 	</cffunction>
 	
