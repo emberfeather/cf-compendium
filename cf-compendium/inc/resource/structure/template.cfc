@@ -27,7 +27,7 @@
 		<cfset variables.theURL = arguments.theURL />
 		
 		<!--- Get the current page object --->
-		<cfif this.getAuthUser() EQ ''>
+		<cfif NOT isObject(this.getAuthUser())>
 			<cfset variables.currentPage = variables.navigation.locate(theURL) />
 		<cfelse>
 			<cfset variables.currentPage = variables.navigation.locate(theURL, this.getAuthUser()) />
