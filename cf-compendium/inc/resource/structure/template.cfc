@@ -159,6 +159,10 @@
 		<cfreturn htmlTitle />
 	</cffunction>
 	
+	<cffunction name="getKey" access="public" returntype="string" output="false">
+		<cfreturn variables.currentPage.getLastLevel().name />
+	</cffunction>
+	
 	<!---
 		Returns the number of levels in use
 	--->

@@ -29,6 +29,10 @@
 		<cfset this.addLevels(level) />
 	</cffunction>
 	
+	<cffunction name="getLastLevel" access="public" returntype="struct" output="false">
+		<cfreturn variables.instance.levels[arrayLen(variables.instance.levels)] />
+	</cffunction>
+	
 	<cffunction name="getPath" access="public" returntype="string" output="false">
 		<cfargument name="basePath" type="string" required="true" />
 		<cfargument name="prefix" type="string" required="true" />

@@ -1,8 +1,8 @@
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returnType="component" output="false">
-		<cfargument name="theDatasource" type="component" required="true" />
+		<cfargument name="datasource" type="component" required="true" />
 		
-		<cfset variables.theDatasource = arguments.theDatasource />
+		<cfset variables.datasource = arguments.datasource />
 		
 		<cfreturn this />
 	</cffunction>
