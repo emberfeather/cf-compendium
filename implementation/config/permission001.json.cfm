@@ -1,0 +1,7 @@
+{
+	section: {
+		admin: {
+			allow: 'admin'
+		}
+	}
+}

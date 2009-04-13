@@ -44,16 +44,36 @@
 	</p>
 </div>
 
+<h2>applyMask(maskFile)</h2>
+
+<div>
+	<cffile action="read" file="#expandPath('/implementation/config/permission001.json.cfm')#" variable="fileContents">
+	<blockquote>
+		<code>
+			<pre><cfoutput>#fileContents#</cfoutput></pre>
+		</code>
+	</blockquote>
+	
+	<cfset theObject.applyMask('/implementation/config/permission001.json.cfm') />
+	
+	<p>
+		<cfdump var="#theObject.getNavigation()#" />
+	</p>
+</div>
+
 <h2>locate(theUrl, [user])</h2>
 
 <div>
 	<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+	<cfset theUser = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	
+	<cfset theUser.addUserTypes('admin') />
 	
 	<!--- Set the url variables --->
 	<cfset theURL.set('', 'section', 'admin') />
 	<cfset theURL.set('', 'subsection', 'errors') />
 	
-	<cfset currentPage = theObject.locate(theURL) />
+	<cfset currentPage = theObject.locate(theURL, theUser) />
 		
 	<p>
 		<cfset currentPage.print() />
