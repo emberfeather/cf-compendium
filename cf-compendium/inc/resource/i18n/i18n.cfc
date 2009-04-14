@@ -66,6 +66,7 @@
 		<cfset var keys = '' />
 		<cfset var resourceBundle = '' />
 		<cfset var base = '' />
+		<cfset var bundlePath = '' />
 		
 		<!--- Normalize the path --->
 		<cfset arguments.path = this.normalizePath(arguments.path) />
@@ -87,8 +88,19 @@
 		
 		<!--- Check if we already have a place for the bundle locale --->
 		<cfif NOT structKeyExists(variables.bundles[arguments.path][arguments.bundleName], arguments.bundleLocale)>
+			<!--- Check the bundle path --->
+			<cfif NOT directoryExists(arguments.path)>
+				<!--- Try just expanding the path --->
+				<cfset bundlePath = expandPath(arguments.path) />
+				
+				<!--- Resort to the base dir with an append --->
+				<cfif NOT directoryExists(bundlePath)>
+					<cfset bundlePath = variables.baseDirectory & arguments.path />
+				</cfif>
+			</cfif>
+			
 			<!--- Create the bundle --->
-			<cfset variables.bundles[arguments.path][arguments.bundleName][arguments.bundleLocale] = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init(variables.baseDirectory & arguments.path, arguments.bundleName, arguments.bundleLocale) />
+			<cfset variables.bundles[arguments.path][arguments.bundleName][arguments.bundleLocale] = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init(bundlePath, arguments.bundleName, arguments.bundleLocale) />
 		</cfif>
 		
 		<cfreturn variables.bundles[arguments.path][arguments.bundleName][arguments.bundleLocale] />
@@ -99,7 +111,7 @@
 	--->
 	<cffunction name="getValidation" access="public" returntype="component" output="false">
 		<cfargument name="locale" type="string" default="en_US" />
-		<cfargument name="bundlePath" type="string" default="cf-compendium/i18n/resource/utility" />
+		<cfargument name="bundlePath" type="string" default="/cf-compendium/i18n/resource/utility" />
 		<cfargument name="bundleName" type="string" default="validation" />
 		<cfargument name="componentPath" type="string" default="cf-compendium.inc.resource.utility.validation" />
 		
@@ -110,9 +122,12 @@
 		<cfif NOT structKeyExists(variables.validators, arguments.locale)>
 			<cfset variables.validators[arguments.locale] = {} />
 			
+			<!--- TODO Remove --->
+			<cfdump var="#arguments#" />
+			
 			<cfif NOT structKeyExists(variables.validators[arguments.locale], arguments.componentPath)>
 				<!--- Grab the required args for a validation object --->
-				<cfset bundle = this.getResourceBundle(bundlePath, arguments.bundleName, arguments.locale) />
+				<cfset bundle = this.getResourceBundle(arguments.bundlePath, arguments.bundleName, arguments.locale) />
 				<cfset format = this.getMessageFormat(arguments.locale) />
 				
 				<!--- Create the validator object --->

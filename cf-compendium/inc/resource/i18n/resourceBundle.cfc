@@ -47,7 +47,7 @@
 		
 		<!--- Check if the key exists --->
 		<cfif NOT structKeyExists(variables.bundle, arguments.key)>
-			<cfthrow message="Bundle Key Does Not Exist" detail="The bundle key does not exist in the bundle" />
+			<cfthrow message="Bundle Key Does Not Exist" detail="The bundle key (#arguments.key#) does not exist in the bundle" />
 		</cfif>
 		
 		<cfreturn variables.bundle[arguments.key] />
@@ -93,7 +93,7 @@
 		
 		<!--- Check that the file path exists --->
 		<cfif NOT directoryExists(filePath)>
-			<cfthrow message="Bundle directory not found" detail="The bundle directory for resource bundle was not found" />
+			<cfthrow message="Bundle directory not found" detail="The bundle directory for resource bundle was not found at #filePath#" />
 		</cfif>
 		
 		<!--- Keep adding to the file path for the bundle name --->

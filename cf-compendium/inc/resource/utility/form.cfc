@@ -4,11 +4,11 @@
 --->
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="any" output="false">
-		<cfargument name="name" type="string" required="true" />
+		<cfargument name="id" type="string" required="true" />
 		
 		<!--- Store the name of the form --->
 		<!--- Used for keeping multiple forms on the same page unique --->
-		<cfset variables.name = arguments.name />
+		<cfset variables.id = arguments.id />
 		
 		<!--- Set defaults for form --->
 		<cfset variables.isMultipart = false />
@@ -36,7 +36,7 @@
 		<cfset var element = '' />
 		
 		<!--- Set defaults --->
-		<cfset defaults.id = variables.name & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1 />
+		<cfset defaults.id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1 />
 		<cfset defaults.title = '' />
 		<cfset defaults.label = '' />
 		<cfset defaults.name = '' />
@@ -76,7 +76,7 @@
 		<cfset fieldset = variables.extender.extend(defaults, arguments.options) />
 		
 		<!--- Set the forced --->
-		<cfset fieldset.id = variables.name & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-fieldset' & arrayLen(variables.fieldsets) + 1 />
+		<cfset fieldset.id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-fieldset' & arrayLen(variables.fieldsets) + 1 />
 		
 		<!--- Check if there are elements to use to create a fieldset --->
 		<cfif arrayLen(variables.elements) GT 0>
@@ -106,7 +106,7 @@
 		<cfset section = variables.extender.extend(defaults, arguments.options) />
 		
 		<!--- Set the forced --->
-		<cfset section.id = variables.name & '-section' & arrayLen(variables.sections) + 1 />
+		<cfset section.id = variables.id & '-section' & arrayLen(variables.sections) + 1 />
 		
 		<!--- Close out any open tabs --->
 		<cfset addTab() />
@@ -138,7 +138,7 @@
 		<cfset tab = variables.extender.extend(defaults, arguments.options) />
 		
 		<!--- Set the forced --->
-		<cfset tab.id = variables.name & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 />
+		<cfset tab.id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 />
 		
 		<!--- Close out any open fieldset --->
 		<cfset addFieldset() />
@@ -188,11 +188,25 @@
 				<!--- Set some statics --->
 				<cfset attribute.form.name = i />
 				<cfset attribute.form.label = arguments.object.getAttributeLabel(i) />
-				<cfinvoke component="#arguments.object#" method="get#i#" returnvariable="attribute.form.value" />
+				
+				<!--- Pull the value of the attribute -- How this is used can be overridden by the form implementation --->
+				<cfset fromObjectAttribute(arguments.object, i, attribute) />
 				
 				<cfset this.addElement(attribute.form.type, attribute.form) />
 			</cfif>
 		</cfloop>
+	</cffunction>
+	
+	<!---
+		Pulls in any meta information from the object for adding to the form
+	--->
+	<cffunction name="fromObjectAttribute" access="private" returntype="void" output="false">
+		<cfargument name="object" type="component" required="true" />
+		<cfargument name="name" type="string" required="true" />
+		<cfargument name="attribute" type="struct" required="true" />
+		
+		<!--- For the checkbox we want to see if the value that the object has is the same as the value for the form --->
+		<cfinvoke component="#arguments.object#" method="get#arguments.name#" returnvariable="arguments.attribute.form.value" />
 	</cffunction>
 	
 	<!--- 
@@ -217,20 +231,20 @@
 		<cfargument name="action" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		
-		<cfset var defaults = structNew() />
+		<cfset var defaults = '' />
 		<cfset var options = '' />
 		<cfset var formatted = '' />
 		
 		<!--- Set defaults for form --->
-		<cfset defaults.name = 'changeMe' />
-		<cfset defaults.id = 'changeMe' />
-		<cfset defaults.method = 'POST' />
-		<cfset defaults.isMultipart = false />
-		<cfset defaults.accept = '' />
-		<cfset defaults.acceptCharset = '' />
-		<cfset defaults.target = '' />
-		<cfset defaults.title = '' />
-		<cfset defaults.class = '' />
+		<cfset defaults = {
+				method = 'POST',
+				isMultipart = false,
+				accept = '',
+				acceptCharset = '',
+				target = '',
+				title = '',
+				class = ''
+			} />
 		
 		<!--- Extend the form options --->
 		<cfset options = variables.extender.extend(defaults, arguments.options) />
@@ -240,23 +254,11 @@
 			<cfthrow message="Invalid form action" detail="A form action is required." />
 		</cfif>
 		
-		<!--- Check if an id is defined --->
-		<cfif options.id EQ ''>
-			<cfset options.id = options.name />
-		</cfif>
-		
 		<!--- Open Tag --->
 		<cfset formatted &= '<form' />
 		
 		<!--- Output id --->
-		<cfif options.id NEQ ''>
-			<cfset formatted &= ' id="' & options.id & '"' />
-		</cfif>
-		
-		<!--- Output name --->
-		<cfif options.name NEQ ''>
-			<cfset formatted &= ' name="' & options.name & '"' />
-		</cfif>
+		<cfset formatted &= ' id="' & variables.id & '"' />
 		
 		<!--- Output action --->
 		<cfset formatted &= ' action="' & arguments.action & '"' />

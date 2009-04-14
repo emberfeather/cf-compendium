@@ -122,7 +122,7 @@
 			<cfloop list="#structKeyList(variables.instance)#" index="i">
 				<cftry>
 					<!--- If it exists in the query pull it in --->
-					<cfif structKeyExists(arguments.input, i)>
+					<cfif listFindNoCase(arguments.input.columnList, i)>
 						<!--- If the current value is an array it should be pulled in as an array --->
 						<cfif isArray(variables.instance[i])>
 							<!--- Reset the value --->

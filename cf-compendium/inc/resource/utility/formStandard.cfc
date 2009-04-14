@@ -605,4 +605,24 @@
 		
 		<cfreturn formatted />
 	</cffunction>
+	
+	<!---
+		Pulls in any meta information from the object for adding to the form
+	--->
+	<cffunction name="fromObjectAttribute" access="private" returntype="void" output="false">
+		<cfargument name="object" type="component" required="true" />
+		<cfargument name="name" type="string" required="true" />
+		<cfargument name="attribute" type="struct" required="true" />
+		
+		<cfset var objectValue = '' />
+		
+		<cfif arguments.attribute.form.type EQ 'checkbox'>
+			<!--- For the checkbox we want to see if the value that the object has is the same as the value for the form --->
+			<cfinvoke component="#arguments.object#" method="get#arguments.name#" returnvariable="objectValue" />
+			
+			<cfset attribute.form.checked = objectValue EQ attribute.form.value />
+		<cfelse>
+			<cfset super.fromObjectAttribute(argumentCollection = arguments) />
+		</cfif>
+	</cffunction>
 </cfcomponent>

@@ -19,12 +19,12 @@
 		<cfset variables.i18n = {
 				i18n = arguments.i18n,
 				locale = arguments.locale,
-				bundlePath = 'cf-compendium/i18n/resource/base',
+				bundlePath = '/cf-compendium/i18n/resource/base',
 				bundleName = 'object'
 			} />
 		
 		<cfset variables.validation = {
-				bundlePath = 'cf-compendium/i18n/resource/utility',
+				bundlePath = '/cf-compendium/i18n/resource/utility',
 				bundleName = 'validation',
 				componentPath = 'cf-compendium.inc.resource.utility.validation'
 			} />
@@ -50,7 +50,7 @@
 		<cfset variables.instance[arguments.attribute] = arguments.defaultValue />
 	</cffunction>
 	
-	<cffunction name="createValidator" access="public" returntype="component" output="false">
+	<cffunction name="createValidator" access="public" returntype="void" output="false">
 		<cfset variables.validator = variables.i18n.i18n.getValidation(variables.i18n.locale, variables.validation.bundlePath, variables.validation.bundleName, variables.validation.componentPath) />
 	</cffunction>
 	
