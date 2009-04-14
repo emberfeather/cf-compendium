@@ -192,7 +192,18 @@
 				<!--- Pull the value of the attribute -- How this is used can be overridden by the form implementation --->
 				<cfset fromObjectAttribute(arguments.object, i, attribute) />
 				
+				<!--- Add the form element --->
 				<cfset this.addElement(attribute.form.type, attribute.form) />
+				
+				<!--- Check for the confirm option --->
+				<cfif structKeyExists(attribute.form, 'confirm')>
+					<!--- Modify the statics --->
+					<cfset attribute.form.name &= 'Confirm' />
+					<cfset attribute.form.label = 'Confirm ' & attribute.form.label />
+					
+					<!--- Add the confirm element --->
+					<cfset this.addElement(attribute.form.type, attribute.form) />
+				</cfif>
 			</cfif>
 		</cfloop>
 	</cffunction>

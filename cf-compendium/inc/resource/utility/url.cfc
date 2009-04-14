@@ -224,6 +224,24 @@
 	</cffunction>
 	
 	<!---
+		Removes a variable from the URL location given.
+	--->
+	<cffunction name="remove" access="public" returntype="void" output="false">
+		<cfargument name="locationName" type="string" required="true" />
+		<cfargument name="varName" type="string" required="true" />
+		
+		<cfset var location = '' />
+		
+		<!--- Get the location --->
+		<cfset location = getLocation(arguments.locationName) />
+		
+		<!--- Remove the value --->
+		<cfif structKeyExists(location, arguments.varName)>
+			<cfset structDelete(location, arguments.varName) />
+		</cfif>
+	</cffunction>
+	
+	<!---
 		Reset a URL location off of a query string or duplicate the master if no string given.
 	--->
 	<cffunction name="setLocation" access="public" returntype="void" output="false">

@@ -48,6 +48,11 @@
 		<cfset variables.attributeOrder = listAppend(variables.attributeOrder, arguments.attribute) />
 		
 		<cfset variables.instance[arguments.attribute] = arguments.defaultValue />
+		
+		<!--- Check for a confirm form option --->
+		<cfif structKeyExists(arguments.form, 'confirm')>
+			<cfset variables.instance[arguments.attribute & 'Confirm'] = arguments.defaultValue />
+		</cfif>
 	</cffunction>
 	
 	<cffunction name="createValidator" access="public" returntype="void" output="false">

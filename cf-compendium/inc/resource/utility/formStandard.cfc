@@ -621,6 +621,8 @@
 			<cfinvoke component="#arguments.object#" method="get#arguments.name#" returnvariable="objectValue" />
 			
 			<cfset attribute.form.checked = objectValue EQ attribute.form.value />
+		<cfelseif arguments.attribute.form.type EQ 'password' AND structKeyExists(attribute.form, 'value')>
+			<!--- For Password elements that have a value defined as part of the meta information do nothing --->
 		<cfelse>
 			<cfset super.fromObjectAttribute(argumentCollection = arguments) />
 		</cfif>
