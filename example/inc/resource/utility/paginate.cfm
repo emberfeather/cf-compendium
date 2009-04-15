@@ -100,6 +100,15 @@
 	</p>
 </div>
 
+<h2>toHTML()</h2>
+
+<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+
+<div>
+	toHTML() --&gt;
+	<cfoutput>#thePaginator.toHTML(theURL)#</cfoutput>
+</div>
+
 <h2>the object</h2>
 
 <cfdump var="#thePaginator#" />

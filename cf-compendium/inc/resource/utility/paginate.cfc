@@ -145,4 +145,56 @@
 		
 		<cfset variables.page = arguments.page />
 	</cffunction>
+	
+	<!---
+		Create HTMl output of the pagination
+	--->
+	<cffunction name="toHTML" access="public" returntype="string" output="false">
+		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="queryVar" type="string" default="onPage" />
+		
+		<cfset var html = '' />
+		<cfset var linkCount = 5 />
+		<cfset var middleLink = ceiling(linkCount / 2) />
+		
+		<cfsavecontent variable="html">
+			<cfoutput>
+				<ul class="pagination">
+					<li>Page: </li>
+					<cfif variables.page GT middleLink>
+						<cfset arguments.theURL.set('navQuery', arguments.queryVar, 1)>
+						<li><a href="#arguments.theURL.get('navQuery')#" title="Page 1">1</a></li>
+						<cfif variables.page GT middleLink + 1>
+							<li>&##8230;</li><!--- Ellipis --->
+						</cfif>
+					</cfif>
+					
+					<cfloop from="#max(1, variables.page - middleLink + 1)#" to="#min(variables.lastPage, variables.page + middleLink - 1)#" index="i">
+						<cfset arguments.theURL.set('navQuery', arguments.queryVar, i)>
+						<li class="<cfif i EQ variables.page>selected</cfif>"><a href="#arguments.theURL.get('navQuery')#" title="Page #i#">#i#</a></li>
+					</cfloop>
+					
+					<cfif variables.page LT variables.lastPage - middleLink + 1>
+						<cfif variables.page LT variables.lastPage - middleLink>
+							<li>&##8230;</li><!--- Ellipis --->
+						</cfif>
+						<cfset arguments.theURL.set('navQuery', arguments.queryVar, variables.lastPage)>
+						<li><a href="#arguments.theURL.get('navQuery')#" title="Page #variables.lastPage#">#variables.lastPage#</a></li>
+					</cfif>
+					
+					<cfif variables.page GT 1>
+						<cfset arguments.theURL.set('navQuery', arguments.queryVar, variables.page - 1)>
+						<li><a href="#arguments.theURL.get('navQuery')#" title="Previous Page">&laquo;</a></li>
+					</cfif>
+					
+					<cfif variables.page LT variables.lastPage>
+						<cfset arguments.theURL.set('navQuery', arguments.queryVar, variables.page + 1)>
+						<li><a href="#arguments.theURL.get('navQuery')#" title="Next Page">&raquo;</a></li>
+					</cfif>
+				</ul>
+			</cfoutput>
+		</cfsavecontent>
+		
+		<cfreturn html />
+	</cffunction>
 </cfcomponent>
