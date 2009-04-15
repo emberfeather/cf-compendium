@@ -1,0 +1,30 @@
+.list {
+	line-height: 1.75em;
+	margin: 1em;
+}
+
+.list li {
+	padding: .25em 1em;
+}
+
+.list li:hover {
+	background: #d3d3d3;
+}
+
+.list li.header:hover {
+	background: none;
+}
+
+.list .header {
+	font-weight: bold;
+	border-bottom: 1px solid #333333;
+}
+
+.list .alt {
+	background: #f2f2f2;
+}
+
+.list a.delete {
+	padding: 0 .5em;
+	color: #8C1717;
+}

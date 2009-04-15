@@ -1,0 +1,41 @@
+.padding-left {
+	padding-left:1em;
+}
+
+.padding-right {
+	padding-right:1em;
+}
+
+.clear {
+	clear: both;
+}
+
+.strong {
+	font-weight: bold;
+}
+
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
+}
+
+.img-left {
+	float:left;
+	margin:.5em 1em .5em 0;
+}
+
+.img-right {
+	float:right;
+	margin:.5em 0 .5em 1em;
+}
+
+.overflow-hidden {
+	overflow: hidden;
+}
+
+.hide, .hidden {
+	display: none;
+}

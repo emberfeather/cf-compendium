@@ -67,8 +67,75 @@
 	<!---
 		Uses the unique to add the scripts
 	--->
+	<cffunction name="addStyle" access="public" returntype="void" output="false">
+		<cfargument name="href" type="string" required="true" />
+		<cfargument name="media" type="string" default="all" />
+		
+		<cfset this.addUniqueStyle( argumentCollection = arguments ) />
+	</cffunction>
+	
+	<!---
+		Uses the unique to add the scripts
+	--->
 	<cffunction name="addStyles" access="public" returntype="void" output="false">
 		<cfset this.addUniqueStyles( argumentCollection = arguments ) />
+	</cffunction>
+	
+	<!---
+		Adds only a unique style
+	--->
+	<cffunction name="addUniqueStyle" access="public" returntype="void" output="false">
+		<cfargument name="href" type="string" required="true" />
+		<cfargument name="media" type="string" required="true" />
+		
+		<cfset var i = '' />
+		<cfset var isUnique = '' />
+		<cfset var j = '' />
+		
+		<!--- Check if it is already in the array --->
+		<cfloop array="#variables.instance.styles#" index="j">
+			<cfif j.href EQ arguments.href>
+				<cfreturn />
+			</cfif>
+		</cfloop>
+		
+		<cfset style = {
+				href = arguments.href,
+				media = arguments.media
+			} />
+		
+		<cfset arrayAppend( variables.instance.styles, style ) />
+	</cffunction>
+	
+	<!---
+		Adds only unique styles
+	--->
+	<cffunction name="addUniqueStyles" access="public" returntype="void" output="false">
+		<cfset var i = '' />
+		<cfset var isUnique = '' />
+		<cfset var j = '' />
+		
+		<cfloop array="#arguments#" index="i">
+			<cfset isUnique = true />
+			
+			<!--- Check if it is already in the array --->
+			<cfloop array="#variables.instance.styles#" index="j">
+				<cfif j.href EQ i>
+					<cfset isUnique = false />
+					
+					<cfbreak />
+				</cfif>
+			</cfloop>
+			
+			<cfif isUnique>
+				<cfset style = {
+						href = i,
+						media = 'all'
+					} />
+				
+				<cfset arrayAppend( variables.instance.styles, style ) />
+			</cfif>
+		</cfloop>
 	</cffunction>
 	
 	<!---
@@ -281,7 +348,7 @@
 		
 		<!--- Loop through each script and add it to the result --->
 		<cfloop array="#variables.instance.styles#" index="i">
-			<cfset results &= '<link rel="stylesheet" type="text/css" href="' & i & '" />' & chr(10) />
+			<cfset results &= '<link rel="stylesheet" type="text/css" href="' & i.href & '" media="' & i.media & '" />' & chr(10) />
 		</cfloop>
 		
 		<cfreturn results />
