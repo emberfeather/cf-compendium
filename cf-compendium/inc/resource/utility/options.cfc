@@ -1,39 +1,62 @@
 <!--- 
 	Used to create options for passing between objects.
 --->
-<cfcomponent displayname="Options" extends="cf-compendium.inc.resource.base.base" output="false">
-	<cffunction name="init" access="public" returntype="any" output="false">
-		<!--- Call the parent constructor --->
-		<cfset super.init() />
-		
-		<cfset variables.options = structNew() />
+<cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
+	<cffunction name="init" access="public" returntype="component" output="false">
+		<cfset reset() />
 		
 		<cfreturn this />
 	</cffunction>
 	
-	<!--- 
-		Accepts one struct for extending the current options with default values.
-	--->
-	<cffunction name="extend" access="public" returntype="void" output="false">
-		<cfargument name="defaults" type="struct" required="true" />
+	<cffunction name="addGroup" access="public" returntype="void" output="false">
+		<cfargument name="label" type="string" default="" />
 		
-		<cfset variables.options = super.extend(arguments.defaults, variables.options) />
+		<cfset var group = {
+				label = trim(arguments.label),
+				options = variables.options
+			} />
+		
+		<!--- Make sure we are actually going to be adding options --->
+		<cfif NOT arrayLen(variables.options)>
+			<cfthrow message="Can not add an option group without options" detail="Need to add options before adding a group" />
+		</cfif>
+		
+		<!--- Reset the options --->
+		<cfset variables.options = [] />
+		
+		<cfset arrayAppend(variables.groups, group) />
 	</cffunction>
 	
-	<!--- 
-		Returns a duplicate struct of options
-	--->
-	<cffunction name="getOptions" access="public" returntype="struct" output="false">
-		<cfreturn duplicate(variables.options) />
+	<cffunction name="addOption" access="public" returntype="void" output="false">
+		<cfargument name="title" type="string" required="true" />
+		<cfargument name="value" type="string" default="" />
+		
+		<cfset var option = {
+				title = trim(arguments.title),
+				value = trim(arguments.value)
+			} />
+		
+		<cfset variables.length++ />
+		
+		<cfset arrayAppend(variables.options, option) />
 	</cffunction>
 	
-	<!--- 
-		Adds/Sets the option to the variables
-	--->
-	<cffunction name="setOption" access="public" returntype="void" output="false">
-		<cfargument name="name" type="string" required="true" />
-		<cfargument name="value" type="any" required="true" />
+	<cffunction name="get" access="public" returntype="array" output="false">
+		<!--- Make sure we have at least one group and that all options are part of a group --->
+		<cfif NOT arrayLen(variables.groups) OR arrayLen(variables.options)>
+			<cfset addGroup() />
+		</cfif>
 		
-		<cfset variables[arguments.name] = arguments.value />
+		<cfreturn duplicate(variables.groups) />
+	</cffunction>
+	
+	<cffunction name="length" access="public" returntype="numeric" output="false">
+		<cfreturn variables.length />
+	</cffunction>
+	
+	<cffunction name="reset" access="public" returntype="void" output="false">
+		<cfset variables.options = [] />
+		<cfset variables.groups = [] />
+		<cfset variables.length = 0 />
 	</cffunction>
 </cfcomponent>

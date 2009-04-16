@@ -12,7 +12,7 @@
 	<!---
 		If the extend object has not been created creates it and uses it.
 	--->
-	<cffunction name="extend" access="public" returntype="struct" output="false">
+	<cffunction name="extend" access="private" returntype="struct" output="false">
 		<cfargument name="defaults" type="struct" required="true" />
 		<cfargument name="original" type="struct" default="#structNew()#" />
 		

@@ -13,7 +13,6 @@
 		
 	</cffunction>
 
-
 	<!--- test extending a url  --->
 	<cffunction name="testExtend" access="public" returnType="void" output="false">
 		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
