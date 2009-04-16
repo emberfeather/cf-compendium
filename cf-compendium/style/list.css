@@ -1,10 +1,11 @@
 .list {
-	line-height: 1.75em;
-	margin: 1em;
+	line-height: 1.5em;
+	list-style: none;
+	padding: 0;
 }
 
 .list li {
-	padding: .25em 1em;
+	padding: .5em 1em;
 }
 
 .list li:hover {
@@ -17,6 +18,7 @@
 
 .list .header {
 	font-weight: bold;
+	line-height: 2em;
 	border-bottom: 1px solid #333333;
 }
 

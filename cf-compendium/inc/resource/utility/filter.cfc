@@ -59,21 +59,19 @@
 		<cfset var option = '' />
 		<cfset var value = variables.theURL.search('', arguments.filter.key) />
 		
-		<cfset html &= '<label>' & filter.label & ': ' />
+		<cfset html &= '<strong>' & filter.label & ':</strong> ' />
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfloop array="#group.options#" index="option">
-				<cfset html &= '<input type="checkbox" name="' & arguments.filter.key & '" value="' & option.value & '"' />
+				<cfset html &= '<label><input type="checkbox" name="' & arguments.filter.key & '" value="' & option.value & '"' />
 				
 				<cfif option.value EQ value>
 					<cfset html &= ' checked="checked"' />
 				</cfif>
 				
-				<cfset html &= ' /> ' & option.title />
+				<cfset html &= ' /> ' & option.title & '</label>' />
 			</cfloop>
 		</cfloop>
-		
-		<cfset html &= '</select></label>' />
 		
 		<cfreturn html />
 	</cffunction>
@@ -87,21 +85,19 @@
 		<cfset var option = '' />
 		<cfset var value = variables.theURL.search('', arguments.filter.key) />
 		
-		<cfset html &= '<label>' & filter.label & ': ' />
+		<cfset html &= '<strong>' & filter.label & ':</strong> ' />
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfloop array="#group.options#" index="option">
-				<cfset html &= '<input type="radio" name="' & arguments.filter.key & '" value="' & option.value & '"' />
+				<cfset html &= '<label><input type="radio" name="' & arguments.filter.key & '" value="' & option.value & '"' />
 				
 				<cfif option.value EQ value>
 					<cfset html &= ' checked="checked"' />
 				</cfif>
 				
-				<cfset html &= ' /> ' & option.title />
+				<cfset html &= ' /> ' & option.title & '</label>' />
 			</cfloop>
 		</cfloop>
-		
-		<cfset html &= '</select></label>' />
 		
 		<cfreturn html />
 	</cffunction>
@@ -115,7 +111,7 @@
 		<cfset var option = '' />
 		<cfset var value = variables.theURL.search('', arguments.filter.key) />
 		
-		<cfset html &= '<label>' & filter.label & ': <select name="' & arguments.filter.key & '">' />
+		<cfset html &= '<label><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfif group.label NEQ ''>
@@ -147,7 +143,7 @@
 		
 		<cfset var html = '' />
 		
-		<cfset html &= '<label>' & filter.label & ': <input type="text" name="' & arguments.filter.key & '" value="' & variables.theURL.search('', arguments.filter.key) & '" /></label>' />
+		<cfset html &= '<label><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & variables.theURL.search('', arguments.filter.key) & '" /></label>' />
 		
 		<cfreturn html />
 	</cffunction>
@@ -203,6 +199,9 @@
 				<cfset html &= '<br />' />
 			</cfif>
 		</cfloop>
+		
+		<!--- Wrap with the filter div --->
+		<cfset html = '<div class="filter"><form method="POST" action="' & variables.theURL.get() & '">' & html & '<input type="submit" value="filter"></form></div>' />
 		
 		<cfreturn html />
 	</cffunction>

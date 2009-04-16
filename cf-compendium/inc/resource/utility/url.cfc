@@ -211,9 +211,12 @@
 		<cfloop list="#arguments.queryString#" index="current" delimiters="&">
 			<cfset i = find('=', current) />
 			
-			<cfif i GT 0>
+			<cfif i GT 0 AND len(current) NEQ i>
 				<!--- Add the value to the struct --->
 				<cfset tempUrl[left(current, i - 1)] = right(current, len(current) - i) />
+			<cfelseif i GT 0>
+				<!--- Add the value to the struct --->
+				<cfset tempUrl[left(current, i - 1)] = '' />
 			<cfelse>
 				<!--- Otherwise assume it is blank --->
 				<cfset tempUrl[current] = '' />
