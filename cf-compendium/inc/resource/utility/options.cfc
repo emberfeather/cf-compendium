@@ -3,7 +3,9 @@
 --->
 <cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
-		<cfset reset() />
+		<cfset variables.options = [] />
+		<cfset variables.groups = [] />
+		<cfset variables.length = 0 />
 		
 		<cfreturn this />
 	</cffunction>
@@ -52,11 +54,5 @@
 	
 	<cffunction name="length" access="public" returntype="numeric" output="false">
 		<cfreturn variables.length />
-	</cffunction>
-	
-	<cffunction name="reset" access="public" returntype="void" output="false">
-		<cfset variables.options = [] />
-		<cfset variables.groups = [] />
-		<cfset variables.length = 0 />
 	</cffunction>
 </cfcomponent>
