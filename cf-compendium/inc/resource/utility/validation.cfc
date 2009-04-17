@@ -30,7 +30,7 @@
 	<!---
 		Tests if the value given is a valid number
 	--->
-	<cffunction name="isNumeric" access="public" returntype="void" output="false">
+	<cffunction name="isNumber" access="public" returntype="void" output="false">
 		<cfargument name="label" type="string" required="true" />
 		<cfargument name="value" type="any" required="true" />
 		<cfargument name="extra" type="string" default="" />
@@ -39,7 +39,7 @@
 		
 		<cfif NOT isNumeric(arguments.value)>
 			<!--- Get the message from the bundle --->
-			<cfset message = variables.resourceBundle.getValue('isNumeric') />
+			<cfset message = variables.resourceBundle.getValue('isNumber') />
 			
 			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
 		</cfif>
@@ -122,10 +122,13 @@
 	--->
 	<cffunction name="notGreaterThan" access="public" returntype="void" output="false">
 		<cfargument name="label" type="string" required="true" />
-		<cfargument name="value" type="date" required="true" />
+		<cfargument name="value" type="string" required="true" />
 		<cfargument name="extra" type="numeric" required="true" />
 		
 		<cfset var message = '' />
+		
+		<!--- Replace all non-numeric characters in case it is money --->
+		<cfset arguments.value = reReplace(arguments.value, '[^0-9.]', '', 'all') />
 		
 		<cfif arguments.value GT arguments.extra>
 			<!--- Get the message from the bundle --->
@@ -140,10 +143,13 @@
 	--->
 	<cffunction name="notLessThan" access="public" returntype="void" output="false">
 		<cfargument name="label" type="string" required="true" />
-		<cfargument name="value" type="date" required="true" />
+		<cfargument name="value" type="string" required="true" />
 		<cfargument name="extra" type="numeric" required="true" />
 		
 		<cfset var message = '' />
+		
+		<!--- Replace all non-numeric characters in case it is money --->
+		<cfset arguments.value = reReplace(arguments.value, '[^0-9.]', '', 'all') />
 		
 		<cfif arguments.value LT arguments.extra>
 			<!--- Get the message from the bundle --->

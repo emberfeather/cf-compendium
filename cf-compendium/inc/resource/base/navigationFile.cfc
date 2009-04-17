@@ -249,6 +249,9 @@
 		
 		<!--- If we found a match add the information and recurse --->
 		<cfif isStruct(matched.match)>
+			<!--- Correct the master url --->
+			<cfset arguments.theURL.set('', lcase(matched.urlVar), lcase(matched.urlValue)) />
+			
 			<!--- Add to current page --->
 			<cfset arguments.theURL.set('currentPage', lcase(matched.urlVar), lcase(matched.urlValue)) />
 			<cfset arguments.currentPage.addLevel(lcase(matched.urlVar), lcase(matched.urlValue), matched.match.title, arguments.theURL.get('currentPage')) />

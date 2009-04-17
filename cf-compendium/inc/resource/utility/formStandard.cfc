@@ -39,6 +39,9 @@
 			<cfcase value="select">
 				<cfreturn elementSelect(arguments.element) />
 			</cfcase>
+			<cfcase value="selectRange">
+				<cfreturn elementSelectRange(arguments.element) />
+			</cfcase>
 			<cfcase value="text">
 				<cfreturn elementText(arguments.element) />
 			</cfcase>
@@ -429,11 +432,105 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
-		<cfset var defaults = {} />
+		<cfset var group = '' />
+		<cfset var option = '' />
+		<cfset var optGroups = '' />
+		<cfset var defaults = {
+				multiple = false,
+				size = 10,
+				value = ''
+			} />
 		
-		<!--- Set defaults --->
-		<cfset defaults.multiple = false />
-		<cfset defaults.size = 10 />
+		<!--- Extend the form options --->
+		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		
+		<!--- check for options --->
+		<cfif NOT structKeyExists( arguments.element, 'options' )>
+			<cfthrow message="Need options for select element" detail="Need to pass options to the select type of element" />
+		</cfif>
+		
+		<cfset formatted = '<select ' />
+		
+		<!--- ID --->
+		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
+		
+		<!--- Title --->
+		<cfif arguments.element.title NEQ ''>
+			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
+		</cfif>
+		
+		<!--- Name --->
+		<cfif arguments.element.name NEQ ''>
+			<cfset formatted &= 'name="' & arguments.element.name & '" ' />
+		</cfif>
+		
+		<!--- Multiple --->
+		<cfif arguments.element.multiple EQ true>
+			<cfset formatted &= 'multiple="multiple" ' />
+		</cfif>
+		
+		<!--- Size --->
+		<cfif arguments.element.size NEQ ''>
+			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
+		</cfif>
+		
+		<!--- Disabled --->
+		<cfif arguments.element.disabled>
+			<cfset formatted &= 'disabled="disabled" ' />
+		</cfif>
+		
+		<!--- Class --->
+		<cfif arguments.element.class NEQ ''>
+			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
+		</cfif>
+		
+		<cfset formatted &= '>' />
+		
+		<!--- Get the option groups --->
+		<cfset optGroups = arguments.element.options.get() />
+		
+		<!--- Output the options --->
+		<cfloop array="#optGroups#" index="group">
+			<cfif group.label NEQ ''>
+				<cfset formatted &= '<optgroup label="' & group.label & '">' />
+			</cfif>
+			
+			<cfloop array="#group.options#" index="option">
+				<cfset formatted &= '<option value="' & option.value & '"' />
+				
+				<!--- Selected --->
+				<cfif option.value EQ arguments.element.value>
+					<cfset formatted &= ' selected="selected"' />
+				</cfif>
+				
+				<cfset formatted &= '>' & option.title & '</option>' />
+			</cfloop>
+			
+			<cfif group.label NEQ ''>
+				<cfset formatted &= '</optgroup>' />
+			</cfif>
+		</cfloop>
+		
+		<cfset formatted &= '</select>' />
+		
+		<cfreturn formatted />
+	</cffunction>
+	
+	<!--- 
+		Creates the select form element.
+	--->
+	<cffunction name="elementSelectRange" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset var formatted = '' />
+		<cfset var i = '' />
+		<cfset var defaults = {
+				multiple = false,
+				size = 10,
+				rangeMin = 1,
+				rangeMax = 100,
+				rangeStep = 1
+			} />
 		
 		<!--- Extend the form options --->
 		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
@@ -464,7 +561,7 @@
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled NEQ ''>
+		<cfif arguments.element.disabled>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
@@ -474,6 +571,12 @@
 		</cfif>
 		
 		<cfset formatted &= '>' />
+		
+		<cfset formatted &= '<option value=""></option>' />
+		
+		<cfloop from="#arguments.element.rangeMin#" to="#arguments.element.rangeMax#" index="i" step="#arguments.element.rangeStep#">
+			<cfset formatted &= '<option value="#i#">#i#</option>' />
+		</cfloop>
 		
 		<cfset formatted &= '</select>' />
 		
