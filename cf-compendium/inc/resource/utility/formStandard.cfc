@@ -575,7 +575,14 @@
 		<cfset formatted &= '<option value=""></option>' />
 		
 		<cfloop from="#arguments.element.rangeMin#" to="#arguments.element.rangeMax#" index="i" step="#arguments.element.rangeStep#">
-			<cfset formatted &= '<option value="#i#">#i#</option>' />
+			<cfset formatted &= '<option value="#i#"' />
+			
+			<!--- Check for a selected value --->
+			<cfif arguments.element.value EQ i>
+				<cfset formatted &= ' selected="selected"' />
+			</cfif>
+			
+			<cfset formatted &= '>#i#</option>' />
 		</cfloop>
 		
 		<cfset formatted &= '</select>' />

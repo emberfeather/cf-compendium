@@ -1,0 +1,42 @@
+.form fieldset {
+	padding: 1em;
+	margin: 1em 0;
+}
+
+.form label {
+	display: block;
+	line-height: 2em;
+	width: 20%;
+	min-width: 270px;
+	float: left;
+	clear: both;
+	text-transform: capitalize;
+}
+
+.form input[type=text],
+.form input[type=password],
+.form input[type=file] {
+	width: 30%;
+	min-width: 250px;
+}
+
+.form textarea {
+	width: 100%;
+}
+
+.form .element {
+	padding: .5em;
+}
+
+.form .required {
+	color: #E3170D;
+}
+
+.form .submit {
+	padding: 1em;
+	text-align: center;
+}
+
+.form .alt {
+	background: #f2f2f2;
+}

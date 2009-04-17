@@ -35,6 +35,37 @@
 	font-weight: bold;
 }
 
+.message,
+.error,
+.success {
+	color: #333333;
+	list-style: none;
+	line-height: 2em;
+}
+
+.message ul,
+.error ul,
+.success ul {
+	list-style: none;
+	padding: 1em 1.5em;
+	margin: 0;
+}
+
+.message {
+	border: 1px solid #000066;
+	background: #CCCCFF;
+}
+
+.error {
+	border: 1px solid #660000;
+	background: #FFCCCC;
+}
+
+.success {
+	border: 1px solid #006600;
+	background: #CCFFCC;
+}
+
 .padding {
 	padding: 1em;
 }

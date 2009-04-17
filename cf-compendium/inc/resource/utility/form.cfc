@@ -266,7 +266,7 @@
 		</cfif>
 		
 		<!--- Open Tag --->
-		<cfset formatted &= '<form' />
+		<cfset formatted &= '<form class="form"' />
 		
 		<!--- Output id --->
 		<cfset formatted &= ' id="' & variables.id & '"' />
@@ -378,17 +378,19 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
-		<cfset var class = 'odd' />
 		
 		<!--- hidden elements should not be shown --->
 		<cfif arguments.element.elementType NEQ 'hidden'>
-			<!--- Check if on an odd or even row --->
-			<cfif (variables.altRow++) MOD 2 EQ 0>
-				<cfset class = 'even' />
+			<!--- Start the tag --->
+			<cfset formatted = '<div class="element' />
+			
+			<!--- Check for a required element --->
+			<cfif arguments.element.required>
+				<cfset formatted &= ' required' />
 			</cfif>
 			
-			<!--- Start the tag --->
-			<cfset formatted = '<div class="element ' & class & '">' />
+			<!--- Finish div --->
+			<cfset formatted &= '">' />
 			
 			<!--- Output the label --->
 			<cfif arguments.element.label NEQ ''>
