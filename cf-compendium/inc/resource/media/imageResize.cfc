@@ -20,8 +20,8 @@
 		<cfargument name="resolutions" type="array" required="true" />
 		<cfargument name="x" type="numeric" default="-1" />
 		<cfargument name="y" type="numeric" default="-1" />
-		<cfargument name="width" type="numeric" default="100" />
-		<cfargument name="height" type="numeric" default="100" />
+		<cfargument name="width" type="numeric" default="-1" />
+		<cfargument name="height" type="numeric" default="-1" />
 		
 		<cfset var original = '' />
 		<cfset var parts = '' />
@@ -29,6 +29,9 @@
 		<cfset var modified = '' />
 		<cfset var width = '' />
 		<cfset var height = '' />
+		<cfset var maxWidth = '' />
+		<cfset var maxHeight = '' />
+		<cfset var resolutionRatio = '' />
 		<cfset var modded = '' />
 		<cfset var newFiles = [] />
 		<cfset var i = '' />
@@ -47,6 +50,82 @@
 		
 		<cfif arguments.y LT 0>
 			<cfset arguments.y = ceiling((height - arguments.height) / 2) />
+		</cfif>
+		
+		<!--- Check for an automatic size check --->
+		<cfif arguments.width LT 0 AND arguments.height LT 0>
+			<cfset maxWidth = width - arguments.x />
+			<cfset maxHeight = height - arguments.y />
+			
+			<cfset resolutionRatio = arguments.resolutions[1].width / arguments.resolutions[1].height />
+			
+			<cfif maxWidth LT maxHeight>
+				<!--- Width is the restraining --->
+				<cfif resolutionRatio LT 0>
+					<!--- Taller than Wide Resolution --->
+					<!---
+						+---------+
+						| |     | |
+						| |     | |
+						| |     | |
+						| |     | |
+						| |     | |
+						| |     | |
+						| |     | |
+						| |     | |
+						+---------+
+					--->
+					<cfset arguments.height = maxHeight />
+					<cfset arguments.width = maxHeight * resolutionRatio />
+				<cfelse>
+					<!--- Wider than Tall Resolution --->
+					<!---
+						+---------+
+						|         |
+						|---------|
+						|         |
+						|         |
+						|         |
+						|         |
+						|---------|
+						|         |
+						+---------+ 
+					--->
+					<cfset arguments.width = maxWidth />
+					<cfset arguments.height = maxWidth * resolutionRatio />
+				</cfif>
+			<cfelse>
+				<!--- Height is restraining --->
+				<cfif resolutionRatio LT 0>
+					<!--- Taller than Wide Resolution --->
+					<!---
+						+----------------------+
+						|   |              |   |
+						|   |              |   |
+						|   |              |   |
+						|   |              |   |
+						|   |              |   |
+						|   |              |   |
+						+----------------------+
+					--->
+					<cfset arguments.height = maxHeight />
+					<cfset arguments.width = maxHeight * resolutionRatio />
+				<cfelse>
+					<!--- Wider than Tall Resolution --->
+					<!---
+						+----------------------+
+						|                      |
+						|----------------------|
+						|                      |
+						|                      |
+						|----------------------|
+						|                      |
+						+----------------------+
+					--->
+					<cfset arguments.width = maxWidth />
+					<cfset arguments.height = maxWidth * resolutionRatio />
+				</cfif>
+			</cfif>
 		</cfif>
 		
 		<cfif arguments.x LT 0 OR width - arguments.x LT arguments.width>

@@ -73,6 +73,25 @@
 	</div>
 </cfloop>
 
+<h2>Clipped Auto Thumbnail</h2>
+
+<cfset resolutions = [
+		{
+			width: 300,
+			height: 300
+		}
+	] />
+
+<cfset modified = theObject.clipImage(imageExpPath, imageName, resolutions, 200, 200, -1, -1) />
+
+<cfloop array="#modified#" index="i">
+	<div>
+		<cfoutput>
+			<img src="#imagePath##i.filename#">
+		</cfoutput>
+	</div>
+</cfloop>
+
 <h2>the object</h2>
 
 <cfdump var="#theObject#" />
