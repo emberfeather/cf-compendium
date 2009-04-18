@@ -172,7 +172,7 @@
 							<cfcase value="1">
 								<cfset html &= filterCheckbox(filter) />
 							</cfcase>
-							<cfcase value="2,3,4,5">
+							<cfcase value="2,3,4">
 								<cfset html &= filterRadio(filter) />
 							</cfcase>
 							<cfdefaultcase>
@@ -184,9 +184,6 @@
 						<cfswitch expression="#filter.options.length()#">
 							<cfcase value="1">
 								<cfset html &= filterCheckbox(filter) />
-							</cfcase>
-							<cfcase value="2">
-								<cfset html &= filterRadio(filter) />
 							</cfcase>
 							<cfdefaultcase>
 								<cfset html &= filterSelect(filter) />

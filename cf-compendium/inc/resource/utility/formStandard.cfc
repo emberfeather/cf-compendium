@@ -4,6 +4,21 @@
 --->
 <cfcomponent extends="cf-compendium.inc.resource.utility.form" output="false">
 	<!--- 
+		Add an element to the form to be displayed.
+	--->
+	<cffunction name="addElement" access="public" returntype="void" output="false">
+		<cfargument name="elementType" type="string" required="true" />
+		<cfargument name="options" type="struct" default="#structNew()#" />
+		
+		<!--- Check for a file form type --->
+		<cfif arguments.elementType EQ 'file'>
+			<cfset variables.isMultipart = true />
+		</cfif>
+		
+		<cfset super.addElement(argumentCollection=arguments) />
+	</cffunction>
+	
+	<!--- 
 		Used to format the actual HTML element.
 		<p>
 		To add a custom element extend the form cfc and override the formatElement

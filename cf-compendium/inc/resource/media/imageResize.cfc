@@ -44,24 +44,16 @@
 		<cfset width = original.getWidth() />
 		<cfset height = original.getHeight() />
 		
-		<cfif arguments.x LT 0>
-			<cfset arguments.x = ceiling((width - arguments.width) / 2) />
-		</cfif>
-		
-		<cfif arguments.y LT 0>
-			<cfset arguments.y = ceiling((height - arguments.height) / 2) />
-		</cfif>
-		
 		<!--- Check for an automatic size check --->
 		<cfif arguments.width LT 0 AND arguments.height LT 0>
-			<cfset maxWidth = width - arguments.x />
-			<cfset maxHeight = height - arguments.y />
+			<cfset maxWidth = width - max(arguments.x, 0) />
+			<cfset maxHeight = height - max(arguments.y, 0) />
 			
 			<cfset resolutionRatio = arguments.resolutions[1].width / arguments.resolutions[1].height />
 			
 			<cfif maxWidth LT maxHeight>
 				<!--- Width is the restraining --->
-				<cfif resolutionRatio LT 0>
+				<cfif resolutionRatio LT 1>
 					<!--- Taller than Wide Resolution --->
 					<!---
 						+---------+
@@ -96,7 +88,7 @@
 				</cfif>
 			<cfelse>
 				<!--- Height is restraining --->
-				<cfif resolutionRatio LT 0>
+				<cfif resolutionRatio LT 1>
 					<!--- Taller than Wide Resolution --->
 					<!---
 						+----------------------+
@@ -108,8 +100,8 @@
 						|   |              |   |
 						+----------------------+
 					--->
-					<cfset arguments.height = maxHeight />
-					<cfset arguments.width = maxHeight * resolutionRatio />
+					<cfset arguments.width = maxWidth />
+					<cfset arguments.height = maxWidth * resolutionRatio />
 				<cfelse>
 					<!--- Wider than Tall Resolution --->
 					<!---
@@ -122,10 +114,18 @@
 						|                      |
 						+----------------------+
 					--->
-					<cfset arguments.width = maxWidth />
-					<cfset arguments.height = maxWidth * resolutionRatio />
+					<cfset arguments.height = maxHeight />
+					<cfset arguments.width = maxHeight * resolutionRatio />
 				</cfif>
 			</cfif>
+		</cfif>
+		
+		<cfif arguments.x LT 0>
+			<cfset arguments.x = ceiling((width - arguments.width) / 2) />
+		</cfif>
+		
+		<cfif arguments.y LT 0>
+			<cfset arguments.y = ceiling((height - arguments.height) / 2) />
 		</cfif>
 		
 		<cfif arguments.x LT 0 OR width - arguments.x LT arguments.width>
@@ -133,6 +133,13 @@
 		</cfif>
 		
 		<cfif arguments.y LT 0 OR height - arguments.y LT arguments.height>
+			<!--- TODO Remove --->
+			<cfdump var="#height - arguments.y#" />
+			<cfdump var="#arguments.height#" />
+			<cfdump var="#maxWidth#" />
+			<cfdump var="#maxHeight#" />
+			<cfdump var="#resolutionRatio#" />
+			<cfabort />
 			<cfthrow message="Image size is smaller than resize" detail="The height of the resize (#arguments.height#) is greater than the height of the image (#height#) with a #arguments.y# starting position." />
 		</cfif>
 		
@@ -176,7 +183,7 @@
 		
 		<!--- Check if we were able to locate the image name --->
 		<cfif NOT search.pos[1]>
-			<cfthrow message="Invalid image name." />
+			<cfthrow message="#arguments.imageName# is an invalid image name." />
 		</cfif>
 		
 		<!--- Get the base of the image name --->
