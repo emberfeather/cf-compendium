@@ -3,6 +3,97 @@
 		<cfreturn this />
 	</cffunction>
 	
+	<cffunction name="calculateMaxFit" access="public" returntype="struct" output="false">
+		<cfargument name="maxWidth" type="string" required="true" />
+		<cfargument name="maxHeight" type="string" required="true" />
+		<cfargument name="resolutions" type="array" required="true" />
+		
+		<cfset var maxResolutionClip = {} />
+		<cfset var resolution = '' />
+		
+		<cfloop array="#arguments.resolutions#" index="resolution">
+			<cfset resolution.whRatio = resolution.width / resolution.height />
+			<cfset resolution.hwRatio = resolution.height / resolution.width />
+			<cfset resolution.ratio = numberFormat(resolution.whRatio, "__.__") />
+			
+			<cfif NOT structKeyExists(maxResolutionClip, resolution.ratio)>
+				<cfset maxResolutionClip[resolution.ratio] = {
+						width = 0,
+						height = 0
+					} />
+				
+				<cfif arguments.maxWidth LT arguments.maxHeight>
+					<cfif resolution.ratio LT 1>
+						<!--- Taller than Wide Resolution --->
+						<!---
+							+---------+
+							| |     | |
+							| |     | |
+							| |     | |
+							| |     | |
+							| |     | |
+							| |     | |
+							| |     | |
+							| |     | |
+							+---------+
+						--->
+						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxHeight />
+						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxHeight * resolution.ratio />
+					<cfelse>
+						<!--- Wider than Tall Resolution --->
+						<!---
+							+---------+
+							|         |
+							|---------|
+							|         |
+							|         |
+							|         |
+							|         |
+							|---------|
+							|         |
+							+---------+ 
+						--->
+						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxWidth />
+						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxWidth * resolution.ratio />
+					</cfif>
+				<cfelse>
+					<!--- Height is restraining --->
+					<cfif resolution.ratio LT 1>
+						<!--- Taller than Wide Resolution --->
+						<!---
+							+----------------------+
+							|   |              |   |
+							|   |              |   |
+							|   |              |   |
+							|   |              |   |
+							|   |              |   |
+							|   |              |   |
+							+----------------------+
+						--->
+						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxWidth />
+						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxWidth * resolution.ratio />
+					<cfelse>
+						<!--- Wider than Tall Resolution --->
+						<!---
+							+----------------------+
+							|                      |
+							|----------------------|
+							|                      |
+							|                      |
+							|----------------------|
+							|                      |
+							+----------------------+
+						--->
+						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxHeight />
+						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxHeight * resolution.ratio />
+					</cfif>
+				</cfif>
+			</cfif>
+		</cfloop>
+		
+		<cfreturn maxResolutionClip />
+	</cffunction>
+	
 	<!---
 		Used to clip, resize, and save an image down to multiple resolutions.
 		<p>
@@ -25,15 +116,12 @@
 		
 		<cfset var original = '' />
 		<cfset var parts = '' />
-		<cfset var clipped = '' />
-		<cfset var modified = '' />
+		<cfset var modified = {} />
 		<cfset var width = '' />
 		<cfset var height = '' />
-		<cfset var maxWidth = '' />
-		<cfset var maxHeight = '' />
-		<cfset var resolutionRatio = '' />
 		<cfset var modded = '' />
 		<cfset var newFiles = [] />
+		<cfset var resolutionClips = '' />
 		<cfset var i = '' />
 		
 		<!--- Get the parts of the image name --->
@@ -44,110 +132,42 @@
 		<cfset width = original.getWidth() />
 		<cfset height = original.getHeight() />
 		
-		<!--- Check for an automatic size check --->
-		<cfif arguments.width LT 0 AND arguments.height LT 0>
-			<cfset maxWidth = width - max(arguments.x, 0) />
-			<cfset maxHeight = height - max(arguments.y, 0) />
-			
-			<cfset resolutionRatio = arguments.resolutions[1].width / arguments.resolutions[1].height />
-			
-			<cfif maxWidth LT maxHeight>
-				<!--- Width is the restraining --->
-				<cfif resolutionRatio LT 1>
-					<!--- Taller than Wide Resolution --->
-					<!---
-						+---------+
-						| |     | |
-						| |     | |
-						| |     | |
-						| |     | |
-						| |     | |
-						| |     | |
-						| |     | |
-						| |     | |
-						+---------+
-					--->
-					<cfset arguments.height = maxHeight />
-					<cfset arguments.width = maxHeight * resolutionRatio />
-				<cfelse>
-					<!--- Wider than Tall Resolution --->
-					<!---
-						+---------+
-						|         |
-						|---------|
-						|         |
-						|         |
-						|         |
-						|         |
-						|---------|
-						|         |
-						+---------+ 
-					--->
-					<cfset arguments.width = maxWidth />
-					<cfset arguments.height = maxWidth * resolutionRatio />
-				</cfif>
-			<cfelse>
-				<!--- Height is restraining --->
-				<cfif resolutionRatio LT 1>
-					<!--- Taller than Wide Resolution --->
-					<!---
-						+----------------------+
-						|   |              |   |
-						|   |              |   |
-						|   |              |   |
-						|   |              |   |
-						|   |              |   |
-						|   |              |   |
-						+----------------------+
-					--->
-					<cfset arguments.width = maxWidth />
-					<cfset arguments.height = maxWidth * resolutionRatio />
-				<cfelse>
-					<!--- Wider than Tall Resolution --->
-					<!---
-						+----------------------+
-						|                      |
-						|----------------------|
-						|                      |
-						|                      |
-						|----------------------|
-						|                      |
-						+----------------------+
-					--->
-					<cfset arguments.height = maxHeight />
-					<cfset arguments.width = maxHeight * resolutionRatio />
-				</cfif>
-			</cfif>
-		</cfif>
-		
 		<cfif arguments.x LT 0>
-			<cfset arguments.x = ceiling((width - arguments.width) / 2) />
+			<cfset arguments.x = ceiling((width - max(arguments.width, 0) / 2)) />
 		</cfif>
 		
 		<cfif arguments.y LT 0>
-			<cfset arguments.y = ceiling((height - arguments.height) / 2) />
+			<cfset arguments.y = ceiling((height - max(arguments.height, 0) / 2)) />
 		</cfif>
 		
-		<cfif arguments.x LT 0 OR width - arguments.x LT arguments.width>
-			<cfthrow message="Image size is smaller than resize" detail="The width of the resize (#arguments.width#) is greater than the width of the image (#width#) with a #arguments.x# starting position." />
+		<!--- Check if using only a portion of the image --->
+		<cfif arguments.width GT 0 AND arguments.height GT 0>
+			<cfif arguments.x LT 0 OR width - arguments.x LT arguments.width>
+				<cfthrow message="Image size is smaller than resize" detail="The width of the resize (#arguments.width#) is greater than the width of the image (#width#) with a #arguments.x# starting position." />
+			</cfif>
+			
+			<cfif arguments.y LT 0 OR height - arguments.y LT arguments.height>
+				<cfthrow message="Image size is smaller than resize" detail="The height of the resize (#arguments.height#) is greater than the height of the image (#height#) with a #arguments.y# starting position." />
+			</cfif>
+			
+			<cfset original = imageCopy(original, arguments.x, arguments.y, arguments.width, arguments.height) />
+			
+			<cfset width = arguments.width />
+			<cfset height = arguments.height />
 		</cfif>
 		
-		<cfif arguments.y LT 0 OR height - arguments.y LT arguments.height>
-			<!--- TODO Remove --->
-			<cfdump var="#height - arguments.y#" />
-			<cfdump var="#arguments.height#" />
-			<cfdump var="#maxWidth#" />
-			<cfdump var="#maxHeight#" />
-			<cfdump var="#resolutionRatio#" />
-			<cfabort />
-			<cfthrow message="Image size is smaller than resize" detail="The height of the resize (#arguments.height#) is greater than the height of the image (#height#) with a #arguments.y# starting position." />
-		</cfif>
-		
-		<cfset clipped = imageCopy(original, arguments.x, arguments.y, arguments.width, arguments.height) />
+		<!--- Calculate the max fit sizes for the resolutions --->
+		<cfset resolutionClips = calculateMaxFit(width, height, resolutions) />
 		
 		<cfloop array="#arguments.resolutions#" index="i">
-			<cfset modified = imageCopy(clipped, 0, 0, arguments.width, arguments.height) />
+			<!--- Check if we already have the modified image for the width/height ratio --->
+			<cfif NOT structKeyExists(modified, i.whRatio)>
+				<cfset clipped[i.ratio] = imageCopy(original, 0, 0, resolutionClips[i.ratio].width, resolutionClips[i.ratio].height) />
+			</cfif>
 			
+			<cfset modified = imageCopy(clipped[i.ratio], 0, 0, resolutionClips[i.ratio].width, resolutionClips[i.ratio].height) />
+			
+			<!--- Resize the image --->
 			<cfset imageResize(modified, i.width, i.height, 'highestQuality') />
 			
 			<!--- Get the modified dimensions --->

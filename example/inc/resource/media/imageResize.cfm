@@ -54,6 +54,7 @@
 	</div>
 </cfloop>
 
+<!--- 
 <h2>Clipped Thumbnail</h2>
 
 <cfset resolutions = [
@@ -72,6 +73,7 @@
 		</cfoutput>
 	</div>
 </cfloop>
+ --->
 
 <h2>Clipped Auto Thumbnail</h2>
 

@@ -1,7 +1,191 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
 	<!---
-		
+		Test the calculateMaxFit with a 4x3 ratio original image and using a 1x1 resolution ratio.
 	--->
-	<cffunction name="test" access="public" returntype="void" output="false">
+	<cffunction name="testCalculateMaxFit4x3with100x100" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 1000,
+					height = 1000
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(4000, 3000, resolutions) />
+		
+		<cfset assertEquals(3000, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(3000, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 4x3 ratio original image and using a 1x5 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit4x3with100x500" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 100,
+					height = 500
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(4000, 3000, resolutions) />
+		
+		<cfset assertEquals(600, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(3000, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 4x3 ratio original image and using a 1x10 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit4x3with100x1000" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 100,
+					height = 1000
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(4000, 3000, resolutions) />
+		
+		<cfset assertEquals(300, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(3000, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 4x3 ratio original image and using a 5x1 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit4x3with500x100" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 500,
+					height = 100
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(4000, 3000, resolutions) />
+		
+		<cfset assertEquals(4000, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(800, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 4x3 ratio original image and using a 10x1 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit4x3with1000x100" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 1000,
+					height = 100
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(4000, 3000, resolutions) />
+		
+		<cfset assertEquals(4000, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(400, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 3x4 ratio original image and using a 1x1 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit3x4with100x100" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 1000,
+					height = 1000
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(3000, 4000, resolutions) />
+		
+		<cfset assertEquals(3000, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(3000, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 3x4 ratio original image and using a 1x5 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit3x4with100x500" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 100,
+					height = 500
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(3000, 4000, resolutions) />
+		
+		<cfset assertEquals(800, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(4000, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 3x4 ratio original image and using a 1x10 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit3x4with100x1000" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 100,
+					height = 1000
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(3000, 4000, resolutions) />
+		
+		<cfset assertEquals(400, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(4000, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 3x4 ratio original image and using a 5x1 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit3x4with500x100" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 500,
+					height = 100
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(3000, 4000, resolutions) />
+		
+		<cfset assertEquals(3000, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(600, result[resolutions[1].ratio].height) />
+	</cffunction>
+	
+	<!---
+		Test the calculateMaxFit with a 3x4 ratio original image and using a 10x1 resolution ratio.
+	--->
+	<cffunction name="testCalculateMaxFit3x4with1000x100" access="public" returntype="void" output="false">
+		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.media.imageResize').init() />
+		<cfset var resolutions = [
+				{
+					width = 1000,
+					height = 100
+				}
+			] />
+		<cfset var result = '' />
+		
+		<cfset result = theObject.calculateMaxFit(3000, 4000, resolutions) />
+		
+		<cfset assertEquals(3000, result[resolutions[1].ratio].width) />
+		<cfset assertEquals(300, result[resolutions[1].ratio].height) />
 	</cffunction>
 </cfcomponent>
