@@ -10,6 +10,7 @@
 		
 		<cfset var maxResolutionClip = {} />
 		<cfset var resolution = '' />
+		<cfset var maxWHRatio = arguments.maxWidth / arguments.maxHeight />
 		
 		<cfloop array="#arguments.resolutions#" index="resolution">
 			<cfset resolution.whRatio = resolution.width / resolution.height />
@@ -22,70 +23,21 @@
 						height = 0
 					} />
 				
-				<cfif arguments.maxWidth LT arguments.maxHeight>
-					<cfif resolution.ratio LT 1>
-						<!--- Taller than Wide Resolution --->
-						<!---
-							+---------+
-							| |     | |
-							| |     | |
-							| |     | |
-							| |     | |
-							| |     | |
-							| |     | |
-							| |     | |
-							| |     | |
-							+---------+
-						--->
-						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxHeight />
-						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxHeight * resolution.ratio />
-					<cfelse>
-						<!--- Wider than Tall Resolution --->
-						<!---
-							+---------+
-							|         |
-							|---------|
-							|         |
-							|         |
-							|         |
-							|         |
-							|---------|
-							|         |
-							+---------+ 
-						--->
+				<cfif maxWHRatio GT 1>
+					<cfif maxWHRatio LT resolution.whRatio>
 						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxWidth />
-						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxWidth * resolution.ratio />
+						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxWidth * resolution.hwRatio />
+					<cfelse>
+						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxHeight * resolution.whRatio />
+						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxHeight />
 					</cfif>
 				<cfelse>
-					<!--- Height is restraining --->
-					<cfif resolution.ratio LT 1>
-						<!--- Taller than Wide Resolution --->
-						<!---
-							+----------------------+
-							|   |              |   |
-							|   |              |   |
-							|   |              |   |
-							|   |              |   |
-							|   |              |   |
-							|   |              |   |
-							+----------------------+
-						--->
+					<cfif maxWHRatio LT resolution.whRatio OR resolution.whRatio GT 1>
 						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxWidth />
-						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxWidth * resolution.ratio />
+						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxWidth * resolution.hwRatio />
 					<cfelse>
-						<!--- Wider than Tall Resolution --->
-						<!---
-							+----------------------+
-							|                      |
-							|----------------------|
-							|                      |
-							|                      |
-							|----------------------|
-							|                      |
-							+----------------------+
-						--->
+						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxHeight * resolution.whRatio />
 						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxHeight />
-						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxHeight * resolution.ratio />
 					</cfif>
 				</cfif>
 			</cfif>
