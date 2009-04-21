@@ -318,7 +318,7 @@
 				<!--- Check for a default --->
 				<cfloop list="#nonDefaultKeyList#" index="j">
 					<!--- Check if using a user --->
-					<cfif structKeyExists(arguments, 'authUser') AND (arguments.navigation[i][j].defaults EQ '*' OR isListCollistion(arguments.navigation[i][j].defaults, arguments.authUser.getUserTypes()))>
+					<cfif structKeyExists(arguments, 'authUser') AND (arguments.navigation[i][j].defaults EQ '*' OR isListCollision(arguments.navigation[i][j].defaults, arrayToList(arguments.authUser.getUserTypes())))>
 						<cfset matched.match = checkMatch(arguments.navigation[i][j], arguments.authUser) />
 					<cfelseif arguments.navigation[i][j].defaults EQ '*'>
 						<cfset matched.match = checkMatch(arguments.navigation[i][j]) />

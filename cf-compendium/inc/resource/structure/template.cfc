@@ -206,7 +206,7 @@
 		
 		<!--- Check if there are page titles --->
 		<cfif NOT numLevels>
-			<cfthrow message="Missing Title" detail="There are no titles to retrieve" />
+			<cfreturn this.getSiteTitle() />
 		</cfif>
 		
 		<!--- Extend out the options --->
@@ -294,7 +294,7 @@
 		
 		<!--- Check if there are page titles --->
 		<cfif NOT numLevels>
-			<cfthrow message="Missing Title" detail="There are no titles to retrieve" />
+			<cfreturn this.getSiteTitle() />
 		</cfif>
 		
 		<!--- Check that we are requesting a level that exists --->
