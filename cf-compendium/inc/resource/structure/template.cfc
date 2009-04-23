@@ -210,7 +210,7 @@
 		</cfif>
 		
 		<!--- Extend out the options --->
-		<cfset extOptions = this.extend(defaults, arguments.options) />
+		<cfset extOptions = extend(defaults, arguments.options) />
 		
 		<cfset htmlTitle = variables.instance.levels[numLevels].title />
 		

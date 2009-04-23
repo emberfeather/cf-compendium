@@ -84,7 +84,7 @@
 	<cffunction name="getStartRow" access="public" returntype="numeric" output="false">
 		<!--- If there are no rows we are nowhere --->
 		<cfif variables.total EQ 0>
-			<cfreturn 0 />
+			<cfreturn 1 />
 		</cfif>
 		
 		<cfreturn 1 + ((variables.page - 1) * variables.numPerPage) />

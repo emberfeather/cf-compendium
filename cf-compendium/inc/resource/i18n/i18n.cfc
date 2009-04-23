@@ -6,7 +6,7 @@
 		<cfargument name="baseDirectory" type="string" required="true" />
 		
 		<!--- Normalize the baseDirectory --->
-		<cfset arguments.baseDirectory = this.normalizePath(arguments.baseDirectory) />
+		<cfset arguments.baseDirectory = normalizePath(arguments.baseDirectory) />
 		
 		<cfif NOT directoryExists(arguments.baseDirectory)>
 			<cfthrow message="Base directory not found" detail="The base directory for resource bundles was not found" />
@@ -69,7 +69,7 @@
 		<cfset var bundlePath = '' />
 		
 		<!--- Normalize the path --->
-		<cfset arguments.path = this.normalizePath(arguments.path) />
+		<cfset arguments.path = normalizePath(arguments.path) />
 		
 		<!--- Check if we are doing the base locale --->
 		<cfif arguments.bundleLocale EQ ''>
@@ -121,9 +121,6 @@
 		<!--- Check if we already have one for the locale requested --->
 		<cfif NOT structKeyExists(variables.validators, arguments.locale)>
 			<cfset variables.validators[arguments.locale] = {} />
-			
-			<!--- TODO Remove --->
-			<cfdump var="#arguments#" />
 			
 			<cfif NOT structKeyExists(variables.validators[arguments.locale], arguments.componentPath)>
 				<!--- Grab the required args for a validation object --->

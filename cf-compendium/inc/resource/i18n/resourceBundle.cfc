@@ -16,7 +16,7 @@
 		<cfset variables.theExtender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		
 		<!--- Read in the bundle --->
-		<cfset bundleResource = this.read( argumentCollection = arguments ) />
+		<cfset bundleResource = read( argumentCollection = arguments ) />
 		
 		<!--- Create cache for resource bundles --->
 		<cfset variables.keys = bundleResource.keys />
@@ -84,7 +84,7 @@
 		<cfset var resourceBundle = '' />
 		
 		<!--- Normalize the path --->
-		<cfset filePath = this.normalizePath(arguments.path) />
+		<cfset filePath = normalizePath(arguments.path) />
 		
 		<!--- Check if we are doing the base bundle --->
 		<cfif arguments.bundleLocale EQ ''>
@@ -142,7 +142,7 @@
 		
 		<!--- If this is not the base bundle extend it to provide defaults --->
 		<cfif arguments.bundleLocale NEQ 'base'>
-			<cfset base = this.read(arguments.path, arguments.bundleName, '') />
+			<cfset base = read(arguments.path, arguments.bundleName, '') />
 			
 			<cfset bundleResource.keys = duplicate(base.keys) />
 			<cfset bundleResource.bundle = variables.theExtender.extend(base.bundle, bundleResource.bundle) />

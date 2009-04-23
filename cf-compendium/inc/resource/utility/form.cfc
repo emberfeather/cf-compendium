@@ -243,7 +243,7 @@
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		
 		<cfset var defaults = '' />
-		<cfset var options = '' />
+		<cfset var extendedOptions = '' />
 		<cfset var formatted = '' />
 		
 		<!--- Set defaults for form --->
@@ -258,7 +258,7 @@
 			} />
 		
 		<!--- Extend the form options --->
-		<cfset options = variables.extender.extend(defaults, arguments.options) />
+		<cfset extendedOptions = variables.extender.extend(defaults, arguments.options) />
 		
 		<!--- Check for valid action --->
 		<cfif trim(arguments.action) EQ ''>
@@ -280,32 +280,32 @@
 		</cfif>
 		
 		<!--- Title --->
-		<cfif options.title NEQ ''>
-			<cfset formatted &= ' title="' & options.title & '"' />
+		<cfif extendedOptions.title NEQ ''>
+			<cfset formatted &= ' title="' & extendedOptions.title & '"' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif options.class NEQ ''>
-			<cfset formatted &= ' class="' & options.class & '"' />
+		<cfif extendedOptions.class NEQ ''>
+			<cfset formatted &= ' class="' & extendedOptions.class & '"' />
 		</cfif>
 		
 		<!--- Output accepts --->
-		<cfif options.accept NEQ ''>
-			<cfset formatted &= ' accept="' & options.accept & '"' />
+		<cfif extendedOptions.accept NEQ ''>
+			<cfset formatted &= ' accept="' & extendedOptions.accept & '"' />
 		</cfif>
 		
 		<!--- Output acceptCharset --->
-		<cfif options.acceptCharset NEQ ''>
-			<cfset formatted &= ' accept-charset="' & options.acceptCharset & '"' />
+		<cfif extendedOptions.acceptCharset NEQ ''>
+			<cfset formatted &= ' accept-charset="' & extendedOptions.acceptCharset & '"' />
 		</cfif>
 		
 		<!--- Output target --->
-		<cfif options.target NEQ ''>
-			<cfset formatted &= ' target="' & options.target & '"' />
+		<cfif extendedOptions.target NEQ ''>
+			<cfset formatted &= ' target="' & extendedOptions.target & '"' />
 		</cfif>
 		
 		<!--- Check for multipart form --->
-		<cfif options.method EQ 'POST'>
+		<cfif extendedOptions.method EQ 'POST'>
 			<cfset formatted &= ' method="POST"' />
 		<cfelse>
 			<cfset formatted &= ' method="GET"' />
@@ -328,7 +328,7 @@
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		
 		<cfset var defaults = structNew() />
-		<cfset var options = '' />
+		<cfset var extendedOptions = '' />
 		<cfset var formatted = '' />
 		
 		<!--- Set defaults for form --->
@@ -337,25 +337,25 @@
 		<cfset defaults.reset = '' />
 		
 		<!--- Extend the form options --->
-		<cfset options = variables.extender.extend(defaults, arguments.options) />
+		<cfset extendedOptions = variables.extender.extend(defaults, arguments.options) />
 		
 		<!--- Open --->
 		<cfset formatted &= '<div ' />
 		
 		<!--- Class --->
-		<cfset formatted &= 'class="submit ' & options.class & '" ' />
+		<cfset formatted &= 'class="submit ' & extendedOptions.class & '" ' />
 		
 		<!--- Close --->
 		<cfset formatted &= '>' />
 		
 		<!--- Submit --->
-		<cfif options.submit NEQ ''>
-			<cfset formatted &= '<input type="submit" value="' & options.submit & '" />' />
+		<cfif extendedOptions.submit NEQ ''>
+			<cfset formatted &= '<input type="submit" value="' & extendedOptions.submit & '" />' />
 		</cfif>
 		
 		<!--- Reset --->
-		<cfif options.reset NEQ ''>
-			<cfset formatted &= '<input type="reset" value="' & options.reset & '" />' />
+		<cfif extendedOptions.reset NEQ ''>
+			<cfset formatted &= '<input type="reset" value="' & extendedOptions.reset & '" />' />
 		</cfif>
 		
 		<!--- Close --->
@@ -475,14 +475,14 @@
 		<cfset var defaults = structNew() />
 		<cfset var numSections = '' />
 		<cfset var formatted = '' />
-		<cfset var options = '' />
+		<cfset var extendedOptions = '' />
 		<cfset var i = '' />
 		
 		<!--- Set defaults for form --->
 		<cfset defaults.section = 0 />
 		
 		<!--- Extend the form options --->
-		<cfset options = variables.extender.extend(defaults, arguments.options) />
+		<cfset extendedOptions = variables.extender.extend(defaults, arguments.options) />
 		
 		<!--- Get the number of sections --->
 		<cfset numSections = getNumSections() />
@@ -503,7 +503,7 @@
 		<cfelse>
 			<!--- Show the entire form --->
 			<!--- Get the start form tag --->
-			<cfset formatted = getFormOpen(arguments.action, options) />
+			<cfset formatted = getFormOpen(arguments.action, extendedOptions) />
 			
 			<cfloop from="1" to="#numSections#" index="i">
 				<cfset formatted &= showSection(variables.sections[i]) />

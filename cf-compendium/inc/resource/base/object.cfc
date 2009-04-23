@@ -34,10 +34,11 @@
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var exists = '' />
+		<cfset var value = '' />
 		<cfset var messages = [] />
 		
 		<!--- Figure out the type --->
-		<cfif isXML(arguments.input)>
+		<cfif isSimpleValue(arguments.input) AND isXML(arguments.input)>
 			<!--- Read in the object from xml --->
 			<cfloop list="#structKeyList(variables.instance)#" index="i">
 				<!--- Check for the xml root --->
@@ -136,7 +137,9 @@
 							</cfloop>
 						<cfelse>
 							<cfinvoke component="#this#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
+								<cfset value = arguments.input[i] />
+								
+								<cfinvokeargument name="value" value="#value#" />
 							</cfinvoke>
 						</cfif>
 					</cfif>
@@ -320,7 +323,7 @@
 		<cfargument name="values" type="struct" default="#structNew()#" />
 		
 		<!--- Set the variables instance --->
-		<cfset variables.instance = this.extend(arguments.defaults, arguments.values) />
+		<cfset variables.instance = extend(arguments.defaults, arguments.values) />
 	</cffunction>
 	
 	<!---

@@ -188,7 +188,9 @@
 		
 		<cfset var theExtender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		
-		<cfreturn variables.locations[arguments.locationName] = theExtender.extend(getLocation(arguments.locationName), parseQueryString(arguments.defaultQueryString)) />
+		<cfset variables.locations[arguments.locationName] = theExtender.extend(getLocation(arguments.locationName), parseQueryString(arguments.defaultQueryString)) />
+		
+		<cfreturn variables.locations[arguments.locationName] />
 	</cffunction>
 	
 	<!---
