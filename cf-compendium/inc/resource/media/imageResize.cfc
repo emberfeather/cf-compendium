@@ -63,8 +63,8 @@
 		<cfargument name="resolutions" type="array" required="true" />
 		<cfargument name="x" type="numeric" default="-1" />
 		<cfargument name="y" type="numeric" default="-1" />
-		<cfargument name="width" type="numeric" default="-1" />
-		<cfargument name="height" type="numeric" default="-1" />
+		<cfargument name="clipWidth" type="numeric" default="-1" />
+		<cfargument name="clipHeight" type="numeric" default="-1" />
 		
 		<cfset var original = '' />
 		<cfset var parts = '' />
@@ -85,27 +85,27 @@
 		<cfset height = original.getHeight() />
 		
 		<cfif arguments.x LT 0>
-			<cfset arguments.x = ceiling((width - max(arguments.width, 0) / 2)) />
+			<cfset arguments.x = ceiling((width - max(arguments.clipWidth, 0) / 2)) />
 		</cfif>
 		
 		<cfif arguments.y LT 0>
-			<cfset arguments.y = ceiling((height - max(arguments.height, 0) / 2)) />
+			<cfset arguments.y = ceiling((height - max(arguments.clipHeight, 0) / 2)) />
 		</cfif>
 		
 		<!--- Check if using only a portion of the image --->
-		<cfif arguments.width GT 0 AND arguments.height GT 0>
-			<cfif arguments.x LT 0 OR width - arguments.x LT arguments.width>
-				<cfthrow message="Image size is smaller than resize" detail="The width of the resize (#arguments.width#) is greater than the width of the image (#width#) with a #arguments.x# starting position." />
+		<cfif arguments.clipWidth GT 0 AND arguments.clipHeight GT 0>
+			<cfif arguments.x LT 0 OR width - arguments.x LT arguments.clipWidth>
+				<cfthrow message="Image size is smaller than resize" detail="The width of the resize (#arguments.clipWidth#) is greater than the width of the image (#width#) with a #arguments.x# starting position." />
 			</cfif>
 			
-			<cfif arguments.y LT 0 OR height - arguments.y LT arguments.height>
-				<cfthrow message="Image size is smaller than resize" detail="The height of the resize (#arguments.height#) is greater than the height of the image (#height#) with a #arguments.y# starting position." />
+			<cfif arguments.y LT 0 OR height - arguments.y LT arguments.clipHeight>
+				<cfthrow message="Image size is smaller than resize" detail="The height of the resize (#arguments.clipHeight#) is greater than the height of the image (#height#) with a #arguments.y# starting position." />
 			</cfif>
 			
-			<cfset original = imageCopy(original, arguments.x, arguments.y, arguments.width, arguments.height) />
+			<cfset original = imageCopy(original, arguments.x, arguments.y, arguments.clipWidth, arguments.clipHeight) />
 			
-			<cfset width = arguments.width />
-			<cfset height = arguments.height />
+			<cfset width = arguments.clipWidth />
+			<cfset height = arguments.clipHeight />
 		</cfif>
 		
 		<!--- Calculate the max fit sizes for the resolutions --->
@@ -124,8 +124,8 @@
 			
 			<!--- Get the modified dimensions --->
 			<cfset modded = {
-					width = modified.getWidth(),
-					height = modified.getHeight()
+					width = i.width,
+					height = i.height
 				} />
 			
 			<!--- Create the new filename --->
