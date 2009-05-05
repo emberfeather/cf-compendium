@@ -198,50 +198,77 @@
 			<cfset extra = mid(arguments.missingMethodName, findParts.pos[3], findParts.len[3]) />
 		</cfif>
 		
+		<!--- Determine what we are really doing --->
 		<cfswitch expression="#name#">
 			<cfcase value="clean">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+					<cfreturn clean(arguments.missingMethodArguments[1]) />
+				</cfif>
+				
 				<cfreturn clean(extra) />
 			</cfcase>
 			
 			<cfcase value="extend">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+					<cfreturn extend(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				</cfif>
+				
 				<cfreturn extend(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="get">
-				<cfif NOT arrayLen(arguments.missingMethodArguments)>
-					<cfreturn get(extra) />
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+					<cfreturn get(extra, arguments.missingMethodArguments[1]) />
+				<cfelseif arrayLen(arguments.missingMethodArguments) EQ 2>
+					<cfreturn get(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
-				<cfreturn get(extra, arguments.missingMethodArguments[1]) />
+				<cfreturn get(extra) />
 			</cfcase>
 			
 			<cfcase value="has">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+					<cfreturn has(arguments.missingMethodArguments[1]) />
+				</cfif>
+				
 				<cfreturn has(extra) />
 			</cfcase>
 			
 			<cfcase value="override">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+					<cfreturn override(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				</cfif>
+				
 				<cfreturn override(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="reset">
-				<cfif NOT arrayLen(arguments.missingMethodArguments)>
-					<cfreturn reset(extra) />
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+					<cfreturn reset(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
-				<cfreturn reset(extra, arguments.missingMethodArguments[1]) />
+				<cfreturn reset(extra) />
 			</cfcase>
 			
 			<cfcase value="search">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+					<cfreturn search(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				</cfif>
+				
 				<cfreturn search(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="searchid">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+					<cfreturn searchID(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				</cfif>
+				
 				<cfreturn searchID(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="set">
 				<cfif arrayLen(arguments.missingMethodArguments) EQ 3>
-					<cfreturn set(arguments.missingMethodArguments[3], arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+					<cfreturn set(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2], arguments.missingMethodArguments[3]) />
 				</cfif>
 				
 				<cfreturn set(extra, arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
