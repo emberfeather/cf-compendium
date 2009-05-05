@@ -8,8 +8,10 @@
 <cfset count = 1000 />
 
 <p>
-	add: <cfoutput>#count#</cfoutput>
+	Running add: <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfsilent>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
@@ -27,8 +29,10 @@
 </cfsilent>
 
 <p>
-	add(value x10): <cfoutput>#count#</cfoutput>
+	Running add(value x10): <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfsilent>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
@@ -46,8 +50,10 @@
 </cfsilent>
 
 <p>
-	addUnique: <cfoutput>#count#</cfoutput>
+	Running addUnique: <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfsilent>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
@@ -65,8 +71,10 @@
 </cfsilent>
 
 <p>
-	addUnique(value x10): <cfoutput>#count#</cfoutput>
+	Running addUnique(value x10): <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfsilent>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
@@ -86,8 +94,10 @@
 <cfset count = 200 />
 
 <p>
-	getAttributesBy: <cfoutput>#count#</cfoutput>
+	Running getAttributesBy: <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfsilent>
 	<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
@@ -109,4 +119,5 @@
 	</cfloop>
 </cfsilent>
 
+<!--- Output Results --->
 <cfoutput>#theProfiler.toHTML()#</cfoutput>

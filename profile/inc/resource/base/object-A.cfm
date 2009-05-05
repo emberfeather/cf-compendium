@@ -8,8 +8,10 @@
 <cfset count = 500 />
 
 <p>
-	createObject: <cfoutput>#count#</cfoutput>
+	Running createObject: <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
@@ -28,8 +30,10 @@
 
 <!--- Test the speed of setting on an object --->
 <p>
-	setExisting: <cfoutput>#count#</cfoutput>
+	Running setExisting: <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 
@@ -47,8 +51,10 @@
 
 <!--- Test the speed of getting on an object --->
 <p>
-	getExisting: <cfoutput>#count#</cfoutput>
+	Running getExisting: <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 <cfset theObject.setName('testing') />
@@ -67,8 +73,10 @@
 
 <!--- Test the speed of setting on an object --->
 <p>
-	setNonExisting: <cfoutput>#count#</cfoutput>
+	Running setNonExisting: <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 
@@ -86,8 +94,10 @@
 
 <!--- Test the speed of getting on an object --->
 <p>
-	getNonExisting: <cfoutput>#count#</cfoutput>
+	Running getNonExisting: <cfoutput>#repeatCount# sets of #count#</cfoutput>
 </p>
+
+<cfflush />
 
 <cfset theObject = createObject('component', 'implementation.inc.resource.base.object1').init() />
 <cfset theObject.setTitle('testing') />
@@ -104,4 +114,5 @@
 	</cfloop>
 </cfsilent>
 
+<!--- Output Results --->
 <cfoutput>#theProfiler.toHTML()#</cfoutput>
