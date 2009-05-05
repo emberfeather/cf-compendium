@@ -111,7 +111,7 @@
 		
 		<cfset theUrl.overrideBrandNewLocation('sarah=new&tj=awesome') />
 		
-		<cfset newUrl = replace(theUrl.getbrandNewLocation(false),'?','&', 'ALL') />
+		<cfset newUrl = replace(theUrl.getBrandNewLocation(false),'?','&', 'ALL') />
 		
 		<cfset assertTrue(theContrast.areEqual('sarah=new&tj=awesome', newUrl, '&')) />
 	</cffunction>

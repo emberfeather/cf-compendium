@@ -104,7 +104,7 @@
 		<cfset var currNavigation = [] />
 		
 		<!--- Clean a url variable for building links --->
-		<cfset arguments.theURL.clean('currentPage') />
+		<cfset arguments.theURL.cleanCurrentPage() />
 		
 		<!--- Need to traverse the url to find out the navigation --->
 		<cfif structKeyExists(arguments, 'authUser')>
@@ -143,7 +143,7 @@
 			</cfif>
 			
 			<!--- Add to url --->
-			<cfset arguments.theURL.set('currentPage', lcase(matched.urlVar), lcase(matched.urlValue)) />
+			<cfset arguments.theURL.setCurrentPage(lcase(matched.urlVar), lcase(matched.urlValue)) />
 			
 			<!--- Recurse --->
 			<cfif structKeyExists(arguments, 'authUser')>
@@ -217,7 +217,7 @@
 		<cfset var currentPage = createObject('component', 'cf-compendium.inc.resource.structure.currentPage').init() />
 		
 		<!--- Clean a url variable for building links --->
-		<cfset arguments.theURL.clean('currentPage') />
+		<cfset arguments.theURL.cleanCurrentPage() />
 		
 		<!--- Need to traverse the url to find out the current page --->
 		<cfif structKeyExists(arguments, 'authUser')>
@@ -250,11 +250,11 @@
 		<!--- If we found a match add the information and recurse --->
 		<cfif isStruct(matched.match)>
 			<!--- Correct the master url --->
-			<cfset arguments.theURL.set('', lcase(matched.urlVar), lcase(matched.urlValue)) />
+			<cfset arguments.theURL.set(lcase(matched.urlVar), lcase(matched.urlValue)) />
 			
 			<!--- Add to current page --->
-			<cfset arguments.theURL.set('currentPage', lcase(matched.urlVar), lcase(matched.urlValue)) />
-			<cfset arguments.currentPage.addLevel(lcase(matched.urlVar), lcase(matched.urlValue), matched.match.title, arguments.theURL.get('currentPage')) />
+			<cfset arguments.theURL.setCurrentPage(lcase(matched.urlVar), lcase(matched.urlValue)) />
+			<cfset arguments.currentPage.addLevel(lcase(matched.urlVar), lcase(matched.urlValue), matched.match.title, arguments.theURL.getCurrentPage()) />
 			
 			<!--- Recurse --->
 			<cfif structKeyExists(arguments, 'authUser')>
@@ -282,7 +282,7 @@
 		<!--- Check if given an explicit element of the navigation --->
 		<cfloop list="#nonDefaultList#" index="i">
 			<!--- Found the url value to check navigation for --->
-			<cfset matched.urlValue = arguments.theURL.search('', i) />
+			<cfset matched.urlValue = arguments.theURL.search(i) />
 			
 			<!--- If we found a value check for a match --->
 			<cfif matched.urlValue NEQ ''>

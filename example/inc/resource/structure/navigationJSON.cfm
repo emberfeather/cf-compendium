@@ -70,8 +70,8 @@
 	<cfset theUser.addUserTypes('admin') />
 	
 	<!--- Set the url variables --->
-	<cfset theURL.set('', 'section', 'admin') />
-	<cfset theURL.set('', 'subsection', 'errors') />
+	<cfset theURL.set('section', 'admin') />
+	<cfset theURL.set('subsection', 'errors') />
 	
 	<cfset currentPage = theObject.locate(theURL, theUser) />
 		

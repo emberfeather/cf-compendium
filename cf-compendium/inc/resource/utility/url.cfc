@@ -240,6 +240,10 @@
 			</cfcase>
 			
 			<cfcase value="set">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 3>
+					<cfreturn set(arguments.missingMethodArguments[3], arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				</cfif>
+				
 				<cfreturn set(extra, arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 			</cfcase>
 		</cfswitch>

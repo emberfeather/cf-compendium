@@ -187,7 +187,7 @@
 	<cffunction name="testGetStartRowSansTotal" access="public" returntype="void" output="false">
 		<cfset var thePaginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(0, 25, 1) />
 		
-		<cfset assertEquals(0, thePaginator.getStartRow()) />
+		<cfset assertEquals(1, thePaginator.getStartRow()) />
 	</cffunction>
 	
 	<!---

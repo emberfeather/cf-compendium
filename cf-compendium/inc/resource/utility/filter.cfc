@@ -57,7 +57,7 @@
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = variables.theURL.search('', arguments.filter.key) />
+		<cfset var value = variables.theURL.search(arguments.filter.key) />
 		
 		<cfset html &= '<strong>' & filter.label & ':</strong> ' />
 		
@@ -83,7 +83,7 @@
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = variables.theURL.search('', arguments.filter.key) />
+		<cfset var value = variables.theURL.search(arguments.filter.key) />
 		
 		<cfset html &= '<strong>' & filter.label & ':</strong> ' />
 		
@@ -109,7 +109,7 @@
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = variables.theURL.search('', arguments.filter.key) />
+		<cfset var value = variables.theURL.search(arguments.filter.key) />
 		
 		<cfset html &= '<label><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
 		
@@ -143,7 +143,7 @@
 		
 		<cfset var html = '' />
 		
-		<cfset html &= '<label><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & variables.theURL.search('', arguments.filter.key) & '" /></label>' />
+		<cfset html &= '<label><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & variables.theURL.search(arguments.filter.key) & '" /></label>' />
 		
 		<cfreturn html />
 	</cffunction>
