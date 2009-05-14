@@ -88,14 +88,21 @@
 		
 		<!--- Check if we already have a place for the bundle locale --->
 		<cfif NOT structKeyExists(variables.bundles[arguments.path][arguments.bundleName], arguments.bundleLocale)>
+			<cfset bundlePath = arguments.path />
+			
 			<!--- Check the bundle path --->
-			<cfif NOT directoryExists(arguments.path)>
+			<cfif NOT directoryExists(bundlePath)>
 				<!--- Try just expanding the path --->
 				<cfset bundlePath = expandPath(arguments.path) />
 				
 				<!--- Resort to the base dir with an append --->
 				<cfif NOT directoryExists(bundlePath)>
 					<cfset bundlePath = variables.baseDirectory & arguments.path />
+					
+					<!--- Resort to the base dir with an append --->
+					<cfif NOT directoryExists(bundlePath)>
+						<cfthrow message="Bundle directory not found." detail="The bundle directory was not found at #bundlePath#" />
+					</cfif>
 				</cfif>
 			</cfif>
 			

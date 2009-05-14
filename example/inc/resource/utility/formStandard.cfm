@@ -9,7 +9,7 @@
 		label = "Button",
 		value = "Testing Button"
 	} />
-	
+
 <cfset theForm.addElement('button', element) />
 
 <!--- Checkbox --->
@@ -18,7 +18,7 @@
 		label = "Checkbox",
 		value = "true"
 	} />
-	
+
 <cfset theForm.addElement('checkbox', element) />
 
 <!--- File --->
@@ -26,7 +26,7 @@
 		name = "testFile",
 		label = "File"
 	} />
-	
+
 <cfset theForm.addElement('file', element) />
 
 <!--- Hidden --->
@@ -44,7 +44,7 @@
 		label = "Image",
 		value = "true"
 	} />
-	
+
 <cfset theForm.addElement('image', element) />
 
 <!--- Password --->
@@ -53,7 +53,7 @@
 		label = "Password",
 		value = "passwd"
 	} />
-	
+
 <cfset theForm.addElement('password', element) />
 
 <!--- Radio --->
@@ -62,15 +62,21 @@
 		label = "Radio",
 		value = "true"
 	} />
-	
+
 <cfset theForm.addElement('radio', element) />
 
 <!--- Select --->
 <cfset element = {
 		name = "testSelect",
 		label = "Select",
+		options = createObject('component', 'cf-compendium.inc.resource.utility.options').init()
 	} />
-	
+
+<cfset element.options.addOption('Title 1', 'Value 1') />
+<cfset element.options.addOption('Title 2', 'Value 2') />
+<cfset element.options.addOption('Title 3', 'Value 3') />
+<cfset element.options.addOption('Title 4', 'Value 4') />
+
 <cfset theForm.addElement('select', element) />
 
 <!--- Text --->
@@ -79,7 +85,7 @@
 		label = "Text",
 		value = "true"
 	} />
-	
+
 <cfset theForm.addElement('text', element) />
 
 <!--- Textarea --->
@@ -88,7 +94,7 @@
 		label = "Textarea",
 		value = "true"
 	} />
-	
+
 <cfset theForm.addElement('textarea', element) />
 
 <cfoutput>#theForm.toHTML('/')#</cfoutput>

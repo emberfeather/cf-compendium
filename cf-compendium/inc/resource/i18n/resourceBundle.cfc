@@ -112,6 +112,11 @@
 			<cfthrow message="Resource bundle not found" detail="The resource bundle was not found at #filepath#" />
 		</cfif>
 		
+		<!--- Check if we only have a CF mapped path --->
+		<cfif fileExists(expandPath(filePath))>
+			<cfset filePath = expandPath(filePath) />
+		</cfif>
+		
 		<!--- Create the objects --->
 		<cfset fileStream = createObject('java', 'java.io.FileInputStream') />
 		<cfset resourceBundle = createObject('java', 'java.util.PropertyResourceBundle') />

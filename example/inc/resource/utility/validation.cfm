@@ -1,6 +1,6 @@
 <h1>Validation Examples</h1>
 
-<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
+<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
 
 <p>
 	Testing the validation on an object in multiple languages

@@ -1,5 +1,5 @@
 <h1>Form Object Examples</h1>
-<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
+<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
 
 <h2>English</h2>
 

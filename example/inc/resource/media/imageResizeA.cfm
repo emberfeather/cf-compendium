@@ -4,6 +4,7 @@
 
 <h2>Original Image</h2>
 
+<cfset imageRelation = '../../../..' />
 <cfset imagePath = '/implementation/img/' />
 <cfset imageExpPath = expandPath(imagePath) />
 <cfset baseName = 'testImg002' />
@@ -12,7 +13,7 @@
 
 <div>
 	<cfoutput>
-		<img src="#imagePath##imageName#">
+		<img src="#imageRelation##imagePath##imageName#">
 	</cfoutput>
 </div>
 
@@ -30,7 +31,7 @@
 <cfloop array="#modified#" index="i">
 	<div>
 		<cfoutput>
-			<img src="#imagePath##i.filename#">
+			<img src="#imageRelation##imagePath##i.filename#">
 		</cfoutput>
 	</div>
 </cfloop>
@@ -49,7 +50,7 @@
 <cfloop array="#modified#" index="i">
 	<div>
 		<cfoutput>
-			<img src="#imagePath##i.filename#">
+			<img src="#imageRelation##imagePath##i.filename#">
 		</cfoutput>
 	</div>
 </cfloop>
@@ -89,7 +90,7 @@
 <cfloop array="#modified#" index="i">
 	<div>
 		<cfoutput>
-			<img src="#imagePath##i.filename#">
+			<img src="#imageRelation##imagePath##i.filename#">
 		</cfoutput>
 	</div>
 </cfloop>
