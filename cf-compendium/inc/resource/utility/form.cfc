@@ -165,61 +165,6 @@
 		<cfthrow message="Unsupported Form Element" detail="The #arguments.element.type# type of element is currently unsupported." />
 	</cffunction>
 	
-	<!---
-		Inspects an object to generate a form
-	--->
-	<cffunction name="fromObject" access="public" returntype="void" output="false">
-		<cfargument name="object" type="component" required="true" />
-		<cfargument name="attributes" type="string" default="" />
-		
-		<cfset var attribute = '' />
-		<cfset var i = '' />
-		
-		<!--- Check if there were no attributes given -- show all --->
-		<cfif arguments.attributes EQ ''>
-			<cfset arguments.attributes = arguments.object.getAttributeList() />
-		</cfif>
-		
-		<!--- Go through each attribute and check if has form meta --->
-		<cfloop list="#arguments.attributes#" index="i">
-			<cfset attribute = arguments.object.getAttribute(i) />
-			
-			<cfif structKeyExists(attribute.form, 'type')>
-				<!--- Set some statics --->
-				<cfset attribute.form.name = i />
-				<cfset attribute.form.label = arguments.object.getAttributeLabel(i) />
-				
-				<!--- Pull the value of the attribute -- How this is used can be overridden by the form implementation --->
-				<cfset fromObjectAttribute(arguments.object, i, attribute) />
-				
-				<!--- Add the form element --->
-				<cfset this.addElement(attribute.form.type, attribute.form) />
-				
-				<!--- Check for the confirm option --->
-				<cfif structKeyExists(attribute.form, 'confirm')>
-					<!--- Modify the statics --->
-					<cfset attribute.form.name &= 'Confirm' />
-					<cfset attribute.form.label = 'Confirm ' & attribute.form.label />
-					
-					<!--- Add the confirm element --->
-					<cfset this.addElement(attribute.form.type, attribute.form) />
-				</cfif>
-			</cfif>
-		</cfloop>
-	</cffunction>
-	
-	<!---
-		Pulls in any meta information from the object for adding to the form
-	--->
-	<cffunction name="fromObjectAttribute" access="private" returntype="void" output="false">
-		<cfargument name="object" type="component" required="true" />
-		<cfargument name="name" type="string" required="true" />
-		<cfargument name="attribute" type="struct" required="true" />
-		
-		<!--- For the checkbox we want to see if the value that the object has is the same as the value for the form --->
-		<cfinvoke component="#arguments.object#" method="get#arguments.name#" returnvariable="arguments.attribute.form.value" />
-	</cffunction>
-	
 	<!--- 
 		Retrieve the closing form tag.
 		<p>
