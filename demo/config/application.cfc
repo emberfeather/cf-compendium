@@ -1,1 +1,1 @@
-<cfcomponent extends="cf-compendium/inc/resource/application/forbidden" />
+<cfcomponent extends="cf-compendium.inc.resource.application.forbidden" />
