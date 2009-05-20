@@ -9,6 +9,15 @@
 		<cfreturn this />
 	</cffunction>
 	
+	<cffunction name="toDatagrid" access="public" returntype="string" output="false">
+		<cfargument name="data" type="any" required="true" />
+		<cfargument name="options" type="struct" default="#structNew()#" />
+		
+		<cfset var html = '' />
+		
+		<cfreturn html />
+	</cffunction>
+	
 	<cffunction name="toForm" access="public" returntype="string" output="false">
 		<cfargument name="object" type="component" required="true" />
 		<cfargument name="action" type="string" required="true" />

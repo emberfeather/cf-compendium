@@ -4,11 +4,11 @@
 <h2>get('location')</h2>
 
 <p>
-	Will return the current bookmark numeric value for the specified location. If no location has been set, theBookmark.get will create the location and initialize the value to 1
+	Will return the current bookmark numeric value for the specified location. If no location has been set, <code>get</code> will create the location and initialize the value to 1
 </p>
 
 <div>
-	<cfoutput>get('location1') --> #theBookmark.get('location1')#</cfoutput>
+	<cfoutput>get('location1') --&gt; #theBookmark.get('location1')#</cfoutput>
 </div>
 
 <h2>set('location', 'value')</h2>
