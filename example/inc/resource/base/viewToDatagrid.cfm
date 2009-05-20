@@ -7,7 +7,7 @@
 
 <cfset data = [] />
 
-<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithValidation').init(i18n) />
+<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithDatagrid').init(i18n) />
 <cfset validatedObj.setFirstName('Tester') />
 
 <cfset arrayAppend(data, validatedObj)>
@@ -19,7 +19,7 @@
 
 <cfset data = [] />
 
-<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithValidation').init(i18n, 'en_PI') />
+<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithDatagrid').init(i18n, 'en_PI') />
 <cfset validatedObj.setFirstName('Tester') />
 
 <cfset arrayAppend(data, validatedObj)>

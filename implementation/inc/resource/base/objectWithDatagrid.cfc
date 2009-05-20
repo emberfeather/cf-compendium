@@ -10,12 +10,8 @@
 		<!--- First Name --->
 		<cfset attr = {
 				attribute = 'firstName',
-				form = {
+				dataGrid = {
 					type = 'text'
-				},
-				validation = {
-					minLength = 1,
-					maxLength = 45
 				}
 			} />
 		
@@ -24,7 +20,7 @@
 		<!--- Last Name --->
 		<cfset attr = {
 				attribute = 'lastName',
-				form = {
+				dataGrid = {
 					type = 'text'
 				}
 			} />
