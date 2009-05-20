@@ -13,6 +13,9 @@
 				form = {
 					type = 'text'
 				},
+				dataGrid = {
+					type = 'text'
+				},
 				validation = {
 					minLength = 1,
 					maxLength = 45
@@ -25,6 +28,9 @@
 		<cfset attr = {
 				attribute = 'lastName',
 				form = {
+					type = 'text'
+				},
+				dataGrid = {
 					type = 'text'
 				}
 			} />
