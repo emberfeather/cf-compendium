@@ -25,7 +25,7 @@
 		
 		<cfset datagrid.addColumn("testCol") />
 		
-		<cfset assertEquals("testCol", datagrid.getColumList()) />
+		<cfset assertEquals("testCol", datagrid.getColumnList()) />
 	</cffunction>
 	
 	<cffunction name="testAddColumnWithOptions" access="public" returntype="void" output="false">

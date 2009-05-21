@@ -39,7 +39,7 @@
 		<cfreturn html />
 	</cffunction>
 	
-	<cffunction name="getColmnList" access="public" returntype="string" output="false">
+	<cffunction name="getColumnList" access="public" returntype="string" output="false">
 		<cfreturn variables.columnList />
 	</cffunction>
 	
@@ -106,5 +106,4 @@
 		
 		<cfreturn html />
 	</cffunction>
-	
 </cfcomponent>
