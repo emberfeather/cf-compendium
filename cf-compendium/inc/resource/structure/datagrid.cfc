@@ -20,6 +20,10 @@
 		
 		<cfset arguments.options = extend(defaults, arguments.options) />
 		
+		<cfif arguments.columnName EQ "">
+			<cfthrow message="Invalid value for columnName" detail="columnName cannot be an empty string.">
+		</cfif>
+		
 		<cfset variables.columnList = listAppend(variables.columnList, arguments.columnName) />
 		<cfset variables.columns[arguments.columnName] = arguments.options />
 	</cffunction>
@@ -35,7 +39,9 @@
 		<cfreturn html />
 	</cffunction>
 	
-	
+	<cffunction name="getColmnList" access="public" returntype="string" output="false">
+		<cfreturn variables.columnList />
+	</cffunction>
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="data" type="any" required="true" />
