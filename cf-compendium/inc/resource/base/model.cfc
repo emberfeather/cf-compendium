@@ -40,8 +40,8 @@
 		<cfargument name="defaultValue" type="any" default="" />
 		<cfargument name="validation" type="struct" default="#structNew()#" />
 		<cfargument name="form" type="struct" default="#structNew()#" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
 		<cfargument name="dataGrid" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#structNew()#" />
 		
 		<cfset variables.attributes[arguments.attribute] = arguments />
 		

@@ -15,6 +15,7 @@
 	<cfset this.mappings['/implementation'] = variables.mappingBase & 'implementation' />
 	<cfset this.mappings['/mxunit'] = variables.mappingBase & 'mxunit' />
 	<cfset this.mappings['/profile'] = variables.mappingBase & 'profile' />
+	<cfset this.mappings['/setup'] = variables.mappingBase & 'setup' />
 	<cfset this.mappings['/test'] = variables.mappingBase & 'test' />
 	<cfset this.mappings['/varscoper'] = variables.mappingBase & 'varscoper' />
 </cfcomponent>
