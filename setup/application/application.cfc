@@ -9,12 +9,12 @@
 	
 	<cffunction name="onApplicationStart" access="public" returntype="boolean" output="false">
 		<cfset var appConfigFile = expandPath('config/application.json.cfm') />
-		<cfset var sparkplug = createObject('component', 'cf-compendium.inc.resource.application.sparkplug').init() />
+		<cfset var sparkplug = createObject('component', 'cf-compendium.inc.resource.application.sparkplug').init( this.mappings['/root'] ) />
 		
 		<!--- Lock the application scope --->
 		<cflock scope="application" type="exclusive" timeout="5">
 			<!--- Start the application --->
-			<cfset application = sparkplug.startApplication( this.mappings['/root'] ) />
+			<cfset application = sparkplug.startApplication() />
 		</cflock>
 		
 		<cfreturn true />

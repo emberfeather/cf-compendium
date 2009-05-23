@@ -20,7 +20,7 @@
 			<cfset directories &= ',plugins' />
 		</cfcase>
 		<cfcase value="plugin">
-			<cfset directories = 'config' />
+			<cfset directories = 'config,config/navigation' />
 			<cfset directories &= ',i18n' />
 			<cfset directories &= ',img' />
 			<cfset directories &= ',inc,inc/content,inc/model,inc/resource,inc/service,inc/view' />
