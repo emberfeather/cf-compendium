@@ -26,7 +26,7 @@
 		<cfloop list="#structKeyList(arguments.defaults)#" index="i">
 			<cfif NOT structKeyExists(extended, i)>
 				<cfset extended[i] = arguments.defaults[i] />
-			<cfelseif arguments.depth GT 1 AND isStruct(arguments.defaults[i]) AND isStruct(extended[i])>
+			<cfelseif (arguments.depth GT 1 OR arguments.depth LT 0) AND isStruct(arguments.defaults[i]) AND isStruct(extended[i])>
 				<cfset extended[i] = extend(arguments.defaults[i], extended[i], arguments.depth - 1) />
 			</cfif>
 		</cfloop>
