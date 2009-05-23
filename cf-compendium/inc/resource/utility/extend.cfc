@@ -11,10 +11,13 @@
 		along with the defaults if not already defined in the original struct.
 		<p>
 		Similar in idea to the way jQuery uses extend with objects.
+		<p>
+		Can also specify the number of levels to extend.
 	--->
 	<cffunction name="extend" access="public" output="false">
 		<cfargument name="defaults" type="struct" required="true" />
 		<cfargument name="original" type="struct" default="#structNew()#" />
+		<cfargument name="depth" type="numeric" default="1" />
 		
 		<cfset var extended = duplicate(arguments.original) />
 		<cfset var i = '' />
@@ -23,6 +26,8 @@
 		<cfloop list="#structKeyList(arguments.defaults)#" index="i">
 			<cfif NOT structKeyExists(extended, i)>
 				<cfset extended[i] = arguments.defaults[i] />
+			<cfelseif arguments.depth GT 1 AND isStruct(arguments.defaults[i]) AND isStruct(extended[i])>
+				<cfset extended[i] = extend(arguments.defaults[i], extended[i], arguments.depth - 1) />
 			</cfif>
 		</cfloop>
 		
