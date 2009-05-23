@@ -1,16 +1,8 @@
 {
 	'information': {
 		'key': '{{key}}',
-		'title': '{{title}}',
-		'locales': 'en_US',
-		'admin': {
-			'directory': 'admin'
-		}
+		'title': '{{title}}'
 	},
-	'navigation': [
-	],
-	'singletons': {
-	},
-	'plugins': {
-	}
+	'plugins': [
+	]
 }

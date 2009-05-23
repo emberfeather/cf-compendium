@@ -11,15 +11,10 @@
 		<cfset var appConfigFile = expandPath('config/application.json.cfm') />
 		<cfset var sparkplug = createObject('component', 'cf-compendium.inc.resource.application.sparkplug').init() />
 		
-		<!--- Check that the application config file exists --->
-		<cfif NOT fileExists(appConfigFile)>
-			<cfthrow message="Application configuration file does not exist" detail="Unable to find the application configuration file at #appConfigFile#" />
-		</cfif>
-		
 		<!--- Lock the application scope --->
 		<cflock scope="application" type="exclusive" timeout="5">
 			<!--- Start the application --->
-			<cfset application = sparkplug.startApplication( appConfigFile ) />
+			<cfset application = sparkplug.startApplication( this.mappings['/root'] ) />
 		</cflock>
 		
 		<cfreturn true />
