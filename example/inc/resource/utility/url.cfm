@@ -42,7 +42,7 @@
 	</p>
 	
 	<p>
-		New URL :
+		Extended URL :
 		<cfoutput>#theURL.getExtended()#</cfoutput>
 	</p>
 	
@@ -87,7 +87,7 @@
 	</p>
 	
 	<p>
-		New URL :
+		Extended URL :
 		<cfoutput>#theURL.getExtended()#</cfoutput>
 	</p>
 	
