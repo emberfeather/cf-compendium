@@ -4,7 +4,7 @@
 		
 		<cfset super.init() />
 		
-		<cfset variables.appBaseDirectory = arguments.appBaseDirectory />
+		<cfset variables.appBaseDirectory = normalizePath(arguments.appBaseDirectory) />
 		
 		<cfreturn this />
 	</cffunction>
@@ -21,7 +21,7 @@
 	
 	<cffunction name="readApplicationConfig" access="public" returntype="struct" output="false">
 		<cfset var appConfig = '' />
-		<cfset var appConfigFile = normalizePath(variables.appBaseDirectory) & '/config/application.json.cfm' />
+		<cfset var appConfigFile = variables.appBaseDirectory & 'config/application.json.cfm' />
 		
 		<cfif NOT fileExists(appConfigFile)>
 			<cfset appConfigFile = expandPath(appConfigFile) />
@@ -35,16 +35,16 @@
 		<cffile action="read" file="#appConfigFile#" variable="appConfig" />
 		
 		<!--- Parse and return the config --->
-		<cfreturn serializeJSON(appConfig) />
+		<cfreturn deserializeJSON(appConfig) />
 	</cffunction>
 	
 	<cffunction name="readPluginConfig" access="public" returntype="struct" output="false">
 		<cfargument name="pluginKey" type="string" required="true" />
 		
 		<cfset var pluginConfig = '' />
-		<cfset var pluginConfigFile = normalizePath(variables.appBaseDirectory) & '/plugins/' & arguments.pluginKey & '/config/plugin.json.cfm' />
+		<cfset var pluginConfigFile = variables.appBaseDirectory & 'plugins/' & arguments.pluginKey & '/config/plugin.json.cfm' />
 		
-		<cfif NOT fileExists(appConfigFile)>
+		<cfif NOT fileExists(pluginConfigFile)>
 			<cfset pluginConfigFile = expandPath(pluginConfigFile) />
 			
 			<cfif NOT fileExists(pluginConfigFile)>
@@ -56,10 +56,51 @@
 		<cffile action="read" file="#pluginConfigFile#" variable="pluginConfig" />
 		
 		<!--- Parse and return the config --->
-		<cfreturn serializeJSON(pluginConfig) />
+		<cfreturn deserializeJSON(pluginConfig) />
+	</cffunction>
+	
+	<cffunction name="readPluginVersion" access="public" returntype="struct" output="false">
+		<cfargument name="pluginKey" type="string" required="true" />
+		
+		<cfset var defaultVersion = {
+				version = ''
+			} />
+		<cfset var pluginVersion = '' />
+		<cfset var pluginVersionFile = variables.appBaseDirectory & 'plugins/' & arguments.pluginKey & '/config/version.json.cfm' />
+		
+		<cfif NOT fileExists(pluginVersionFile)>
+			<cfset pluginVersionFile = expandPath(pluginVersionFile) />
+		</cfif>
+		
+		<cfif fileExists(pluginVersionFile)>
+			<!--- Read the application version file --->
+			<cffile action="read" file="#pluginVersionFile#" variable="pluginVersion" />
+			
+			<!--- Parse and return the version --->
+			<cfreturn extend(defaultVersion, deserializeJSON(pluginVersion)) />
+		<cfelse>
+			<cfreturn defaultVersion />
+		</cfif>
+	</cffunction>
+	
+	<cffunction name="setDefaultSingletons" access="public" returntype="void" output="false">
+		<cfargument name="newApplication" type="struct" required="true" />
+		
+		<cfset var temp = '' />
+		
+		<!--- Create the navigation singleton --->
+		<cfset temp = createObject('component', 'cf-compendium.inc.resource.structure.navigationJSON').init() />
+		<cfset arguments.newApplication.singletons.setNavigation(temp) />
+		
+		<!--- Create the i18n singleton --->
+		<cfset temp = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath(arguments.newApplication.information.i18n.base)) />
+		<cfset arguments.newApplication.singletons.setI18N(temp) />
 	</cffunction>
 	
 	<cffunction name="startApplication" access="public" returntype="struct" output="false">
+		<cfargument name="newApplication" type="struct" required="true" />
+		<cfargument name="isDebugMode" type="boolean" default="false" />
+		
 		<cfset var appConfig = '' />
 		<cfset var defaultPluginConfig = {
 				information = {
@@ -73,35 +114,41 @@
 					version = 'unknown'
 				}
 			} />
-		<cfset var naviationMasks = {} />
+		<cfset var navigation = '' />
+		<cfset var navigationMasks = {} />
 		<cfset var i = '' />
 		<cfset var j = '' />
-		<cfset var newApplication = {
-				information = {
-					key = 'unknown',
-					title = 'unknown',
-					i18n = {
-						base = '/root',
-						locales = 'en_US'
-					},
-					admin = {
-						directory = 'admin'
-					}
-				},
-				plugins = {},
-				singletons = {}
-			} />
 		<cfset var pluginConfig = '' />
 		<cfset var pluginList = '' />
+		<cfset var pluginVersion = '' />
 		<cfset var precedence = '' />
 		
+		<!--- Set the default application variables --->
+		<cfset arguments.newApplication['information'] = {
+				key = 'unknown',
+				title = 'unknown',
+				i18n = {
+					base = '/root',
+					default = 'en_US',
+					locales = 'en_US'
+				},
+				admin = {
+					directory = 'admin'
+				}
+			} />
+		<cfset arguments.newApplication['plugins'] = {} />
+		<cfset arguments.newApplication['singletons'] = createObject('component', 'cf-compendium.inc.resource.application.singletons').init(arguments.isDebugMode) />
+		
 		<!--- Read in application information --->
-		<cfset appConfig = readApplicationConfig(variables.appBaseDirectory) />
+		<cfset appConfig = readApplicationConfig() />
 		
 		<!--- Extend information from the config --->
 		<cfif structKeyExists(appConfig, 'information')>
 			<cfset newApplication.information = extend(newApplication.information, appConfig.information, -1) />
 		</cfif>
+		
+		<!--- Create the default set of singletons --->
+		<cfset setDefaultSingletons(newApplication) />
 		
 		<!--- Pull in the list of plugins --->
 		<cfif structKeyExists(appConfig, 'plugins')>
@@ -111,7 +158,7 @@
 		<!--- Read in all plugin configs --->
 		<cfloop list="#pluginList#" index="i">
 			<cfset newApplication.plugins[i] = duplicate(defaultPluginConfig) />
-			<cfset pluginConfig = readPluginConfig(variables.appBaseDirectory, i) />
+			<cfset pluginConfig = readPluginConfig(i) />
 			
 			<!--- Extend information from the config --->
 			<cfif structKeyExists(pluginConfig, 'information')>
@@ -146,10 +193,30 @@
 			</cfloop>
 		</cfloop>
 		
-		<!--- TODO Install/Upgrade plugins --->
-		<!--- TODO Create all singletons --->
-		<!--- TODO Apply Navigation Masks --->
+		<!--- Go through the plugins in the order determined by dependency precedence --->
 		<cfloop list="#precedence#" index="i">
+			<!--- Create the configurer for the plugin --->
+			<cfset configurer = createObject('component', 'plugins.' & i & '.config.configure').init() />
+			
+			<!--- Read in the plugin version information --->
+			<cfset pluginVersion = readPluginVersion(i) />
+			
+			<!--- Call the configure function which handles installs/upgrades and singleton creation for the plugin --->
+			<cfset configurer.update(newApplication.plugins[i], pluginVersion) />
+			
+			<!--- Configure the application for the plugin --->
+			<cfset configurer.configure(newApplication) />
+			
+			<!--- Check for navigation masks for the plugin --->
+			<cfif structKeyExists(navigationMasks, i)>
+				<!--- Retrieve the navigation object --->
+				<cfset navigation = newApplication.singletons.getNavigation() />
+				
+				<cfloop array="#navigationMasks[i]#" index="j">
+					<!--- Apply Navigation Masks --->
+					<cfset navigation.applyMask( variables.appBaseDirectory & 'plugins/' & i & '/config/navigation/' & j ) />
+				</cfloop>
+			</cfif>
 		</cfloop>
 		
 		<cfreturn newApplication />
@@ -163,10 +230,9 @@
 		<cfargument name="precedence" type="string" required="true" />
 		<cfargument name="plugin" type="string" required="true" />
 		
-		<cfset var existsAt = '' />
+		<cfset var existsAt = listFind(arguments.precedence, arguments.plugin) />
 		
-		<cfset existsAt = listFind(arguments.precedence, arguments.plugin) />
-		
+		<!--- It is already exists in the precedence remove it --->
 		<cfif existsAt>
 			<cfset arguments.precedence = listDeleteAt(arguments.precedence, existsAt) />
 		</cfif>

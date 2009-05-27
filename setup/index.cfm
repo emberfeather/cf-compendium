@@ -4,7 +4,8 @@
 	
 	<!--- Setup Settings --->
 	<cfset setupSettings = {} />
-	<cfset setupSettings['path'] = normalizePath(FORM.path) />
+	<cfset setupSettings['basepath'] = normalizePath(FORM.path) />
+	<cfset setupSettings['path'] = setupSettings['basepath'] />
 	<cfset setupSettings['type'] = FORM.type />
 	<cfset setupSettings['key'] = FORM.key />
 	<cfset setupSettings['title'] = FORM.title />
@@ -66,7 +67,7 @@
 			<cfset files &= ',application.cfc,index.cfm' />
 		</cfcase>
 		<cfcase value="plugin">
-			<cfset files = 'config/application.cfc,config/plugin.json.cfm' />
+			<cfset files = 'config/application.cfc,config/configure.cfc,config/plugin.json.cfm' />
 			<cfset files &= ',inc/application.cfc,inc/admin.cfm,inc/application.cfc,inc/index.cfm' />
 		</cfcase>
 		<cfdefaultcase>
@@ -101,7 +102,7 @@
 	</div>
 	
 	<div>
-		<a href="?path=<cfoutput>#urlEncodedFormat(setupSettings['path'])#</cfoutput>">Setup another plugin or application</a>
+		<a href="?path=<cfoutput>#urlEncodedFormat(setupSettings['basepath'])#</cfoutput>">Setup another plugin or application</a>
 	</div>
 <cfelse>
 	<cfparam name="URL.path" default="" />

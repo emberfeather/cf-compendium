@@ -1,19 +1,17 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.navigationFile" output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
-		<cfargument name="navigationFile" type="string" required="true" />
+		<cfargument name="navigationFile" type="string" default="" />
 		
-		<cfset var fileContents = '' />
-		<cfset var parsedNav = '' />
+		<cfset var baseNav = {} />
 		
 		<cfset super.init() />
 		
-		<!--- Read in the navigation file --->
-		<cfset fileContents = readFile(arguments.navigationFile) />
+		<cfset variables.navigation = expandNavigation(baseNav) />
 		
-		<!--- Parse the file contents --->
-		<cfset parsedNav = deserializeJSON(fileContents) />
-		
-		<cfset variables.navigation = expandNavigation(parsedNav) />
+		<!--- Add the navigation as a mask if provided --->
+		<cfif arguments.navigationFile NEQ ''>
+			<cfset applyMask(arguments.navigationFile) />
+		</cfif>
 		
 		<cfreturn this />
 	</cffunction>
