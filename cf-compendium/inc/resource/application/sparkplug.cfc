@@ -99,14 +99,14 @@
 		<!--- Create the datasource singleton --->
 		<cfset temp = createObject('component', 'cf-compendium.inc.resource.persistence.datasource').init() />
 		
-		<cfset temp.setDatasource(argumenst.newApplication.information.datasource.datasource) />
-		<cfset temp.setType(argumenst.newApplication.information.datasource.type) />
-		<cfset temp.setPrefix(argumenst.newApplication.information.datasource.prefix) />
+		<cfset temp.setDatasource(arguments.newApplication.information.datasource.datasource) />
+		<cfset temp.setType(arguments.newApplication.information.datasource.type) />
+		<cfset temp.setPrefix(arguments.newApplication.information.datasource.prefix) />
 		
 		<cfset arguments.newApplication.singletons.setDatasource(temp) />
 	</cffunction>
 	
-	<cffunction name="startApplication" access="public" returntype="struct" output="false">
+	<cffunction name="startApplication" access="public" returntype="void" output="false">
 		<cfargument name="newApplication" type="struct" required="true" />
 		<cfargument name="isDebugMode" type="boolean" default="false" />
 		
