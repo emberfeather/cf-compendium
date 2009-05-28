@@ -3,7 +3,7 @@
 --->
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
-		<cfargument name="singletonName" type="boolean" default="true" />
+		<cfargument name="singletonName" type="string" default="true" />
 		<cfargument name="isDebugMode" type="boolean" default="true" />
 		
 		<cfset variables.singletonName = arguments.singletonName />
