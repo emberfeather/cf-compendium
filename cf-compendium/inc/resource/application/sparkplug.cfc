@@ -102,6 +102,7 @@
 		<cfargument name="isDebugMode" type="boolean" default="false" />
 		
 		<cfset var appConfig = '' />
+		<cfset var compareVersion = '' />
 		<cfset var defaultPluginConfig = {
 				information = {
 					key = 'unknown',
@@ -115,7 +116,6 @@
 				}
 			} />
 		<cfset var navigation = '' />
-		<cfset var navigationMasks = {} />
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var pluginConfig = '' />
@@ -162,12 +162,7 @@
 			
 			<!--- Extend information from the config --->
 			<cfif structKeyExists(pluginConfig, 'information')>
-				<cfset newApplication.plugins[i].information = extend(newApplication.plugins[i].information, appConfig.information, -1) />
-			</cfif>
-			
-			<!--- Pull in the navigation masks --->
-			<cfif structKeyExists(pluginConfig, 'navigation')>
-				<cfset naviationMasks[i] = pluginConfig.navigation />
+				<cfset newApplication.plugins[i] = extend(newApplication.plugins[i], pluginConfig, -1) />
 			</cfif>
 		</cfloop>
 		
@@ -184,8 +179,12 @@
 				</cfif>
 				
 				<!--- Check that the version of the current plugin meets the prerequisite version --->
-				<cfif compare(newApplication.plugins[j].inforamation.version, newApplication.plugins[i].information.prerequisites[j]) LT 0>
+				<cfset compareVersion = compare(newApplication.plugins[j].information.version, newApplication.plugins[i].information.prerequisites[j]) />
+				
+				<cfif compareVersion LT 0>
 					<cfthrow message="Plugin too old" detail="The #j# plugin with a version at least #newApplication.plugins[i].information.prerequisites[j]# is required by the #i# plugin" />
+				<cfelseif compareVersion GT 0>
+					<cflog type="information" application="true" log="application" text="The #j# plugin is at version #newApplication.plugins[j].information.version# when the #i# plugin is expecting #newApplication.plugins[i].information.prerequisites[j]#" />
 				</cfif>
 				
 				<!--- Update the precedence to run install / updates based on prerequisites --->
@@ -207,16 +206,13 @@
 			<!--- Configure the application for the plugin --->
 			<cfset configurer.configure(newApplication) />
 			
-			<!--- Check for navigation masks for the plugin --->
-			<cfif structKeyExists(navigationMasks, i)>
-				<!--- Retrieve the navigation object --->
-				<cfset navigation = newApplication.singletons.getNavigation() />
-				
-				<cfloop array="#navigationMasks[i]#" index="j">
-					<!--- Apply Navigation Masks --->
-					<cfset navigation.applyMask( variables.appBaseDirectory & 'plugins/' & i & '/config/navigation/' & j ) />
-				</cfloop>
-			</cfif>
+			<!--- Retrieve the navigation object --->
+			<cfset navigation = newApplication.singletons.getNavigation() />
+			
+			<cfloop array="#newApplication.plugins[i].navigation#" index="j">
+				<!--- Apply Navigation Masks --->
+				<cfset navigation.applyMask( variables.appBaseDirectory & 'plugins/' & i & '/config/navigation/' & j ) />
+			</cfloop>
 		</cfloop>
 		
 		<cfreturn newApplication />
