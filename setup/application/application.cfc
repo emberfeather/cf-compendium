@@ -10,7 +10,7 @@
 	<cffunction name="onApplicationStart" access="public" returntype="boolean" output="false">
 		<cfset var appConfigFile = expandPath('config/application.json.cfm') />
 		<cfset var sparkplug = createObject('component', 'cf-compendium.inc.resource.application.sparkplug').init( this.mappings['/root'] ) />
-		<cfset var isDebugMode = false />
+		<cfset var isDebugMode = true />
 		
 		<!--- Lock the application scope --->
 		<cflock scope="application" type="exclusive" timeout="5">
@@ -19,6 +19,15 @@
 		</cflock>
 		
 		<cfreturn true />
+	</cffunction>
+	
+	<cffunction name="onError" access="public" returntype="void" output="false">
+		<cfargument name="Exception" type="struct" required="true" />
+		<cfargument name="EventName" type="string" required="true" />
+		
+		<cfset var errorLogger = application.singletons.getErrorLogger() />
+		
+		<cfset errorLogger.log(argumentCollection = arguments) />
 	</cffunction>
 	
 	<cffunction name="onRequestStart" access="public" returntype="boolean" output="true">

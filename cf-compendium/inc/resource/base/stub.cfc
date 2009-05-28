@@ -21,7 +21,7 @@
 		
 		<!--- Logs a warning when in debug mode when try to use a singleton that is not defined --->
 		<cfif variables.isDebugMode>
-			<cflog type="warning" application="true" log="singletons" text="The #arguments.missingMethodName# method of the #variables.singletonName# singleton has not been defined by a plugin" />
+			<cflog type="warning" application="true" file="singletons" text="The #arguments.missingMethodName# method of the #variables.singletonName# singleton has not been defined by a plugin" />
 		</cfif>
 	</cffunction>
 </cfcomponent>

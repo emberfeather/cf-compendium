@@ -95,6 +95,15 @@
 		<!--- Create the i18n singleton --->
 		<cfset temp = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath(arguments.newApplication.information.i18n.base)) />
 		<cfset arguments.newApplication.singletons.setI18N(temp) />
+		
+		<!--- Create the datasource singleton --->
+		<cfset temp = createObject('component', 'cf-compendium.inc.resource.persistence.datasource').init() />
+		
+		<cfset temp.setDatasource(argumenst.newApplication.information.datasource.datasource) />
+		<cfset temp.setType(argumenst.newApplication.information.datasource.type) />
+		<cfset temp.setPrefix(argumenst.newApplication.information.datasource.prefix) />
+		
+		<cfset arguments.newApplication.singletons.setDatasource(temp) />
 	</cffunction>
 	
 	<cffunction name="startApplication" access="public" returntype="struct" output="false">
@@ -112,7 +121,7 @@
 					},
 					prerequisites = {
 					},
-					version = 'unknown'
+					version = ''
 				}
 			} />
 		<cfset var navigation = '' />
@@ -127,13 +136,18 @@
 		<cfset arguments.newApplication['information'] = {
 				key = 'unknown',
 				title = 'unknown',
+				admin = {
+					directory = 'admin'
+				},
+				datasource = {
+					datasource = '',
+					type = '',
+					prefix = ''
+				},
 				i18n = {
 					base = '/root',
 					default = 'en_US',
 					locales = 'en_US'
-				},
-				admin = {
-					directory = 'admin'
 				}
 			} />
 		<cfset arguments.newApplication['plugins'] = {} />
@@ -144,11 +158,11 @@
 		
 		<!--- Extend information from the config --->
 		<cfif structKeyExists(appConfig, 'information')>
-			<cfset newApplication.information = extend(newApplication.information, appConfig.information, -1) />
+			<cfset arguments.newApplication.information = extend(arguments.newApplication.information, appConfig.information, -1) />
 		</cfif>
 		
 		<!--- Create the default set of singletons --->
-		<cfset setDefaultSingletons(newApplication) />
+		<cfset setDefaultSingletons(arguments.newApplication) />
 		
 		<!--- Pull in the list of plugins --->
 		<cfif structKeyExists(appConfig, 'plugins')>
@@ -157,12 +171,12 @@
 		
 		<!--- Read in all plugin configs --->
 		<cfloop list="#pluginList#" index="i">
-			<cfset newApplication.plugins[i] = duplicate(defaultPluginConfig) />
+			<cfset arguments.newApplication.plugins[i] = duplicate(defaultPluginConfig) />
 			<cfset pluginConfig = readPluginConfig(i) />
 			
 			<!--- Extend information from the config --->
 			<cfif structKeyExists(pluginConfig, 'information')>
-				<cfset newApplication.plugins[i] = extend(newApplication.plugins[i], pluginConfig, -1) />
+				<cfset arguments.newApplication.plugins[i] = extend(arguments.newApplication.plugins[i], pluginConfig, -1) />
 			</cfif>
 		</cfloop>
 		
@@ -172,19 +186,19 @@
 		<!--- Check for plugin prerequisites --->
 		<cfloop list="#pluginList#" index="i">
 			<!--- Go through each prerequisite to see if we don't have one or if the version is wrong --->
-			<cfloop list="#structKeyList(newApplication.plugins[i].information.prerequisites)#" index="j">
+			<cfloop list="#structKeyList(arguments.newApplication.plugins[i].information.prerequisites)#" index="j">
 				<!--- Check for a completely missing plugin --->
-				<cfif NOT structKeyExists(newApplication.plugins, j)>
-					<cfthrow message="Missing required plugin" detail="The #j# plugin with a version at least #newApplication.plugins[i].information.prerequisites[j]# is required by the #i# plugin" />
+				<cfif NOT structKeyExists(arguments.newApplication.plugins, j)>
+					<cfthrow message="Missing required plugin" detail="The #j# plugin with a version at least #arguments.newApplication.plugins[i].information.prerequisites[j]# is required by the #i# plugin" />
 				</cfif>
 				
 				<!--- Check that the version of the current plugin meets the prerequisite version --->
-				<cfset compareVersion = compare(newApplication.plugins[j].information.version, newApplication.plugins[i].information.prerequisites[j]) />
+				<cfset compareVersion = compare(arguments.newApplication.plugins[j].information.version, arguments.newApplication.plugins[i].information.prerequisites[j]) />
 				
 				<cfif compareVersion LT 0>
-					<cfthrow message="Plugin too old" detail="The #j# plugin with a version at least #newApplication.plugins[i].information.prerequisites[j]# is required by the #i# plugin" />
+					<cfthrow message="Plugin too old" detail="The #j# plugin with a version at least #arguments.newApplication.plugins[i].information.prerequisites[j]# is required by the #i# plugin" />
 				<cfelseif compareVersion GT 0>
-					<cflog type="information" application="true" log="application" text="The #j# plugin is at version #newApplication.plugins[j].information.version# when the #i# plugin is expecting #newApplication.plugins[i].information.prerequisites[j]#" />
+					<cflog type="information" application="true" log="application" text="The #j# plugin is at version #arguments.newApplication.plugins[j].information.version# when the #i# plugin is expecting #arguments.newApplication.plugins[i].information.prerequisites[j]#" />
 				</cfif>
 				
 				<!--- Update the precedence to run install / updates based on prerequisites --->
@@ -201,21 +215,19 @@
 			<cfset pluginVersion = readPluginVersion(i) />
 			
 			<!--- Call the configure function which handles installs/upgrades and singleton creation for the plugin --->
-			<cfset configurer.update(newApplication.plugins[i], pluginVersion) />
+			<cfset configurer.update(arguments.newApplication.plugins[i], pluginVersion) />
 			
 			<!--- Configure the application for the plugin --->
-			<cfset configurer.configure(newApplication) />
+			<cfset configurer.configure(arguments.newApplication) />
 			
 			<!--- Retrieve the navigation object --->
-			<cfset navigation = newApplication.singletons.getNavigation() />
+			<cfset navigation = arguments.newApplication.singletons.getNavigation() />
 			
-			<cfloop array="#newApplication.plugins[i].navigation#" index="j">
+			<cfloop array="#arguments.newApplication.plugins[i].navigation#" index="j">
 				<!--- Apply Navigation Masks --->
 				<cfset navigation.applyMask( variables.appBaseDirectory & 'plugins/' & i & '/config/navigation/' & j ) />
 			</cfloop>
 		</cfloop>
-		
-		<cfreturn newApplication />
 	</cffunction>
 	
 	<!---

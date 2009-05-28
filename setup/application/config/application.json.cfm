@@ -1,7 +1,12 @@
 {
 	'information': {
 		'key': '{{key}}',
-		'title': '{{title}}'
+		'title': '{{title}}',
+		'datasource': {
+			'dsn': '',
+			'type': '',
+			'prefix': ''
+		}
 	},
 	'plugins': [
 	]
