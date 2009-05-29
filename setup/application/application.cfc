@@ -10,12 +10,13 @@
 	<cffunction name="onApplicationStart" access="public" returntype="boolean" output="false">
 		<cfset var appConfigFile = expandPath('config/application.json.cfm') />
 		<cfset var sparkplug = createObject('component', 'cf-compendium.inc.resource.application.sparkplug').init( this.mappings['/root'] ) />
-		<cfset var isDebugMode = true />
+		
+		<cfset variables.isDebugMode = true />
 		
 		<!--- Lock the application scope --->
 		<cflock scope="application" type="exclusive" timeout="5">
 			<!--- Start the application --->
-			<cfset sparkplug.startApplication(application, isDebugMode) />
+			<cfset sparkplug.startApplication(application, variables.isDebugMode) />
 		</cflock>
 		
 		<cfreturn true />
@@ -25,9 +26,17 @@
 		<cfargument name="Exception" type="struct" required="true" />
 		<cfargument name="EventName" type="string" required="true" />
 		
-		<cfset var errorLogger = application.singletons.getErrorLogger() />
+		<cfset var errorLog = '' />
 		
-		<cfset errorLogger.log(argumentCollection = arguments) />
+		<!--- Check if we have got far enough for the singletons --->
+		<cfif structKeyExists(application, 'singletons') AND NOT variables.isDebugMode>
+			<cfset errorLog = application.singletons.getErrorLog() />
+			
+			<cfset errorLog.log(argumentCollection = arguments) />
+		<cfelse>
+			<!--- Dump out the error --->
+			<cfdump var="#arguments.exception#" /><cfabort />
+		</cfif>
 	</cffunction>
 	
 	<cffunction name="onRequestStart" access="public" returntype="boolean" output="true">
