@@ -1,6 +1,6 @@
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
-		<cfargument name="isDebugMode" type="boolean" required="true" />
+		<cfargument name="isDebugMode" type="boolean" default="false" />
 		
 		<cfset variables.isDebugMode = arguments.isDebugMode />
 		<cfset variables.instance = {} />
@@ -17,7 +17,7 @@
 		<cfset var result = '' />
 		
 		<!--- Do a regex on the name --->
-		<cfset result = reFindNoCase('^(get|set)(.+)', arguments.missingMethodName, 1, true) />
+		<cfset result = reFindNoCase('^(get|has|set)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
 		<cfif NOT result.pos[1]>
@@ -41,12 +41,18 @@
 				<cfreturn variables.instance[attribute] />
 			</cfcase>
 			
+			<cfcase value="has">
+				<!--- Check if we have the singleton defined --->
+				<cfreturn structKeyExists(variables.instance, attribute) AND NOT isInstanceOf(variables.instance[attribute], 'cf-compendium.inc.resource.base.stub') />
+			</cfcase>
+			
 			<cfcase value="set">
 				<cfset variables.instance[attribute] = arguments.missingMethodArguments[1] />
 			</cfcase>
 		</cfswitch>
 	</cffunction>
 	
+	<!--- TODO Remove -- for debug purposes only --->
 	<cffunction name="print" access="public" returntype="void" output="true">
 		<cfdump var="#variables.instance#" />
 	</cffunction>
