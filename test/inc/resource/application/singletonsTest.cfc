@@ -35,4 +35,48 @@
 		
 		<cfset assertFalse(singletons.hasSingleton()) />
 	</cffunction>
+	
+	<!---
+		When setting a singleton on the singleton manager it needs
+		to have an object passed as an argument.
+	--->
+	<cffunction name="testSetSansArguments" access="public" returntype="void" output="false">
+		<cfset var singletons = createObject('component', 'cf-compendium.inc.resource.application.singletons').init() />
+		
+		<cftry>
+			<cfset singletons.setSingleton() />
+			
+			<cfset fail("Should not be able to call the set without an argument.") />
+			
+			<cfcatch type="mxunit.exception.AssertionFailedError">
+				<cfrethrow />
+			</cfcatch>
+			
+			<cfcatch type="any">
+				<!--- expect to get here --->
+			</cfcatch>
+		</cftry>
+	</cffunction>
+	
+	<!---
+		When setting a singleton on the singleton manager it needs
+		to be an actual object.
+	--->
+	<cffunction name="testSetSansObject" access="public" returntype="void" output="false">
+		<cfset var singletons = createObject('component', 'cf-compendium.inc.resource.application.singletons').init() />
+		
+		<cftry>
+			<cfset singletons.setSingleton('testing simple value') />
+			
+			<cfset fail("Should not be able to call with a simple value argument.") />
+			
+			<cfcatch type="mxunit.exception.AssertionFailedError">
+				<cfrethrow />
+			</cfcatch>
+			
+			<cfcatch type="any">
+				<!--- expect to get here --->
+			</cfcatch>
+		</cftry>
+	</cffunction>
 </cfcomponent>

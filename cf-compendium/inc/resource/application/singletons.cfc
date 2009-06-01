@@ -47,6 +47,10 @@
 			</cfcase>
 			
 			<cfcase value="set">
+				<cfif NOT isObject(arguments.missingMethodArguments)>
+					<cfthrow message="Singletons must be objects" detail="Singletons need to be objects when set into the singleton manager" />
+				</cfif>
+				
 				<cfset variables.instance[attribute] = arguments.missingMethodArguments[1] />
 			</cfcase>
 		</cfswitch>
