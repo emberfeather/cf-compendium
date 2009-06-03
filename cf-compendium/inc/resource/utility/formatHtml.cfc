@@ -74,7 +74,7 @@
 						</cfif>
 					</cfcase>
 				 	<cfcase value="``">
-					 	<cfif doBackticks>
+					 	<cfif arguments.doBackticks>
 							<cfset value = '&##8216;' />
 						</cfif>
 					</cfcase>
@@ -83,8 +83,8 @@
 							<cfset value = '&##8217;' />
 						</cfif>
 					</cfcase>
-				 	<cfcase value="',&##8216;,&##8217;,'',``">
-						<!--- Check if already opened a double quote --->
+				 	<cfcase value="',&##8216;,&##8217;">
+						<!--- Check if already opened a single quote --->
 						<cfif inSingle>
 							<cfset value = '&##8217;' />
 						<cfelse>
