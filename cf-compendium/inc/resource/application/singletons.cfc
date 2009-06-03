@@ -47,7 +47,7 @@
 			</cfcase>
 			
 			<cfcase value="set">
-				<cfif NOT isObject(arguments.missingMethodArguments)>
+				<cfif NOT isObject(arguments.missingMethodArguments[1])>
 					<cfthrow message="Singletons must be objects" detail="Singletons need to be objects when set into the singleton manager" />
 				</cfif>
 				
