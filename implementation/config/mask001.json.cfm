@@ -1,10 +1,10 @@
 {
-	'section': {
-		'admin': {
-			'allow': '*',
-			'subsection': {
-				'errors': {
-					'deny': 'Service'
+	"section": {
+		"admin": {
+			"allow": "*",
+			"subsection": {
+				"errors": {
+					"deny": "Service"
 				}
 			}
 		}
