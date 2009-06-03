@@ -6,8 +6,9 @@
 	--->
 	<cffunction name="testHasSingleton" access="public" returntype="void" output="false">
 		<cfset var singletons = createObject('component', 'cf-compendium.inc.resource.application.singletons').init() />
+		<cfset var test = createObject('component', 'cf-compendium.inc.resource.base.base').init() />
 		
-		<cfset singletons.setSingleton(createObject('component', 'cf-compendium.inc.resource.base.base').init()) />
+		<cfset singletons.setSingleton( test ) />
 		
 		<cfset assertTrue(singletons.hasSingleton()) />
 	</cffunction>
