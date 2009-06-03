@@ -60,7 +60,7 @@
 	<!---
 		Test the get by attribute functionality.
 	--->
-	<cffunction name="testGetByAttribute" access="public" returntype="void" output="false">
+	<cffunction name="testGetBy" access="public" returntype="void" output="false">
 		<cfset var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		
 		<cfset theObject.addTests('valve', 'pressure', 'release', 'control', 'flow') />

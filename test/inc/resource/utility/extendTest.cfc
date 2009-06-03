@@ -52,7 +52,7 @@
 		<cfset var original = {
 				two = {
 					twoTwo = {
-						twoTwoTwo = 222,
+						twoTwoTwo = 222
 					}
 				}
 			} />

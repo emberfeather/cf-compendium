@@ -51,6 +51,10 @@
 					<cfthrow message="Singletons must be objects" detail="Singletons need to be objects when set into the singleton manager" />
 				</cfif>
 				
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 0>
+					<cfthrow message="Setting singleton requires an arguments" detail="Singletons need one argument." />
+				</cfif>
+				
 				<cfset variables.instance[attribute] = arguments.missingMethodArguments[1] />
 			</cfcase>
 		</cfswitch>

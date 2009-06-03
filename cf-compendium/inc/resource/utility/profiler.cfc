@@ -75,8 +75,10 @@
 	<cffunction name="getTicker" access="public" returntype="struct" output="false">
 		<cfargument name="tickerName" type="string" required="true" />
 		
+		<cfset var results = {} />
+		
 		<cfif NOT variables.isActive>
-			<cfreturn {} />
+			<cfreturn results />
 		</cfif>
 		
 		<!--- Check if the ticker even exists --->
@@ -95,9 +97,10 @@
 	--->
 	<cffunction name="getTickers" access="public" returntype="struct" output="false">
 		<cfset var i = '' />
+		<cfset var results = {} />
 		
 		<cfif NOT variables.isActive>
-			<cfreturn {} />
+			<cfreturn results />
 		</cfif>
 		
 		<!--- Calculating the counts for the tickers --->
