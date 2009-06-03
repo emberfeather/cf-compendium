@@ -3,15 +3,19 @@
 		<cfargument name="navigationFile" type="string" default="" />
 		
 		<cfset var baseNav = {} />
+		<cfset var fileContents = '' />
 		
 		<cfset super.init() />
 		
-		<cfset variables.navigation = expandNavigation(baseNav) />
-		
-		<!--- Add the navigation as a mask if provided --->
 		<cfif arguments.navigationFile NEQ ''>
-			<cfset applyMask(arguments.navigationFile) />
+			<!--- Read in the navigation file --->
+			<cfset fileContents = readFile(arguments.navigationFile) />
+			
+			<!--- Parse the file contents --->
+			<cfset baseNav = deserializeJSON(fileContents) />
 		</cfif>
+		
+		<cfset variables.navigation = expandNavigation(baseNav) />
 		
 		<cfreturn this />
 	</cffunction>
