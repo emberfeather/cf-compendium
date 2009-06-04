@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<project name="poseidon" default="prepare" basedir=".">
+	<!-- Load ANT tasks -->
+	<taskdef name="statsvn" classname="net.sf.statsvn.ant.StatSvnTask" classpath="${basedir}/dist/lib/statsvn.jar" />
+	<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar" />
+	
+	<!-- Include the property files -->
+	<property file="${basedir}/common.properties"/>
+	<property file="${basedir}/user.properties"/>
+	
+	<target name="prepare" description="Prepare environment for build">
+		<!-- Define log file -->
+		<record name="${basedir}${build.dist}/logs/${build.logfile}"/>
+		
+		<!-- Create the time stamp -->
+		<tstamp>
+			<format property="build.date" pattern="MM/dd/yy hh:mmaa"/>
+		</tstamp>
+		
+		<echo message="${project.fullname} preparations complete"/>
+	</target>
+	
+	<target name="statSVN" description="Generates statistics from the repository">
+		<statsvn
+			path="${basedir}"
+			log="${basedir}${build.dist}/logs/${svn.commit.log}"/>
+		
+		<echo message="${project.fullname} stats created at: ${basedir}${build.dist}/stats"/>
+	</target>
+</project>
