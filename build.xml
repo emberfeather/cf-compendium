@@ -23,7 +23,10 @@
 	<target name="statSVN" description="Generates statistics from the repository">
 		<statsvn
 			path="${basedir}"
-			log="${basedir}${build.dist}/logs/${svn.commit.log}"/>
+			log="${basedir}${build.dist}/logs/${svn.commit.log}"
+			outputDir="${basedir}${build.dist}/stats"
+			title="${project.fullname}"
+			include="**/*.cfc"/>
 		
 		<echo message="${project.fullname} stats created at: ${basedir}${build.dist}/stats"/>
 	</target>
