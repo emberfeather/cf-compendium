@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="poseidon" default="prepare" basedir=".">
+<project name="cf-compendium" default="prepare" basedir=".">
 	<!-- Load ANT tasks -->
 	<taskdef name="statsvn" classname="net.sf.statsvn.ant.StatSvnTask" classpath="${basedir}/dist/lib/statsvn.jar" />
 	<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar" />
@@ -20,14 +20,33 @@
 		<echo message="${project.fullname} preparations complete"/>
 	</target>
 	
+	<target name="logSVN" description="Generates logs from the repository">
+		<exec executable="svn" output="${basedir}${build.dist}/logs/${svn.commit.log}">
+			<arg value="log"/>
+			<arg value="-v"/>
+			<arg value="--xml"/>
+			<arg value="${basedir}"/>
+		</exec>
+		
+		<echo message="${project.fullname} svn log created at: ${basedir}${build.dist}/logs/${svn.commit.log}"/>
+	</target>
+	
 	<target name="statSVN" description="Generates statistics from the repository">
 		<statsvn
 			path="${basedir}"
 			log="${basedir}${build.dist}/logs/${svn.commit.log}"
 			outputDir="${basedir}${build.dist}/stats"
 			title="${project.fullname}"
-			include="**/*.cfc"/>
+			include="**/*.cfc;**/*.cfm;**/*.js;**/*.css;**/*.xml;**/*.properties"/>
 		
 		<echo message="${project.fullname} stats created at: ${basedir}${build.dist}/stats"/>
+	</target>
+	
+	<target name="test" depends="prepare" description="Runs the Unit Tests">
+		<mxunittask server="${mxunit.host}" port="${mxunit.port}" outputdir="${basedir}${build.dist}/unit" defaultrunner="${mxunit.defaultrunner}" verbose="${general.verbose}" haltonerror="true">
+			<directory path="${basedir}/test" componentPath="${mxunit.componentpath}" recurse="true" />
+		</mxunittask>
+		
+		<echo message="${project.fullname} tests have successfully run"/>
 	</target>
 </project>
