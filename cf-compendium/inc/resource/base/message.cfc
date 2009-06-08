@@ -25,6 +25,7 @@
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfset var html = '' />
+		<cfset var i = '' />
 		
 		<cfif arrayLen(variables.instance.messages)>
 			<cfsavecontent variable="html">

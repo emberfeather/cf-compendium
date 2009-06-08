@@ -154,6 +154,7 @@
 		<cfargument name="queryVar" type="string" default="onPage" />
 		
 		<cfset var html = '' />
+		<cfset var i = '' />
 		<cfset var linkCount = 5 />
 		<cfset var middleLink = ceiling(linkCount / 2) />
 		

@@ -91,6 +91,7 @@
 		<cfset var i = '' />
 		<cfset var isUnique = '' />
 		<cfset var j = '' />
+		<cfset var style = '' />
 		
 		<!--- Check if it is already in the array --->
 		<cfloop array="#variables.instance.styles#" index="j">
@@ -114,6 +115,7 @@
 		<cfset var i = '' />
 		<cfset var isUnique = '' />
 		<cfset var j = '' />
+		<cfset var style = '' />
 		
 		<cfloop array="#arguments#" index="i">
 			<cfset isUnique = true />

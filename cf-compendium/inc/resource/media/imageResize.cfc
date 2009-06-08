@@ -114,10 +114,10 @@
 		<cfloop array="#arguments.resolutions#" index="i">
 			<!--- Check if we already have the modified image for the width/height ratio --->
 			<cfif NOT structKeyExists(modified, i.whRatio)>
-				<cfset clipped[i.ratio] = imageCopy(original, 0, 0, resolutionClips[i.ratio].width, resolutionClips[i.ratio].height) />
+				<cfset resolutionClips[i.ratio] = imageCopy(original, 0, 0, resolutionClips[i.ratio].width, resolutionClips[i.ratio].height) />
 			</cfif>
 			
-			<cfset modified = imageCopy(clipped[i.ratio], 0, 0, resolutionClips[i.ratio].width, resolutionClips[i.ratio].height) />
+			<cfset modified = imageCopy(resolutionClips[i.ratio], 0, 0, resolutionClips[i.ratio].width, resolutionClips[i.ratio].height) />
 			
 			<!--- Resize the image --->
 			<cfset imageResize(modified, i.width, i.height, 'highestQuality') />

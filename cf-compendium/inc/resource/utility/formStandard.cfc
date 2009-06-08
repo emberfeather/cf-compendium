@@ -745,7 +745,7 @@
 			<!--- For the checkbox we want to see if the value that the object has is the same as the value for the form --->
 			<cfinvoke component="#arguments.object#" method="get#arguments.name#" returnvariable="objectValue" />
 			
-			<cfset attribute.form.checked = objectValue EQ attribute.form.value />
+			<cfset arguments.attribute.form.checked = objectValue EQ attribute.form.value />
 		<cfelseif arguments.attribute.form.type EQ 'password' AND structKeyExists(attribute.form, 'value')>
 			<!--- For Password elements that have a value defined as part of the meta information do nothing --->
 		<cfelse>

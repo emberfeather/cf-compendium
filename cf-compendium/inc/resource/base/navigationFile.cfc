@@ -271,6 +271,7 @@
 		<cfargument name="authUser" type="component" required="false" />
 		
 		<cfset var i = '' />
+		<cfset var j = '' />
 		<cfset var matched = {
 				match = '',
 				urlVar = '',

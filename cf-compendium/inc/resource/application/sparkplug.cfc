@@ -112,6 +112,7 @@
 		
 		<cfset var appConfig = '' />
 		<cfset var compareVersion = '' />
+		<cfset var configurer = '' />
 		<cfset var defaultPluginConfig = {
 				information = {
 					key = 'unknown',
