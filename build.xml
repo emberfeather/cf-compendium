@@ -5,8 +5,8 @@
 	<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar" />
 	
 	<!-- Include the property files -->
-	<property file="${basedir}/common.properties"/>
 	<property file="${basedir}/user.properties"/>
+	<property file="${basedir}/common.properties"/>
 	
 	<target name="prepare" description="Prepare environment for build">
 		<!-- Define log file -->
@@ -15,16 +15,20 @@
 		<!-- Create the time stamp -->
 		<tstamp>
 			<format property="build.date" pattern="MM/dd/yy hh:mmaa"/>
+			<format property="svn.log.startDate" pattern="yyyy-MM-dd" offset="-5" unit="year" />
+			<format property="svn.log.endDate" pattern="yyyy-MM-dd"/>
 		</tstamp>
 		
 		<echo message="${project.fullname} preparations complete"/>
 	</target>
 	
-	<target name="logSVN" description="Generates logs from the repository">
+	<target name="logSVN" depends="prepare" description="Generates logs from the repository">
 		<exec executable="svn" output="${basedir}${build.dist}/logs/${svn.commit.log}">
 			<arg value="log"/>
 			<arg value="-v"/>
 			<arg value="--xml"/>
+			<arg value="-r"/>
+			<arg value="{${svn.log.startDate}}:{${svn.log.endDate}}"/>
 			<arg value="${basedir}"/>
 		</exec>
 		
