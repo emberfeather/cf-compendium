@@ -35,7 +35,7 @@
 		<echo message="${project.fullname} svn log created at: ${basedir}${build.dist}/logs/${svn.commit.log}"/>
 	</target>
 	
-	<target name="statSVN" description="Generates statistics from the repository">
+	<target name="statSVN" depends="logSVN" description="Generates statistics from the repository">
 		<statsvn
 			path="${basedir}"
 			log="${basedir}${build.dist}/logs/${svn.commit.log}"
