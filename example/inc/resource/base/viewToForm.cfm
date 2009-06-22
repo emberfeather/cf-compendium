@@ -5,16 +5,16 @@
 
 <h2>English</h2>
 
-<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithValidation').init(i18n) />
-<cfset validatedObj.setFirstName('Tester') />
+<cfset validatedModel = createObject('component', 'implementation.inc.resource.base.modelWithValidation').init(i18n) />
+<cfset validatedModel.setFirstName('Tester') />
 
 <!--- Create the form from the object --->
-<cfoutput>#theView.toForm(validatedObj, theURL.get())#</cfoutput>
+<cfoutput>#theView.toForm(validatedModel, theURL.get())#</cfoutput>
 
 <h2>Pirate</h2>
 
-<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithValidation').init(i18n, 'en_PI') />
-<cfset validatedObj.setFirstName('Tester') />
+<cfset validatedModel = createObject('component', 'implementation.inc.resource.base.modelWithValidation').init(i18n, 'en_PI') />
+<cfset validatedModel.setFirstName('Tester') />
 
 <!--- Create the form from the object --->
-<cfoutput>#theView.toForm(validatedObj, theURL.get())#</cfoutput>
+<cfoutput>#theView.toForm(validatedModel, theURL.get())#</cfoutput>

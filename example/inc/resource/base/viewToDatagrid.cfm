@@ -7,10 +7,10 @@
 
 <cfset data = [] />
 
-<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithDatagrid').init(i18n) />
-<cfset validatedObj.setFirstName('Tester') />
+<cfset validatedModel = createObject('component', 'implementation.inc.resource.base.modelWithDatagrid').init(i18n) />
+<cfset validatedModel.setFirstName('Tester') />
 
-<cfset arrayAppend(data, validatedObj)>
+<cfset arrayAppend(data, validatedModel)>
 
 <!--- Create the form from the object --->
 <cfoutput>#theView.toDatagrid(data)#</cfoutput>
@@ -19,10 +19,10 @@
 
 <cfset data = [] />
 
-<cfset validatedObj = createObject('component', 'implementation.inc.resource.base.objectWithDatagrid').init(i18n, 'en_PI') />
-<cfset validatedObj.setFirstName('Tester') />
+<cfset validatedModel = createObject('component', 'implementation.inc.resource.base.modelWithDatagrid').init(i18n, 'en_PI') />
+<cfset validatedModel.setFirstName('Tester') />
 
-<cfset arrayAppend(data, validatedObj)>
+<cfset arrayAppend(data, validatedModel)>
 
 <!--- Create the form from the object --->
 <cfoutput>#theView.toForm(data)#</cfoutput>
