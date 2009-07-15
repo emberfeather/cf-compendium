@@ -33,8 +33,14 @@
 		<!--- Do the fun stuff --->
 		<cfswitch expression="#prefix#">
 			<cfcase value="get">
-				<!--- If there isn't a singleton defined create a stub --->
+				<!--- Check if we are missing the singleton --->
 				<cfif NOT structKeyExists(variables.instance, attribute)>
+					<!--- If the first argument exists and is true we need to throw an error because it is a required singleton --->
+					<cfif arrayLen(arguments.missingMethodArguments) GT 0 AND arguments.missingMethodArguments[1] EQ true>
+						<cfthrow message="Missing Singleton" detail="A singleton (#attribute#) is required but not created" />
+					</cfif>
+					
+					<!--- If not required create a stub --->
 					<cfset variables.instance[attribute] = createObject('component', 'cf-compendium.inc.resource.base.stub').init(attribute, variables.isDebugMode) />
 				</cfif>
 				
@@ -47,12 +53,12 @@
 			</cfcase>
 			
 			<cfcase value="set">
-				<cfif NOT isObject(arguments.missingMethodArguments[1])>
-					<cfthrow message="Singletons must be objects" detail="Singletons need to be objects when set into the singleton manager" />
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 0>
+					<cfthrow message="Setting singleton requires an argument" detail="Singletons need one argument." />
 				</cfif>
 				
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 0>
-					<cfthrow message="Setting singleton requires an arguments" detail="Singletons need one argument." />
+				<cfif NOT isObject(arguments.missingMethodArguments[1])>
+					<cfthrow message="Singletons must be objects" detail="Singletons need to be objects when set into the singleton manager" />
 				</cfif>
 				
 				<cfset variables.instance[attribute] = arguments.missingMethodArguments[1] />
