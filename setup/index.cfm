@@ -17,11 +17,14 @@
 	<!--- Create the directory structure --->
 	<cfswitch expression="#setupSettings['type']#">
 		<cfcase value="application">
-			<cfset directories = 'config' />
+			<cfset directories = 'admin' />
+			<cfset directories &= ',config' />
 			<cfset directories &= ',plugins' />
 		</cfcase>
+		
 		<cfcase value="plugin">
-			<cfset directories = 'config,config/navigation' />
+			<cfset directories = 'admin' />
+			<cfset directories &= ',config,config/navigation' />
 			<cfset directories &= ',i18n' />
 			<cfset directories &= ',img' />
 			<cfset directories &= ',inc,inc/content,inc/model,inc/resource,inc/service,inc/view' />
@@ -36,6 +39,7 @@
 				<cfdirectory action="create" directory="#setupSettings['path']#">
 			</cfif>
 		</cfcase>
+		
 		<cfdefaultcase>
 			<cfthrow message="#setupSettings['type']# is not supported" />
 		</cfdefaultcase>
@@ -63,13 +67,17 @@
 	<!--- Create the file structure --->
 	<cfswitch expression="#setupSettings['type']#">
 		<cfcase value="application">
-			<cfset files = 'config/application.cfc,config/application.json.cfm' />
+			<cfset files = 'admin/index.cfm' />
+			<cfset files &= ',config/application.cfc,config/application.json.cfm' />
 			<cfset files &= ',application.cfc,index.cfm' />
 		</cfcase>
+		
 		<cfcase value="plugin">
-			<cfset files = 'config/application.cfc,config/configure.cfc,config/plugin.json.cfm' />
+			<cfset files = 'admin/application.cfc' />
+			<cfset files &= ',config/application.cfc,config/configure.cfc,config/plugin.json.cfm' />
 			<cfset files &= ',inc/application.cfc,inc/admin.cfm,inc/application.cfc,inc/index.cfm' />
 		</cfcase>
+		
 		<cfdefaultcase>
 			<cfthrow message="#setupSettings['type']# is not supported" />
 		</cfdefaultcase>
