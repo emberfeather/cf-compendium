@@ -90,11 +90,11 @@
 		
 		<!--- Create the navigation singleton --->
 		<cfset temp = createObject('component', 'cf-compendium.inc.resource.structure.navigationJSON').init() />
-		<cfset arguments.newApplication.singletons.setNavigation(temp) />
+		<cfset arguments.newApplication.managers.singleton.setNavigation(temp) />
 		
 		<!--- Create the i18n singleton --->
 		<cfset temp = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath(arguments.newApplication.information.i18n.base)) />
-		<cfset arguments.newApplication.singletons.setI18N(temp) />
+		<cfset arguments.newApplication.managers.singleton.setI18N(temp) />
 		
 		<!--- Create the datasource singleton --->
 		<cfset temp = createObject('component', 'cf-compendium.inc.resource.persistence.datasource').init() />
@@ -103,7 +103,7 @@
 		<cfset temp.setType(arguments.newApplication.information.datasource.type) />
 		<cfset temp.setPrefix(arguments.newApplication.information.datasource.prefix) />
 		
-		<cfset arguments.newApplication.singletons.setDatasource(temp) />
+		<cfset arguments.newApplication.managers.singleton.setDatasource(temp) />
 	</cffunction>
 	
 	<cffunction name="startApplication" access="public" returntype="void" output="false">
@@ -152,7 +152,10 @@
 				}
 			} />
 		<cfset arguments.newApplication['plugins'] = {} />
-		<cfset arguments.newApplication['singletons'] = createObject('component', 'cf-compendium.inc.resource.application.singletons').init(arguments.isDebugMode) />
+		<cfset arguments.newApplication['managers'] = {
+				factory = createObject('component', 'cf-compendium.inc.resource.application.factoryManager').init(arguments.isDebugMode),
+				singleton = createObject('component', 'cf-compendium.inc.resource.application.singletonManager').init(arguments.isDebugMode)
+			} />
 		
 		<!--- Read in application information --->
 		<cfset appConfig = readApplicationConfig() />
@@ -222,7 +225,7 @@
 			<cfset configurer.configure(arguments.newApplication) />
 			
 			<!--- Retrieve the navigation object --->
-			<cfset navigation = arguments.newApplication.singletons.getNavigation() />
+			<cfset navigation = arguments.newApplication.managers.singleton.getNavigation() />
 			
 			<cfloop array="#arguments.newApplication.plugins[i].navigation#" index="j">
 				<!--- Apply Navigation Masks --->
