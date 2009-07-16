@@ -17,7 +17,7 @@
 		<cfset var result = '' />
 		
 		<!--- Do a regex on the name --->
-		<cfset result = reFind('^(get|has|set)(.+)', arguments.missingMethodName, 1, true) />
+		<cfset result = reFindNoCase('^(get|has|set)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
 		<cfif NOT result.pos[1]>

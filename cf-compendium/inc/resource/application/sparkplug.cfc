@@ -231,6 +231,16 @@
 				<!--- Apply Navigation Masks --->
 				<cfset navigation.applyMask( variables.appBaseDirectory & 'plugins/' & i & '/config/navigation/' & j ) />
 			</cfloop>
+			
+			<!--- Check for factory information --->
+			<cfif structKeyExists(arguments.newApplication.plugins[i], 'factory')>
+				<cfloop collection="#arguments.newApplication.plugins[i].factory#" item="j">
+					<!--- Set the factory paths in the manager -- overrides any pre-existing paths --->
+					<cfinvoke component="#arguments.newApplication['managers']['factory']#" method="set#j#">
+						<cfinvokeargument name="path" value="#arguments.newApplication.plugins[i].factory[j]#" />
+					</cfinvoke>
+				</cfloop>
+			</cfif>
 		</cfloop>
 	</cffunction>
 	
