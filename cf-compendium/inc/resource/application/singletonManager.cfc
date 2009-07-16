@@ -17,7 +17,7 @@
 		<cfset var result = '' />
 		
 		<!--- Do a regex on the name --->
-		<cfset result = reFindNoCase('^(get|has|set)(.+)', arguments.missingMethodName, 1, true) />
+		<cfset result = reFind('^(get|has|set)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
 		<cfif NOT result.pos[1]>
@@ -35,11 +35,6 @@
 			<cfcase value="get">
 				<!--- Check if we are missing the singleton --->
 				<cfif NOT structKeyExists(variables.instance, attribute)>
-					<!--- If the first argument exists and is true we need to throw an error because it is a required singleton --->
-					<cfif arrayLen(arguments.missingMethodArguments) GT 0 AND arguments.missingMethodArguments[1] EQ true>
-						<cfthrow message="Missing Singleton" detail="A singleton (#attribute#) is required but not created" />
-					</cfif>
-					
 					<!--- If not required create a stub --->
 					<cfset variables.instance[attribute] = createObject('component', 'cf-compendium.inc.resource.base.stub').init(attribute, variables.isDebugMode) />
 				</cfif>

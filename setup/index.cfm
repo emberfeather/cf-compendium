@@ -134,7 +134,7 @@
 			</div>
 			<div>
 				<p>The title for the application or plugin.</p>
-				<label>Tite: <input type="text" name="title" value="" /></label>
+				<label>Title: <input type="text" name="title" value="" /></label>
 			</div>
 			<div>
 				<input type="submit" value="Setup" />
@@ -145,6 +145,8 @@
 
 <cffunction name="normalizePath" access="public" returntype="string" output="false">
 	<cfargument name="path" type="string" required="true" />
+	
+	<cfset arguments.path = trim(arguments.path) />
 	
 	<cfif right(arguments.path, 1) NEQ '/'>
 		<cfreturn arguments.path & '/' />
