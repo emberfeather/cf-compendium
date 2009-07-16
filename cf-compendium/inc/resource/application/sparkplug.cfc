@@ -232,10 +232,20 @@
 				<cfset navigation.applyMask( variables.appBaseDirectory & 'plugins/' & i & '/config/navigation/' & j ) />
 			</cfloop>
 			
+			<!--- Check for singleton information --->
+			<cfif structKeyExists(arguments.newApplication.plugins[i], 'singleton')>
+				<cfloop collection="#arguments.newApplication.plugins[i].singleton#" item="j">
+					<!--- Create the singleton and set it to the singleton manager --->
+					<cfinvoke component="#arguments.newApplication['managers']['singleton']#" method="set#j#">
+						<cfinvokeargument name="singleton" value="#createObject('component', arguments.newApplication.plugins[i].singleton[j]).init()#" />
+					</cfinvoke>
+				</cfloop>
+			</cfif>
+			
 			<!--- Check for factory information --->
 			<cfif structKeyExists(arguments.newApplication.plugins[i], 'factory')>
 				<cfloop collection="#arguments.newApplication.plugins[i].factory#" item="j">
-					<!--- Set the factory paths in the manager -- overrides any pre-existing paths --->
+					<!--- Set the factory path in the manager -- overrides any pre-existing path --->
 					<cfinvoke component="#arguments.newApplication['managers']['factory']#" method="set#j#">
 						<cfinvokeargument name="path" value="#arguments.newApplication.plugins[i].factory[j]#" />
 					</cfinvoke>
