@@ -1,12 +1,50 @@
 <?xml version="1.0"?>
 <project name="cf-compendium" default="prepare" basedir=".">
+	<path id="svn.classpath">
+		<pathelement location="${basedir}/dist/lib/svnant.jar" />
+		<pathelement location="${basedir}/dist/lib/svnClientAdapter.jar"/>
+		<pathelement location="${basedir}/dist/lib/svnjavahl.jar"/>
+		<pathelement location="${basedir}/dist/lib/svnkit.jar"/>
+		<pathelement location="${basedir}/dist/lib/ganymed.jar"/>
+	</path>
+	
 	<!-- Load ANT tasks -->
+	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svn.classpath"/>
 	<taskdef name="statsvn" classname="net.sf.statsvn.ant.StatSvnTask" classpath="${basedir}/dist/lib/statsvn.jar" />
 	<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar" />
 	
 	<!-- Include the property files -->
 	<property file="${basedir}/user.properties"/>
-	<property file="${basedir}/common.properties"/>
+	<property file="${basedir}/project.properties"/>
+	
+	<target name="minify" depends="prepare" description="Minify the CSS and JS files">
+		<echo message="Starting: CSS and JS minification"/>
+		
+		<!-- Use the jar to minify the css and js files -->
+		<apply executable="java" parallel="false" dest="${basedir}/${project.name}/script">
+			<fileset dir="${basedir}/${project.name}/script" includes="**/*.js" excludes="**/*-min.js" />
+			<arg line="-jar"/>
+			<arg path="${basedir}/${build.dist}/lib/yuicompressor-2.4.2.jar" />
+			<arg line="-v"/>
+			<srcfile/>
+			<arg line="-o"/>
+			<mapper type="glob" from="*.js" to="*-min.js"/>
+			<targetfile/>
+		</apply>
+		
+		<apply executable="java" parallel="false" dest="${basedir}/${project.name}/style">
+			<fileset dir="${basedir}/${project.name}/style" includes="**/*.css" excludes="**/*-min.css" />
+			<arg line="-jar"/>
+			<arg path="${basedir}/${build.dist}/lib/yuicompressor-2.4.2.jar" />
+			<arg line="-v"/>
+			<srcfile/>
+			<arg line="-o"/>
+			<mapper type="glob" from="*.css" to="*-min.css"/>
+			<targetfile/>
+		</apply>
+		
+		<echo message="Finished: CSS and JS minification"/>
+	</target>
 	
 	<target name="prepare" description="Prepare environment for build">
 		<!-- Define log file -->
@@ -22,20 +60,7 @@
 		<echo message="${project.fullname} preparations complete"/>
 	</target>
 	
-	<target name="logSVN" depends="prepare" description="Generates logs from the repository">
-		<exec executable="svn" output="${basedir}${build.dist}/logs/${svn.commit.log}">
-			<arg value="log"/>
-			<arg value="-v"/>
-			<arg value="--xml"/>
-			<arg value="-r"/>
-			<arg value="{${svn.log.startDate}}:{${svn.log.endDate}}"/>
-			<arg value="${basedir}"/>
-		</exec>
-		
-		<echo message="${project.fullname} svn log created at: ${basedir}${build.dist}/logs/${svn.commit.log}"/>
-	</target>
-	
-	<target name="statSVN" depends="logSVN" description="Generates statistics from the repository">
+	<target name="statSVN" description="Generates statistics from the repository">
 		<statsvn
 			path="${basedir}"
 			log="${basedir}${build.dist}/logs/${svn.commit.log}"
@@ -46,11 +71,40 @@
 		<echo message="${project.fullname} stats created at: ${basedir}${build.dist}/stats"/>
 	</target>
 	
+	<target name="svnCommit" depends="prepare,minify" description="Commits the code to the repository">
+		<echo message="Starting: SVN Commit"/>
+		
+		<input addproperty="svn.message" message="Commit Message" />
+		
+		<svn username="${svn.username}" password="${svn.password}" javahl="${svn.javahl}" svnkit="${svn.svnkit}">
+			<commit dir="${basedir}" recurse="true" message="${svn.message}"/>
+		</svn>
+		
+		<echo message="Finished: SVN Commit"/>
+	</target>
+	
+	<target name="svnLog" depends="prepare" description="Generates logs from the repository">
+		<echo message="Starting: SVN Log"/>
+		
+		<exec executable="svn" output="${basedir}${build.dist}/logs/${svn.commit.log}">
+			<arg value="log"/>
+			<arg value="-v"/>
+			<arg value="--xml"/>
+			<arg value="-r"/>
+			<arg value="{${svn.log.startDate}}:{${svn.log.endDate}}"/>
+			<arg value="${basedir}"/>
+		</exec>
+		
+		<echo message="Finished: SVN Log at ${basedir}${build.dist}/logs/${svn.commit.log}"/>
+	</target>
+	
 	<target name="test" depends="prepare" description="Runs the Unit Tests">
+		<echo message="Starting: Unit Tests"/>
+		
 		<mxunittask server="${mxunit.host}" port="${mxunit.port}" outputdir="${basedir}${build.dist}/unit" defaultrunner="${mxunit.defaultrunner}" verbose="${general.verbose}" haltonerror="true">
 			<directory path="${basedir}/test" componentPath="${mxunit.componentpath}" recurse="true" />
 		</mxunittask>
 		
-		<echo message="${project.fullname} tests have successfully run"/>
+		<echo message="Finished: Unit Tests"/>
 	</target>
 </project>
