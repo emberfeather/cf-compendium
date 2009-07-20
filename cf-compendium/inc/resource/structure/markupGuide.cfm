@@ -1,5 +1,4 @@
 <div id="markupguide">
-	<hr />
 	<h2 id="headerexamples">Header <a href="#">Examples</a></h2>
 	<p>The secondary header above is an <code>h2</code> element, which may be used for any form of important page-level header. More than one may be used per page. Consider using an <code>h2</code> unless you need a header level of less importance, or as a sub-header to an existing <code>h2</code> element. Any header level may include links, as depicted in the example.</p>
 
