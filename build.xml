@@ -47,6 +47,8 @@
 	</target>
 	
 	<target name="prepare" description="Prepare environment for build">
+		<echo message="Starting: Environment Preparation"/>
+		
 		<!-- Define log file -->
 		<record name="${basedir}${build.dist}/logs/${build.logfile}"/>
 		
@@ -57,10 +59,12 @@
 			<format property="svn.log.endDate" pattern="yyyy-MM-dd"/>
 		</tstamp>
 		
-		<echo message="${project.fullname} preparations complete"/>
+		<echo message="Finished: Environment Preparation"/>
 	</target>
 	
 	<target name="statSVN" description="Generates statistics from the repository">
+		<echo message="Starting: SVN Statistics"/>
+		
 		<statsvn
 			path="${basedir}"
 			log="${basedir}${build.dist}/logs/${svn.commit.log}"
@@ -68,7 +72,7 @@
 			title="${project.fullname}"
 			include="**/*.cfc;**/*.cfm;**/*.js;**/*.css;**/*.xml;**/*.properties"/>
 		
-		<echo message="${project.fullname} stats created at: ${basedir}${build.dist}/stats"/>
+		<echo message="Finished: SVN Statistics at ${basedir}${build.dist}/stats"/>
 	</target>
 	
 	<target name="svnCommit" depends="prepare,minify" description="Commits the code to the repository">
