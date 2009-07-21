@@ -1,14 +1,12 @@
 {
-	"information": {
-		"key": "{{key}}",
-		"title": "{{title}}",
-		"i18n": {
-			"locales": "en_US"
-		},
-		"prerequisites": {
-		},
-		"version": "0.1.0"
+	"i18n": {
+		"locales": [
+			"en_US"
+		]
 	},
-	"navigation": [
-	]
+	"key": "{{key}}",
+	"prerequisites": {
+	},
+	"version": "0.1.0"
+	}
 }

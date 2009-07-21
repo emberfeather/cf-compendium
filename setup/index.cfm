@@ -24,7 +24,7 @@
 		
 		<cfcase value="plugin">
 			<cfset directories = 'config,config/navigation' />
-			<cfset directories &= ',i18n' />
+			<cfset directories &= ',i18n,i18n/config,i18n/inc,i18n/inc/model' />
 			<cfset directories &= ',img' />
 			<cfset directories &= ',inc,inc/content,inc/model,inc/resource,inc/service,inc/view' />
 			<cfset directories &= ',script' />
@@ -73,6 +73,7 @@
 		
 		<cfcase value="plugin">
 			<cfset files = 'config/application.cfc,config/configure.cfc,config/plugin.json.cfm' />
+			<cfset files &= ',i18n/config/plugin.properties,i18n/config/plugin_en_US.properties' />
 			<cfset files &= ',inc/application.cfc,inc/admin.cfm,inc/application.cfc,inc/index.cfm' />
 		</cfcase>
 		
