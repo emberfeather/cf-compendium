@@ -207,7 +207,7 @@
 		<cfloop array="#arguments.newApplication['plugins']#" index="i">
 			
 			<!--- Create the configure utility for the plugin --->
-			<cfset configurers[i.key] = createObject('component', 'plugins.' & i.key & '.config.configure').init() />
+			<cfset configurers[i.key] = createObject('component', 'plugins.' & i.key & '.config.configure').init(variables.appBaseDirectory) />
 			
 			<!--- Upgrade the plugin --->
 			<cfset configurers[i.key].update(i, readPluginVersion(i.key)) />

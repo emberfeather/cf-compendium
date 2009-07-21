@@ -1,4 +1,14 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
+	<cffunction name="init" access="public" returntype="component" output="false">
+		<cfargument name="appBaseDirectory" type="string" required="true" />
+		
+		<cfset super.init() />
+		
+		<cfset variables.appBaseDirectory = arguments.appBaseDirectory />
+		
+		<cfreturn this />
+	</cffunction>
+	
 	<cffunction name="configure" access="public" returntype="void" output="false">
 		<cfargument name="newApplication" type="struct" required="true" />
 		
