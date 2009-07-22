@@ -20,22 +20,38 @@
 	</cffunction>
 	
 	<cffunction name="readApplicationConfig" access="public" returntype="struct" output="false">
-		<cfset var appConfig = '' />
-		<cfset var appConfigFile = variables.appBaseDirectory & 'config/application.json.cfm' />
+		<cfset var config = '' />
+		<cfset var configFile = 'application.json.cfm' />
+		<cfset var configPath = variables.appBaseDirectory & 'config/' />
+		<cfset var contents = '' />
+		<cfset var settingsFile = 'settings.json.cfm' />
 		
-		<cfif NOT fileExists(appConfigFile)>
-			<cfset appConfigFile = expandPath(appConfigFile) />
+		<cfif NOT fileExists(configPath & configFile)>
+			<cfset configPath = expandPath(configPath) />
 			
-			<cfif NOT fileExists(appConfigFile)>
+			<cfif NOT fileExists(configPath & configFile)>
 				<cfthrow message="Could not find the application configuration" detail="The application could not be detected at #variables.appBaseDirectory#" />
 			</cfif>
 		</cfif>
 		
 		<!--- Read the application config file --->
-		<cffile action="read" file="#appConfigFile#" variable="appConfig" />
+		<cffile action="read" file="#configPath & configFile#" variable="contents" />
 		
-		<!--- Parse and return the config --->
-		<cfreturn deserializeJSON(appConfig) />
+		<!--- Deserialize the Configuration --->
+		<cfset config = deserializeJSON(contents) />
+		
+		<!--- Check for settings file --->
+		<cfif NOT fileExists(configPath & settingsFile)>
+			<cfthrow message="Could not find the application settings" detail="The application settings could not be detected at #variables.appBaseDirectory#" />
+		</cfif>
+		
+		<!--- Read the application config file --->
+		<cffile action="read" file="#configPath & settingsFile#" variable="contents" />
+		
+		<!--- Deserialize the Settings --->
+		<cfset config['settings'] = deserializeJSON(contents) />
+		
+		<cfreturn config />
 	</cffunction>
 	
 	<cffunction name="readPluginConfig" access="public" returntype="struct" output="false">
@@ -78,23 +94,10 @@
 		
 		<cfset var temp = '' />
 		
-		<!--- Create the navigation singleton --->
-		<cfset temp = createObject('component', 'cf-compendium.inc.resource.structure.navigationJSON').init() />
-		
-		<cfset arguments.newApplication.managers.singleton.setNavigation(temp) />
-		
 		<!--- Create the i18n singleton --->
 		<cfset temp = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath(arguments.newApplication.information.i18n.base)) />
 		
 		<cfset arguments.newApplication.managers.singleton.setI18N(temp) />
-		
-		<!--- Create the datasource singleton --->
-		<cfset temp = createObject('component', 'cf-compendium.inc.resource.persistence.datasource').init() />
-		<cfset temp.setDatasource(arguments.newApplication.information.datasource.datasource) />
-		<cfset temp.setType(arguments.newApplication.information.datasource.type) />
-		<cfset temp.setPrefix(arguments.newApplication.information.datasource.prefix) />
-		
-		<cfset arguments.newApplication.managers.singleton.setDatasource(temp) />
 	</cffunction>
 	
 	<cffunction name="startApplication" access="public" returntype="void" output="false">
@@ -116,13 +119,8 @@
 		
 		<!--- Set the default application variables --->
 		<cfset arguments.newApplication['information'] = {
-				key = 'unknown',
-				title = 'unknown',
-				datasource = {
-					datasource = '',
-					type = '',
-					prefix = ''
-				},
+				key = 'undefined',
+				title = 'undefined',
 				i18n = {
 					base = '/root',
 					default = 'en_US',
@@ -130,6 +128,11 @@
 						'en_US'
 					]
 				}
+			} />
+		<cfset arguments.newApplication['settings'] = {
+				datasources = {
+				},
+				environment = "production"
 			} />
 		<cfset arguments.newApplication['plugins'] = [] />
 		<cfset arguments.newApplication['managers'] = {
@@ -140,18 +143,26 @@
 		<!--- Read in application information --->
 		<cfset appConfig = readApplicationConfig() />
 		
+		<!---
+			Since the arguments.newApplication can be the application scope
+			need to extend keys inside the scope as the scope can't be replaced
+		--->
+		
 		<!--- Extend information from the config --->
 		<cfif structKeyExists(appConfig, 'information')>
 			<cfset arguments.newApplication.information = extend(arguments.newApplication.information, appConfig.information, -1) />
+		</cfif>
+		
+		<!--- Extend settings from the config --->
+		<cfif structKeyExists(appConfig, 'settings')>
+			<cfset arguments.newApplication.settings = extend(arguments.newApplication.settings, appConfig.settings, -1) />
 		</cfif>
 		
 		<!--- Create the default set of singletons --->
 		<cfset setDefaultSingletons(arguments.newApplication) />
 		
 		<!--- Pull in the list of plugins --->
-		<cfif structKeyExists(appConfig, 'plugins')>
-			<cfset pluginList = arrayToList(appConfig.plugins) />
-		</cfif>
+		<cfset pluginList = arrayToList(appConfig.plugins) />
 		
 		<!--- Read in all plugin configs --->
 		<cfloop list="#pluginList#" index="i">
