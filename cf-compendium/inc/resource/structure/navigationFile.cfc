@@ -26,6 +26,61 @@
 		<cfreturn this />
 	</cffunction>
 	
+	<cffunction name="addNavElementsXML" access="private" returntype="void" output="false">
+		<cfargument name="elements" type="array" required="true" />
+		<cfargument name="bundle" type="component" required="true" />
+		<cfargument name="level" type="numeric" default="1" />
+		<cfargument name="parentPath" type="string" default="" />
+		
+		<cfset var i = '' />
+		<cfset var args = '' />
+		<cfset var currentRow = '' />
+		<cfset var fullPath = '' />
+		<cfset var locale = '' />
+		<cfset var plainPath = '' />
+		
+		<!--- Get the locale of the bundle --->
+		<cfset locale = arguments.bundle.getLocale() />
+		
+		<cfloop array="#arguments.elements#" index="i">
+			<!--- Figure out the current path --->
+			<cfset plainPath = arguments.parentPath & (len(arguments.parentPath) ? '.' : '') & i.xmlName />
+			<cfset fullPath = locale & '.' & plainPath />
+			
+			<!--- Find out if need to insert as a new row --->
+			<cfif NOT structKeyExists(variables.pathIndex, fullPath)>
+				<cfset addNavRow() />
+				
+				<!--- Shortcut to the row index --->
+				<cfset currentRow = variables.nextID - 1 />
+				
+				<cfset querySetCell(variables.navigation, 'level', arguments.level, currentRow) />
+				<cfset querySetCell(variables.navigation, 'path', '.' & plainPath, currentRow) />
+				<cfset querySetCell(variables.navigation, 'locale', locale, currentRow) />
+				
+				<!--- Pull titles from resource bundle --->
+				<cfset querySetCell(variables.navigation, 'title', bundle.getValue(plainPath), currentRow) />
+				<cfset querySetCell(variables.navigation, 'navTitle', bundle.getValue(plainPath & "-nav"), currentRow) />
+				
+				<!--- update the index for the path --->
+				<cfset variables.pathIndex[fullPath] = currentRow />
+			<cfelse>
+				<!--- Shortcut to the row index --->
+				<cfset currentRow = variables.pathIndex[fullPath] />
+			</cfif>
+			
+			<!--- Make arguments for the next level --->
+			<cfset args = {
+					elements = i.xmlChildren,
+					level = arguments.level + 1,
+					parentPath = plainPath,
+					bundle = arguments.bundle
+				} />
+			
+			<cfset addNavElementsXML( argumentCollection = args ) />
+		</cfloop>
+	</cffunction>
+	
 	<cffunction name="addNavRow" access="private" returntype="void" output="false">
 		<!--- Add a new navigation row with default values --->
 		<cfset queryAddRow(variables.navigation) />
@@ -37,6 +92,36 @@
 		<cfset querySetCell(variables.navigation, 'defaults', '*') />
 		
 		<cfset variables.nextID++ />
+	</cffunction>
+	
+	<cffunction name="applyMask" access="public" returntype="void" output="false">
+		<cfargument name="filename" type="string" required="true" />
+		<cfargument name="bundlePath" type="string" required="true" />
+		<cfargument name="bundleName" type="string" required="true" />
+		<cfargument name="locales" type="string" default="en_US" />
+		
+		<cfset var fileContents = '' />
+		<cfset var bundle = '' />
+		<cfset var locale = '' />
+		
+		<!--- Read the navigation mask file --->
+		<cfset fileContents = readMask(arguments.filename) />
+		
+		<cfif isXML(fileContents)>
+			<cfset fileContents = xmlParse(fileContents).xmlRoot />
+			
+			<cfloop list="#arguments.locales#" index="locale">
+				<!--- Set the resource bundle --->
+				<cfset bundle = variables.i18n.getResourceBundle(arguments.bundlePath, arguments.bundleName, locale) />
+				
+				<!--- Add the navigation elements --->
+				<cfset addNavElementsXML(fileContents.xmlChildren, bundle) />
+			</cfloop>
+		<cfelseif isJSON(fileContents)>
+			<!--- TODO work with JSON file --->
+		<cfelse>
+			<cfthrow message="Unrecognized mask format" detail="The format of the mask file at #arguments.fileName# is unrecognized" />
+		</cfif>
 	</cffunction>
 	
 	<!---

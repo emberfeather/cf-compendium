@@ -1,7 +1,7 @@
 <h1>Navigation Examples</h1>
 
 <cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
-<cfset navigation = createObject('component', 'cf-compendium.inc.resource.structure.navigationXML').init(i18n) />
+<cfset navigation = createObject('component', 'cf-compendium.inc.resource.structure.navigationFile').init(i18n) />
 
 <h2>applyMask(maskFile)</h2>
 
