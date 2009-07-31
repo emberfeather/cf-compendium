@@ -1,7 +1,0 @@
-{
-	"section": {
-		"admin": {
-			"allow": "admin"
-		}
-	}
-}

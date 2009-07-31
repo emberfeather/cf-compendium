@@ -1,412 +1,157 @@
-<cfcomponent extends="cf-compendium.inc.resource.base.base" output="false">
+<cfcomponent extends="cf-compendium.inc.resource.base.navigation" output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
-		<!--- Store the default values for the navigation elements --->
-		<cfset variables.defaults = {
-				title = '',
-				desc = '',
-				ids = '',
-				vars = '',
-				precedence = '*',
-				attributes = {},
-				allow = '*',
-				deny = '*',
-				defaults = '*',
-				order = 'allow,deny',
-				navTitle = '',
-				navPosition = ''
-			} />
-		<cfset variables.defaultKeys = {
-				precedence = '*'
-			} />
-		<cfset variables.navigation = {} />
+		<cfargument name="i18n" type="component" required="true" />
+		
+		<cfset super.init() />
+		
+		<!--- Store the i18n information --->
+		<cfset variables.i18n = arguments.i18n />
+		
+		<!--- Use a query for the navigation storage --->
+		<cfset variables.navigationFields = 'pageID,level,title,navTitle,path,navPosition,description,ids,vars,attribute,attributeValue,allow,deny,secureOrder,defaults,locale' />
+		<cfset variables.navigationTypes = 'integer,integer,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar' />
+		
+		<!--- Use a query for the navigation storage --->
+		<cfset variables.navigation = queryNew(variables.navigationFields, variables.navigationTypes) />
+		
+		<!--- Create a cache variable for navigation html caching --->
+		<cfset variables.cachedHTML = {} />
+		
+		<!--- Use a mock ID incrementor --->
+		<cfset variables.nextID = 1 />
+		
+		<!--- Path index to store id's for use in parent indexing --->
+		<cfset variables.pathIndex = {} />
 		
 		<cfreturn this />
 	</cffunction>
 	
-	<cffunction name="checkMatch" access="private" returntype="any" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		<cfargument name="authUser" type="component" required="false" />
+	<cffunction name="addNavRow" access="private" returntype="void" output="false">
+		<!--- Add a new navigation row with default values --->
+		<cfset queryAddRow(variables.navigation) />
 		
-		<cfset var isExplicitAllow = arguments.element.allow EQ '*' />
-		<cfset var isExplicitDeny = arguments.element.deny EQ '*' />
+		<cfset querySetCell(variables.navigation, 'pageID', variables.nextID) />
+		<cfset querySetCell(variables.navigation, 'allow', '*') />
+		<cfset querySetCell(variables.navigation, 'deny', '*') />
+		<cfset querySetCell(variables.navigation, 'secureOrder', 'allow,deny') />
+		<cfset querySetCell(variables.navigation, 'defaults', '*') />
 		
-		<!--- Check if we have to worry about the user for permissions --->
-		<cfif structKeyExists(arguments, 'authUser')>
-			<!--- Check for an actual named explicit --->
-			<cfif NOT isExplicitAllow AND isListCollision(arguments.element.allow, arrayToList(arguments.authUser.getUserTypes()))>
-				<cfset isExplicitAllow = true />
-			</cfif>
-			
-			<!--- Check for an actual named explicit --->
-			<cfif NOT isExplicitDeny AND isListCollision(arguments.element.deny, arrayToList(arguments.authUser.getUserTypes()))>
-				<cfset isExplicitDeny = true />
-			</cfif>
-		</cfif>
-		
-		<!--- Check the order --->
-		<cfif listFirst(arguments.element.order) EQ 'allow'>
-			<cfif isExplicitAllow OR NOT isExplicitDeny>
-				<cfreturn arguments.element />
-			</cfif>
-		<cfelse>
-			<cfif NOT isExplicitDeny OR isExplicitAllow>
-				<cfreturn arguments.element />
-			</cfif>
-		</cfif>
-		
-		<!--- Didn't make it through the match --->
-		<cfreturn '' />
+		<cfset variables.nextID++ />
 	</cffunction>
 	
-	<cffunction name="expandNavigation" access="private" returntype="struct" output="false">
-		<cfargument name="parsedNav" type="struct" required="true" />
-		
-		<cfset var i = '' />
-		<cfset var j = '' />
-		<cfset var nonDefaultList = '' />
-		<cfset var nonDefaultKeyList = '' />
-		
-		<!--- Expand the current node --->
-		<cfset arguments.parsedNav = extend(variables.defaults, arguments.parsedNav) />
-		
-		<!--- Get the non-default list --->
-		<cfset nonDefaultList = getNonDefaultList(variables.defaults, arguments.parsedNav) />
-		
-		<!--- Look for more levels of navigation --->
-		<cfloop list="#nonDefaultList#" index="i">
-			<cfif isStruct(arguments.parsedNav[i])>
-				<!--- Expand the navigation keys --->
-				<cfset arguments.parsedNav[i] = extend(variables.defaultKeys, arguments.parsedNav[i]) />
-				
-				<!--- Get the non-default key list --->
-				<cfset nonDefaultKeyList = getNonDefaultList(variables.defaultKeys, arguments.parsedNav[i]) />
-				
-				<!--- Expand the navigation elements --->
-				<cfloop list="#nonDefaultKeyList#" index="j">
-					<cfif NOT structKeyExists(defaultKeys, j)>
-						<!--- Recurse into the navigation --->
-						<cfset arguments.parsedNav[i][j] = expandNavigation(arguments.parsedNav[i][j]) />
-					</cfif>
-				</cfloop>
-			</cfif>
-		</cfloop>
-		
-		<cfreturn arguments.parsedNav />
-	</cffunction>
-	
-	<cffunction name="getNavigation" access="public" returntype="array" output="false">
+	<!---
+		A unique page Identifier is used for caching the navigation
+		so extra does not need to be done to create navigation if
+		it was already generated
+	--->
+	<cffunction name="createUniquePageID" access="private" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />
 		<cfargument name="navPosition" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
-		<cfargument name="authUser" type="component" required="false" />
+		<cfargument name="locale" type="string" default="en_US" />
 		
-		<cfset var currNavigation = [] />
+		<cfset var uniquePageID = '' />
 		
-		<!--- Clean a url variable for building links --->
-		<cfset arguments.theURL.cleanCurrentPage() />
+		<cfset uniquePageID = arguments.locale & '-' & arguments.navPosition & '-' & arguments.level />
 		
-		<!--- Need to traverse the url to find out the navigation --->
-		<cfif structKeyExists(arguments, 'authUser')>
-			<cfset getNavigationChild(variables.navigation, currNavigation, arguments.theURL, arguments.level, arguments.navPosition, arguments.options, arguments.authUser) />
-		<cfelse>
-			<cfset getNavigationChild(variables.navigation, currNavigation, arguments.theURL, arguments.level, arguments.navPosition, arguments.options) />
-		</cfif>
+		<!--- TODO Make the identification string more unique --->
 		
-		<cfreturn currNavigation />
+		<cfreturn uniquePageID />
 	</cffunction>
 	
-	<cffunction name="getNavigationChild" access="private" returntype="void" output="false">
-		<cfargument name="navigation" type="struct" required="true" />
-		<cfargument name="currNavigation" type="array" required="true" />
+	<cffunction name="getNav" access="public" returntype="query" output="false">
+		<cfargument name="level" type="numeric" required="true" />
+		<cfargument name="navPosition" type="string" required="true" />
+		<cfargument name="parentPath" type="string" default="." />
+		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="locale" type="string" default="en_US" />
+		<cfargument name="authUser" type="component" required="false" />
+		
+		<cfset var navigation = '' />
+		
+		<!--- Query the navigation query for the page information --->
+		<cfquery name="navigation" dbtype="query">
+			SELECT pageID, level, path, title, navTitle, navPosition, description, ids, vars, attribute, attributeValue, allow, deny, defaults
+			FROM variables.navigation
+			WHERE level = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.level#" />
+				AND navPosition = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.navPosition#" />
+				AND path LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.parentPath#%" />
+				AND locale = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.locale#" />
+				<!--- TODO add in authUser type permission checking --->
+		</cfquery>
+		
+		<cfreturn navigation />
+	</cffunction>
+	
+	<cffunction name="getNavigation" access="public" returntype="query" output="false">
+		<cfreturn variables.navigation />
+	</cffunction>
+	
+	<cffunction name="readMask" access="private" returntype="string" output="false">
+		<cfargument name="filename" type="string" required="true" />
+		
+		<cfset var maskFileContents = '' />
+		<cfset var maskFileName = arguments.filename />
+		
+		<cfif NOT fileExists(maskFileName)>
+			<cfset maskFileName = expandPath(maskFileName) />
+			
+			<cfif NOT fileExists(maskFileName)>
+				<cfthrow message="Mask file was not found" detail="The mask file was not found at #arguments.filename#" />
+			</cfif>
+		</cfif>
+		
+		<cffile action="read" file="#maskFileName#" variable="maskFileContents" />
+		
+		<cfreturn maskFileContents />
+	</cffunction>
+	
+	<!---
+		On navigation that is run by files the navigation html doesn't change
+		on the fly, therefore, it should be cached to speed up template
+		HTML generation.
+		<p>
+		Caching is performed unless a user is logged in.
+	--->
+	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />
 		<cfargument name="navPosition" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="locale" type="string" default="en_US" />
 		<cfargument name="authUser" type="component" required="false" />
 		
-		<cfset var i = '' />
-		<cfset var matched= '' />
+		<cfset var html = '' />
+		<cfset var uniquePageID = '' />
 		
-		<!--- If we are not on the first level, find it --->
-		<cfif arguments.level GT 1>
-			<!--- Locate the page that matches the url --->
-			<cfif structKeyExists(arguments, 'authUser')>
-				<cfset matched = locateMatch(arguments.navigation, arguments.theURL, arguments.authUser) />
-			<cfelse>
-				<cfset matched = locateMatch(arguments.navigation, arguments.theURL) />
-			</cfif>
-			
-			<!--- If we didn't find it then it doesn't exist --->
-			<cfif NOT isStruct(matched.match)>
-				<cfreturn />
-			</cfif>
-			
-			<!--- Add to url --->
-			<cfset arguments.theURL.setCurrentPage(lcase(matched.urlVar), lcase(matched.urlValue)) />
-			
-			<!--- Recurse --->
-			<cfif structKeyExists(arguments, 'authUser')>
-				<cfset getNavigationChild(variables.navigation, currNavigation, arguments.theURL, arguments.level - 1, arguments.navPosition, arguments.options, arguments.authUser) />
-			<cfelse>
-				<cfset getNavigationChild(variables.navigation, currNavigation, arguments.theURL, arguments.level - 1, arguments.navPosition, arguments.options) />
-			</cfif>
-		<cfelse>
-			<!--- We are on the level 1 --->
-			<cfthrow message="Incomplete: Need to figure out how to implement this correctly" />
-		</cfif>
-	</cffunction>
-	
-	<cffunction name="getNonDefaultList" access="private" returntype="string" output="false">
-		<cfargument name="defaults" type="struct" required="true" />
-		<cfargument name="navigation" type="struct" required="true" />
-		
-		<cfset var i = '' />
-		<cfset var nonDefaultList = '' />
-		
-		<!--- If it is not any precedence return the specified precedence --->
-		<cfif arguments.navigation.precedence NEQ '*'>
-			<cfreturn arguments.navigation.precedence />
-		</cfif>
-		
-		<!--- Find all the keys that are not part of the reserved defaults --->
-		<cfloop list="#structKeyList(arguments.navigation)#" index="i">
-			<cfif NOT structKeyExists(arguments.defaults, i)>
-				<cfset nonDefaultList = listAppend(nonDefaultList, i) />
-			</cfif>
-		</cfloop>
-		
-		<cfreturn nonDefaultList />
-	</cffunction>
-	
-	<cffunction name="hasChildren" access="public" returntype="boolean" output="false">
-		<cfargument name="navigation" type="struct" required="true" />
-		
-		<cfset var i = '' />
-		<cfset var nonDefaultList = getNonDefaultList(variables.defaults, arguments.navigation) />
-		
-		<!--- Check for any that are not empty children --->
-		<cfloop list="#nonDefaultList#" index="i">
-			<cfif NOT structIsEmpty(arguments.navigation[i])>
-				<cfreturn true />
-			</cfif>
-		</cfloop>
-		
-		<cfreturn false />
-	</cffunction>
-	
-	<cffunction name="isListCollision" access="private" returntype="boolean" output="false">
-		<cfargument name="list1" type="string" required="true" />
-		<cfargument name="list2" type="string" required="true" />
-		
-		<cfset var i = '' />
-		
-		<cfloop list="#list1#" index="i">
-			<cfif listFindNoCase(list2, i)>
-				<cfreturn true />
-			</cfif>
-		</cfloop>
-		
-		<cfreturn false />
-	</cffunction>
-	
-	<cffunction name="locate" access="public" returntype="component" output="false">
-		<cfargument name="theURL" type="component" required="true" />
-		<cfargument name="authUser" type="component" required="false" />
-		
-		<cfset var currentPage = createObject('component', 'cf-compendium.inc.resource.structure.currentPage').init() />
-		
-		<!--- Clean a url variable for building links --->
-		<cfset arguments.theURL.cleanCurrentPage() />
-		
-		<!--- Need to traverse the url to find out the current page --->
+		<!--- Check for a logged-in user -- NO caching --->
 		<cfif structKeyExists(arguments, 'authUser')>
-			<cfset locateChild(variables.navigation, currentPage, arguments.theURL, arguments.authUser) />
-		<cfelse>
-			<cfset locateChild(variables.navigation, currentPage, arguments.theURL) />
+			<cfreturn super.toHTML(argumentCollection = arguments) />
 		</cfif>
 		
-		<cfreturn currentPage />
-	</cffunction>
-	
-	<cffunction name="locateChild" access="private" returntype="void" output="false">
-		<cfargument name="navigation" type="struct" required="true" />
-		<cfargument name="currentPage" type="component" required="true" />
-		<cfargument name="theURL" type="component" required="true" />
-		<cfargument name="authUser" type="component" required="false" />
+		<!--- Determine a unique page identification for caching purposes --->
+		<cfset uniquePageID = createUniquePageID(argumentCollection = arguments) />
 		
-		<cfset var i = '' />
-		<cfset var matched = '' />
-		<cfset var nonDefaultList = getNonDefaultList(variables.defaults, arguments.navigation) />
-		<cfset var nonDefaultKeyList = '' />
-		
-		<!--- Locate the page that matches the url --->
-		<cfif structKeyExists(arguments, 'authUser')>
-			<cfset matched = locateMatch(arguments.navigation, arguments.theURL, arguments.authUser) />
-		<cfelse>
-			<cfset matched = locateMatch(arguments.navigation, arguments.theURL) />
+		<!--- Do we need to create and cache the HTML? --->
+		<cfif NOT structKeyExists(variables.cachedHTML, uniquePageID)>
+			<cfset variables.cachedHTML[uniquePageID] = super.toHTML(argumentCollection = arguments) />
 		</cfif>
 		
-		<!--- If we found a match add the information and recurse --->
-		<cfif isStruct(matched.match)>
-			<!--- Correct the master url --->
-			<cfset arguments.theURL.set(lcase(matched.urlVar), lcase(matched.urlValue)) />
-			
-			<!--- Add to current page --->
-			<cfset arguments.theURL.setCurrentPage(lcase(matched.urlVar), lcase(matched.urlValue)) />
-			<cfset arguments.currentPage.addLevel(lcase(matched.urlVar), lcase(matched.urlValue), matched.match.title, arguments.theURL.getCurrentPage()) />
-			
-			<!--- Recurse --->
-			<cfif structKeyExists(arguments, 'authUser')>
-				<cfset locateChild(matched.match, currentPage, arguments.theURL, arguments.authUser) />
-			<cfelse>
-				<cfset locateChild(matched.match, currentPage, arguments.theURL) />
-			</cfif>
-		</cfif>
-	</cffunction>
-	
-	<cffunction name="locateMatch" access="private" returntype="struct" output="false">
-		<cfargument name="navigation" type="struct" required="true" />
-		<cfargument name="theURL" type="component" required="true" />
-		<cfargument name="authUser" type="component" required="false" />
-		
-		<cfset var i = '' />
-		<cfset var j = '' />
-		<cfset var matched = {
-				match = '',
-				urlVar = '',
-				urlValue = ''
-			} />
-		<cfset var nonDefaultList = getNonDefaultList(variables.defaults, arguments.navigation) />
-		<cfset var nonDefaultKeyList = '' />
-		
-		<!--- Check if given an explicit element of the navigation --->
-		<cfloop list="#nonDefaultList#" index="i">
-			<!--- Found the url value to check navigation for --->
-			<cfset matched.urlValue = arguments.theURL.search(i) />
-			
-			<!--- If we found a value check for a match --->
-			<cfif matched.urlValue NEQ ''>
-				<cfloop list="#structKeyList(arguments.navigation[i])#" index="j">
-					<cfif j EQ matched.urlValue>
-						<!--- Check if using a user --->
-						<cfif structKeyExists(arguments, 'authUser')>
-							<cfset matched.match = checkMatch(arguments.navigation[i][j], arguments.authUser) />
-						<cfelse>
-							<cfset matched.match = checkMatch(arguments.navigation[i][j]) />
-						</cfif>
-						
-						<!--- Save the url value for later --->
-						<cfset matched.urlVar = i />
-						
-						<cfbreak />
-					</cfif>
-				</cfloop>
-			</cfif>
-			
-			<!--- If we found a match stop looking --->
-			<cfif isStruct(matched.match)>
-				<cfbreak />
-			</cfif>
-		</cfloop>
-		
-		<!--- If we didn't find a valid breadth first match look for a default --->
-		<cfif NOT isStruct(matched.match)>
-			<cfloop list="#nonDefaultList#" index="i">
-				<!--- Get the non-default key list --->
-				<cfset nonDefaultKeyList = getNonDefaultList(variables.defaultKeys, arguments.navigation[i]) />
-				
-				<!--- Check for a default --->
-				<cfloop list="#nonDefaultKeyList#" index="j">
-					<!--- Check if using a user --->
-					<cfif structKeyExists(arguments, 'authUser') AND (arguments.navigation[i][j].defaults EQ '*' OR isListCollision(arguments.navigation[i][j].defaults, arrayToList(arguments.authUser.getUserTypes())))>
-						<cfset matched.match = checkMatch(arguments.navigation[i][j], arguments.authUser) />
-					<cfelseif arguments.navigation[i][j].defaults EQ '*'>
-						<cfset matched.match = checkMatch(arguments.navigation[i][j]) />
-					</cfif>
-					
-					<!--- Only break if we did find a valid default --->
-					<cfif isStruct(matched.match)>
-						<cfset matched.urlVar = i />
-						<cfset matched.urlValue = j />
-						
-						<cfbreak />
-					</cfif>
-				</cfloop>
-				
-				<!--- Keep breaking if we found a match --->
-				<cfif isStruct(matched.match)>
-					<cfbreak />
-				</cfif>
-			</cfloop>
-		</cfif>
-		
-		<cfreturn matched />
-	</cffunction>
-	
-	<cffunction name="maskNavigation" access="private" returntype="struct" output="false">
-		<cfargument name="navigation" type="struct" required="true" />
-		<cfargument name="mask" type="struct" required="true" />
-		
-		<cfset var i = '' />
-		
-		<!--- Look for keys in the mask --->
-		<cfloop list="#structKeyList(arguments.mask)#" index="i">
-			<!--- If we already have a value for it --->
-			<cfif isStruct(arguments.mask[i])>
-				<!--- Make sure we have the default in the navigation before we proceed --->
-				<cfif NOT structKeyExists(arguments.navigation, i)>
-					<cfset arguments.navigation[i] = duplicate(variables.defaults) />
-				</cfif>
-				
-				<!--- If the key is a struct, recurse --->
-				<cfset arguments.navigation[i] = maskNavigation(arguments.navigation[i], arguments.mask[i]) />
-			<cfelse>
-				<!--- Pull the value into the navigation struct --->
-				<cfset arguments.navigation[i] = arguments.mask[i] />
-			</cfif>
-		</cfloop>
-		
-		<cfreturn arguments.navigation />
-	</cffunction>
-	
-	<cffunction name="readFile" access="private" returntype="string" output="false">
-		<cfargument name="navigationFile" type="string" required="true" />
-		
-		<cfset var fileContents = '' />
-		
-		<!--- Check if the file path needs to be expanded --->
-		<cfif NOT fileExists(arguments.navigationFile)>
-			<cfset arguments.navigationFile = expandPath(arguments.navigationFile) />
-		</cfif>
-		
-		<cffile action="read" file="#arguments.navigationFile#" variable="fileContents" />
-		
-		<cfreturn fileContents />
+		<!--- Return the cached navigation html --->
+		<cfreturn variables.cachedHTML[uniquePageID] />
 	</cffunction>
 	
 	<cffunction name="validate" access="public" returntype="void" output="false">
-		<cfargument name="contentPath" type="string" required="true" />
 		<cfargument name="prefixes" type="string" required="true" />
 		
-		<!--- Check if the directory needs to be expanded --->
-		<cfif NOT directoryExists(arguments.contentPath)>
-			<cfset arguments.contentPath = expandPath(arguments.contentPath) />
-		</cfif>
-		
-		<!--- Normalize the directory path --->
-		<cfif right(arguments.contentPath, 1) NEQ '/'>
-			<cfset arguments.contentPath &= '/' />
-		</cfif>
-		
 		<!--- Recurse through the navigation and validate each of the elements --->
-		<cfset validateChild(variables.navigation, 'index', arguments.contentPath, arguments.prefixes) />
+		<cfset validateChild(variables.navigation, 'index', arguments.prefixes) />
 	</cffunction>
 	
 	<cffunction name="validateChild" access="private" returntype="void" output="false">
 		<cfargument name="navigation" type="struct" required="true" />
 		<cfargument name="filename" type="string" required="true" />
-		<cfargument name="contentPath" type="string" required="true" />
 		<cfargument name="prefixes" type="string" required="true" />
 		
 		<cfset var i = '' />
@@ -457,7 +202,7 @@
 					</cfif>
 					
 					<!--- Recurse to the next child --->
-					<cfset validateChild(arguments.navigation[i][j], j, completeFilename, arguments.prefixes) />
+					<cfset validateChild(arguments.navigation[i][j], j, arguments.prefixes) />
 				</cfif>
 			</cfloop>
 		</cfloop>

@@ -22,6 +22,9 @@
 		<cfset variables.keys = bundleResource.keys />
 		<cfset variables.bundle = bundleResource.bundle />
 		
+		<!--- Store the locale --->
+		<cfset variables.locale = arguments.bundleLocale />
+		
 		<cfreturn this />
 	</cffunction>
 	
@@ -37,6 +40,13 @@
 	--->
 	<cffunction name="getKeys" access="public" returntype="array" output="false">
 		<cfreturn variables.keys />
+	</cffunction>
+	
+	<!---
+		Returns the locale of the bundle
+	--->
+	<cffunction name="getLocale" access="public" returntype="string" output="false">
+		<cfreturn variables.locale />
 	</cffunction>
 	
 	<!---
