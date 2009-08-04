@@ -56,7 +56,7 @@
 		<tstamp>
 			<format property="build.date" pattern="MM/dd/yy hh:mmaa"/>
 			<format property="svn.log.startDate" pattern="yyyy-MM-dd" offset="-5" unit="year" />
-			<format property="svn.log.endDate" pattern="yyyy-MM-dd"/>
+			<format property="svn.log.endDate" pattern="yyyy-MM-dd" offset="1" unit="day"/>
 		</tstamp>
 		
 		<echo message="Finished: Environment Preparation"/>
