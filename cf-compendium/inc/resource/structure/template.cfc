@@ -272,7 +272,7 @@
 	--->
 	<cffunction name="getNavigation" access="public" returntype="string" output="false">
 		<cfargument name="level" type="numeric" default="1" />
-		<cfargument name="navPosition" type="string" required="true" />
+		<cfargument name="navPosition" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		<cfargument name="locale" type="string" default="en_US" />
 		<cfargument name="authUser" type="component" required="false" />

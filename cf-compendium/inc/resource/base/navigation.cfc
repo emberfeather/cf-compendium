@@ -6,26 +6,39 @@
 	<cffunction name="generateHTML" access="private" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />
-		<cfargument name="navPosition" type="string" required="true" />
+		<cfargument name="navPosition" type="any" required="true" />
 		<cfargument name="parentPath" type="string" default="." />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		<cfargument name="locale" type="string" default="en_US" />
 		<cfargument name="authUser" type="component" required="false" />
 		
 		<cfset var attributes = '' />
-		<cfset var html = '' />
-		<cfset var isSelected = '' />
-		<cfset var navigation = '' />
-		<cfset var temp = '' />
 		<cfset var defaults = {
 				navClasses = []
 			} />
+		<cfset var html = '' />
+		<cfset var isSelected = '' />
+		<cfset var navigation = '' />
+		<cfset var positions = '' />
+		<cfset var temp = '' />
 		
 		<!--- Extend the options --->
 		<cfset arguments.options = extend(defaults, arguments.options) />
 		
 		<!--- For generating the navigation HTML exclude blank nav titles --->
 		<cfset arguments.options.hideBlankNavTitles = true />
+		
+		<!--- Store the nav positions for later --->
+		<cfset positions = arguments.navPosition />
+		
+		<!--- Check if we are dealing with an array of positions or not --->
+		<cfif isArray(arguments.navPosition)>
+			<cfif NOT arrayLen(arguments.navPosition)>
+				<cfthrow message="Missing nav position" detail="No nav position was provided for level #arguments.level#" />
+			</cfif>
+			
+			<cfset arguments.navPosition = arguments.navPosition[1] />
+		</cfif>
 		
 		<!--- Get the navigation query --->
 		<cfset navigation = this.getNav(argumentCollection = arguments) />
@@ -101,9 +114,17 @@
 				<cfset temp.options = duplicate(arguments.options) />
 				<cfset temp.options.depth-- />
 				
-				<!--- Check if there are nav classes being used --->
+				<!--- Check if there are multiple nav classes being used --->
 				<cfif arrayLen(arguments.options.navClasses)>
 					<cfset arrayDeleteAt(temp.options.navClasses, 1) />
+				</cfif>
+				
+				<!--- Set the position to the original --->
+				<cfset temp.navPosition = duplicate(positions) />
+				
+				<!--- Remove the first position since it has already been used --->
+				<cfif isArray(temp.navPosition)>
+					<cfset arrayDeleteAt(temp.navPosition, 1) />
 				</cfif>
 				
 				<!--- Generate the additional HTML for the sub navigation --->
@@ -163,13 +184,10 @@
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />
-		<cfargument name="navPosition" type="string" required="true" />
+		<cfargument name="navPosition" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		<cfargument name="locale" type="string" default="en_US" />
 		<cfargument name="authUser" type="component" required="false" />
-		
-		<!--- Clean a url variable for building links --->
-		<cfset arguments.theURL.cleanCurrentPage() />
 		
 		<!--- Set the base parent path dependent upon the current level --->
 		<cfset arguments.parentPath = getBasePathForLevel(arguments.level, arguments.theURL.search('_base')) />

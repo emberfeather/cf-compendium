@@ -76,6 +76,11 @@
 				<cfset currentRow = variables.pathIndex[fullPath] />
 			</cfif>
 			
+			<!--- Check for attributes being defined in the navigation --->
+			<cfif structKeyExists(i.xmlAttributes, 'position')>
+				<cfset querySetCell(variables.navigation, 'navPosition', i.xmlAttributes.position, currentRow) />
+			</cfif>
+			
 			<!--- Make arguments for the next level --->
 			<cfset args = {
 					elements = i.xmlChildren,
@@ -140,13 +145,18 @@
 	<cffunction name="createUniquePageID" access="private" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />
-		<cfargument name="navPosition" type="string" required="true" />
+		<cfargument name="navPosition" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		<cfargument name="locale" type="string" default="en_US" />
 		
+		<cfset var position = '' />
 		<cfset var uniquePageID = '' />
 		
-		<cfset uniquePageID = arguments.locale & '-' & arguments.navPosition & '-' & arguments.level />
+		<cfif isArray(arguments.navPosition)>
+			<cfset position = arguments.navPosition[1] />
+		</cfif>
+		
+		<cfset uniquePageID = arguments.locale & '-' & position & '-' & arguments.level />
 		
 		<!--- TODO Make the identification string more unique --->
 		
@@ -168,13 +178,17 @@
 			SELECT pageID, level, path, title, navTitle, navPosition, description, ids, vars, attribute, attributeValue, allow, deny, defaults, orderBy
 			FROM variables.navigation
 			WHERE level = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.level#" />
-				AND navPosition = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.navPosition#" />
 				AND path LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.parentPath#%" />
 				AND locale = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.locale#" />
+				AND navPosition = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.navPosition#" />
+				
+				<!--- Check if we want to return blank nav titles --->
 				<cfif structKeyExists(arguments.options, 'hideBlankNavTitles') and arguments.options.hideBlankNavTitles EQ true>
 					AND navTitle <> <cfqueryparam cfsqltype="cf_sql_varchar" value="" />
 				</cfif>
+				
 				<!--- TODO add in authUser type permission checking --->
+				
 				ORDER BY orderBy ASC, navTitle ASC
 		</cfquery>
 		
@@ -214,7 +228,7 @@
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />
-		<cfargument name="navPosition" type="string" required="true" />
+		<cfargument name="navPosition" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		<cfargument name="locale" type="string" default="en_US" />
 		<cfargument name="authUser" type="component" required="false" />
