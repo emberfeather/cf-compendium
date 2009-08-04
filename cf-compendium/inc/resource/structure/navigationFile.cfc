@@ -8,8 +8,8 @@
 		<cfset variables.i18n = arguments.i18n />
 		
 		<!--- Use a query for the navigation storage --->
-		<cfset variables.navigationFields = 'pageID,level,title,navTitle,path,navPosition,description,ids,vars,attribute,attributeValue,allow,deny,secureOrder,defaults,locale' />
-		<cfset variables.navigationTypes = 'integer,integer,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar' />
+		<cfset variables.navigationFields = 'pageID,level,title,navTitle,path,navPosition,description,ids,vars,attribute,attributeValue,allow,deny,secureOrder,defaults,locale,orderBy' />
+		<cfset variables.navigationTypes = 'integer,integer,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,integer' />
 		
 		<!--- Use a query for the navigation storage --->
 		<cfset variables.navigation = queryNew(variables.navigationFields, variables.navigationTypes) />
@@ -57,6 +57,13 @@
 				<cfset querySetCell(variables.navigation, 'level', arguments.level, currentRow) />
 				<cfset querySetCell(variables.navigation, 'path', '.' & plainPath, currentRow) />
 				<cfset querySetCell(variables.navigation, 'locale', locale, currentRow) />
+				
+				<!--- Check for a defined sort order --->
+				<cfif structKeyExists(i.xmlAttributes, 'orderBy')>
+					<cfset querySetCell(variables.navigation, 'orderBy', i.xmlAttributes.orderBy, currentRow) />
+				<cfelse>
+					<cfset querySetCell(variables.navigation, 'orderBy', 1, currentRow) />
+				</cfif>
 				
 				<!--- Pull titles from resource bundle --->
 				<cfset querySetCell(variables.navigation, 'title', bundle.getValue(plainPath), currentRow) />
@@ -119,6 +126,7 @@
 			</cfloop>
 		<cfelseif isJSON(fileContents)>
 			<!--- TODO work with JSON file --->
+			<cfthrow message="JSON not implemented" detail="JSON formatted navigation files have not been programmed yet" />
 		<cfelse>
 			<cfthrow message="Unrecognized mask format" detail="The format of the mask file at #arguments.fileName# is unrecognized" />
 		</cfif>
@@ -157,13 +165,17 @@
 		
 		<!--- Query the navigation query for the page information --->
 		<cfquery name="navigation" dbtype="query">
-			SELECT pageID, level, path, title, navTitle, navPosition, description, ids, vars, attribute, attributeValue, allow, deny, defaults
+			SELECT pageID, level, path, title, navTitle, navPosition, description, ids, vars, attribute, attributeValue, allow, deny, defaults, orderBy
 			FROM variables.navigation
 			WHERE level = <cfqueryparam cfsqltype="cf_sql_integer" value="#arguments.level#" />
 				AND navPosition = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.navPosition#" />
 				AND path LIKE <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.parentPath#%" />
 				AND locale = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.locale#" />
+				<cfif structKeyExists(arguments.options, 'hideBlankNavTitles') and arguments.options.hideBlankNavTitles EQ true>
+					AND navTitle <> <cfqueryparam cfsqltype="cf_sql_varchar" value="" />
+				</cfif>
 				<!--- TODO add in authUser type permission checking --->
+				ORDER BY orderBy ASC, navTitle ASC
 		</cfquery>
 		
 		<cfreturn navigation />
@@ -217,6 +229,9 @@
 		
 		<!--- Determine a unique page identification for caching purposes --->
 		<cfset uniquePageID = createUniquePageID(argumentCollection = arguments) />
+		
+		<!--- TODO enable the caching by removing next line --->
+		<cfreturn super.toHTML(argumentCollection = arguments) />
 		
 		<!--- Do we need to create and cache the HTML? --->
 		<cfif NOT structKeyExists(variables.cachedHTML, uniquePageID)>

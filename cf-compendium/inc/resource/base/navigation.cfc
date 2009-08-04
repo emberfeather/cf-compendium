@@ -17,12 +17,32 @@
 		<cfset var isSelected = '' />
 		<cfset var navigation = '' />
 		<cfset var temp = '' />
+		<cfset var defaults = {
+				navClasses = []
+			} />
+		
+		<!--- Extend the options --->
+		<cfset arguments.options = extend(defaults, arguments.options) />
+		
+		<!--- For generating the navigation HTML exclude blank nav titles --->
+		<cfset arguments.options.hideBlankNavTitles = true />
 		
 		<!--- Get the navigation query --->
 		<cfset navigation = this.getNav(argumentCollection = arguments) />
 		
 		<!--- Generate the html off the given navigation --->
-		<cfset html = '<ul class="#arguments.navPosition# level-#arguments.level#">' />
+		<cfset html = '<ul class="' />
+		
+		<!--- Add navigation classes --->
+		<cfif arrayLen(arguments.options.navClasses)>
+			<cfset html &= arguments.options.navClasses[1] />
+		</cfif>
+		
+		<cfset html &= ' ' & arguments.navPosition />
+		<cfset html &= ' level-' & arguments.level />
+		
+		<!--- Close the opening ul --->
+		<cfset html &= '">' />
 		
 		<cfoutput query="navigation" group="pageID">
 			<!--- Discover the attributes for the page --->
@@ -81,6 +101,11 @@
 				<cfset temp.options = duplicate(arguments.options) />
 				<cfset temp.options.depth-- />
 				
+				<!--- Check if there are nav classes being used --->
+				<cfif arrayLen(arguments.options.navClasses)>
+					<cfset arrayDeleteAt(temp.options.navClasses, 1) />
+				</cfif>
+				
 				<!--- Generate the additional HTML for the sub navigation --->
 				<cfset html &= generateHTML(argumentCollection = temp) />
 			</cfif>
@@ -96,6 +121,45 @@
 		<cfreturn html />
 	</cffunction>
 	
+	<cffunction name="getBasePathForLevel" access="public" returntype="string" output="false">
+		<cfargument name="level" type="numeric" required="true" />
+		<cfargument name="basePath" type="string" required="true" />
+		
+		<cfset var count = 0 />
+		<cfset var i = '' />
+		<cfset var position = 0 />
+		
+		<!--- Check for no base path --->
+		<cfif arguments.basePath EQ ''>
+			<cfset arguments.basePath = '.' />
+		</cfif>
+		
+		<!--- Want to make sure it ends in a period for searching --->
+		<cfif right(arguments.basePath, 1) NEQ '.'>
+			<cfset arguments.basePath &= '.' />
+		</cfif>
+		
+		<!--- Find the proper level we are looking for --->
+		<cfloop from="1" to="#arguments.level#" index="i">
+			<!--- Start with the next position to not get stuck --->
+			<cfset position = find('.', arguments.basePath, position + 1) />
+			
+			<!--- If we can't find it stop looking --->
+			<cfif position EQ 0>
+				<cfbreak />
+			</cfif>
+		</cfloop>
+		
+		<!--- If not found, lower in levels that we have --->
+		<!--- EX: looking for level 3 when only on level 1 --->
+		<cfif position EQ 0>
+			<cfreturn '' />
+		</cfif>
+		
+		<!--- Return the portion we are looking for --->
+		<cfreturn left(arguments.basePath, position) />
+	</cffunction>
+	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />
@@ -107,7 +171,16 @@
 		<!--- Clean a url variable for building links --->
 		<cfset arguments.theURL.cleanCurrentPage() />
 		
-		<!--- TODO Use current URL to determine the base url for the navigation --->
+		<!--- Set the base parent path dependent upon the current level --->
+		<cfset arguments.parentPath = getBasePathForLevel(arguments.level, arguments.theURL.search('_base')) />
+		
+		<!---
+			If we can't find a parent path for the level we are looking
+			then we shouldn't have a navigation to generate.
+		--->
+		<cfif arguments.parentPath EQ ''>
+			<cfreturn '' />
+		</cfif>
 		
 		<cfreturn generateHTML(argumentCollection = arguments) />
 	</cffunction>

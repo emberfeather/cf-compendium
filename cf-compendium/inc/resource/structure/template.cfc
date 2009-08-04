@@ -27,17 +27,23 @@
 		<cfset variables.navigation = arguments.navigation />
 		<cfset variables.theURL = arguments.theURL />
 		
+		<!--- TODO How do we need to handle the current page information? --->
+		<!--- 
 		<!--- Get the current page object --->
 		<cfif NOT isObject(this.getAuthUser())>
 			<cfset variables.currentPage = variables.navigation.locate(theURL) />
 		<cfelse>
 			<cfset variables.currentPage = variables.navigation.locate(theURL, this.getAuthUser()) />
 		</cfif>
+		 --->
 		
+		<!--- TODO What does this really do? --->
+		<!--- 
 		<!--- Pull in the levels from the current page --->
 		<cfloop array="#variables.currentPage.getLevels()#" index="i">
 			<cfset this.addLevel(argumentCollection = i) />
 		</cfloop>
+		 --->
 		
 		<cfreturn this />
 	</cffunction>
@@ -266,9 +272,12 @@
 	--->
 	<cffunction name="getNavigation" access="public" returntype="string" output="false">
 		<cfargument name="level" type="numeric" default="1" />
-		<cfargument name="position" type="string" required="true" />
+		<cfargument name="navPosition" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="locale" type="string" default="en_US" />
+		<cfargument name="authUser" type="component" required="false" />
 		
+		<cfset var args = '' />
 		<cfset var defaults = {
 				numLevels = 1,
 				isExpanded = false,
@@ -276,14 +285,22 @@
 				outerTag = 'ul',
 				innerTag = 'li'
 			} />
-		<cfset var navigation = variables.navigation.getNavigation(argumentCollection = arguments) />
-		<cfset var tempHTML = '' />
 		
-		<cfset arguments.options = extend(defaults, arguments.options) />
+		<!--- Create an argument collection --->
+		<cfset args = {
+				theURL = variables.theURL,
+				level = arguments.level,
+				navPosition = arguments.navPosition,
+				options = extend(defaults, arguments.options),
+				locale = arguments.locale
+			} />
 		
-		<!--- TODO Need to implement the getNavigation function in the navigation to correctly retrieve the structure needed for generating the html for the navigation --->
+		<!--- Check for user --->
+		<cfif structKeyExists(arguments, 'authUser')>
+			<cfset args.authUser = arguments.authUser />
+		</cfif>
 		
-		<cfreturn tempHTML />
+		<cfreturn variables.navigation.toHTML( argumentCollection = args ) />
 	</cffunction>
 	
 	<!---
