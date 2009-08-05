@@ -55,7 +55,7 @@
 		<cfset html &= ' level-' & arguments.level />
 		
 		<!--- Close the opening ul --->
-		<cfset html &= '">' />
+		<cfset html &= '">' & chr(10) />
 		
 		<cfoutput query="navigation" group="pageID">
 			<!--- Discover the attributes for the page --->
@@ -106,6 +106,7 @@
 					OR arguments.options.selectedOnly EQ false
 					OR isSelected
 				)>
+				<cfset html  &= chr(10) />
 				
 				<!--- Decrement the depth so that it eventually ends --->
 				<cfset temp = duplicate(arguments) />
@@ -134,10 +135,10 @@
 			<!--- Remove the navigation variable so it doesn't affect other navigation --->
 			<cfset arguments.theURL.removeCurrentPage('_base') />
 			
-			<cfset html &= '</li>' />
+			<cfset html &= '</li>' & chr(10) />
 		</cfoutput>
 		
-		<cfset html &= '</ul>' />
+		<cfset html &= '</ul>' & chr(10) />
 		
 		<cfreturn html />
 	</cffunction>
