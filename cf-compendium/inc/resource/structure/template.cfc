@@ -158,16 +158,20 @@
 		<cfset var levels = '' />
 		<cfset var numLevels = this.getLevel() />
 		
+		<!--- Extend out the options --->
+		<cfset arguments.options = extend(defaults, arguments.options) />
+		
 		<!--- Check if there are page titles --->
 		<cfif NOT numLevels>
-			<cfreturn this.getSiteTitle() />
+			<cfif arguments.options.showsiteTitle>
+				<cfreturn '<a href="' & this.getSiteLink() & '" title="' & this.getSiteTitle() & '">' & this.getSiteTitle() & '</a>' />
+			<cfelse>
+				<cfreturn '' />
+			</cfif>
 		</cfif>
 		
 		<!--- Get the levels from the current page --->
 		<cfset levels = variables.currentPage.getLevels() />
-		
-		<!--- Extend out the options --->
-		<cfset arguments.options = extend(defaults, arguments.options) />
 		
 		<cfset breadcrumb = '<a href="' & levels[numLevels].link & '" title="' & levels[numLevels].title & '">' & (arguments.options.useNavTitle ? levels[numLevels].navTitle : levels[numLevels].title) & '</a>' />
 		
