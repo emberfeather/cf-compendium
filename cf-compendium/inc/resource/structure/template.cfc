@@ -14,8 +14,6 @@
 				scripts = [
 					'http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'
 				],
-				siteLink = '/',
-				siteTitle = '',
 				styles = []
 			} />
 		<cfset var i = '' />
@@ -152,7 +150,6 @@
 		<cfset var defaults = {
 				separator = ' : ',
 				showMultiple = true,
-				showSiteTitle = true,
 				useNavTitle = true
 			} />
 		<cfset var i = '' />
@@ -164,11 +161,7 @@
 		
 		<!--- Check if there are page titles --->
 		<cfif NOT numLevels>
-			<cfif arguments.options.showsiteTitle>
-				<cfreturn '<a href="' & this.getSiteLink() & '" title="' & this.getSiteTitle() & '">' & this.getSiteTitle() & '</a>' />
-			<cfelse>
-				<cfreturn '' />
-			</cfif>
+			<cfreturn '' />
 		</cfif>
 		
 		<!--- Get the levels from the current page --->
@@ -183,11 +176,6 @@
 			</cfloop>
 		</cfif>
 		
-		<!--- Want to show the site title? --->
-		<cfif arguments.options.showSiteTitle>
-			<cfset breadcrumb = '<a href="' & this.getSiteLink() & '" title="' & this.getSiteTitle() & '">' & this.getSiteTitle() & '</a>' & arguments.options.separator & breadcrumb />
-		</cfif>
-		
 		<cfreturn breadcrumb />
 	</cffunction>
 	
@@ -200,17 +188,16 @@
 		<cfset var defaults = {
 				separator = ' : ',
 				showMultiple = true,
-				showSiteTitle = true,
 				useNavTitle = true
 			} />
 		<cfset var i = '' />
-		<cfset var htmlTitle = this.getSiteTitle() />
+		<cfset var htmlTitle = '' />
 		<cfset var levels = '' />
 		<cfset var numLevels = this.getLevel() />
 		
 		<!--- Check if there are page titles --->
 		<cfif NOT numLevels>
-			<cfreturn this.getSiteTitle() />
+			<cfreturn '' />
 		</cfif>
 		
 		<!--- Get the levels from the current page --->
@@ -226,11 +213,6 @@
 			<cfloop from="#numLevels - 1#" to="1" index="i" step="-1">
 				<cfset htmlTitle &= arguments.options.separator & (arguments.options.useNavTitle ? levels[i].navTitle : levels[i].title) />
 			</cfloop>
-		</cfif>
-		
-		<!--- Want to show the site title? --->
-		<cfif arguments.options.showSiteTitle>
-			<cfset htmlTitle &= arguments.options.separator & this.getSiteTitle() />
 		</cfif>
 		
 		<cfreturn htmlTitle />
@@ -311,7 +293,7 @@
 		
 		<!--- Check if there are page titles --->
 		<cfif NOT numLevels>
-			<cfreturn this.getSiteTitle() />
+			<cfreturn '' />
 		</cfif>
 		
 		<!--- Check that we are requesting a level that exists --->

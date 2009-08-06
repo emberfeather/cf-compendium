@@ -8,11 +8,14 @@
 		<cfset variables.i18n = arguments.i18n />
 		
 		<!--- Use a query for the navigation storage --->
-		<cfset variables.navigationFields = 'pageID,level,title,navTitle,path,navPosition,description,ids,vars,attribute,attributeValue,allow,deny,secureOrder,defaults,locale,orderBy' />
-		<cfset variables.navigationTypes = 'integer,integer,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,integer' />
+		<cfset variables.navigationFields = 'pageID,level,title,navTitle,path,navPosition,description,ids,vars,attribute,attributeValue,allow,deny,secureOrder,defaults,contentPath,locale,orderBy' />
+		<cfset variables.navigationTypes = 'integer,integer,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,varChar,integer' />
 		
 		<!--- Use a query for the navigation storage --->
 		<cfset variables.navigation = queryNew(variables.navigationFields, variables.navigationTypes) />
+		
+		<!--- The default root is used when there is no base path given --->
+		<cfset variables.defaultRoot = '.index' />
 		
 		<!--- Create a cache variable for navigation html caching --->
 		<cfset variables.cachedHTML = {} />
@@ -28,6 +31,7 @@
 	
 	<cffunction name="addNavElementsXML" access="private" returntype="void" output="false">
 		<cfargument name="elements" type="array" required="true" />
+		<cfargument name="contentPath" type="string" required="true" />
 		<cfargument name="bundle" type="component" required="true" />
 		<cfargument name="level" type="numeric" default="1" />
 		<cfargument name="parentPath" type="string" default="" />
@@ -54,6 +58,7 @@
 				<!--- Shortcut to the row index --->
 				<cfset currentRow = variables.nextID - 1 />
 				
+				<cfset querySetCell(variables.navigation, 'contentPath', arguments.contentPath, currentRow) />
 				<cfset querySetCell(variables.navigation, 'level', arguments.level, currentRow) />
 				<cfset querySetCell(variables.navigation, 'path', '.' & plainPath, currentRow) />
 				<cfset querySetCell(variables.navigation, 'locale', locale, currentRow) />
@@ -76,6 +81,11 @@
 				<cfset currentRow = variables.pathIndex[fullPath] />
 			</cfif>
 			
+			<!--- Check for overriding navigation --->
+			<cfif structKeyExists(i.xmlAttributes, 'override')>
+				<cfset querySetCell(variables.navigation, 'contentPath', arguments.contentPath, currentRow) />
+			</cfif>
+			
 			<!--- Check for attributes being defined in the navigation --->
 			<cfif structKeyExists(i.xmlAttributes, 'position')>
 				<cfset querySetCell(variables.navigation, 'navPosition', i.xmlAttributes.position, currentRow) />
@@ -84,6 +94,8 @@
 			<!--- Make arguments for the next level --->
 			<cfset args = {
 					elements = i.xmlChildren,
+					<!--- TODO make the content path actually change for each level --->
+					contentPath = contentPath,
 					level = arguments.level + 1,
 					parentPath = plainPath,
 					bundle = arguments.bundle
@@ -108,6 +120,7 @@
 	
 	<cffunction name="applyMask" access="public" returntype="void" output="false">
 		<cfargument name="filename" type="string" required="true" />
+		<cfargument name="contentPath" type="string" required="true" />
 		<cfargument name="bundlePath" type="string" required="true" />
 		<cfargument name="bundleName" type="string" required="true" />
 		<cfargument name="locales" type="string" default="en_US" />
@@ -122,12 +135,18 @@
 		<cfif isXML(fileContents)>
 			<cfset fileContents = xmlParse(fileContents).xmlRoot />
 			
+			<cfif structKeyExists(fileContents.xmlAttributes, 'override') AND fileContents.xmlAttributes.override EQ true>
+				<!--- TODO Remove --->
+				<cfdump var="#fileContents#" />
+				<cfabort />
+			</cfif>
+			
 			<cfloop list="#arguments.locales#" index="locale">
 				<!--- Set the resource bundle --->
 				<cfset bundle = variables.i18n.getResourceBundle(arguments.bundlePath, arguments.bundleName, locale) />
 				
 				<!--- Add the navigation elements --->
-				<cfset addNavElementsXML(fileContents.xmlChildren, bundle) />
+				<cfset addNavElementsXML(fileContents.xmlChildren, arguments.contentPath, bundle) />
 			</cfloop>
 		<cfelseif isJSON(fileContents)>
 			<!--- TODO work with JSON file --->
@@ -161,6 +180,10 @@
 		<!--- TODO Make the identification string more unique --->
 		
 		<cfreturn uniquePageID />
+	</cffunction>
+	
+	<cffunction name="getDefaultRoot" access="public" returntype="string" output="false">
+		<cfreturn variables.defaultRoot />
 	</cffunction>
 	
 	<cffunction name="getNav" access="public" returntype="query" output="false">
@@ -204,12 +227,16 @@
 		<cfargument name="locale" type="string" required="true" />
 		<cfargument name="authUser" type="component" required="false" />
 		
-		<cfset var currentPage = createObject('component', 'cf-compendium.inc.resource.structure.currentPage').init() />
+		<cfset var currentPage = createObject('component', 'cf-compendium.inc.resource.structure.currentPageFile').init() />
 		<cfset var paths = '' />
 		<cfset var navigation = '' />
+		<cfset var currentPath = '' />
+		
+		<!--- Check the base path --->
+		<cfset currentPath = arguments.theURL.search('_base') />
 		
 		<!--- Explode the current path --->
-		<cfset paths = explodePath(arguments.theURL.search('_base')) />
+		<cfset paths = explodePath(currentPath EQ '' ? variables.defaultRoot : currentPath) />
 		
 		<!--- Query for the exact pages that match the paths --->
 		<cfquery name="navigation" dbtype="query">
@@ -257,6 +284,12 @@
 		<cfreturn maskFileContents />
 	</cffunction>
 	
+	<cffunction name="setDefaultRoot" access="public" returntype="void" output="false">
+		<cfargument name="defaultRoot" type="string" required="true" />
+		
+		<cfset variables.defaultRoot = arguments.defaultRoot />
+	</cffunction>
+	
 	<!---
 		On navigation that is run by files the navigation html doesn't change
 		on the fly, therefore, it should be cached to speed up template
@@ -297,6 +330,9 @@
 	
 	<cffunction name="validate" access="public" returntype="void" output="false">
 		<cfargument name="prefixes" type="string" required="true" />
+		
+		<!--- TODO Redo the validation and creation of files --->
+		<cfthrow message="Need to redo this with the new structure..." />
 		
 		<!--- Recurse through the navigation and validate each of the elements --->
 		<cfset validateChild(variables.navigation, 'index', arguments.prefixes) />
