@@ -388,7 +388,7 @@
 				
 				<!--- Create the file if it doesn't exist --->
 				<cfif NOT fileExists(filePath)>
-					<cffile action="write" file="#filePath#" output="" />
+					<cffile action="write" file="#filePath#" output="" addNewLine="false" />
 				</cfif>
 			</cfloop>
 		</cfloop>
