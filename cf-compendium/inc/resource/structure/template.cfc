@@ -309,11 +309,14 @@
 	<!---
 		Returns the template path to include for the current page and prefix
 	--->
-	<cffunction name="getPath" access="public" returntype="string" output="false">
-		<cfargument name="basePath" type="string" required="true" />
+	<cffunction name="getContentPath" access="public" returntype="string" output="false">
 		<cfargument name="prefix" type="string" required="true" />
 		
-		<cfreturn variables.currentPage.getPath(argumentCollection = arguments) />
+		<cfset var level = '' />
+		
+		<cfset level = variables.currentPage.getLevels()[variables.currentPage.lengthLevels()] />
+		
+		<cfreturn variables.navigation.convertContentPath(level.path, level.contentPath, arguments.prefix) />
 	</cffunction>
 	
 	<!---

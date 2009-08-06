@@ -156,6 +156,38 @@
 		</cfif>
 	</cffunction>
 	
+	<cffunction name="convertContentPath" access="public" returntype="string" output="false">
+		<cfargument name="path" type="string" required="true" />
+		<cfargument name="contentPath" type="string" required="true" />
+		<cfargument name="prefix" type="string" required="true" />
+		
+		<cfset var i = '' />
+		<cfset var contentPath = '' />
+		<cfset var levels = '' />
+		<cfset var numLevels = '' />
+		<cfset var pageName = '' />
+		
+		<!--- Get the content path --->
+		<cfset contentPath = right(arguments.path, len(arguments.path) - 1) />
+		
+		<cfset pageName = listLast(contentPath, '.') />
+		
+		<!--- Remove the pagename from the contentPath --->
+		<cfif len(contentPath) GT len(pageName)>
+			<cfset contentPath = left(contentPath, len(contentPath) - len(pageName)) />
+		<cfelse>
+			<cfset contentPath = '' />
+		</cfif>
+		
+		<!--- Replace the periods with slashes --->
+		<cfset contentPath = replace(contentPath, '.', '/', 'all') />
+		
+		<!--- Convert the pageName to have the prefix and postfix --->
+		<cfset pageName = lCase(arguments.prefix) & uCase(left(pageName, 1)) & right(pageName, len(pageName) - 1) & '.cfm' />
+		
+		<cfreturn arguments.contentPath & contentPath & pageName />
+	</cffunction>
+	
 	<!---
 		A unique page Identifier is used for caching the navigation
 		so extra does not need to be done to create navigation if
@@ -240,7 +272,7 @@
 		
 		<!--- Query for the exact pages that match the paths --->
 		<cfquery name="navigation" dbtype="query">
-			SELECT pageID, level, path, title, navTitle, navPosition, description, ids, vars, attribute, attributeValue, allow, deny, defaults, orderBy
+			SELECT pageID, level, path, title, navTitle, navPosition, description, ids, vars, attribute, attributeValue, allow, deny, defaults, contentPath, orderBy
 			FROM variables.navigation
 			WHERE path IN (<cfqueryparam cfsqltype="cf_sql_varchar" value="#arrayToList(paths)#" list="true" />)
 				AND locale = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.locale#" />
@@ -259,7 +291,7 @@
 			<cfset arguments.theURL.setCurrent('_base', navigation.path) />
 			
 			<!--- Add to the current page --->
-			<cfset currentPage.addLevel(navigation.title, navigation.navTitle, arguments.theURL.getCurrent(), navigation.path) />
+			<cfset currentPage.addLevel(navigation.title, navigation.navTitle, arguments.theURL.getCurrent(), navigation.path, navigation.contentPath) />
 		</cfloop>
 		
 		<cfreturn currentPage />
@@ -331,67 +363,32 @@
 	<cffunction name="validate" access="public" returntype="void" output="false">
 		<cfargument name="prefixes" type="string" required="true" />
 		
-		<!--- TODO Redo the validation and creation of files --->
-		<cfthrow message="Need to redo this with the new structure..." />
+		<cfset var directoryPath = '' />
+		<cfset var filePath = '' />
+		<cfset var navigation = '' />
+		<cfset var prefix = '' />
 		
-		<!--- Recurse through the navigation and validate each of the elements --->
-		<cfset validateChild(variables.navigation, 'index', arguments.prefixes) />
-	</cffunction>
-	
-	<cffunction name="validateChild" access="private" returntype="void" output="false">
-		<cfargument name="navigation" type="struct" required="true" />
-		<cfargument name="filename" type="string" required="true" />
-		<cfargument name="prefixes" type="string" required="true" />
+		<!--- Query for the exact pages that match the paths --->
+		<cfquery name="navigation" dbtype="query">
+			SELECT DISTINCT path, contentPath
+			FROM variables.navigation
+			ORDER BY path ASC
+		</cfquery>
 		
-		<cfset var i = '' />
-		<cfset var j = '' />
-		<cfset var completeFilename = '' />
-		<cfset var isChildren = false />
-		<cfset var isGrandchildren = false />
-		<cfset var nonDefaultList = getNonDefaultList(variables.defaults, arguments.navigation) />
-		<cfset var nonDefaultKeyList = '' />
-		
-		<cfloop list="#nonDefaultList#" index="i">
-			<!--- If we have not already handled children --->
-			<cfif NOT isChildren AND NOT structIsEmpty(arguments.navigation[i])>
-				<!--- Check for the existance of the prefixed files --->
-				<cfloop list="#arguments.prefixes#" index="j">
-					<!--- camelCase the filename in preperation for adding prefix --->
-					<cfset arguments.filename = ucase(left(arguments.filename, 1)) & lcase(right(arguments.filename, len(arguments.filename) - 1)) />
-					
-					<!--- Compile the full filename together --->
-					<cfset completeFilename = arguments.contentPath & j & arguments.filename & '.cfm' />
-					
-					<!--- If the prefixed file does not exist create it --->
-					<cfif NOT fileExists(completeFilename)>
-						<cffile action="write" file="#completeFilename#" output="" />
-					</cfif>
-				</cfloop>
+		<cfloop list="#arguments.prefixes#" index="prefix">
+			<cfloop query="navigation">
+				<cfset filePath = convertContentPath(navigation.path, navigation.contentPath, prefix) />
 				
-				<cfset isChildren = true />
-			</cfif>
-			
-			<!--- Get the non-default key list --->
-			<cfset nonDefaultKeyList = getNonDefaultList(variables.defaultKeys, arguments.navigation[i]) />
-			
-			<!--- Check for need to recurse --->
-			<cfloop list="#nonDefaultKeyList#" index="j">
-				<!--- Child needs to have a child ( grandchild ) to recurse --->
-				<cfif hasChildren(arguments.navigation[i][j])>
-					<!--- Compile the full filename together --->
-					<cfset completeFilename = arguments.contentPath & lcase(arguments.filename) & '/' />
-					
-					<!--- If this is the first time with a grandchild make certain the directory exists --->
-					<cfif NOT isGrandchildren>
-						<cfif NOT directoryExists(completeFilename)>
-							<cfdirectory action="create" directory="#completeFilename#" />
-						</cfif>
-						
-						<cfset isGrandchildren = true />
-					</cfif>
-					
-					<!--- Recurse to the next child --->
-					<cfset validateChild(arguments.navigation[i][j], j, arguments.prefixes) />
+				<cfset directoryPath = listDeleteAt(filePath, listLen(filePath, '/'), '/') />
+				
+				<!--- Create the file if it doesn't exist --->
+				<cfif NOT directoryExists(directoryPath)>
+					<cfdirectory action="create" directory="#directoryPath#" />
+				</cfif>
+				
+				<!--- Create the file if it doesn't exist --->
+				<cfif NOT fileExists(filePath)>
+					<cffile action="write" file="#filePath#" output="" />
 				</cfif>
 			</cfloop>
 		</cfloop>
