@@ -3,6 +3,35 @@
 		<cfreturn this />
 	</cffunction>
 	
+	<cffunction name="explodePath" access="public" returntype="array" output="false">
+		<cfargument name="path" type="string" required="true" />
+		
+		<cfset var exploded = [] />
+		<cfset var part = '' />
+		<cfset var partLen = '' />
+		<cfset var search = 0 />
+		
+		<cfset search = find('.', arguments.path, search) />
+		
+		<cfloop condition="search GT 0">
+			<!--- Make sure that only the root will end with a period --->
+			<cfset partLen = (search GT 1 ? search - 1 : search) />
+			
+			<!--- Retrieve the part of the path --->
+			<cfset part = left(arguments.path, partLen) />
+			
+			<!--- Add the part --->
+			<cfset arrayAppend(exploded, part) />
+			
+			<cfset search = find('.', arguments.path, search + 1) />
+		</cfloop>
+		
+		<!--- The full path is part of the explode --->
+		<cfset arrayAppend(exploded, arguments.path) />
+		
+		<cfreturn exploded />
+	</cffunction>
+	
 	<cffunction name="generateHTML" access="private" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />

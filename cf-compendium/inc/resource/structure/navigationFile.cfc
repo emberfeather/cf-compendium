@@ -199,6 +199,45 @@
 		<cfreturn variables.navigation />
 	</cffunction>
 	
+	<cffunction name="locatePage" access="public" returntype="component" output="false">
+		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="locale" type="string" required="true" />
+		<cfargument name="authUser" type="component" required="false" />
+		
+		<cfset var currentPage = createObject('component', 'cf-compendium.inc.resource.structure.currentPage').init() />
+		<cfset var paths = '' />
+		<cfset var navigation = '' />
+		
+		<!--- Explode the current path --->
+		<cfset paths = explodePath(arguments.theURL.search('_base')) />
+		
+		<!--- Query for the exact pages that match the paths --->
+		<cfquery name="navigation" dbtype="query">
+			SELECT pageID, level, path, title, navTitle, navPosition, description, ids, vars, attribute, attributeValue, allow, deny, defaults, orderBy
+			FROM variables.navigation
+			WHERE path IN (<cfqueryparam cfsqltype="cf_sql_varchar" value="#arrayToList(paths)#" list="true" />)
+				AND locale = <cfqueryparam cfsqltype="cf_sql_varchar" value="#arguments.locale#" />
+				AND navTitle <> <cfqueryparam cfsqltype="cf_sql_varchar" value="" />
+				
+				<!--- TODO add in authUser type permission checking --->
+				
+				ORDER BY path ASC
+		</cfquery>
+		
+		<!--- Prime the URL --->
+		<cfset arguments.theURL.cleanCurrent() />
+		
+		<cfloop query="navigation">
+			<!--- Create the url --->
+			<cfset arguments.theURL.setCurrent('_base', navigation.path) />
+			
+			<!--- Add to the current page --->
+			<cfset currentPage.addLevel(navigation.title, navigation.navTitle, arguments.theURL.getCurrent(), navigation.path) />
+		</cfloop>
+		
+		<cfreturn currentPage />
+	</cffunction>
+	
 	<cffunction name="readMask" access="private" returntype="string" output="false">
 		<cfargument name="filename" type="string" required="true" />
 		

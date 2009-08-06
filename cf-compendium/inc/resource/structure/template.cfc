@@ -2,13 +2,14 @@
 	<cffunction name="init" access="public" returnType="component" output="false">
 		<cfargument name="navigation" type="component" required="true" />
 		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="locale" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		
+		<cfset var args = '' />
 		<cfset var defaults = {
 				attributes = {},
 				authUser = '',
 				pageTitles = [],
-				levels = [],
 				meta = {},
 				scripts = [
 					'http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js'
@@ -27,40 +28,20 @@
 		<cfset variables.navigation = arguments.navigation />
 		<cfset variables.theURL = arguments.theURL />
 		
-		<!--- TODO How do we need to handle the current page information? --->
-		<!--- 
-		<!--- Get the current page object --->
-		<cfif NOT isObject(this.getAuthUser())>
-			<cfset variables.currentPage = variables.navigation.locate(theURL) />
-		<cfelse>
-			<cfset variables.currentPage = variables.navigation.locate(theURL, this.getAuthUser()) />
-		</cfif>
-		 --->
+		<!--- Get the current page information --->
+		<cfset args = {
+				theURL = arguments.theURL,
+				locale = arguments.locale
+			} />
 		
-		<!--- TODO What does this really do? --->
-		<!--- 
-		<!--- Pull in the levels from the current page --->
-		<cfloop array="#variables.currentPage.getLevels()#" index="i">
-			<cfset this.addLevel(argumentCollection = i) />
-		</cfloop>
-		 --->
+		<!--- Check if we have an auth user --->
+		<cfif isObject(this.getAuthUser())>
+			<cfset args.authUser = this.getAuthUser() />
+		</cfif>
+		
+		<cfset variables.currentPage = variables.navigation.locatePage( argumentCollection = args ) />
 		
 		<cfreturn this />
-	</cffunction>
-	
-	<!---
-		Adds a level
-	--->
-	<cffunction name="addLevel" access="public" returntype="void" output="false">
-		<cfargument name="title" type="string" required="true" />
-		<cfargument name="link" type="string" default="##" />
-		
-		<cfset var level = {} />
-		
-		<cfset level.title = arguments.title />
-		<cfset level.link = arguments.link />
-		
-		<cfset arrayAppend(variables.instance.levels, level) />
 	</cffunction>
 	
 	<!---
@@ -166,33 +147,41 @@
 	<cffunction name="getBreadcrumb" access="public" returntype="string" output="false">
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		
+		<cfset var breadcrumb = '' />
 		<cfset var defaults = {
 				separator = ' : ',
-				showMultiple = true
+				showMultiple = true,
+				showSiteTitle = true,
+				useNavTitle = true
 			} />
-		<cfset var extOptions = '' />
 		<cfset var i = '' />
-		<cfset var breadcrumb = '' />
+		<cfset var levels = '' />
 		<cfset var numLevels = this.getLevel() />
 		
 		<!--- Check if there are page titles --->
 		<cfif NOT numLevels>
-			<cfthrow message="Missing Title" detail="There are no titles to retrieve" />
+			<cfreturn this.getSiteTitle() />
 		</cfif>
 		
-		<!--- Extend out the options --->
-		<cfset extOptions = this.extend(defaults, arguments.options) />
+		<!--- Get the levels from the current page --->
+		<cfset levels = variables.currentPage.getLevels() />
 		
-		<cfset breadcrumb = '<a href="' & variables.instance.levels[numLevels].link & '" title="' & variables.instance.levels[numLevels].title & '">' & variables.instance.levels[numLevels].title & '</a>' />
+		<!--- Extend out the options --->
+		<cfset arguments.options = extend(defaults, arguments.options) />
+		
+		<cfset breadcrumb = '<a href="' & levels[numLevels].link & '" title="' & levels[numLevels].title & '">' & (arguments.options.useNavTitle ? levels[numLevels].navTitle : levels[numLevels].title) & '</a>' />
 		
 		<!--- If we are showing multiples --->
-		<cfif extOptions.showMultiple>
+		<cfif arguments.options.showMultiple>
 			<cfloop from="#numLevels - 1#" to="1" index="i" step="-1">
-				<cfset breadcrumb = '<a href="' & variables.instance.levels[i].link & '" title="' & variables.instance.levels[i].title & '">' & variables.instance.levels[i].title & '</a>' & extOptions.separator & breadcrumb />
+				<cfset breadcrumb = '<a href="' & levels[i].link & '" title="' & levels[i].title & '">' & (arguments.options.useNavTitle ? levels[i].navTitle : levels[i].title) & '</a>' & arguments.options.separator & breadcrumb />
 			</cfloop>
 		</cfif>
 		
-		<cfset breadcrumb = '<a href="' & this.getSiteLink() & '" title="' & this.getSiteTitle() & '">' & this.getSiteTitle() & '</a>' & extOptions.separator & breadcrumb />
+		<!--- Want to show the site title? --->
+		<cfif arguments.options.showSiteTitle>
+			<cfset breadcrumb = '<a href="' & this.getSiteLink() & '" title="' & this.getSiteTitle() & '">' & this.getSiteTitle() & '</a>' & arguments.options.separator & breadcrumb />
+		</cfif>
 		
 		<cfreturn breadcrumb />
 	</cffunction>
@@ -205,11 +194,13 @@
 		
 		<cfset var defaults = {
 				separator = ' : ',
-				showMultiple = true
+				showMultiple = true,
+				showSiteTitle = true,
+				useNavTitle = true
 			} />
-		<cfset var extOptions = '' />
 		<cfset var i = '' />
 		<cfset var htmlTitle = this.getSiteTitle() />
+		<cfset var levels = '' />
 		<cfset var numLevels = this.getLevel() />
 		
 		<!--- Check if there are page titles --->
@@ -217,32 +208,34 @@
 			<cfreturn this.getSiteTitle() />
 		</cfif>
 		
-		<!--- Extend out the options --->
-		<cfset extOptions = extend(defaults, arguments.options) />
+		<!--- Get the levels from the current page --->
+		<cfset levels = variables.currentPage.getLevels() />
 		
-		<cfset htmlTitle = variables.instance.levels[numLevels].title />
+		<!--- Extend out the options --->
+		<cfset arguments.options = extend(defaults, arguments.options) />
+		
+		<cfset htmlTitle = levels[numLevels].title />
 		
 		<!--- If we are showing multiples --->
-		<cfif extOptions.showMultiple>
+		<cfif arguments.options.showMultiple>
 			<cfloop from="#numLevels - 1#" to="1" index="i" step="-1">
-				<cfset htmlTitle &= extOptions.separator & variables.instance.levels[i].title />
+				<cfset htmlTitle &= arguments.options.separator & (arguments.options.useNavTitle ? levels[i].navTitle : levels[i].title) />
 			</cfloop>
 		</cfif>
 		
-		<cfset htmlTitle &= extOptions.separator & this.getSiteTitle() />
+		<!--- Want to show the site title? --->
+		<cfif arguments.options.showSiteTitle>
+			<cfset htmlTitle &= arguments.options.separator & this.getSiteTitle() />
+		</cfif>
 		
 		<cfreturn htmlTitle />
-	</cffunction>
-	
-	<cffunction name="getKey" access="public" returntype="string" output="false">
-		<cfreturn variables.currentPage.getLastLevel().name />
 	</cffunction>
 	
 	<!---
 		Returns the number of levels in use
 	--->
 	<cffunction name="getLevel" access="public" returntype="numeric" output="false">
-		<cfreturn arrayLen(variables.instance.levels) />
+		<cfreturn variables.currentPage.lengthLevels() />
 	</cffunction>
 	
 	<!---
@@ -309,6 +302,7 @@
 	<cffunction name="getPageTitle" access="public" returntype="string" output="false">
 		<cfargument name="level" type="numeric" default="#this.getLevel()#" />
 		
+		<cfset var levels = '' />
 		<cfset var numLevels = this.getLevel() />
 		
 		<!--- Check if there are page titles --->
@@ -321,7 +315,9 @@
 			<cfthrow message="Invalid Level" detail="The #arguments.level# has not been defined" />
 		</cfif>
 		
-		<cfreturn variables.instance.levels[arguments.level].title />
+		<cfset levels = variables.currentPage.getLevels() />
+		
+		<cfreturn levels[arguments.level].title />
 	</cffunction>
 	
 	<!---
