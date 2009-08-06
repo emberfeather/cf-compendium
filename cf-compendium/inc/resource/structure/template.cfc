@@ -27,6 +27,7 @@
 		<!--- Store the navigation and url objects --->
 		<cfset variables.navigation = arguments.navigation />
 		<cfset variables.theURL = arguments.theURL />
+		<cfset variables.locale = arguments.locale />
 		
 		<!--- Get the current page information --->
 		<cfset args = {
@@ -271,7 +272,6 @@
 		<cfargument name="level" type="numeric" default="1" />
 		<cfargument name="navPosition" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
-		<cfargument name="locale" type="string" default="en_US" />
 		<cfargument name="authUser" type="component" required="false" />
 		
 		<cfset var args = '' />
@@ -289,7 +289,7 @@
 				level = arguments.level,
 				navPosition = arguments.navPosition,
 				options = extend(defaults, arguments.options),
-				locale = arguments.locale
+				locale = variables.locale
 			} />
 		
 		<!--- Check for user --->
