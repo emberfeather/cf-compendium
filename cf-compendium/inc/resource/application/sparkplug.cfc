@@ -152,6 +152,9 @@
 		<cfset var pluginVersion = '' />
 		<cfset var precedence = '' />
 		
+		<!--- Increase the page timeout so that it won't timeout in the middle of install/update --->
+		<cfsetting requesttimeout="60" />
+		
 		<!--- Set the default application variables --->
 		<cfset arguments.newApplication.information = {
 				key = 'undefined',
