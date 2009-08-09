@@ -1,10 +1,12 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
 		<cfargument name="appBaseDirectory" type="string" required="true" />
+		<cfargument name="datasource" type="struct" required="true" />
 		
 		<cfset super.init() />
 		
 		<cfset variables.appBaseDirectory = arguments.appBaseDirectory />
+		<cfset variables.datasource = arguments.datasource />
 		
 		<cfreturn this />
 	</cffunction>

@@ -45,7 +45,7 @@
 		<cfreturn precedence />
 	</cffunction>
 	
-	<cffunction name="normalizePath" access="public" returntype="string" output="false">
+	<cffunction name="normalizePath" access="private" returntype="string" output="false">
 		<cfargument name="path" type="string" required="true" />
 		
 		<cfif right(arguments.path, 1) NEQ '/'>
@@ -55,7 +55,7 @@
 		<cfreturn path />
 	</cffunction>
 	
-	<cffunction name="readApplicationConfig" access="public" returntype="struct" output="false">
+	<cffunction name="readApplicationConfig" access="private" returntype="struct" output="false">
 		<cfset var config = '' />
 		<cfset var configFile = 'application.json.cfm' />
 		<cfset var configPath = variables.appBaseDirectory & 'config/' />
@@ -90,7 +90,7 @@
 		<cfreturn config />
 	</cffunction>
 	
-	<cffunction name="readPluginConfig" access="public" returntype="struct" output="false">
+	<cffunction name="readPluginConfig" access="private" returntype="struct" output="false">
 		<cfargument name="pluginKey" type="string" required="true" />
 		
 		<cfset var pluginConfig = '' />
@@ -111,7 +111,7 @@
 		<cfreturn deserializeJSON(pluginConfig) />
 	</cffunction>
 	
-	<cffunction name="readPluginVersion" access="public" returntype="string" output="false">
+	<cffunction name="readPluginVersion" access="private" returntype="string" output="false">
 		<cfargument name="pluginKey" type="string" required="true" />
 		
 		<cfset var pluginVersion = '' />
@@ -125,7 +125,7 @@
 		<cfreturn trim(pluginVersion) />
 	</cffunction>
 	
-	<cffunction name="setDefaultSingletons" access="public" returntype="void" output="false">
+	<cffunction name="setDefaultSingletons" access="private" returntype="void" output="false">
 		<cfargument name="newApplication" type="struct" required="true" />
 		
 		<cfset var temp = '' />
@@ -138,14 +138,14 @@
 	
 	<cffunction name="startApplication" access="public" returntype="void" output="false">
 		<cfargument name="newApplication" type="struct" required="true" />
-		<cfargument name="isDebugMode" type="boolean" default="false" />
 		
 		<cfset var appConfig = '' />
 		<cfset var configurers = {} />
 		<cfset var defaultPluginConfig = '' />
-		<cfset var navigation = '' />
+		<cfset var isDebugMode = '' />
 		<cfset var i = '' />
 		<cfset var j = '' />
+		<cfset var navigation = '' />
 		<cfset var plugins = {} />
 		<cfset var pluginConfig = '' />
 		<cfset var pluginList = '' />
@@ -153,7 +153,7 @@
 		<cfset var precedence = '' />
 		
 		<!--- Set the default application variables --->
-		<cfset arguments.newApplication['information'] = {
+		<cfset arguments.newApplication.information = {
 				key = 'undefined',
 				title = 'undefined',
 				i18n = {
@@ -164,16 +164,24 @@
 					]
 				}
 			} />
-		<cfset arguments.newApplication['settings'] = {
-				datasources = {
-				},
-				environment = "production"
+		
+		<cfset arguments.newApplication.settings = {
+				datasources = {},
+				environment = 'production'
 			} />
-		<cfset arguments.newApplication['plugins'] = [] />
-		<cfset arguments.newApplication['managers'] = {
-				factory = createObject('component', 'cf-compendium.inc.resource.application.factoryManager').init(arguments.isDebugMode),
-				singleton = createObject('component', 'cf-compendium.inc.resource.application.singletonManager').init(arguments.isDebugMode)
+		
+		<!--- Set the default datasource stubs --->
+		<cfset arguments.newApplication.settings.datasources.alter = {
+				name = 'undefined',
+				owner = 'undefined',
+				prefix = 'undefined',
+				type = 'undefined'
 			} />
+		
+		<cfset arguments.newApplication.settings.datasources.update = duplicate(arguments.newApplication.settings.datasources.alter) />
+		
+		<!--- Placeholder for the plugin information --->
+		<cfset arguments.newApplication.plugins = [] />
 		
 		<!--- Read in application information --->
 		<cfset appConfig = readApplicationConfig() />
@@ -192,6 +200,14 @@
 		<cfif structKeyExists(appConfig, 'settings')>
 			<cfset arguments.newApplication.settings = extend(arguments.newApplication.settings, appConfig.settings, -1) />
 		</cfif>
+		
+		<cfset isDebugMode = newApplication.settings.environment NEQ 'production' />
+		
+		<!--- Setup the application managers --->
+		<cfset arguments.newApplication.managers = {
+				factory = createObject('component', 'cf-compendium.inc.resource.application.factoryManager').init(isDebugMode),
+				singleton = createObject('component', 'cf-compendium.inc.resource.application.singletonManager').init(isDebugMode)
+			} />
 		
 		<!--- Create the default set of singletons --->
 		<cfset setDefaultSingletons(arguments.newApplication) />
@@ -229,7 +245,7 @@
 		<!--- Update the plugins and setup the factory and singleton information --->
 		<cfloop array="#arguments.newApplication['plugins']#" index="i">
 			<!--- Create the configure utility for the plugin --->
-			<cfset configurers[i.key] = createObject('component', 'plugins.' & i.key & '.config.configure').init(variables.appBaseDirectory) />
+			<cfset configurers[i.key] = createObject('component', 'plugins.' & i.key & '.config.configure').init(variables.appBaseDirectory, arguments.newApplication.settings.datasources.alter) />
 			
 			<!--- Upgrade the plugin --->
 			<cfset configurers[i.key].update(i, readPluginVersion(i.key)) />
@@ -271,7 +287,7 @@
 		</cfloop>
 	</cffunction>
 	
-	<cffunction name="updatePluginVersion" access="public" returntype="void" output="false">
+	<cffunction name="updatePluginVersion" access="private" returntype="void" output="false">
 		<cfargument name="pluginKey" type="string" required="true" />
 		<cfargument name="version" type="string" required="true" />
 		
@@ -285,7 +301,7 @@
 		Used to update the list of plugins to account for the ones that should come first.
 		Anything new is prequisite of something that is already in the list so it should be moved to the first.
 	--->
-	<cffunction name="updatePrecedence" access="public" returntype="string" output="false">
+	<cffunction name="updatePrecedence" access="private" returntype="string" output="false">
 		<cfargument name="precedence" type="string" required="true" />
 		<cfargument name="plugin" type="string" required="true" />
 		
