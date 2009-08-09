@@ -247,8 +247,10 @@
 			<!--- Create the configure utility for the plugin --->
 			<cfset configurers[i.key] = createObject('component', 'plugins.' & i.key & '.config.configure').init(variables.appBaseDirectory, arguments.newApplication.settings.datasources.alter) />
 			
-			<!--- Upgrade the plugin --->
-			<cfset configurers[i.key].update(i, readPluginVersion(i.key)) />
+			<cftransaction>
+				<!--- Upgrade the plugin --->
+				<cfset configurers[i.key].update(i, readPluginVersion(i.key)) />
+			</cftransaction>
 			
 			<!--- Update the plugin version information --->
 			<cfset updatePluginVersion(i.key, i.version) />
