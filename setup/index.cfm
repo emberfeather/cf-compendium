@@ -74,6 +74,7 @@
 		
 		<cfcase value="plugin">
 			<cfset files = 'config/application.cfc,config/configure.cfc,config/plugin.json.cfm' />
+			<cfset files &= ',extend/application.cfc' />
 			<cfset files &= ',i18n/config/plugin.properties,i18n/config/plugin_en_US.properties' />
 			<cfset files &= ',inc/application.cfc,inc/admin.cfm,inc/application.cfc,inc/index.cfm' />
 		</cfcase>
