@@ -263,7 +263,7 @@
 				<cfloop collection="#i.factory#" item="j">
 					<!--- Set the factory path in the factory manager --->
 					<!--- Overrides any pre-existing factory paths --->
-					<cfinvoke component="#arguments.newApplication['managers']['factory']#" method="set#j#">
+					<cfinvoke component="#arguments.newApplication.managers.transient#" method="set#j#">
 						<cfinvokeargument name="path" value="#i.factory[j]#" />
 					</cfinvoke>
 				</cfloop>
@@ -274,7 +274,7 @@
 				<cfloop collection="#i.singleton#" item="j">
 					<!--- Create the singleton and set it to the singleton manager --->
 					<!--- Overrides any pre-existing singletons --->
-					<cfinvoke component="#arguments.newApplication['managers']['singleton']#" method="set#j#">
+					<cfinvoke component="#arguments.newApplication.managers.singleton#" method="set#j#">
 						<cfinvokeargument name="singleton" value="#createObject('component', i.singleton[j]).init()#" />
 					</cfinvoke>
 				</cfloop>
