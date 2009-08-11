@@ -1,3 +1,7 @@
+<head>
+<link rel="stylesheet" href="/cf-compendium/style/datagrid.css" />
+</head>
+
 <h1>Datagrid Examples</h1>
 
 <cfset theObject = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init() />
@@ -5,33 +9,43 @@
 <h2>addColumn('columnName'[, 'options'])</h2>
 
 <p>
-	Adds a column to be displayed in the dataGrid. 
+	Adds a column to be displayed in the dataGrid.
 </p>
 
 <div>
-	<cfset options = {
-			label = "First Name"
-		} />
-	
+
 	options = { label = "First Name" }<br/>
-	addColumn('Name', options) --&gt;
-	<cfoutput>#theObject.addColumn('Name', options)#</cfoutput>
+	addColumn('FirstName', options) --&gt;<br />
+
+	<cfset options = {
+			label = 'First Name',
+			class = 'namae'
+		} />
+	<cfset theObject.addColumn('FirstName', options) />
+
+	options = { label = "Last Name" }<br/>
+	addColumn('LastName', options) --&gt;<br />
+
+	<cfset options = {
+			label = "Last Name"
+		} />
+	<cfset theObject.addColumn('LastName', options) />
 </div>
 
 <div>
-	
+
 	<cfset data = [
 			{
-				name = "John Doe"
+				firstname = "John", lastName= "Doe"
 			},
 			{
-				name = "Jane Doe"
+				firstname = "Jane", lastName="Doe"
 			},
 			{
-				name = "Bobby Joe"
+				firstname = "Bobby", lastName="Joe"
 			}
 		] />
-	
+
 	<p>
 		<cfoutput>#theObject.toHTML(data)#</cfoutput>
 	</p>
