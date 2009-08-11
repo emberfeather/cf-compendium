@@ -16,7 +16,7 @@
 		</code>
 	</blockquote>
 	
-	<cfset navigation.applyMask(filename, 'config', 'navigation01', 'en_US,en_PI') />
+	<cfset navigation.applyMask(filename, '/plugin/content/path', 'config', 'navigation01', 'en_US,en_PI') />
 	
 	<p>
 		<cfdump var="#navigation.getNavigation()#" />
