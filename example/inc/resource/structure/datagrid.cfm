@@ -1,5 +1,5 @@
 <head>
-<link rel="stylesheet" href="/cf-compendium/style/datagrid.css" />
+	<link rel="stylesheet" href="/cf-compendium/style/datagrid.css" />
 </head>
 
 <h1>Datagrid Examples</h1>
@@ -13,19 +13,18 @@
 </p>
 
 <div>
-
 	options = { label = "First Name" }<br/>
 	addColumn('FirstName', options) --&gt;<br />
-
+	
 	<cfset options = {
 			label = 'First Name',
 			class = 'namae'
 		} />
 	<cfset theObject.addColumn('FirstName', options) />
-
+	
 	options = { label = "Last Name" }<br/>
 	addColumn('LastName', options) --&gt;<br />
-
+	
 	<cfset options = {
 			label = "Last Name"
 		} />
@@ -33,7 +32,6 @@
 </div>
 
 <div>
-
 	<cfset data = [
 			{
 				firstname = "John", lastName= "Doe"
@@ -45,7 +43,7 @@
 				firstname = "Bobby", lastName="Joe"
 			}
 		] />
-
+	
 	<p>
 		<cfoutput>#theObject.toHTML(data)#</cfoutput>
 	</p>
