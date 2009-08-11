@@ -4,11 +4,11 @@
 		it should return true for the has functionality.
 	--->
 	<cffunction name="testHasDefinition" access="public" returntype="void" output="false">
-		<cfset var factory = createObject('component', 'cf-compendium.inc.resource.application.factoryManager').init() />
+		<cfset var transient = createObject('component', 'cf-compendium.inc.resource.application.transientManager').init() />
 		
-		<cfset factory.setFactory( 'testing' ) />
+		<cfset transient.setFactory('testing') />
 		
-		<cfset assertTrue(factory.hasFactory()) />
+		<cfset assertTrue(transient.hasFactory()) />
 	</cffunction>
 	
 	<!---
@@ -16,20 +16,20 @@
 		exist it should return false for the has functionality.
 	--->
 	<cffunction name="testHasDefinitionSansDefinition" access="public" returntype="void" output="false">
-		<cfset var factory = createObject('component', 'cf-compendium.inc.resource.application.factoryManager').init() />
+		<cfset var transient = createObject('component', 'cf-compendium.inc.resource.application.transientManager').init() />
 		
-		<cfset assertFalse(factory.hasFactory()) />
+		<cfset assertFalse(transient.hastransient()) />
 	</cffunction>
 	
 	<!---
-		When setting a definition on the factory manager it needs
+		When setting a definition on the transient manager it needs
 		to have an string passed as an argument.
 	--->
 	<cffunction name="testSetSansArguments" access="public" returntype="void" output="false">
-		<cfset var factory = createObject('component', 'cf-compendium.inc.resource.application.factoryManager').init() />
+		<cfset var transient = createObject('component', 'cf-compendium.inc.resource.application.transientManager').init() />
 		
 		<cftry>
-			<cfset factory.setFactory() />
+			<cfset transient.settransient() />
 			
 			<cfset fail("Should not be able to call the set without an argument.") />
 			
@@ -44,15 +44,15 @@
 	</cffunction>
 	
 	<!---
-		When setting a definition on the factory manager it needs
+		When setting a definition on the transient manager it needs
 		to be a simple value.
 	--->
 	<cffunction name="testSetSansObject" access="public" returntype="void" output="false">
-		<cfset var factory = createObject('component', 'cf-compendium.inc.resource.application.factoryManager').init() />
+		<cfset var transient = createObject('component', 'cf-compendium.inc.resource.application.transientManager').init() />
 		<cfset var test = createObject('component', 'cf-compendium.inc.resource.base.base').init() />
 		
 		<cftry>
-			<cfset factory.setFactory(test) />
+			<cfset transient.settransient(test) />
 			
 			<cfset fail("Should not be able to call with a non-simple value argument.") />
 			
