@@ -70,9 +70,10 @@
 					<cfset querySetCell(variables.navigation, 'orderBy', 1, currentRow) />
 				</cfif>
 				
-				<!--- Pull titles from resource bundle --->
+				<!--- Pull translated information from resource bundle --->
 				<cfset querySetCell(variables.navigation, 'title', bundle.getValue(plainPath), currentRow) />
 				<cfset querySetCell(variables.navigation, 'navTitle', bundle.getValue(plainPath & "-nav"), currentRow) />
+				<cfset querySetCell(variables.navigation, 'description', bundle.getValue(plainPath & "-desc"), currentRow) />
 				
 				<!--- update the index for the path --->
 				<cfset variables.pathIndex[fullPath] = currentRow />
