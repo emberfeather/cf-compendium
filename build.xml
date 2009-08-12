@@ -70,7 +70,9 @@
 			log="${basedir}${build.dist}/logs/${svn.commit.log}"
 			outputDir="${basedir}${build.dist}/stats"
 			title="${project.fullname}"
-			include="**/*.cfc;**/*.cfm;**/*.js;**/*.css;**/*.xml;**/*.properties"/>
+			include="**/*.cfc;**/*.cfm;**/*.js;**/*.css;**/*.xml;**/*.properties"
+			username="${svn.username}"
+			password="${svn.password}"/>
 		
 		<echo message="Finished: SVN Statistics at ${basedir}${build.dist}/stats"/>
 	</target>
