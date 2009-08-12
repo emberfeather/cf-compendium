@@ -1,18 +1,5 @@
 <?xml version="1.0"?>
 <project name="cf-compendium" default="minify" basedir=".">
-	<path id="svn.classpath">
-		<pathelement location="${basedir}/dist/lib/svnant.jar" />
-		<pathelement location="${basedir}/dist/lib/svnClientAdapter.jar"/>
-		<pathelement location="${basedir}/dist/lib/svnjavahl.jar"/>
-		<pathelement location="${basedir}/dist/lib/svnkit.jar"/>
-		<pathelement location="${basedir}/dist/lib/ganymed.jar"/>
-	</path>
-	
-	<!-- Load ANT tasks -->
-	<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svn.classpath"/>
-	<taskdef name="statsvn" classname="net.sf.statsvn.ant.StatSvnTask" classpath="${basedir}/dist/lib/statsvn.jar" />
-	<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar" />
-	
 	<!-- Include the property files -->
 	<property file="${basedir}/user.properties"/>
 	<property file="${basedir}/project.properties"/>
@@ -24,7 +11,7 @@
 		<apply executable="java" parallel="false" dest="${basedir}/${project.name}/script">
 			<fileset dir="${basedir}/${project.name}/script" includes="**/*.js" excludes="**/*-min.js" />
 			<arg line="-jar"/>
-			<arg path="${basedir}/${build.dist}/lib/yuicompressor-2.4.2.jar" />
+			<arg path="${basedir}/${build.dist}/lib/yuicompressor-2.4.2/yuicompressor.jar" />
 			<arg line="-v"/>
 			<srcfile/>
 			<arg line="-o"/>
@@ -35,7 +22,7 @@
 		<apply executable="java" parallel="false" dest="${basedir}/${project.name}/style">
 			<fileset dir="${basedir}/${project.name}/style" includes="**/*.css" excludes="**/*-min.css" />
 			<arg line="-jar"/>
-			<arg path="${basedir}/${build.dist}/lib/yuicompressor-2.4.2.jar" />
+			<arg path="${basedir}/${build.dist}/lib/yuicompressor-2.4.2/yuicompressor.jar" />
 			<arg line="-v"/>
 			<srcfile/>
 			<arg line="-o"/>
@@ -63,6 +50,17 @@
 	<target name="prepareSVN" depends="prepare">
 		<echo message="Starting: SVN Preparation"/>
 		
+		<path id="svn.classpath">
+			<pathelement location="${basedir}/dist/lib/svnant-1.3.0/svnant.jar" />
+			<pathelement location="${basedir}/dist/lib/svnant-1.3.0/svnClientAdapter.jar"/>
+			<pathelement location="${basedir}/dist/lib/svnant-1.3.0/svnjavahl.jar"/>
+			<pathelement location="${basedir}/dist/lib/svnant-1.3.0/svnkit.jar"/>
+			<pathelement location="${basedir}/dist/lib/svnant-1.3.0/ganymed.jar"/>
+		</path>
+		
+		<!-- Load ANT tasks -->
+		<typedef resource="org/tigris/subversion/svnant/svnantlib.xml" classpathref="svn.classpath"/>
+		
 		<!-- Create the time stamp -->
 		<tstamp>
 			<format property="svn.log.startDate" pattern="yyyy-MM-dd" offset="-5" unit="year" />
@@ -76,8 +74,10 @@
 		<echo message="Finished: SVN Preparation"/>
 	</target>
 	
-	<target name="statSVN" depends="prepareSVN" description="Generates statistics from the repository">
+	<target name="statSVN" depends="svnLog" description="Generates statistics from the repository">
 		<echo message="Starting: SVN Statistics"/>
+		
+		<taskdef name="statsvn" classname="net.sf.statsvn.ant.StatSvnTask" classpath="${basedir}/dist/lib/statSVN-0.5.0/statsvn.jar" />
 		
 		<statsvn
 			path="${basedir}"
@@ -86,7 +86,7 @@
 			title="${project.fullname}"
 			include="**/*.cfc;**/*.cfm;**/*.js;**/*.css;**/*.xml;**/*.properties"
 			username="${svn.username}"
-			password="${svn.password}"/>
+			password="${svn.password}" />
 		
 		<echo message="Finished: SVN Statistics at ${basedir}${build.dist}/stats"/>
 	</target>
@@ -124,6 +124,8 @@
 	
 	<target name="test" depends="prepare" description="Runs the Unit Tests">
 		<echo message="Starting: Unit Tests"/>
+		
+		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar" />
 		
 		<mxunittask server="${mxunit.host}" port="${mxunit.port}" outputdir="${basedir}${build.dist}/unit" defaultrunner="${mxunit.defaultrunner}" verbose="${general.verbose}" haltonerror="true">
 			<directory path="${basedir}/test" componentPath="${mxunit.componentpath}" recurse="true" />

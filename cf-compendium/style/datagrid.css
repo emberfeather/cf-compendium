@@ -1,2 +1,15 @@
-.datagrid .row { clear: both; }
-.datagrid .col { float: left; }
+.datagrid .row {
+	clear: both;
+}
+
+.datagrid .col {
+	float: left;
+}
+
+.datagrid .col.clear {
+	clear: left;
+}
+
+.datagrid .col.one {
+	width: 100%;
+}
