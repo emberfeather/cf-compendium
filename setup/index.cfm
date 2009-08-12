@@ -87,22 +87,22 @@
 	<h2>Creating the files</h2>
 	<div>
 		<ul>
-			<cfloop list="#files#" index="file">
+			<cfloop list="#files#" index="fileName">
 				<li>
 					<cfoutput>
-						<cfif NOT fileExists(setupSettings['path'] & file)>
-							<cffile action="read" file="#setupBasePath##setupSettings['type']#/#file#" variable="fileContents" />
+						<cfif NOT fileExists(setupSettings['path'] & fileName)>
+							<cffile action="read" file="#setupBasePath##setupSettings['type']#/#fileName#" variable="fileContents" />
 							
 							<!--- Replace with settings --->
 							<cfloop list="#structKeyList(setupSettings)#" index="i">
 								<cfset fileContents = replace(fileContents, '{{' & i & '}}', setupSettings[i], 'all') />
 							</cfloop>
 							
-							<cffile action="write" file="#setupSettings['path']##file#" output="#fileContents#" addnewline="false" />
+							<cffile action="write" file="#setupSettings['path']##fileName#" output="#fileContents#" addnewline="false" />
 							
-							The #file# file was created.
+							The #fileName# file was created.
 						<cfelse>
-							The #file# file already exists.
+							The #fileName# file already exists.
 						</cfif>
 					</cfoutput>
 				</li>
