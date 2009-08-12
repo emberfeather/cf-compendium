@@ -122,6 +122,16 @@
 		<echo message="Finished: SVN Log at ${basedir}${build.dist}/logs/${svn.commit.log}"/>
 	</target>
 	
+	<target name="svnUpdate" depends="prepareSVN" description="Updates the code from the repository">
+		<echo message="Starting: SVN Update"/>
+		
+		<svn username="${svn.username}" password="${svn.password}" javahl="${svn.javahl}" svnkit="${svn.svnkit}">
+			<update dir="${basedir}" recurse="true"/>
+		</svn>
+		
+		<echo message="Finished: SVN Update"/>
+	</target>
+	
 	<target name="test" depends="prepare" description="Runs the Unit Tests">
 		<echo message="Starting: Unit Tests"/>
 		
