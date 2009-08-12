@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="cf-compendium" default="prepare" basedir=".">
+<project name="cf-compendium" default="minify" basedir=".">
 	<path id="svn.classpath">
 		<pathelement location="${basedir}/dist/lib/svnant.jar" />
 		<pathelement location="${basedir}/dist/lib/svnClientAdapter.jar"/>
@@ -46,7 +46,7 @@
 		<echo message="Finished: CSS and JS minification"/>
 	</target>
 	
-	<target name="prepare" description="Prepare environment for build">
+	<target name="prepare">
 		<echo message="Starting: Environment Preparation"/>
 		
 		<!-- Define log file -->
@@ -55,14 +55,28 @@
 		<!-- Create the time stamp -->
 		<tstamp>
 			<format property="build.date" pattern="MM/dd/yy hh:mmaa"/>
-			<format property="svn.log.startDate" pattern="yyyy-MM-dd" offset="-5" unit="year" />
-			<format property="svn.log.endDate" pattern="yyyy-MM-dd" offset="1" unit="day"/>
 		</tstamp>
 		
 		<echo message="Finished: Environment Preparation"/>
 	</target>
 	
-	<target name="statSVN" description="Generates statistics from the repository">
+	<target name="prepareSVN" depends="prepare">
+		<echo message="Starting: SVN Preparation"/>
+		
+		<!-- Create the time stamp -->
+		<tstamp>
+			<format property="svn.log.startDate" pattern="yyyy-MM-dd" offset="-5" unit="year" />
+			<format property="svn.log.endDate" pattern="yyyy-MM-dd" offset="1" unit="day"/>
+		</tstamp>
+		
+		<!-- Get the SVN information -->
+		<input addproperty="svn.username" message="SVN Username" />
+		<input addproperty="svn.password" message="SVN Password" />
+		
+		<echo message="Finished: SVN Preparation"/>
+	</target>
+	
+	<target name="statSVN" depends="prepareSVN" description="Generates statistics from the repository">
 		<echo message="Starting: SVN Statistics"/>
 		
 		<statsvn
@@ -77,7 +91,7 @@
 		<echo message="Finished: SVN Statistics at ${basedir}${build.dist}/stats"/>
 	</target>
 	
-	<target name="svnCommit" depends="prepare,minify" description="Commits the code to the repository">
+	<target name="svnCommit" depends="prepareSVN,minify" description="Commits the code to the repository">
 		<echo message="Starting: SVN Commit"/>
 		
 		<input addproperty="svn.message" message="Commit Message" />
@@ -89,7 +103,7 @@
 		<echo message="Finished: SVN Commit"/>
 	</target>
 	
-	<target name="svnLog" depends="prepare" description="Generates logs from the repository">
+	<target name="svnLog" depends="prepareSVN" description="Generates logs from the repository">
 		<echo message="Starting: SVN Log"/>
 		
 		<exec executable="svn" output="${basedir}${build.dist}/logs/${svn.commit.log}">
