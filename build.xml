@@ -96,6 +96,10 @@
 			<arg value="log"/>
 			<arg value="-v"/>
 			<arg value="--xml"/>
+			<arg value="--username"/>
+			<arg value="${svn.username}"/>
+			<arg value="--password"/>
+			<arg value="${svn.password}"/>
 			<arg value="-r"/>
 			<arg value="{${svn.log.startDate}}:{${svn.log.endDate}}"/>
 			<arg value="${basedir}"/>
