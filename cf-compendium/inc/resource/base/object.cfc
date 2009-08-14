@@ -243,7 +243,7 @@
 			</cfcase>
 			
 			<cfcase value="get">
-				<cfset result = reFindNoCase('(.+)By(.+)', attribute, 1, true) />
+				<cfset result = reFindNoCase('(.+)By(.*)', attribute, 1, true) />
 				
 				<!--- Check if it is a simple get or a search --->
 				<cfif NOT result.pos[1]>
