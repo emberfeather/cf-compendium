@@ -119,6 +119,12 @@
 			<arg value="${basedir}"/>
 		</exec>
 		
+		<!-- TODO Use this version when they get the verbose option working
+		<svn username="${svn.username}" password="${svn.password}" javahl="${svn.javahl}" svnkit="${svn.svnkit}">
+			<log path="${basedir}" startrevision="{${svn.log.startDate}}" destfile="${basedir}${build.dist}/logs/${svn.commit.log}" asxml="true" recurse="true" verbose="true"/>
+		</svn>
+		-->
+		
 		<echo message="Finished: SVN Log at ${basedir}${build.dist}/logs/${svn.commit.log}"/>
 	</target>
 	
