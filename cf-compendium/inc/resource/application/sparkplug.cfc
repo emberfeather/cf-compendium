@@ -14,6 +14,8 @@
 		<cfargument name="pluginList" type="string" required="true" />
 		
 		<cfset var compareVersion = '' />
+		<cfset var i = '' />
+		<cfset var j = '' />
 		<cfset var precedence = '' />
 		
 		<!--- Start with the plugin list that we have as an unordered precedence --->
