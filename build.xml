@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <project name="cf-compendium" default="minify" basedir=".">
 	<!-- Include the property files -->
-	<property file="${basedir}/user.properties"/>
-	<property file="${basedir}/project.properties"/>
+	<property file="${basedir}/dist/settings/user.properties"/>
+	<property file="${basedir}/dist/settings/project.properties"/>
 	
 	<target name="minify" depends="prepare" description="Minify the CSS and JS files">
 		<echo message="Starting: CSS and JS minification"/>
@@ -145,14 +145,23 @@
 		<!-- Load ANT tasks -->
 		<taskdef name="statsvn" classname="net.sf.statsvn.ant.StatSvnTask" classpath="${build.lib}/statSVN-0.5.0/statsvn.jar" />
 		
-		<statsvn
-			path="${basedir}"
-			log="${build.logs.svn}"
-			outputDir="${build.dist}/stats"
-			title="${project.fullname}"
-			include="**/*.cfc;**/*.cfm;**/*.js;**/*.css;**/*.xml;**/*.properties"
-			username="${svn.username}"
-			password="${svn.password}" />
+		<java jar="${build.lib}/statSVN-0.5.0/statsvn.jar" fork="true" failonerror="true">
+			<arg value="-title" />
+			<arg value="${project.fullname}" />
+			<arg value="-include" />
+			<arg value="**/*.cfc;**/*.cfm;**/*.js;**/*.css;**/*.xml;**/*.properties" />
+			<arg value="-output-dir" />
+			<arg value="${build.dist}/stats" />
+			<arg value="-username" />
+			<arg value="${svn.username}" />
+			<arg value="-password" />
+			<arg value="${svn.password}" />
+			<arg value="-disable-twitter-button" />
+			<arg value="-config-file" />
+			<arg value="${build.dist}/settings/svnstat.properties" />
+			<arg value="${build.logs.svn}" />
+			<arg value="${basedir}" />
+		</java>
 		
 		<echo message="Finished: SVN Statistics at ${build.dist}/stats"/>
 	</target>
