@@ -72,6 +72,11 @@
 		<!--- Get the navigation query --->
 		<cfset navigation = this.getNav(argumentCollection = arguments) />
 		
+		<!--- Check for blank navigation --->
+		<cfif NOT navigation.recordCount>
+			<cfreturn html />
+		</cfif>
+		
 		<!--- Generate the html off the given navigation --->
 		<cfset html = '<ul class="' />
 		

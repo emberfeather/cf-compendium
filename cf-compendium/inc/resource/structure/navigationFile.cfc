@@ -201,18 +201,27 @@
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		<cfargument name="locale" type="string" default="en_US" />
 		
+		<cfset var i = '' />
 		<cfset var position = '' />
 		<cfset var uniquePageID = '' />
 		
 		<cfif isArray(arguments.navPosition)>
-			<cfset position = arguments.navPosition[1] />
+			<cfloop array="#arguments.navPosition#" index="i">
+				<cfset position &= i & '.' />
+			</cfloop>
+			
+			<cfset position = left(position, len(position) - 1) />
+		<cfelse>
+			<cfset position = arguments.navPosition />
 		</cfif>
 		
 		<cfset uniquePageID = arguments.locale & '-' & arguments.level & '-' & position />
 		
 		<cfif structKeyExists(arguments.options, 'depth')>
-			<cfset uniquePageID &= '-' & arguments.options.depth />
+			<cfset uniquePageID &= '-depth' & arguments.options.depth />
 		</cfif>
+		
+		<cfset uniquePageID &= '-parent' & getBasePathForLevel(arguments.level, arguments.theURL.search('_base')) />
 		
 		<!--- TODO Make the identification string more unique --->
 		
@@ -394,5 +403,10 @@
 				</cfif>
 			</cfloop>
 		</cfloop>
+	</cffunction>
+	
+	<!--- TODO Remove --->
+	<cffunction name="print" access="public" returntype="void" output="true">
+		<cfdump var="#variables.cachedHTML#" />
 	</cffunction>
 </cfcomponent>
