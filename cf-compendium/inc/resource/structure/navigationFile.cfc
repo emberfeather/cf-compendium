@@ -208,7 +208,11 @@
 			<cfset position = arguments.navPosition[1] />
 		</cfif>
 		
-		<cfset uniquePageID = arguments.locale & '-' & position & '-' & arguments.level />
+		<cfset uniquePageID = arguments.locale & '-' & arguments.level & '-' & position />
+		
+		<cfif structKeyExists(arguments.options, 'depth')>
+			<cfset uniquePageID &= '-' & arguments.options.depth />
+		</cfif>
 		
 		<!--- TODO Make the identification string more unique --->
 		
@@ -348,9 +352,6 @@
 		
 		<!--- Determine a unique page identification for caching purposes --->
 		<cfset uniquePageID = createUniquePageID(argumentCollection = arguments) />
-		
-		<!--- TODO enable the caching by removing next line --->
-		<cfreturn super.toHTML(argumentCollection = arguments) />
 		
 		<!--- Do we need to create and cache the HTML? --->
 		<cfif NOT structKeyExists(variables.cachedHTML, uniquePageID)>
