@@ -144,7 +144,6 @@
 		<cfset var appConfig = '' />
 		<cfset var configurers = {} />
 		<cfset var defaultPluginConfig = '' />
-		<cfset var isDebugMode = '' />
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var navigation = '' />
@@ -206,7 +205,7 @@
 			<cfset arguments.newApplication.settings = extend(arguments.newApplication.settings, appConfig.settings, -1) />
 		</cfif>
 		
-		<cfset isDebugMode = newApplication.settings.environment NEQ 'production' />
+		<cfset variables.isDebugMode = newApplication.settings.environment NEQ 'production' />
 		
 		<!--- Setup the application managers --->
 		<cfset arguments.newApplication.managers = {
@@ -247,7 +246,7 @@
 			<cfset arrayAppend(arguments.newApplication['plugins'], plugins[i]) />
 		</cfloop>
 		
-		<!--- Update the plugins and setup the factory and singleton information --->
+		<!--- Update the plugins and setup the transient and singleton information --->
 		<cfloop array="#arguments.newApplication['plugins']#" index="i">
 			<!--- Create the configure utility for the plugin --->
 			<cfset configurers[i.key] = createObject('component', 'plugins.' & i.key & '.config.configure').init(variables.appBaseDirectory, arguments.newApplication.settings.datasources.alter) />
@@ -260,13 +259,13 @@
 			<!--- Update the plugin version information --->
 			<cfset updatePluginVersion(i.key, i.version) />
 			
-			<!--- Check for factory information --->
-			<cfif structKeyExists(i, 'factory')>
-				<cfloop collection="#i.factory#" item="j">
-					<!--- Set the factory path in the factory manager --->
-					<!--- Overrides any pre-existing factory paths --->
+			<!--- Check for transient information --->
+			<cfif structKeyExists(i, 'transient')>
+				<cfloop collection="#i.transient#" item="j">
+					<!--- Set the transient path in the transient manager --->
+					<!--- Overrides any pre-existing transient paths --->
 					<cfinvoke component="#arguments.newApplication.managers.transient#" method="set#j#">
-						<cfinvokeargument name="path" value="#i.factory[j]#" />
+						<cfinvokeargument name="path" value="#i.transient[j]#" />
 					</cfinvoke>
 				</cfloop>
 			</cfif>

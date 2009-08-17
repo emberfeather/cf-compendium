@@ -43,12 +43,12 @@
 			
 			<cfcase value="set">
 				<cfif arrayLen(arguments.missingMethodArguments) EQ 0>
-					<cfthrow message="Setting definitions requires the component path" detail="Factory definitions need arguments." />
+					<cfthrow message="Setting definitions requires the component path" detail="Transient definitions need arguments." />
 				</cfif>
 				
 				<!--- Check for a simple value for the component path --->
 				<cfif NOT isSimpleValue(arguments.missingMethodArguments[1])>
-					<cfthrow message="Factory definition needs to be a string" detail="The factory definiton was not a simple value" />
+					<cfthrow message="Transient definition needs to be a string" detail="The transient definiton was not a simple value" />
 				</cfif>
 				
 				<!--- Create the definition --->
