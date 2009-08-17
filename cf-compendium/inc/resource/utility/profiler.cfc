@@ -95,9 +95,10 @@
 	<!---
 		Retrieves all of the tickers that were used
 	--->
-	<cffunction name="getTickers" access="public" returntype="struct" output="false">
+	<cffunction name="getTickers" access="public" returntype="query" output="false">
 		<cfset var i = '' />
-		<cfset var results = {} />
+		<cfset var results = queryNew('ticker,count,total,average,minimum,maximum') />
+		<cfset var tickList = '' />
 		
 		<cfif NOT variables.isActive>
 			<cfreturn results />
@@ -106,7 +107,21 @@
 		<!--- Calculating the counts for the tickers --->
 		<cfset calculateTicks() />
 		
-		<cfreturn variables.tickers />
+		<!--- Get the list of tickers as an alphabetical list --->
+		<cfset tickList = listSort(structKeyList(variables.tickers), 'text') />
+		
+		<cfloop list="#tickList#" index="i">
+			<cfset queryAddRow(results, 1) />
+			
+			<cfset querySetCell(results, 'ticker', i) />
+			<cfset querySetCell(results, 'count', arrayLen(variables.tickers[i].count)) />
+			<cfset querySetCell(results, 'total', arraySum(variables.tickers[i].count)) />
+			<cfset querySetCell(results, 'average', arrayAvg(variables.tickers[i].count)) />
+			<cfset querySetCell(results, 'minimum', arrayMin(variables.tickers[i].count)) />
+			<cfset querySetCell(results, 'maximum', arrayMax(variables.tickers[i].count)) />
+		</cfloop>
+		
+		<cfreturn results />
 	</cffunction>
 	
 	<!---
@@ -169,8 +184,6 @@
 		Formats and returns the profiling to a HTML string
 	--->
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
-		<cfargument name="asComment" type="boolean" default="false" />
-		
 		<cfset var tempHTML = chr(10) />
 		<cfset var counter = 0 />
 		<cfset var maxLength = 0 />
@@ -188,65 +201,31 @@
 		<!--- Get the list of tickers as an alphabetical list --->
 		<cfset tickList = listSort(structKeyList(variables.tickers), 'text') />
 		
-		<cfif arguments.asComment>
-			<!--- Find the max length --->
-			<cfloop list="#tickList#" index="i">
-				<cfif len(i) GT maxLength>
-					<cfset maxLength = len(i) />
-				</cfif>
-			</cfloop>
+		<!--- Find the max length --->
+		<cfloop list="#tickList#" index="i">
+			<cfif len(i) GT maxLength>
+				<cfset maxLength = len(i) />
+			</cfif>
+		</cfloop>
+		
+		<cfset tempHTML &= '<!-- Profiling Specs -->' & chr(10) />
+		
+		<cfloop list="#tickList#" index="i">
+			<cfset tempHTML &= '<!-- ' & lJustify(i, maxLength + 3) />
 			
-			<cfset tempHTML &= '<!-- Profiling Specs -->' & chr(10) />
+			<!--- Check if this is a multi ticker --->
+			<cfif arrayLen(variables.tickers[i].count) GT 1>
+				<cfset tempHTML &= 'Count: ' & lJustify(arrayLen(variables.tickers[i].count), 7) />
+				<cfset tempHTML &= 'Max: ' & lJustify(formatTickTime(arrayMax(variables.tickers[i].count)), 8) />
+				<cfset tempHTML &= 'Min: ' & lJustify(formatTickTime(arrayMin(variables.tickers[i].count)), 8) />
+				<cfset tempHTML &= 'Avg: ' & lJustify(formatTickTime(arrayAvg(variables.tickers[i].count)), 8) />
+				<cfset tempHTML &= 'Sum: ' & lJustify(formatTickTime(arraySum(variables.tickers[i].count)), 8) />
+			<cfelse>
+				<cfset tempHTML &= formatTickTime(variables.tickers[i].count[1]) />
+			</cfif>
 			
-			<cfloop list="#tickList#" index="i">
-				<cfset tempHTML &= '<!-- ' & lJustify(i, maxLength + 3) />
-				
-				<!--- Check if this is a multi ticker --->
-				<cfif arrayLen(variables.tickers[i].count) GT 1>
-					<cfset tempHTML &= 'Count: ' & lJustify(arrayLen(variables.tickers[i].count), 7) />
-					<cfset tempHTML &= 'Max: ' & lJustify(formatTickTime(arrayMax(variables.tickers[i].count)), 8) />
-					<cfset tempHTML &= 'Min: ' & lJustify(formatTickTime(arrayMin(variables.tickers[i].count)), 8) />
-					<cfset tempHTML &= 'Avg: ' & lJustify(formatTickTime(arrayAvg(variables.tickers[i].count)), 8) />
-					<cfset tempHTML &= 'Sum: ' & lJustify(formatTickTime(arraySum(variables.tickers[i].count)), 8) />
-				<cfelse>
-					<cfset tempHTML &= formatTickTime(variables.tickers[i].count[1]) />
-				</cfif>
-				
-				<cfset tempHTML &= ' -->' & chr(10) />
-			</cfloop>
-		<cfelse>
-			<cfset tempHTML &= '<div class="profileSummary">' & chr(10) />
-			<cfset tempHTML &= '	<h1>Profiling</h1>' & chr(10) />
-			<cfset tempHTML &= '	<ul>' & chr(10) />
-			
-			<cfloop list="#tickList#" index="i">
-				<cfset tempHTML &= '		<li' />
-				
-				<cfif (counter++) MOD 2 EQ 1>
-					<cfset tempHTML &= ' class="alt"' />
-				</cfif>
-				
-				<cfset tempHTML &= '>' & chr(10) />
-				
-				<cfset tempHTML &= '			<strong>' & i & ' ( ' & arrayLen(variables.tickers[i].count) & ' ) : </strong>' />
-				
-				<!--- Check if this is a multi ticker --->
-				<cfif arrayLen(variables.tickers[i].count) GT 1>
-					<cfset tempHTML &= '<span class="max">Max: ' & formatTickTime(arrayMax(variables.tickers[i].count)) & '</span> ' />
-					<cfset tempHTML &= '<span class="min">Min: ' & formatTickTime(arrayMin(variables.tickers[i].count)) & '</span> ' />
-					<cfset tempHTML &= '<span class="avg">Avg: ' & formatTickTime(arrayAvg(variables.tickers[i].count)) & '</span> ' />
-					<cfset tempHTML &= '<span class="sum">Sum: ' & formatTickTime(arraySum(variables.tickers[i].count)) & '</span> ' />
-				<cfelse>
-					<cfset tempHTML &= formatTickTime(variables.tickers[i].count[1]) />
-				</cfif>
-				
-				<cfset tempHTML &= chr(10) />
-				<cfset tempHTML &= '		</li>' & chr(10) />
-			</cfloop>
-			
-			<cfset tempHTML &= '	</ul>' & chr(10) />
-			<cfset tempHTML &= '</div>' & chr(10) />
-		</cfif>
+			<cfset tempHTML &= ' -->' & chr(10) />
+		</cfloop>
 		
 		<cfreturn tempHTML />
 	</cffunction>
