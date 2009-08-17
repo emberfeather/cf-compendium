@@ -5,24 +5,29 @@
 --->
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="any" output="false">
-		<cfargument name="queryString" type="string" default="" />
+		<cfargument name="masterBase" type="any" default="" />
 		<cfargument name="options" type="struct" default="#structNew()#" />
 		
+		<cfset var defaults = {
+				start = '?',
+				ampEncodeChar = '&amp;',
+				eqEncodeChar = '=',
+				ampChar = '&',
+				eqChar = '='
+			} />
 		<cfset var theExtender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		
-		<!--- Set defaults for form --->
-		<cfset variables.urlOptions = structNew() />
-		<cfset variables.urlOptions.start = '?' />
-		<cfset variables.urlOptions.ampEncodeChar = '&amp;' />
-		<cfset variables.urlOptions.eqEncodeChar = '=' />
-		<cfset variables.urlOptions.ampChar = '&' />
-		<cfset variables.urlOptions.eqChar = '=' />
-		
 		<!--- Extend the form options --->
-		<cfset variables.urlOptions = theExtender.extend(variables.urlOptions, arguments.options) />
+		<cfset variables.urlOptions = theExtender.extend(defaults, arguments.options) />
 		
 		<!--- Set the master URL location --->
-		<cfset variables.master = parseQueryString(arguments.queryString) />
+		<cfif isStruct(arguments.masterBase)>
+			<!--- Allow to pass in a struct as the master --->
+			<cfset variables.master = duplicate(arguments.masterBase) />
+		<cfelse>
+			<!--- Parse the master form the queryString --->
+			<cfset variables.master = parseQueryString(arguments.masterBase) />
+		</cfif>
 		
 		<!--- Create the variable for named locations --->
 		<cfset variables.locations = structNew() />
