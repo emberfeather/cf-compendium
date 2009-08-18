@@ -83,30 +83,6 @@
 		
 		<!-- Export the files to a temporary location -->
 		<svn username="${svn.username}" password="${svn.password}" javahl="${svn.javahl}" svnkit="${svn.svnkit}">
-			<export srcPath="${basedir}/setup" destpath="${build.export}/setup" />
-		</svn>
-		
-		<!-- Create a zip of the temporary files -->
-		<zip destfile="${build.files.setup}" basedir="${build.export}/setup" update="true" />
-		
-		<!-- Remove the temporary location -->
-		<delete dir="${build.export}/setup" />
-		
-		<!-- Upload the setup files -->
-		<gcupload
-			username="${svn.username}"
-			password="${svn.password}"
-			projectname="${project.name}"
-			filename="${build.files.setup}"
-			targetfilename="${project.name}-setup-${project.version}.zip"
-			summary="Setup files for applications and plugins for ${project.name} version ${project.version}"
-			labels="Featured, Type-Archive, OpSys-All" />
-		
-		<!-- Remove the zip of the temporary files -->
-		<delete file="${build.files.setup}" />
-		
-		<!-- Export the files to a temporary location -->
-		<svn username="${svn.username}" password="${svn.password}" javahl="${svn.javahl}" svnkit="${svn.svnkit}">
 			<export srcPath="${basedir}/${project.name}" destpath="${build.export}/${project.name}" />
 		</svn>
 		
