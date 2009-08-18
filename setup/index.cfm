@@ -23,7 +23,7 @@
 		</cfcase>
 		
 		<cfcase value="plugin">
-			<cfset directories = 'config,config/releases' />
+			<cfset directories = 'config' />
 			<cfset directories &= ',extend' />
 			<cfset directories &= ',i18n,i18n/config,i18n/extend,i18n/inc,i18n/inc/model' />
 			<cfset directories &= ',img' />
