@@ -320,7 +320,7 @@
 	--->
 	<cffunction name="properties" access="private" output="false">
 		<cfargument name="defaults" type="struct" required="true" />
-		<cfargument name="values" type="struct" default="#structNew()#" />
+		<cfargument name="values" type="struct" default="#{}#" />
 		
 		<!--- Set the variables instance --->
 		<cfset variables.instance = extend(arguments.defaults, arguments.values) />

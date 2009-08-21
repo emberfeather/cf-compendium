@@ -1,6 +1,6 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
 	<cffunction name="init" access="public" returnType="component" output="false">
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset super.init() />
 		
@@ -12,7 +12,7 @@
 	
 	<cffunction name="addColumn" access="public" returntype="void" output="false">
 		<cfargument name="columnName" type="string" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
 				label = arguments.columnName,
@@ -53,7 +53,7 @@
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="data" type="any" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var col = "" />
 		<cfset var defaults = {

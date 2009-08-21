@@ -1,6 +1,6 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
 	<cffunction name="init" access="public" returnType="component" output="false">
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
 				levels = []

@@ -16,7 +16,7 @@
 	--->
 	<cffunction name="extend" access="public" output="false">
 		<cfargument name="defaults" type="struct" required="true" />
-		<cfargument name="original" type="struct" default="#structNew()#" />
+		<cfargument name="original" type="struct" default="#{}#" />
 		<cfargument name="depth" type="numeric" default="1" />
 		
 		<cfset var extended = duplicate(arguments.original) />

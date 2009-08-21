@@ -3,7 +3,7 @@
 		<cfargument name="navigation" type="component" required="true" />
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="locale" type="string" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var args = '' />
 		<cfset var defaults = {
@@ -144,7 +144,7 @@
 		Returns the formatted page titles as the breadcrumb
 	--->
 	<cffunction name="getBreadcrumb" access="public" returntype="string" output="false">
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var breadcrumb = '' />
 		<cfset var defaults = {
@@ -183,7 +183,7 @@
 		Returns the formatted page titles in reverse
 	--->
 	<cffunction name="getHtmlTitle" access="public" returntype="string" output="false">
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
 				separator = ' : ',
@@ -253,7 +253,7 @@
 	<cffunction name="getNavigation" access="public" returntype="string" output="false">
 		<cfargument name="level" type="numeric" default="1" />
 		<cfargument name="navPosition" type="any" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		<cfargument name="authUser" type="component" required="false" />
 		
 		<cfset var args = '' />

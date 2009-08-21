@@ -38,10 +38,10 @@
 	<cffunction name="addAttribute" access="public" returntype="void" output="false">
 		<cfargument name="attribute" type="string" required="true" />
 		<cfargument name="defaultValue" type="any" default="" />
-		<cfargument name="validation" type="struct" default="#structNew()#" />
-		<cfargument name="form" type="struct" default="#structNew()#" />
-		<cfargument name="dataGrid" type="struct" default="#structNew()#" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="validation" type="struct" default="#{}#" />
+		<cfargument name="form" type="struct" default="#{}#" />
+		<cfargument name="dataGrid" type="struct" default="#{}#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset variables.attributes[arguments.attribute] = arguments />
 		

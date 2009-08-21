@@ -6,7 +6,7 @@
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="any" output="false">
 		<cfargument name="masterBase" type="any" default="" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
 				start = '?',

@@ -30,7 +30,7 @@
 	--->
 	<cffunction name="addElement" access="public" returntype="void" output="false">
 		<cfargument name="elementType" type="string" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {} />
 		<cfset var element = '' />
@@ -62,7 +62,7 @@
 		Add a fieldset to the form to be displayed.
 	--->
 	<cffunction name="addFieldset" access="public" returntype="void" output="false">
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {} />
 		<cfset var fieldset = '' />
@@ -93,7 +93,7 @@
 		Add a section to the form to be displayed.
 	--->
 	<cffunction name="addSection" access="public" returntype="void" output="false">
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {} />
 		<cfset var section = '' />
@@ -125,7 +125,7 @@
 		Add a tab to the form to be displayed.
 	--->
 	<cffunction name="addTab" access="public" returntype="void" output="false">
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {} />
 		<cfset var tab = '' />
@@ -185,7 +185,7 @@
 	--->
 	<cffunction name="getFormOpen" access="public" returntype="string" output="false">
 		<cfargument name="action" type="string" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = '' />
 		<cfset var extendedOptions = '' />
@@ -270,7 +270,7 @@
 		all sections are being displayed.
 	--->
 	<cffunction name="getFormSubmit" access="public" returntype="string" output="false">
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = structNew() />
 		<cfset var extendedOptions = '' />
@@ -415,7 +415,7 @@
 	--->
 	<cffunction name="showForm" access="private" returntype="string" output="false">
 		<cfargument name="action" type="string" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = structNew() />
 		<cfset var numSections = '' />
@@ -562,7 +562,7 @@
 	--->
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="action" type="string" default="" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfreturn showForm( argumentCollection = arguments ) />
 	</cffunction>

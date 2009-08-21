@@ -8,7 +8,7 @@
 	--->
 	<cffunction name="addElement" access="public" returntype="void" output="false">
 		<cfargument name="elementType" type="string" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<!--- Check for a file form type --->
 		<cfif arguments.elementType EQ 'file'>

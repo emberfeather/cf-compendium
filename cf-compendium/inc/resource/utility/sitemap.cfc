@@ -50,7 +50,7 @@
 	--->
 	<cffunction name="addUrl" access="public" returntype="void" output="false">
 		<cfargument name="loc" type="string" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = { lastMod = '', changeFreq = '', priority = '' } />
 		<cfset var urlElement = '' />

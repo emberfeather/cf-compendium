@@ -37,7 +37,7 @@
 		<cfargument name="level" type="numeric" required="true" />
 		<cfargument name="navPosition" type="any" required="true" />
 		<cfargument name="parentPath" type="string" default="." />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		<cfargument name="locale" type="string" default="en_US" />
 		<cfargument name="authUser" type="component" required="false" />
 		
@@ -220,7 +220,7 @@
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="level" type="numeric" required="true" />
 		<cfargument name="navPosition" type="any" required="true" />
-		<cfargument name="options" type="struct" default="#structNew()#" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		<cfargument name="locale" type="string" default="en_US" />
 		<cfargument name="authUser" type="component" required="false" />
 		
