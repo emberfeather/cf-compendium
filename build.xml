@@ -22,7 +22,7 @@
 		<apply executable="java" parallel="false" dest="${basedir}/${project.name}/style">
 			<fileset dir="${basedir}/${project.name}/style" includes="**/*.css" excludes="**/*-min.css" />
 			<arg line="-jar"/>
-			<arg path="${basedir}/${build.lib}/yuicompressor-2.4.2/yuicompressor.jar" />
+			<arg path="${build.lib}/yuicompressor-2.4.2/yuicompressor.jar" />
 			<arg line="-v"/>
 			<srcfile/>
 			<arg line="-o"/>
@@ -220,7 +220,7 @@
 		<!-- Load ANT tasks -->
 		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar" />
 		
-		<mxunittask server="${test.host}" port="${test.port}" outputdir="${basedir}${build.dist}/unit" defaultrunner="${test.mxunit.defaultrunner}" verbose="${general.verbose}" haltonerror="true">
+		<mxunittask server="${test.host}" port="${test.port}" outputdir="${build.dist}/unit" defaultrunner="${test.mxunit.defaultrunner}" verbose="${general.verbose}" haltonerror="true">
 			<directory path="${basedir}/test" componentPath="${test.mxunit.componentpath}" recurse="true" />
 		</mxunittask>
 		
