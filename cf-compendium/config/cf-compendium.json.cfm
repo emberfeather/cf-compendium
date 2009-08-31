@@ -6,5 +6,5 @@
 		]
 	},
 	"key": "cf-compendium",
-	"version": "0.1.001"
+	"version": "0.1.1"
 }

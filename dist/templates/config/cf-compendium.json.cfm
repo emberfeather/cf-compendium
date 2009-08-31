@@ -6,5 +6,5 @@
 		]
 	},
 	"key": "@project.key@",
-	"version": "@project.version@"
+	"version": "@project.version.major@.@project.version.minor@.@project.version.build@"
 }
