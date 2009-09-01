@@ -119,7 +119,7 @@
 		</svn>
 		
 		<!-- Reset the release notes for the next version -->
-		<echo append="false" file="${build.release.notes.txt}" message="" />
+		<echo append="false" file="${build.release.notes.txt}" message="  * " />
 		
 		<!-- Update the build version -->
 		<propertyfile file="${build.dist}/settings/version.properties" comment="Version properties">
