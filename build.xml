@@ -77,7 +77,7 @@
 		<echo message="Finished: SVN Preparation"/>
 	</target>
 	
-	<target name="release" depends="prepareSVN,minify,testVarScoper,testMXUnit" description="Tags a release and uploads a new version of the setup zip">
+	<target name="release" depends="prepareSVN,svnUpdate,minify,testVarScoper" description="Tags a release and uploads a new version of the setup zip">
 		<echo message="Starting: Release of version ${project.version}"/>
 		
 		<!-- Load ANT tasks -->
@@ -126,8 +126,16 @@
 			<entry key="project.version.build" value="1" operation="+" type="int"/>
 		</propertyfile>
 		
+		<!-- Call the template target -->
+		<antcall target="template"/>
+		
+		<!-- Commit changes -->
+		<svn username="${svn.username}" password="${svn.password}" javahl="${svn.javahl}" svnkit="${svn.svnkit}">
+			<commit dir="${basedir}" recurse="true" message="Post release changes from version: ${project.version}"/>
+			<commit dir="${build.wiki.path}" recurse="true" message="Post release changes from version: ${project.version}"/>
+		</svn>
+		
 		<echo message="Finished: Release of version ${project.version} complete"/>
-		<echo message="Remember to run the template target and commit changes to the trunk and wiki"/>
 	</target>
 	
 	<target name="statSVN" depends="svnLog" description="Generates statistics from the repository">
@@ -224,9 +232,9 @@
 		<echo message="Starting: Unit Tests"/>
 		
 		<!-- Load ANT tasks -->
-		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar" />
+		<taskdef name="mxunittask" classname="org.mxunit.ant.MXUnitAntTask" classpath="${basedir}/mxunit/ant/lib/mxunit-ant-java5.jar"/>
 		
-		<mxunittask server="${test.host}" port="${test.port}" outputdir="${build.dist}/unit" defaultrunner="${test.mxunit.defaultrunner}" failureproperty="test.mxunit.failure" verbose="${general.verbose}">
+		<mxunittask server="${test.host}" port="${test.port}" outputdir="${build.dist}/unit" defaultrunner="${test.mxunit.defaultrunner}" failureproperty="test.mxunit.failure" verbose="true">
 			<directory path="${basedir}/test" componentPath="${test.mxunit.componentpath}" recurse="true" />
 		</mxunittask>
 		
