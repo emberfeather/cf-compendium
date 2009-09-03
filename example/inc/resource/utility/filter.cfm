@@ -1,103 +1,100 @@
-<h1>Paginate Examples</h1>
+<h1>Filter Examples</h1>
 
 <cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 <cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(theURL) />
 
 <h2>addFilter() - No Options</h2>
 
-<div>
-	<p>
-		addFilter(label, key) --&gt;
-		<cfoutput>#filter.addFilter('Test 1', 'test1')#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		filter.addFilter('Test 1', 'test1')
+	</code>
+</blockquote>
 
-<h2>toHTML()</h2>
+<cfset filter.addFilter('Test 1', 'test1') />
 
-<div>
-	toHTML() --&gt;
-	<cfoutput>#filter.toHTML()#</cfoutput>
-</div>
-
-<cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(theURL) />
+<cfoutput>#filter.toHTML()#</cfoutput>
 
 <h2>addFilter() - One Option</h2>
 
-<div>
-	<p>
-		addFilter(label, key, options) --&gt;
-		
-		<cfset options = createObject('component', 'cf-compendium.inc.resource.utility.options').init() />
-		
-		<cfloop from="1" to="1" index="i">
-			<cfset options.addOption('Option ' & i, 'option' & i) />
-		</cfloop>
-		
-		<cfoutput>#filter.addFilter('Test 1', 'test1', options)#</cfoutput>
-	</p>
-</div>
-
-<h2>toHTML()</h2>
-
-<div>
-	toHTML() --&gt;
-	<cfoutput>#filter.toHTML()#</cfoutput>
-</div>
-
 <cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(theURL) />
+
+<blockquote>
+	<code>
+		options = createObject('component', 'cf-compendium.inc.resource.utility.options').init()<br />
+		options.addOption('Option 1', 'option1')<br />
+		filter.addFilter('Test 1', 'test1', options)
+	</code>
+</blockquote>
+
+<cfset options = createObject('component', 'cf-compendium.inc.resource.utility.options').init() />
+
+<cfset options.addOption('Option 1', 'option1') />
+
+<cfset filter.addFilter('Test 1', 'test1', options) />
+
+<cfoutput>#filter.toHTML()#</cfoutput>
 
 <h2>addFilter() - Few Options</h2>
 
-<div>
-	<p>
-		addFilter(label, key, options) --&gt;
-		
-		<cfset options = createObject('component', 'cf-compendium.inc.resource.utility.options').init() />
-		
-		<cfloop from="1" to="3" index="i">
-			<cfset options.addOption('Option ' & i, 'option' & i) />
-		</cfloop>
-		
-		<cfoutput>#filter.addFilter('Test 1', 'test1', options)#</cfoutput>
-	</p>
-</div>
-
-<h2>toHTML()</h2>
-
-<div>
-	toHTML() --&gt;
-	<cfoutput>#filter.toHTML()#</cfoutput>
-</div>
-
 <cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(theURL) />
+
+<blockquote>
+	<code>
+		options = createObject('component', 'cf-compendium.inc.resource.utility.options').init()<br />
+		options.addOption('Option 1', 'option1')<br />
+		options.addOption('Option 2', 'option2')<br />
+		options.addOption('Option 3', 'option3')<br />
+		filter.addFilter('Test 1', 'test1', options)
+	</code>
+</blockquote>
+
+<cfset options = createObject('component', 'cf-compendium.inc.resource.utility.options').init() />
+
+<cfset options.addOption('Option 1', 'option1') />
+<cfset options.addOption('Option 2', 'option2') />
+<cfset options.addOption('Option 3', 'option3') />
+
+<cfset filter.addFilter('Test 1', 'test1', options) />
+
+<cfoutput>#filter.toHTML()#</cfoutput>
 
 <h2>addFilter() - Many options</h2>
 
-<div>
-	<p>
-		addFilter(label, key, options) --&gt;
-		
-		<cfset options = createObject('component', 'cf-compendium.inc.resource.utility.options').init() />
-		
-		<cfloop from="1" to="10" index="i">
-			<cfset options.addOption('Option ' & i, 'option' & i) />
-			
-			<cfif i MOD 3 EQ 0>
-				<cfset options.addGroup('Group ' & i) />
-			</cfif>
-		</cfloop>
-		
-		<cfoutput>#filter.addFilter('Test 1', 'test1', options)#</cfoutput>
-	</p>
-</div>
+<cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(theURL) />
 
-<h2>toHTML()</h2>
+<blockquote>
+	<code>
+		options = createObject('component', 'cf-compendium.inc.resource.utility.options').init()<br />
+		options.addOption('Option 1', 'option1')<br />
+		options.addOption('Option 2', 'option2')<br />
+		options.addOption('Option 3', 'option3')<br />
+		options.addOption('Option 4', 'option4')<br />
+		options.addOption('Option 5', 'option5')<br />
+		options.addOption('Option 6', 'option6')<br />
+		options.addOption('Option 7', 'option7')<br />
+		options.addOption('Option 8', 'option8')<br />
+		options.addOption('Option 9', 'option9')<br />
+		filter.addFilter('Test 1', 'test1', options)
+	</code>
+</blockquote>
 
-<div>
-	toHTML() --&gt;
-	<cfoutput>#filter.toHTML()#</cfoutput>
-</div>
+<cfset options = createObject('component', 'cf-compendium.inc.resource.utility.options').init() />
 
-<h2>the object</h2>
+<cfset options.addOption('Option 1', 'option1') />
+<cfset options.addOption('Option 2', 'option2') />
+<cfset options.addOption('Option 3', 'option3') />
+<cfset options.addOption('Option 4', 'option4') />
+<cfset options.addOption('Option 5', 'option5') />
+<cfset options.addOption('Option 6', 'option6') />
+<cfset options.addOption('Option 7', 'option7') />
+<cfset options.addOption('Option 8', 'option8') />
+<cfset options.addOption('Option 9', 'option9') />
+
+<cfset filter.addFilter('Test 1', 'test1', options) />
+
+<cfoutput>#filter.toHTML()#</cfoutput>
+
+<h2>The Object</h2>
 
 <cfdump var="#filter#" />

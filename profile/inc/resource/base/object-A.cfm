@@ -1,7 +1,5 @@
 <h1>Object - A Tests</h1>
 
-<cfset theProfiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true) />
-
 <h2>Counts</h2>
 
 <cfset repeatCount = 5 />
@@ -16,13 +14,13 @@
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
-		<cfset theProfiler.start('createObject') />
+		<cfset profiler.start('createObject') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 		</cfloop>
 		
-		<cfset theProfiler.stop('createObject') />
+		<cfset profiler.stop('createObject') />
 	</cfloop>
 </cfsilent>
 
@@ -39,13 +37,13 @@
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
-		<cfset theProfiler.start('setExisting') />
+		<cfset profiler.start('setExisting') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.setName('testing') />
 		</cfloop>
 		
-		<cfset theProfiler.stop('setExisting') />
+		<cfset profiler.stop('setExisting') />
 	</cfloop>
 </cfsilent>
 
@@ -61,13 +59,13 @@
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
-		<cfset theProfiler.start('getExisting') />
+		<cfset profiler.start('getExisting') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.getName() />
 		</cfloop>
 		
-		<cfset theProfiler.stop('getExisting') />
+		<cfset profiler.stop('getExisting') />
 	</cfloop>
 </cfsilent>
 
@@ -82,13 +80,13 @@
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
-		<cfset theProfiler.start('setNonExisting') />
+		<cfset profiler.start('setNonExisting') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.setTitle('testing') />
 		</cfloop>
 		
-		<cfset theProfiler.stop('setNonExisting') />
+		<cfset profiler.stop('setNonExisting') />
 	</cfloop>
 </cfsilent>
 
@@ -104,15 +102,15 @@
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
-		<cfset theProfiler.start('getNonExisting') />
+		<cfset profiler.start('getNonExisting') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.getTitle() />
 		</cfloop>
 		
-		<cfset theProfiler.stop('getNonExisting') />
+		<cfset profiler.stop('getNonExisting') />
 	</cfloop>
 </cfsilent>
 
 <!--- Output Results --->
-<cfoutput>#theProfiler.toHTML()#</cfoutput>
+<pre><cfoutput>#htmlCodeFormat(profiler.toHTML())#</cfoutput></pre>

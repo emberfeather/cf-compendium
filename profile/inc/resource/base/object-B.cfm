@@ -1,7 +1,5 @@
 <h1>Object - B Tests</h1>
 
-<cfset theProfiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true) />
-
 <h2>Counts</h2>
 
 <cfset repeatCount = 5 />
@@ -18,13 +16,13 @@
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
-		<cfset theProfiler.start('add') />
+		<cfset profiler.start('add') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.addText('testing') />
 		</cfloop>
 		
-		<cfset theProfiler.stop('add') />
+		<cfset profiler.stop('add') />
 	</cfloop>
 </cfsilent>
 
@@ -39,13 +37,13 @@
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
-		<cfset theProfiler.start('addMulti') />
+		<cfset profiler.start('addMulti') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.addText('testing', 'testing', 'testing', 'testing', 'testing', 'testing', 'testing', 'testing', 'testing', 'testing') />
 		</cfloop>
 		
-		<cfset theProfiler.stop('addMulti') />
+		<cfset profiler.stop('addMulti') />
 	</cfloop>
 </cfsilent>
 
@@ -60,13 +58,13 @@
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
-		<cfset theProfiler.start('addUnique') />
+		<cfset profiler.start('addUnique') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.addUniqueText('testing') />
 		</cfloop>
 		
-		<cfset theProfiler.stop('addUnique') />
+		<cfset profiler.stop('addUnique') />
 	</cfloop>
 </cfsilent>
 
@@ -81,13 +79,13 @@
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
-		<cfset theProfiler.start('addUniqueMulti') />
+		<cfset profiler.start('addUniqueMulti') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.addUniqueText('testing', 'testing', 'testing', 'testing', 'testing', 'testing', 'testing', 'testing', 'testing', 'testing') />
 		</cfloop>
 		
-		<cfset theProfiler.stop('addUniqueMulti') />
+		<cfset profiler.stop('addUniqueMulti') />
 	</cfloop>
 </cfsilent>
 
@@ -109,15 +107,15 @@
 	
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
-		<cfset theProfiler.start('getAttributesBy') />
+		<cfset profiler.start('getAttributesBy') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.getTextBy('testing') />
 		</cfloop>
 		
-		<cfset theProfiler.stop('getAttributesBy') />
+		<cfset profiler.stop('getAttributesBy') />
 	</cfloop>
 </cfsilent>
 
 <!--- Output Results --->
-<cfoutput>#theProfiler.toHTML()#</cfoutput>
+<pre><cfoutput>#htmlCodeFormat(profiler.toHTML())#</cfoutput></pre>

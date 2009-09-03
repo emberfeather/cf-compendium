@@ -1,7 +1,5 @@
 <h1>URL - A Tests</h1>
 
-<cfset theProfiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true) />
-
 <h2>Counts</h2>
 
 <cfset repeatCount = 5 />
@@ -16,13 +14,13 @@
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
 		<!--- Test the speed of creating objects --->
-		<cfset theProfiler.start('createObject') />
+		<cfset profiler.start('createObject') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
 		</cfloop>
 		
-		<cfset theProfiler.stop('createObject') />
+		<cfset profiler.stop('createObject') />
 	</cfloop>
 </cfsilent>
 
@@ -39,13 +37,13 @@
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
-		<cfset theProfiler.start('set') />
+		<cfset profiler.start('set') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.setName('testing', 'aValue') />
 		</cfloop>
 		
-		<cfset theProfiler.stop('set') />
+		<cfset profiler.stop('set') />
 	</cfloop>
 </cfsilent>
 
@@ -61,15 +59,15 @@
 
 <cfsilent>
 	<cfloop from="1" to="#repeatCount#" index="j">
-		<cfset theProfiler.start('get') />
+		<cfset profiler.start('get') />
 		
 		<cfloop from="1" to="#count#" index="i">
 			<cfset theObject.getName() />
 		</cfloop>
 		
-		<cfset theProfiler.stop('get') />
+		<cfset profiler.stop('get') />
 	</cfloop>
 </cfsilent>
 
 <!--- Output Results --->
-<cfoutput>#theProfiler.toHTML()#</cfoutput>
+<pre><cfoutput>#htmlCodeFormat(profiler.toHTML())#</cfoutput></pre>

@@ -6,7 +6,7 @@
 		
 		<cfset assertEquals(theBookmark.get('testAction'), 1, 'Get Function returned incorrect value.') />
 	</cffunction>
-
+	
 	<cffunction name="testGetInitialize" access="public" returntype="void" output="false">
 		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
 		

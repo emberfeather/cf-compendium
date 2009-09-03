@@ -7,32 +7,54 @@
 	Will convert a number to a base 62 string.
 </p>
 
-<div>
-	<cfset value = 2637482 />
-	<cfset base = base62.valueToBase62(value) />
-	<cfoutput>valueToBase62(#value#) --&gt; #base#</cfoutput>
-</div>
+<cfset value = 2637482 />
 
-<h2>Base62ToValue( string )</h2>
+<blockquote>
+	<code>
+		base62.valueToBase62(<cfoutput>#value#</cfoutput>)
+	</code>
+</blockquote>
+
+<cfset base = base62.valueToBase62(value) />
+
+<cfdump var="#base#" label="valueToBase62" />
+
+<h2>base62ToValue( string )</h2>
 
 <p>
 	Will convert a base 62 string (a-zA-Z0-9) to a value.
 </p>
 
-<div>
-	<cfset value = base62.base62ToValue(base) />
-	<cfoutput>base62ToValue('#base#') --&gt; #value#</cfoutput>
-</div>
+<blockquote>
+	<code>
+		base62.valueToBase62(<cfoutput>#base#</cfoutput>)
+	</code>
+</blockquote>
+
+<cfset value = base62.base62ToValue(base) />
+
+<cfdump var="#value#" label="base62ToBValue" />
 
 <h2>Base 62 Characters</h2>
 
-<cfloop from="0" to="61" index="i">
-	<div>
+<div class="prefix_1 grid_2 alpha">
+	<cfloop from="0" to="61" index="i">
+		<cfif i EQ 16 OR i EQ 32>
+			</div>
+			<div class="grid_2">
+		<cfelseif i EQ 48>
+			</div>
+			<div class="grid_2 omega">
+		</cfif>
+		
 		<cfoutput>
-			#i# : #base62.valueToBase62(i)#
+			<strong>#i#</strong> : #base62.valueToBase62(i)#<br />
 		</cfoutput>
-	</div>
-</cfloop>
+	</cfloop>
+</div>
 
-<h2>the object</h2>
+<div class="clear"><!-- clear --></div>
+
+<h2>The Object</h2>
+
 <cfdump var="#base62#" />

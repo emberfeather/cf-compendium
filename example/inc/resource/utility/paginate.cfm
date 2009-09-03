@@ -1,114 +1,135 @@
 <h1>Paginate Examples</h1>
-<cfset thePaginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(1200, 25, 5) />
+
+<blockquote>
+	<code>
+		paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(1200, 25, 5)
+	</code>
+</blockquote>
+
+<cfset paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(1200, 25, 5) />
 
 <h2>getTotal()</h2>
 
-<div>
-	<p>
-		getTotal() --&gt;
-		<cfoutput>#thePaginator.getTotal()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getTotal()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getTotal()#" label="Total" />
 
 <h2>getNumPerPage()</h2>
 
-<div>
-	<p>
-		getNumPerPage() --&gt;
-		<cfoutput>#thePaginator.getNumPerPage()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getNumPerPage()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getNumPerPage()#" label="Number Per Page" />
 
 <h2>getPage()</h2>
 
-<div>
-	<p>
-		getPage() --&gt;
-		<cfoutput>#thePaginator.getPage()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getPage()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getPage()#" label="Current Page" />
 
 <h2>getStartRow()</h2>
 
-<div>
-	<p>
-		getStartRow() --&gt;
-		<cfoutput>#thePaginator.getStartRow()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getStartRow()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getStartRow()#" label="Start Row" />
 
 <h2>getEndRow()</h2>
 
-<div>
-	<p>
-		getEndRow() --&gt;
-		<cfoutput>#thePaginator.getEndRow()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getEndRow()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getEndRow()#" label="End Row" />
 
 <h2>getPrevious()</h2>
 
-<div>
-	<p>
-		getPrevious() --&gt;
-		<cfoutput>#thePaginator.getPrevious()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getPrevious()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getPrevious()#" label="Previous Page" />
 
 <h2>getNext()</h2>
 
-<div>
-	<p>
-		getNext() --&gt;
-		<cfoutput>#thePaginator.getNext()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getNext()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getNext()#" label="Next Page" />
 
 <h2>hasPrevious()</h2>
 
-<div>
-	<p>
-		hasPrevious() --&gt;
-		<cfoutput>#thePaginator.hasPrevious()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.hasPrevious()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.hasPrevious()#" label="Has Previous Page" />
 
 <h2>hasNext()</h2>
 
-<div>
-	<p>
-		hasNext() --&gt;
-		<cfoutput>#thePaginator.hasNext()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.hasNext()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.hasNext()#" label="Has Next Page" />
 
 <h2>getFirst()</h2>
 
-<div>
-	<p>
-		getFirst() --&gt;
-		<cfoutput>#thePaginator.getFirst()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getFirst()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getFirst()#" label="Get First Page" />
 
 <h2>getLast()</h2>
 
-<div>
-	<p>
-		getLast() --&gt;
-		<cfoutput>#thePaginator.getLast()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		paginator.getLast()
+	</code>
+</blockquote>
+
+<cfdump var="#paginator.getLast()#" label="Get Last Page" />
 
 <h2>toHTML()</h2>
 
 <cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
 
-<div>
-	toHTML() --&gt;
-	<cfoutput>#thePaginator.toHTML(theURL)#</cfoutput>
-</div>
+<blockquote>
+	<code>
+		paginator.toHTML()
+	</code>
+</blockquote>
 
-<h2>the object</h2>
+<cfoutput>#paginator.toHTML(theURL)#</cfoutput>
 
-<cfdump var="#thePaginator#" />
+<h2>The Object</h2>
+
+<cfdump var="#paginator#" />

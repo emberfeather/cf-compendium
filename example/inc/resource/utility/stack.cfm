@@ -1,44 +1,54 @@
 <h1>Stack Examples</h1>
-<cfset theStacker = createObject('component', 'cf-compendium.inc.resource.utility.stack').init() />
+<cfset stacker = createObject('component', 'cf-compendium.inc.resource.utility.stack').init() />
 
-<h2>push(item) and pop()</h2>
+<h2>push(item)</h2>
 
 <p>
 	Pushes an item onto the stack.
 </p>
 
-<div>
-	<p>
-		push('value1')
-		<cfset theStacker.push('value1') />
-	</p>
-	
-	<p>
-		push('value2')
-		<cfset theStacker.push('value2') />
-	</p>
-	
-	<p>
-		push('value3')
-		<cfset theStacker.push('value3') />
-	</p>
-	
-	<p>
-		pop() --&gt;
-		<cfoutput>#theStacker.pop()#</cfoutput>
-	</p>
-	
-	<p>
-		pop() --&gt;
-		<cfoutput>#theStacker.pop()#</cfoutput>
-	</p>
-	
-	<p>
-		pop() --&gt;
-		<cfoutput>#theStacker.pop()#</cfoutput>
-	</p>
-</div>
+<blockquote>
+	<code>
+		stacker.push('value1')<br />
+		stacker.push('value2')<br />
+		stacker.push('value3')
+	</code>
+</blockquote>
 
-<h2>the object</h2>
+<cfset stacker.push('value1') />
+<cfset stacker.push('value2') />
+<cfset stacker.push('value3') />
 
-<cfdump var="#theStacker#" />
+<h2>pop()</h2>
+
+<p>
+	Pops an item off the stack.
+</p>
+
+<blockquote>
+	<code>
+		stacker.pop()
+	</code>
+</blockquote>
+
+<cfdump var="#stacker.pop()#" label="Pop Item" />
+
+<blockquote>
+	<code>
+		stacker.pop()
+	</code>
+</blockquote>
+
+<cfdump var="#stacker.pop()#" label="Pop Item" />
+
+<blockquote>
+	<code>
+		stacker.pop()
+	</code>
+</blockquote>
+
+<cfdump var="#stacker.pop()#" label="Pop Item" />
+
+<h2>The Object</h2>
+
+<cfdump var="#stacker#" />
