@@ -1,5 +1,5 @@
 <cfsilent>
-	<cfparam name="title" default="home" />
+	<cfparam name="title" default="Home" />
 	<cfparam name="paths" default="" />
 	<cfparam name="pathRoot" default="" />
 	<cfparam name="basePath" default="/root" />
@@ -12,7 +12,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		
-		<title><cfoutput>#title#</cfoutput> : cf-compendium</title>
+		<title><cfoutput>#title#</cfoutput> : Algid</title>
 		
 		<link rel="stylesheet" type="text/css" href="<cfoutput>#pathRoot#</cfoutput>preview/styles/reset.css" media="all" /> 
 		<link rel="stylesheet" type="text/css" href="<cfoutput>#pathRoot#</cfoutput>preview/styles/960.css" media="all" /> 
@@ -23,7 +23,7 @@
 		<div class="container_12">
 			<div id="header">
 				<div class="grid_12">
-					<h1>cf-compendium : <cfoutput>#title#</cfoutput></h1>
+					<h1>Algid : <cfoutput>#title#</cfoutput></h1>
 				</div>
 				
 				<div class="clear"><!-- clear --></div>
@@ -67,7 +67,7 @@
 				<cfelse>
 					<div class="grid_12">
 						<p>
-							Welcome to the cf-compendium project!
+							Welcome to the Algid project!
 						</p>
 					</div>
 					
@@ -92,7 +92,7 @@
 								</a>
 							</dt>
 							<dd>
-								Test out just how fast the cf-compendium components 
+								Test out just how fast the Algid components 
 								are on your engine.
 							</dd>
 						</dl>
