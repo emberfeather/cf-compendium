@@ -1,9 +1,7 @@
 <h1>Resource Bundle Example</h1>
 
-<cfset path = expandPath('/i18n/inc/resource/i18n/') />
+<cfset path = '/i18n/inc/resource/i18n/' />
 <cfset bundle = 'resourceBundle' />
-
-<cfset theResourceBundle = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle') />
 
 <h2>English</h2>
 
@@ -12,15 +10,15 @@
 <blockquote>
 	<cfoutput>
 		<code>
-			theResourceBundle.init('#path#', '#bundle#', '#locale#')<br />
-			theResourceBundle.get()
+			resourceBundle = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init('#path#', '#bundle#', '#locale#')<br />
+			resourceBundle.get()
 		</code>
 	</cfoutput>
 </blockquote>
 
-<cfset theResourceBundle.init(path, bundle, locale) />
+<cfset resourceBundle = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init(path, bundle, locale) />
 
-<cfdump var="#theResourceBundle.get()#" />
+<cfdump var="#resourceBundle.get()#" />
 
 <h2>Pirate</h2>
 
@@ -29,15 +27,15 @@
 <blockquote>
 	<cfoutput>
 		<code>
-			theResourceBundle.init('#path#', '#bundle#', '#locale#')<br />
-			theResourceBundle.get()
+			resourceBundle = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init('#path#', '#bundle#', '#locale#')<br />
+			resourceBundle.get()
 		</code>
 	</cfoutput>
 </blockquote>
 
-<cfset theResourceBundle.init(path, bundle, locale) />
+<cfset resourceBundle = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init(path, bundle, locale) />
 
-<cfdump var="#theResourceBundle.get()#" />
+<cfdump var="#resourceBundle.get()#" />
 
 <h2>Thai</h2>
 
@@ -46,16 +44,16 @@
 <blockquote>
 	<cfoutput>
 		<code>
-			theResourceBundle.init('#path#', '#bundle#', '#locale#')<br />
-			theResourceBundle.get()
+			resourceBundle = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init('#path#', '#bundle#', '#locale#')<br />
+			resourceBundle.get()
 		</code>
 	</cfoutput>
 </blockquote>
 
-<cfset theResourceBundle.init(path, bundle, locale) />
+<cfset resourceBundle = createObject('component', 'cf-compendium.inc.resource.i18n.resourceBundle').init(path, bundle, locale) />
 
-<cfdump var="#theResourceBundle.get()#" />
+<cfdump var="#resourceBundle.get()#" />
 
 <h2>The Object</h2>
 
-<cfdump var="#theResourceBundle#" />
+<cfdump var="#resourceBundle#" />

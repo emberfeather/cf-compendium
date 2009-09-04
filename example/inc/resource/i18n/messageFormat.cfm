@@ -1,7 +1,12 @@
 <h1>Message Format Example</h1>
 
-<cfset theMessageFormatter = createObject('component', 'cf-compendium.inc.resource.i18n.messageFormat').init() />
+<blockquote>
+	<code>
+		formatter = createObject('component', 'cf-compendium.inc.resource.i18n.messageFormat').init()
+	</code>
+</blockquote>
 
+<cfset formatter = createObject('component', 'cf-compendium.inc.resource.i18n.messageFormat').init() />
 
 <h2>Message Information</h2>
 
@@ -36,15 +41,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>English (UK)</h2>
@@ -53,15 +58,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>Japenese</h2>
@@ -70,15 +75,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>Thai</h2>
@@ -87,15 +92,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>Albanian</h2>
@@ -104,15 +109,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>Tibetan</h2>
@@ -121,15 +126,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>Dutch</h2>
@@ -138,15 +143,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>French</h2>
@@ -155,15 +160,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>German</h2>
@@ -172,15 +177,15 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>Yiddish</h2>
@@ -189,17 +194,17 @@
 
 <blockquote>
 	<code>
-		theMessageFormatter.init('<cfoutput>#locale#</cfoutput>')<br />
-		theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)
+		formatter.init('<cfoutput>#locale#</cfoutput>')<br />
+		formatter.format(message, replacement1, replacement2, replacement3, replacement4)
 	</code>
 </blockquote>
 
-<cfset theMessageFormatter.init(locale) />
+<cfset formatter.init(locale) />
 
 <blockquote>
-	<cfoutput>#theMessageFormatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
+	<cfoutput>#formatter.format(message, replacement1, replacement2, replacement3, replacement4)#</cfoutput>
 </blockquote>
 
 <h2>The Object</h2>
 
-<cfdump var="#theMessageFormatter#" />
+<cfdump var="#formatter#" />
