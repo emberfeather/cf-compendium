@@ -28,6 +28,24 @@
 	</cffunction>
 	
 	<!---
+		Tests if the value given is in the given list
+	--->
+	<cffunction name="in" access="public" returntype="void" output="false">
+		<cfargument name="label" type="string" required="true" />
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="extra" type="string" required="true" />
+		
+		<cfset var message = '' />
+		
+		<cfif NOT listFind(arguments.extra, arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('in') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label, arguments.extra )#" />
+		</cfif>
+	</cffunction>
+	
+	<!---
 		Tests if the value given is a valid number
 	--->
 	<cffunction name="isNumber" access="public" returntype="void" output="false">
@@ -133,6 +151,24 @@
 		<cfif arguments.value GT arguments.extra>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('notGreaterThan') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label, arguments.extra )#" />
+		</cfif>
+	</cffunction>
+	
+	<!---
+		Tests if the value given is not less than a given amount
+	--->
+	<cffunction name="notIn" access="public" returntype="void" output="false">
+		<cfargument name="label" type="string" required="true" />
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="extra" type="string" required="true" />
+		
+		<cfset var message = '' />
+		
+		<cfif listFind(arguments.extra, arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('notIn') />
 			
 			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label, arguments.extra )#" />
 		</cfif>
