@@ -1,7 +1,6 @@
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
 		<cfset variables.instance = {} />
-		<cfset variables.base62 = createObject('component', 'cf-compendium.inc.resource.utility.base62').init() />
 		
 		<cfreturn this />
 	</cffunction>
@@ -21,9 +20,9 @@
 		<cfargument name="token" type="string" required="true" />
 		<cfargument name="doReset" type="boolean" default="false" />
 		
-		<!--- Generate a new base62 token using a random number --->
+		<!--- Generate a new UUID token --->
 		<cfif arguments.doReset OR NOT structKeyExists(variables.instance, arguments.token)>
-			<cfset variables.instance[arguments.token] = variables.base62.valueToBase62( randRange(100,999999999) & randRange(100,999999999) & randRange(100,999999999) ) />
+			<cfset variables.instance[arguments.token] = createUUID() />
 		</cfif>
 		
 		<cfreturn variables.instance[arguments.token] />
