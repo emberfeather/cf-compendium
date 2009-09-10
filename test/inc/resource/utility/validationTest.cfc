@@ -1,7 +1,7 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
 	<cffunction name="testInInvalid" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var validator = i18n.getValidation('en_US', '/cf-compendium/i18n/resource/utility', 'validation', 'cf-compendium.inc.resource.utility.validation') />
+		<cfset var validator = i18n.getValidation('en_US') />
 		
 		<cftry>
 			<cfset validator.in('testing', 'val', 'is,it,in,here') />
@@ -20,7 +20,7 @@
 	
 	<cffunction name="testInValid" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var validator = i18n.getValidation('en_US', '/cf-compendium/i18n/resource/utility', 'validation', 'cf-compendium.inc.resource.utility.validation') />
+		<cfset var validator = i18n.getValidation('en_US') />
 		
 		<cftry>
 			<cfset validator.in('testing', 'is', 'is,it,in,here') />
@@ -33,7 +33,7 @@
 	
 	<cffunction name="testNotInInvalid" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var validator = i18n.getValidation('en_US', '/cf-compendium/i18n/resource/utility', 'validation', 'cf-compendium.inc.resource.utility.validation') />
+		<cfset var validator = i18n.getValidation('en_US') />
 		
 		<cftry>
 			<cfset validator.notIn('testing', 'val', 'val,is,in,here') />
@@ -52,7 +52,7 @@
 	
 	<cffunction name="testNotInValid" access="public" returntype="void" output="false">
 		<cfset var i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-		<cfset var validator = i18n.getValidation('en_US', '/cf-compendium/i18n/resource/utility', 'validation', 'cf-compendium.inc.resource.utility.validation') />
+		<cfset var validator = i18n.getValidation('en_US') />
 		
 		<cftry>
 			<cfset validator.notIn('testing', 'waldo', 'val,is,in,here') />
