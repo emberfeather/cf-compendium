@@ -80,7 +80,7 @@
 			<cfset offset += 6 />
 		</cfif>
 		
-		<!--- User the offset to determine the character --->
+		<!--- Use the offset to determine the character --->
 		<cfreturn chr(offset + arguments.value) />
 	</cffunction>
 </cfcomponent>

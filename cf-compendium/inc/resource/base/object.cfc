@@ -11,10 +11,6 @@
 	<cffunction name="init" access="public" returntype="component" output="false">
 		<cfset variables.instance = {} />
 		
-		<cfset variables.validation = {
-				componentPath = 'cf-compendium.inc.resource.utility.validation'
-			} />
-		
 		<cfreturn this />
 	</cffunction>
 	
