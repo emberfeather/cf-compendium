@@ -5,160 +5,132 @@
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('button', {
 				name = "testButton",
 				label = "Button",
 				value = "Testing Button"
-			}<br />
-		
-		theForm.addElement('button', element)
+			})
 	</code>
 </blockquote>
 
 <!--- Button --->
-<cfset element = {
+<cfset theForm.addElement('button', {
 		name = "testButton",
 		label = "Button",
 		value = "Testing Button"
-	} />
-
-<cfset theForm.addElement('button', element) />
+	}) />
 
 <h2>Checkbox</h2>
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('checkbox', {
 				name = "testCheckbox",
 				label = "Checkbox",
 				value = "true"
-			}<br />
-		
-		theForm.addElement('checkbox', element)
+			})
 	</code>
 </blockquote>
 
 <!--- Checkbox --->
-<cfset element = {
+<cfset theForm.addElement('checkbox', {
 		name = "testCheckbox",
 		label = "Checkbox",
 		value = "true"
-	} />
-
-<cfset theForm.addElement('checkbox', element) />
+	}) />
 
 <h2>File</h2>
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('file', {
 				name = "testFile",
 				label = "File"
-			}<br />
-		
-		theForm.addElement('file', element)
+			})
 	</code>
 </blockquote>
 
 <!--- File --->
-<cfset element = {
+<cfset theForm.addElement('file', {
 		name = "testFile",
 		label = "File"
-	} />
-
-<cfset theForm.addElement('file', element) />
+	}) />
 
 <h2>Hidden</h2>
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('hidden', {
 				name = "testHidden",
 				label = "Hidden",
 				value = "true"
-			}<br />
-		
-		theForm.addElement('hidden', element)
+			})
 	</code>
 </blockquote>
 
 <!--- Hidden --->
-<cfset element = {
+<cfset theForm.addElement('hidden', {
 		name = "testHidden",
 		label = "Hidden",
 		value = "true"
-	} />
-	
-<cfset theForm.addElement('hidden', element) />
+	}) />
 
 <h2>Image</h2>
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('image', {
 				name = "testImage",
 				label = "Image",
 				value = "true"
-			}<br />
-		
-		theForm.addElement('image', element)
+			})
 	</code>
 </blockquote>
 
 <!--- Image --->
-<cfset element = {
+<cfset theForm.addElement('image', {
 		name = "testImage",
 		label = "Image",
 		value = "true"
-	} />
-
-<cfset theForm.addElement('image', element) />
+	}) />
 
 <h2>Password</h2>
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('password', {
 				name = "testPassword",
 				label = "Password",
 				value = "passwd"
-			}<br />
-		
-		theForm.addElement('password', element)
+			})
 	</code>
 </blockquote>
 
 <!--- Password --->
-<cfset element = {
+<cfset theForm.addElement('password', {
 		name = "testPassword",
 		label = "Password",
 		value = "passwd"
-	} />
-
-<cfset theForm.addElement('password', element) />
+	}) />
 
 <h2>Radio</h2>
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('radio', {
 				name = "testRadio",
 				label = "Radio",
 				value = "true"
-			}<br />
-		
-		theForm.addElement('radio', element)
+			})
 	</code>
 </blockquote>
 
 <!--- Radio --->
-<cfset element = {
+<cfset theForm.addElement('radio', {
 		name = "testRadio",
 		label = "Radio",
 		value = "true"
-	} />
-
-<cfset theForm.addElement('radio', element) />
+	}) />
 
 <h2>Select</h2>
 
@@ -197,47 +169,39 @@
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('text', {
 				name = "testText",
 				label = "Text",
 				value = "true"
-			}<br />
-		
-		theForm.addElement('text', element)
+			})
 	</code>
 </blockquote>
 
 <!--- Text --->
-<cfset element = {
+<cfset theForm.addElement('text', {
 		name = "testText",
 		label = "Text",
 		value = "true"
-	} />
-
-<cfset theForm.addElement('text', element) />
+	}) />
 
 <h2>Textarea</h2>
 
 <blockquote>
 	<code>
-		element = {
+		theForm.addElement('textarea', {
 				name = "testTextarea",
 				label = "Textarea",
 				value = "true"
-			}<br />
-		
-		theForm.addElement('textarea', element)
+			})
 	</code>
 </blockquote>
 
 <!--- Textarea --->
-<cfset element = {
+<cfset theForm.addElement('textarea', {
 		name = "testTextarea",
 		label = "Textarea",
 		value = "true"
-	} />
-
-<cfset theForm.addElement('textarea', element) />
+	}) />
 
 <h2>Example Output</h2>
 
