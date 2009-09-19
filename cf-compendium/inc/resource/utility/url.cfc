@@ -348,6 +348,12 @@
 		<cfreturn tempUrl />
 	</cffunction>
 	
+	<cffunction name="querystringKeyList" access="public" returntype="string" output="false">
+		<cfargument name="locationName" type="string" default="" />
+		
+		<cfreturn structKeyList( findLocation( arguments.locationName ) ) />
+	</cffunction>
+	
 	<!---
 		Removes a variable from the URL location given.
 	--->

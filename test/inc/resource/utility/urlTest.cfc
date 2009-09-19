@@ -156,6 +156,20 @@
 	</cffunction>
 	
 	<!---
+		Test queryKeyList returns the correct list of tokens
+	--->
+	<cffunction name="testQueryKeyList" access="public" returntype="void" output="false">
+		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		
+		<cfset theURL.set('test1', '1') />
+		<cfset theURL.set('test2', '2') />
+		<cfset theURL.set('test3', '3') />
+		<cfset theURL.set('test4', '4') />
+		
+		<cfset assertEquals('test1,test2,test3,test4', listSort( theURL.querystringKeyList(), 'text' ) ) />
+	</cffunction>
+	
+	<!---
 		Test the search function for fail
 	--->
 	<cffunction name="testSearchFail" access="public" returntype="void" output="false">
