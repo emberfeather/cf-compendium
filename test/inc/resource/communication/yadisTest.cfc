@@ -66,8 +66,6 @@
 		<cfset var services = '' />
 		<cfset var yadis = createObject('component', 'cf-compendium.inc.resource.communication.yadis').init() />
 		
-		<cfset makePublic(yadis, 'xmlPrioritySort') />
-		
 		<cfset services = yadis.getServices( variables.xrds ) />
 		
 		<!--- TODO this ordering is incorrect, needs to have the correct URI ordering --->
