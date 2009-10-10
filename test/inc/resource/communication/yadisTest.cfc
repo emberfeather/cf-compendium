@@ -1,31 +1,33 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
 	<cffunction name="setup" access="public" returntype="void" output="false">
 		<cfsavecontent variable="variables.xrds">
-			<?xml version="1.0" encoding="UTF-8"?>
-			<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)"
-				xmlns:openid="http://openid.net/xmlns/1.0">
-				<xrd>
-					<Service priority="50">
-						<Type>http://openid.net/signon/1.0</Type>
-						<URI>http://www.myopenid.com/server</URI>
-						<openid:Delegate>http://smoker.myopenid.com/</openid:Delegate>
-					</Service>
-					<Service priority="10">
-						<Type>http://openid.net/signon/1.0</Type>
-						<URI priority="15">http://resolve2.example.com</URI>
-						<URI priority="10">http://resolve.example.com</URI>
-						<URI>https://resolve.example.com</URI>
-						<openid:Delegate>http://www.livejournal.com/users/frank/</openid:Delegate>
-					</Service>
-					<Service priority="20">
-						<Type>http://lid.netmesh.org/sso/2.0</Type>
-						<URI>http://mylid.net/liddemouser</URI>
-					</Service>
-					<Service>
-						<Type>http://lid.netmesh.org/sso/1.0</Type>
-					</Service>
-				</xrd>
-			</xrds:XRDS>
+			<cfoutput>
+				<?xml version="1.0" encoding="UTF-8"?>
+				<xrds:XRDS xmlns:xrds="xri://$xrds" xmlns="xri://$xrd*($v*2.0)"
+					xmlns:openid="http://openid.net/xmlns/1.0">
+					<xrd>
+						<Service priority="50">
+							<Type>http://openid.net/signon/1.0</Type>
+							<URI>http://www.myopenid.com/server</URI>
+							<openid:Delegate>http://smoker.myopenid.com/</openid:Delegate>
+						</Service>
+						<Service priority="10">
+							<Type>http://openid.net/signon/1.0</Type>
+							<URI priority="15">http://resolve2.example.com</URI>
+							<URI priority="10">http://resolve.example.com</URI>
+							<URI>https://resolve.example.com</URI>
+							<openid:Delegate>http://www.livejournal.com/users/frank/</openid:Delegate>
+						</Service>
+						<Service priority="20">
+							<Type>http://lid.netmesh.org/sso/2.0</Type>
+							<URI>http://mylid.net/liddemouser</URI>
+						</Service>
+						<Service>
+							<Type>http://lid.netmesh.org/sso/1.0</Type>
+						</Service>
+					</xrd>
+				</xrds:XRDS>
+			</cfoutput>
 		</cfsavecontent>
 		
 		<cfset variables.xrds = xmlParse(variables.xrds) />
