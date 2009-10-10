@@ -3,7 +3,7 @@
 	<p>
 	Please note: To gain the advantage of the extended form cfc requires the use of jQuery.
 --->
-<cfcomponent displayname="form" extends="cf-compendium.inc.resource.utility.formStandard" output="false">
+<cfcomponent displayname="form" extends="cf-compendium.inc.resource.structure.formStandard" output="false">
 	<!--- 
 		Used to format the actual HTML element.
 		<p>

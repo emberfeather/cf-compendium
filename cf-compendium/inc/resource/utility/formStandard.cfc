@@ -2,7 +2,7 @@
 	Used to generate forms. This cfc is meant to be extended to have form elements with
 	custom formatting.
 --->
-<cfcomponent extends="cf-compendium.inc.resource.utility.form" output="false">
+<cfcomponent extends="cf-compendium.inc.resource.structure.form" output="false">
 	<!--- 
 		Add an element to the form to be displayed.
 	--->
