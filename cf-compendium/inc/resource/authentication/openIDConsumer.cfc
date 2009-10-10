@@ -42,6 +42,7 @@
 		
 		<cfset var openID = {} />
 		<cfset var results = '' />
+		<cfset var token = '' />
 		
 		<!--- Options --->
 		<cfparam name="arguments.options.sregRequired" default="" />
@@ -167,7 +168,7 @@
 		
 		<!--- Convert hashed secret and encrypted MAC key to BigIntegers because it's easy to XOR BigIntegers --->
 		<cfset sharedBigInt = variables.bigInteger.init( sharedHashBin ) />
-		<cfset encMackKeyBigInt = variables.bigInteger.init( arguments.encMacKey ) />
+		<cfset encMacKeyBigInt = variables.bigInteger.init( arguments.encMacKey ) />
 		
 		<!--- XOR values --->
 		<cfset secret = sharedBigInt.xor( encMacKeyBigInt ) />
