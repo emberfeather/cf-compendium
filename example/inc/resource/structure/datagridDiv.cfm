@@ -1,14 +1,14 @@
-<cfhtmlhead text="<link rel=""stylesheet"" href=""/cf-compendium/style/datagrid.css"" />">
+<cfhtmlhead text="<link rel=""stylesheet"" href=""/cf-compendium/style/datagridDiv.css"" />">
 
 <h1>Datagrid Examples</h1>
 
 <blockquote>
 	<code>
-		datagrid = createObject('component', 'algid.inc.resource.structure.datagrid').init()
+		datagrid = createObject('component', 'algid.inc.resource.structure.datagridDiv').init()
 	</code>
 </blockquote>
 
-<cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init() />
+<cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagridDiv').init() />
 
 <h2>addColumn(columnName [, options])</h2>
 
@@ -18,33 +18,31 @@
 
 <blockquote>
 	<code>
-		options = {
+		datagrid.addColumn('FirstName', {
 				label = 'First Name',
-				class = 'namae'
-			}<br />
-		datagrid.addColumn('FirstName', options)
+				class = 'name'
+			})
 	</code>
 </blockquote>
 
-<cfset options = {
+<cfset datagrid.addColumn('FirstName', {
 		label = 'First Name',
-		class = 'namae'
-	} />
-<cfset datagrid.addColumn('FirstName', options) />
+		class = 'name'
+	}) />
 
 <blockquote>
 	<code>
-		options = {
+		datagrid.addColumn('LastName', {
 				label = "Last Name"
-			}
-		datagrid.addColumn('LastName', options)
+			})
 	</code>
 </blockquote>
 
-<cfset options = {
+<cfset datagrid.addColumn('LastName', {
 		label = "Last Name"
-	} />
-<cfset datagrid.addColumn('LastName', options) />
+	}) />
+
+<h2>toHTML(data[, options])</h2>
 
 <blockquote>
 	<code>
@@ -77,3 +75,7 @@
 	] />
 
 <cfoutput>#datagrid.toHTML(data)#</cfoutput>
+
+<h2>The Object</h2>
+
+<cfdump var="#datagrid#" />
