@@ -154,7 +154,3 @@
 		</cfoutput>
 	</div>
 </cfloop>
-
-<h2>The Object</h2>
-
-<cfdump var="#theObject#" />

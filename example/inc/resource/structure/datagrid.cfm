@@ -6,13 +6,15 @@
 
 <blockquote>
 	<code>
-		datagrid = createObject('component', 'algid.inc.resource.structure.datagrid').init()
+		theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init()<br />
+		datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL)
 	</code>
 </blockquote>
 
-<cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init() />
+<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+<cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
 
-<h2>addColumn(columnName [, options])</h2>
+<h2>addColumn([options])</h2>
 
 <p>
 	Adds a column to be displayed in the dataGrid.
@@ -20,26 +22,14 @@
 
 <blockquote>
 	<code>
-		datagrid.addColumn('FirstName', {
-				label = 'First Name'
+		datagrid.addColumn({
+				label = 'Name'
 			})
 	</code>
 </blockquote>
 
-<cfset datagrid.addColumn('FirstName', {
-		label = 'First Name'
-	}) />
-
-<blockquote>
-	<code>
-		datagrid.addColumn('LastName', {
-				label = 'Last Name'
-			})
-	</code>
-</blockquote>
-
-<cfset datagrid.addColumn('LastName', {
-		label = 'Last Name'
+<cfset datagrid.addColumn({
+		label = 'Name'
 	}) />
 
 <h2>toHTML(data[, options])</h2>
@@ -47,15 +37,9 @@
 <blockquote>
 	<code>
 		data = [
-				{
-					firstname = "John", lastName= "Doe"
-				},
-				{
-					firstname = "Jane", lastName="Doe"
-				},
-				{
-					firstname = "Bobby", lastName="Joe"
-				}
+				"John Doe",
+				"Jane Doe",
+				"Bobby Joe"
 			]<br />
 		
 		datagrid.toHTML(data)
@@ -63,15 +47,9 @@
 </blockquote>
 
 <cfset data = [
-		{
-			firstname = "John", lastName= "Doe"
-		},
-		{
-			firstname = "Jane", lastName="Doe"
-		},
-		{
-			firstname = "Bobby", lastName="Joe"
-		}
+		"John Doe",
+		"Jane Doe",
+		"Bobby Joe"
 	] />
 
 <cfoutput>#datagrid.toHTML(data)#</cfoutput>

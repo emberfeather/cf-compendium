@@ -1,36 +1,156 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<cffunction name="testAddColumnSansLabel" access="public" returntype="void" output="false">
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc..resource.structure.datagrid').init() />
-		
-		<cftry>
-			<cfset datagrid.addColumn("") />
-			
-			<cfset fail("No column name was defined.") />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<cffunction name="testAddColumnWithLabel" access="public" returntype="void" output="false">
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc..resource.structure.datagrid').init() />
-		
-		<cfset datagrid.addColumn("testCol") />
-		
-		<cfset assertEquals("testCol", datagrid.getColumnList()) />
-	</cffunction>
-	
 	<cffunction name="testAddColumnWithOptions" access="public" returntype="void" output="false">
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc..resource.structure.datagrid').init() />
-		<cfset var options = {
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		
+		<cfset datagrid.addColumn({
 				label = "First Name"
-			} />
-
-		<cfset datagrid.addColumn("testCol", options) />
+			}) />
+	</cffunction>
+	
+	<!---
+		Test the calculate derived with simple array for the currentRow
+	--->
+	<cffunction name="testCalculateDerivedArrayCurrentRow" access="public" returntype="void" output="false">
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		<cfset var data = '' />
+		
+		<cfset makePublic(datagrid, 'calculateDerived') />
+		
+		<cfset data = [ 11, 22, 33, 44 ] />
+		
+		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', '', data, 4)) />
+	</cffunction>
+	
+	<!---
+		Test the calculate derived with simple array for a running sum
+	--->
+	<cffunction name="testCalculateDerivedArrayRunningSum" access="public" returntype="void" output="false">
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		<cfset var data = '' />
+		
+		<cfset makePublic(datagrid, 'calculateDerived') />
+		
+		<cfset data = [ 11, 22, 33, 44 ] />
+		
+		<cfset assertEquals(110, datagrid.calculateDerived({'sum-' = 66}, 'sum', '', data, 4)) />
+	</cffunction>
+	
+	<!---
+		Test the calculate derived with array of structs for the currentRow
+	--->
+	<cffunction name="testCalculateDerivedArrayStructsCurrentRow" access="public" returntype="void" output="false">
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		<cfset var data = '' />
+		
+		<cfset makePublic(datagrid, 'calculateDerived') />
+		
+		<cfset data = [] />
+		
+		<cfset arrayAppend(data, {
+				value = 1
+			}) />
+		
+		<cfset arrayAppend(data, {
+				value = 2
+			}) />
+		
+		<cfset arrayAppend(data, {
+				value = 3
+			}) />
+		
+		<cfset arrayAppend(data, {
+				value = 4
+			}) />
+		
+		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4)) />
+	</cffunction>
+	
+	<!---
+		Test the calculate derived with array of structs for a running sum
+	--->
+	<cffunction name="testCalculateDerivedArrayStructsRunningSum" access="public" returntype="void" output="false">
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		<cfset var data = '' />
+		
+		<cfset makePublic(datagrid, 'calculateDerived') />
+		
+		<cfset data = [] />
+		
+		<cfset arrayAppend(data, {
+				value = 1
+			}) />
+		
+		<cfset arrayAppend(data, {
+				value = 2
+			}) />
+		
+		<cfset arrayAppend(data, {
+				value = 3
+			}) />
+		
+		<cfset arrayAppend(data, {
+				value = 4
+			}) />
+		
+		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4)) />
+	</cffunction>
+	
+	<!---
+		Test the calculate derived with query for the currentRow
+	--->
+	<cffunction name="testCalculateDerivedQueryCurrentRow" access="public" returntype="void" output="false">
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		<cfset var data = '' />
+		
+		<cfset makePublic(datagrid, 'calculateDerived') />
+		
+		<cfset data = queryNew('value') />
+		
+		<cfset queryAddRow(data) />
+		<cfset querySetCell(data, 'value', 1) />
+		
+		<cfset queryAddRow(data) />
+		<cfset querySetCell(data, 'value', 2) />
+		
+		<cfset queryAddRow(data) />
+		<cfset querySetCell(data, 'value', 3) />
+		
+		<cfset queryAddRow(data) />
+		<cfset querySetCell(data, 'value', 4) />
+		
+		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4)) />
+	</cffunction>
+	
+	<!---
+		Test the calculate derived with query for a running sum
+	--->
+	<cffunction name="testCalculateDerivedQueryRunningSum" access="public" returntype="void" output="false">
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		<cfset var data = '' />
+		
+		<cfset makePublic(datagrid, 'calculateDerived') />
+		
+		<cfset data = queryNew('value') />
+		
+		<cfset queryAddRow(data) />
+		<cfset querySetCell(data, 'value', 1) />
+		
+		<cfset queryAddRow(data) />
+		<cfset querySetCell(data, 'value', 2) />
+		
+		<cfset queryAddRow(data) />
+		<cfset querySetCell(data, 'value', 3) />
+		
+		<cfset queryAddRow(data) />
+		<cfset querySetCell(data, 'value', 4) />
+		
+		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4)) />
 	</cffunction>
 </cfcomponent>

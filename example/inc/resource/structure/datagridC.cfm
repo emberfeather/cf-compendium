@@ -63,52 +63,46 @@
 <blockquote>
 	<code>
 		datagrid.addColumn({
-				class = 'phantom align-right'
+				key = 'Email',
+				label = 'Email Address'
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
-		class = 'phantom align-right'
+		key = 'Email',
+		label = 'Email Address'
 	}) />
 
 <h2>toHTML(data[, options])</h2>
 
 <blockquote>
 	<code>
-		data = [
-				{
-					firstname = "John",
-					lastName= "Doe"
-				},
-				{
-					firstname = "Jane",
-					lastName="Doe"
-				},
-				{
-					firstname = "Bobby",
-					lastName="Joe"
-				}
-			]<br />
+		
+		data = queryNew('FirstName,LastName,Email')<br />
+		
+		from="1" to="2000" index="i"<br />
+			queryAddRow(data)<br />
+			
+			querySetCell(data, 'FirstName', ( randRange(0,100) GT 50 ? 'John' : 'Jane' ) & i )<br />
+			querySetCell(data, 'LastName', ( randRange(0,100) GT 50 ? 'Doe' : 'Downey' ) & i )<br />
+			querySetCell(data, 'Value', randRange(0,100))<br />
+			querySetCell(data, 'Email', ( randRange(0,100) GT 50 ? 'Duck' : 'Goose' ) & i & '@example.com' )<br />
 		
 		datagrid.toHTML(data)
 	</code>
 </blockquote>
 
-<cfset data = [
-		{
-			firstname = "John",
-			lastName= "Doe"
-		},
-		{
-			firstname = "Jane",
-			lastName="Doe"
-		},
-		{
-			firstname = "Bobby",
-			lastName="Joe"
-		}
-	] />
+<cfset data = queryNew('FirstName,LastName,Value,Email') />
+
+<cfloop from="1" to="2000" index="i">
+	<cfset queryAddRow(data) />
+	
+	<cfset querySetCell(data, 'FirstName', ( randRange(0,100) GT 50 ? 'John' : 'Jane' ) & i ) />
+	<cfset querySetCell(data, 'LastName', ( randRange(0,100) GT 50 ? 'Doe' : 'Downey' ) & i ) />
+	<cfset querySetCell(data, 'Value', randRange(0,100)) />
+	<cfset querySetCell(data, 'Email', ( randRange(0,100) GT 50 ? 'Duck' : 'Goose' ) & i & '@example.com' ) />
+</cfloop>
 
 <cfoutput>#datagrid.toHTML(data)#</cfoutput>
 

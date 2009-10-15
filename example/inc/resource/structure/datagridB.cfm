@@ -63,52 +63,61 @@
 <blockquote>
 	<code>
 		datagrid.addColumn({
-				class = 'phantom align-right'
+				aggregate = 'Sum',
+				key = 'Value',
+				label = 'Value'
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
-		class = 'phantom align-right'
+		aggregate = 'Sum',
+		key = 'Value',
+		label = 'Value'
+	}) />
+
+<blockquote>
+	<code>
+		datagrid.addColumn({
+				derived = 'sum',
+				keys = 'value',
+				label = 'Running Sum'
+			})
+	</code>
+</blockquote>
+
+<cfset datagrid.addColumn({
+		derived = 'sum',
+		keys = 'value',
+		label = 'Running Sum'
 	}) />
 
 <h2>toHTML(data[, options])</h2>
 
 <blockquote>
 	<code>
-		data = [
-				{
-					firstname = "John",
-					lastName= "Doe"
-				},
-				{
-					firstname = "Jane",
-					lastName="Doe"
-				},
-				{
-					firstname = "Bobby",
-					lastName="Joe"
-				}
-			]<br />
+		data = []<br />
+		
+		from="1" to="2000" index="i"<br />
+			person = createObject('component', 'cf-compendium.inc.resource.base.object').init()<br />
+			person.setFirstName(( randRange(0,100) GT 50 ? 'John' : 'Jane' ))<br />
+			person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' ))<br />
+			person.setValue(randRange(0,100))<br />
 		
 		datagrid.toHTML(data)
 	</code>
 </blockquote>
 
-<cfset data = [
-		{
-			firstname = "John",
-			lastName= "Doe"
-		},
-		{
-			firstname = "Jane",
-			lastName="Doe"
-		},
-		{
-			firstname = "Bobby",
-			lastName="Joe"
-		}
-	] />
+<cfset data = [] />
+
+<cfloop from="1" to="40" index="i">
+	<cfset person = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+	<cfset person.setFirstName(( randRange(0,100) GT 50 ? 'Sam' : 'Jane' )) />
+	<cfset person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' )) />
+	<cfset person.setValue(randRange(0,100)) />
+	
+	<cfset arrayAppend(data, person) />
+</cfloop>
 
 <cfoutput>#datagrid.toHTML(data)#</cfoutput>
 
