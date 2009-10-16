@@ -129,8 +129,11 @@
 								<cfif structKeyExists(col, 'aggregate')>
 									<cfset currentKey = col.key & '-' & col.aggregate />
 									
-									<!--- Prime aggregate --->
-									<cfset aggregate[currentKey] = 0 />
+									<cfswitch expression="#col.aggregate#">
+										<cfcase value="sum">
+											<cfset aggregate[currentKey] = 0 />
+										</cfcase>
+									</cfswitch>
 									
 									<!--- Calculate the aggregate --->
 									<cfif isArray(arguments.data)>
@@ -151,6 +154,36 @@
 												<cfcase value="sum">
 													<cfset aggregate[currentKey] += value />
 												</cfcase>
+												
+												<cfcase value="min">
+													<cfif NOT structKeyExists(aggregate, currentKey)>
+														<cfset aggregate[currentKey] = value />
+													</cfif>
+													
+													<cfif value LT aggregate[currentKey]>
+														<cfset aggregate[currentKey] = value />
+													</cfif>
+												</cfcase>
+												
+												<cfcase value="max">
+													<cfif NOT structKeyExists(aggregate, currentKey)>
+														<cfset aggregate[currentKey] = value />
+													</cfif>
+													
+													<cfif value GT aggregate[currentKey]>
+														<cfset aggregate[currentKey] = value />
+													</cfif>
+												</cfcase>
+												
+												<cfcase value="avg">
+													<cfif NOT structKeyExists(aggregate, currentKey)>
+														<cfset aggregate[currentKey] = 0 />
+														<cfset aggregate[currentKey & '-cnt'] = 0 />
+													</cfif>
+													
+													<cfset aggregate[currentKey] += value />
+													<cfset aggregate[currentKey & '-cnt']++ />
+												</cfcase>
 											</cfswitch>
 										</cfloop>
 									<cfelseif isQuery(arguments.data)>
@@ -159,11 +192,47 @@
 												<cfcase value="sum">
 													<cfset aggregate[currentKey] += arguments.data[col.key] />
 												</cfcase>
+												
+												<cfcase value="min">
+													<cfif NOT structKeyExists(aggregate, currentKey)>
+														<cfset aggregate[currentKey] = arguments.data[col.key] />
+													</cfif>
+													
+													<cfif value LT aggregate[currentKey]>
+														<cfset aggregate[currentKey] = arguments.data[col.key] />
+													</cfif>
+												</cfcase>
+												
+												<cfcase value="max">
+													<cfif NOT structKeyExists(aggregate, currentKey)>
+														<cfset aggregate[currentKey] = arguments.data[col.key] />
+													</cfif>
+													
+													<cfif value GT aggregate[currentKey]>
+														<cfset aggregate[currentKey] = arguments.data[col.key] />
+													</cfif>
+												</cfcase>
+												
+												<cfcase value="avg">
+													<cfif NOT structKeyExists(aggregate, currentKey)>
+														<cfset aggregate[currentKey] = 0 />
+														<cfset aggregate[currentKey & '-cnt'] = 0 />
+													</cfif>
+													
+													<cfset aggregate[currentKey] += arguments.data[col.key] />
+													<cfset aggregate[currentKey & '-cnt']++ />
+												</cfcase>
 											</cfswitch>
 										</cfloop>
 									<cfelse>
 										<cfthrow message="The data type passed in is not supported." detail="The type of the data passed in is not a query or array.">
 									</cfif>
+									
+									<cfswitch expression="#col.aggregate#">
+										<cfcase value="avg">
+											<cfset aggregate[currentKey] /= aggregate[currentKey & '-cnt'] />
+										</cfcase>
+									</cfswitch>
 									
 									#aggregate[currentKey]#
 								<cfelse>

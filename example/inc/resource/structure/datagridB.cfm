@@ -65,7 +65,7 @@
 		datagrid.addColumn({
 				aggregate = 'Sum',
 				key = 'Value',
-				label = 'Value'
+				label = 'Sum'
 			})
 	</code>
 </blockquote>
@@ -73,7 +73,55 @@
 <cfset datagrid.addColumn({
 		aggregate = 'Sum',
 		key = 'Value',
-		label = 'Value'
+		label = 'Sum'
+	}) />
+
+<blockquote>
+	<code>
+		datagrid.addColumn({
+				aggregate = 'Avg',
+				key = 'Value',
+				label = 'Avg'
+			})
+	</code>
+</blockquote>
+
+<cfset datagrid.addColumn({
+		aggregate = 'Avg',
+		key = 'Value',
+		label = 'Avg'
+	}) />
+
+<blockquote>
+	<code>
+		datagrid.addColumn({
+				aggregate = 'Min',
+				key = 'Value',
+				label = 'Min'
+			})
+	</code>
+</blockquote>
+
+<cfset datagrid.addColumn({
+		aggregate = 'Min',
+		key = 'Value',
+		label = 'Min'
+	}) />
+
+<blockquote>
+	<code>
+		datagrid.addColumn({
+				aggregate = 'Max',
+				key = 'Value',
+				label = 'Max'
+			})
+	</code>
+</blockquote>
+
+<cfset datagrid.addColumn({
+		aggregate = 'Max',
+		key = 'Value',
+		label = 'Max'
 	}) />
 
 <blockquote>
@@ -92,6 +140,20 @@
 		label = 'Running Sum'
 	}) />
 
+<blockquote>
+	<code>
+		datagrid.addColumn({
+				class = 'phantom',
+				key = 'action'
+			})
+	</code>
+</blockquote>
+
+<cfset datagrid.addColumn({
+		class = 'phantom align-right',
+		key = 'action'
+	}) />
+
 <h2>toHTML(data[, options])</h2>
 
 <blockquote>
@@ -103,6 +165,7 @@
 			person.setFirstName(( randRange(0,100) GT 50 ? 'John' : 'Jane' ))<br />
 			person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' ))<br />
 			person.setValue(randRange(0,100))<br />
+			person.setAction('&lt;a href="#"&gt;Action&lt;/a&gt')<br />
 		
 		datagrid.toHTML(data)
 	</code>
@@ -115,6 +178,7 @@
 	<cfset person.setFirstName(( randRange(0,100) GT 50 ? 'Sam' : 'Jane' )) />
 	<cfset person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' )) />
 	<cfset person.setValue(randRange(0,100)) />
+	<cfset person.setAction('<a href="##">Action</a>') />
 	
 	<cfset arrayAppend(data, person) />
 </cfloop>

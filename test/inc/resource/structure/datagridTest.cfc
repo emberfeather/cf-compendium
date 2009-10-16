@@ -41,6 +41,77 @@
 	<!---
 		Test the calculate derived with array of structs for the currentRow
 	--->
+	<cffunction name="testCalculateDerivedArrayObjectsCurrentRow" access="public" returntype="void" output="false">
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		<cfset var data = '' />
+		<cfset var obj = '' />
+		
+		<cfset makePublic(datagrid, 'calculateDerived') />
+		
+		<cfset data = [] />
+		
+		<cfset obj = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset obj.setValue(1) />
+		
+		<cfset arrayAppend(data, obj) />
+		
+		<cfset obj = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset obj.setValue(2) />
+		
+		<cfset arrayAppend(data, obj) />
+		
+		<cfset obj = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset obj.setValue(3) />
+		
+		<cfset arrayAppend(data, obj) />
+		
+		<cfset obj = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset obj.setValue(4) />
+		
+		<cfset arrayAppend(data, obj) />
+		
+		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4)) />
+	</cffunction>
+	
+	<!---
+		Test the calculate derived with array of structs for a running sum
+	--->
+	<cffunction name="testCalculateDerivedArrayObjectsRunningSum" access="public" returntype="void" output="false">
+		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+		<cfset var data = '' />
+		
+		<cfset makePublic(datagrid, 'calculateDerived') />
+		
+		<cfset data = [] />
+		
+		<cfset obj = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset obj.setValue(1) />
+		
+		<cfset arrayAppend(data, obj) />
+		
+		<cfset obj = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset obj.setValue(2) />
+		
+		<cfset arrayAppend(data, obj) />
+		
+		<cfset obj = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset obj.setValue(3) />
+		
+		<cfset arrayAppend(data, obj) />
+		
+		<cfset obj = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<cfset obj.setValue(4) />
+		
+		<cfset arrayAppend(data, obj) />
+		
+		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4)) />
+	</cffunction>
+	
+	<!---
+		Test the calculate derived with array of structs for the currentRow
+	--->
 	<cffunction name="testCalculateDerivedArrayStructsCurrentRow" access="public" returntype="void" output="false">
 		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
 		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
