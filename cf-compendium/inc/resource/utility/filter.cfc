@@ -153,7 +153,7 @@
 		<cfset var filter = '' />
 		
 		<!--- Check to make sure we have filters to display --->
-		<cfif NOT variables.numFilters>
+		<cfif NOT length()>
 			<cfthrow message="Missing filters" detail="Cannot generate filter html without filters" />
 		</cfif>
 		
@@ -166,7 +166,7 @@
 					<cfset html &= filterText(filter) />
 				<cfelse>
 					<!--- Check the number of filters --->
-					<cfif variables.numFilters EQ 1>
+					<cfif length() EQ 1>
 						<!--- 'Smartly' determine what type of output would be best --->
 						<cfswitch expression="#filter.options.length()#">
 							<cfcase value="1">
