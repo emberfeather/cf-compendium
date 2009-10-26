@@ -6,6 +6,9 @@
 		<cfset variables.filters = [] />
 		<cfset variables.numFilters = 0 />
 		
+		<!--- Reset the current page for the filter --->
+		<cfset arguments.theURL.setFilter('onPage', 1) />
+		
 		<cfreturn this />
 	</cffunction>
 	
@@ -198,7 +201,7 @@
 		</cfloop>
 		
 		<!--- Wrap with the filter div --->
-		<cfset html = '<div class="filter"><form method="POST" action="' & variables.theURL.get() & '">' & html & '<input type="submit" value="filter"></form></div>' />
+		<cfset html = '<div class="filter"><form method="POST" action="' & variables.theURL.getFilter() & '">' & html & '<input type="submit" value="filter"></form></div>' />
 		
 		<cfreturn html />
 	</cffunction>
