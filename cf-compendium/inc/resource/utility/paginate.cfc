@@ -120,12 +120,9 @@
 		<cfset variables.total = arguments.total />
 		
 		<!--- Validate numPerPage --->
-		<cfif arguments.numPerPage LT 0>
-			<cfthrow message="Invalid number of rows per page" detail="The number of rows per page cannot be less than 0" />
-		</cfif>
-		
-		<cfif arguments.numPerPage GT 100>
-			<cfthrow message="Invalid number of rows per page" detail="The number of rows per page cannot be more than 100" />
+		<cfif arguments.numPerPage LTE 0 OR arguments.numPerPage GT 1000>
+			<!--- Use a default value --->
+			<cfset arguments.numPerPage = 30 />
 		</cfif>
 		
 		<cfset variables.numPerPage = arguments.numPerPage />

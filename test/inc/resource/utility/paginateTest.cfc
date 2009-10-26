@@ -5,19 +5,9 @@
 	<cffunction name="testInitFailWithNegativeNumPerPage" access="public" returntype="void" output="false">
 		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate') />
 		
-		<cftry>
-			<cfset paginator.init(100, -1, 1) />
-			
-			<cfset fail('Should not be a valid number per page argument') />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
+		<cfset paginator.init(100, -1, 1) />
+		
+		<cfset assertEquals(30, paginator.getNumPerPage()) />
 	</cffunction>
 	
 	<!---
@@ -26,19 +16,9 @@
 	<cffunction name="testInitFailWithExtremeNumPerPage" access="public" returntype="void" output="false">
 		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate') />
 		
-		<cftry>
-			<cfset paginator.init(100, 101, 1) />
-			
-			<cfset fail('Should not be a valid number per page argument') />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
+		<cfset paginator.init(100, 1001, 1) />
+		
+		<cfset assertEquals(30, paginator.getNumPerPage()) />
 	</cffunction>
 	
 	<!---
