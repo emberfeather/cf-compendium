@@ -89,7 +89,9 @@
 			querySetCell(data, 'Value', randRange(0,100))<br />
 			querySetCell(data, 'Email', ( randRange(0,100) GT 50 ? 'Duck' : 'Goose' ) & i & '@example.com' )<br />
 		
-		datagrid.toHTML(data)
+		datagrid.toHTML(data, {
+				numPerPage = 2000
+			})
 	</code>
 </blockquote>
 
@@ -104,7 +106,9 @@
 	<cfset querySetCell(data, 'Email', ( randRange(0,100) GT 50 ? 'Duck' : 'Goose' ) & i & '@example.com' ) />
 </cfloop>
 
-<cfoutput>#datagrid.toHTML(data)#</cfoutput>
+<cfoutput>#datagrid.toHTML(data, {
+		numPerPage = 2000
+	})#</cfoutput>
 
 <h2>JavaScript</h2>
 

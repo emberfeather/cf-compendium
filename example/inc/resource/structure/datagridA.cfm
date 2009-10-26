@@ -91,7 +91,9 @@
 				}
 			]<br />
 		
-		datagrid.toHTML(data)
+		datagrid.toHTML(data, {
+				numPerPage = 2000
+			})
 	</code>
 </blockquote>
 
@@ -110,7 +112,9 @@
 		}
 	] />
 
-<cfoutput>#datagrid.toHTML(data)#</cfoutput>
+<cfoutput>#datagrid.toHTML(data, {
+		numPerPage = 2000
+	})#</cfoutput>
 
 <h2>JavaScript</h2>
 

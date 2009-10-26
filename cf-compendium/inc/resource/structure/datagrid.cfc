@@ -30,6 +30,7 @@
 		<cfargument name="keys" type="string" required="true" />
 		<cfargument name="data" type="any" required="true" />
 		<cfargument name="row" type="numeric" required="true" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var currentKey = '' />
 		<cfset var key = '' />
@@ -38,7 +39,7 @@
 		
 		<cfswitch expression="#arguments.type#">
 			<cfcase value="currentRow">
-				<cfreturn arguments.row />
+				<cfreturn arguments.row + arguments.options.startRow - 1 />
 			</cfcase>
 			
 			<cfcase value="sum">
@@ -84,8 +85,9 @@
 		<cfset var currentKey = '' />
 		<cfset var defaults = {
 				class = '',
-				startingRow = 1,
-				minimumRows = 15
+				minimumRows = 15,
+				numPerPage = 30,
+				startRow = 1
 			} />
 		<cfset var derived = {} />
 		<cfset var html = '' />
@@ -246,19 +248,21 @@
 		</cfif>
 		
 		<cfsavecontent variable="html">
-			<cfoutput>
-				<table class="datagrid #arguments.options.class#">
+			<table class="datagrid #arguments.options.class#">
+				<cfoutput>
 					<thead>
 						#htmlColumns#
 						#htmlAggregates#
 					</thead>
-					<tbody>
-						<cfif isArray(arguments.data)>
-							<cfset row = 0 />
+				</cfoutput>
+				<tbody>
+					<cfif isArray(arguments.data)>
+						<cfset row = 0 />
+						
+						<cfloop array="#arguments.data#" index="item">
+							<cfset row++ />
 							
-							<cfloop array="#arguments.data#" index="item">
-								<cfset row++ />
-								
+							<cfoutput>
 								<tr>
 									<cfif isObject(item)>
 										<cfset counter = 0 />
@@ -270,7 +274,7 @@
 													
 													#result#
 												<cfelseif structKeyExists(col, 'derived')>
-													#calculateDerived( derived, col.derived, col.keys, data, row )#
+													#calculateDerived( derived, col.derived, col.keys, data, row, arguments.options )#
 												<cfelse>
 													&nbsp;
 												</cfif>
@@ -284,7 +288,7 @@
 												<cfif col.key NEQ ''>
 													#item[col.key]#
 												<cfelseif structKeyExists(col, 'derived')>
-													#calculateDerived( derived, col.derived, col.keys, data, row )#
+													#calculateDerived( derived, col.derived, col.keys, data, row, arguments.options )#
 												<cfelse>
 													&nbsp;
 												</cfif>
@@ -298,42 +302,52 @@
 										<cfthrow message="The data type passed in is not suported." detail="The type of the data in the array is not of type struct, object or simpleValue.">
 									</cfif>
 								</tr>
-							</cfloop>
-						<cfelseif isQuery(arguments.data)>
-							<cfloop query="arguments.data">
-								<tr>
-									<cfset counter = 0 />
-									
-									<cfloop array="#variables.columns#" index="col">
-										<td class="#col.key# #col.class# column-#counter++#">
-											<cfif col.key NEQ ''>
-												#arguments.data[col.key]#
-											<cfelseif structKeyExists(col, 'derived')>
-												#calculateDerived( derived, col.derived, col.keys, data, arguments.data.currentRow )#
-											<cfelse>
-												&nbsp;
-											</cfif>
-										</td>
-									</cfloop>
-								</tr>
-							</cfloop>
-						<cfelse>
-							<cfthrow message="The data type passed in is not supported." detail="The type of the data passed in is not a query or array.">
-						</cfif>
-					</tbody>
-					<!--- Show footer --->
-					<cfif arguments.options['minimumRows'] GT 0
-						AND (
-							(isArray(arguments.data) AND arrayLen(arguments.data) GTE arguments.options['minimumRows'])
-							OR (isQuery(arguments.data) AND arguments.data.recordCount GTE arguments.options['minimumRows'])
-						)>
+							</cfoutput>
+							
+							<!--- Check if we have enough rows displayed --->
+							<cfif row GTE arguments.options.numPerPage>
+								<cfbreak />
+							</cfif>
+						</cfloop>
+					<cfelseif isQuery(arguments.data)>
+						<cfset row = 0 />
+						
+						<cfoutput query="arguments.data" startrow="#arguments.options.startRow#" maxrows="#arguments.options.numPerPage#">
+							<cfset row++ />
+							<tr>
+								<cfset counter = 0 />
+								
+								<cfloop array="#variables.columns#" index="col">
+									<td class="#col.key# #col.class# column-#counter++#">
+										<cfif col.key NEQ ''>
+											#arguments.data[col.key]#
+										<cfelseif structKeyExists(col, 'derived')>
+											#calculateDerived( derived, col.derived, col.keys, data, row, arguments.options )#
+										<cfelse>
+											&nbsp;
+										</cfif>
+									</td>
+								</cfloop>
+							</tr>
+						</cfoutput>
+					<cfelse>
+						<cfthrow message="The data type passed in is not supported." detail="The type of the data passed in is not a query or array.">
+					</cfif>
+				</tbody>
+				<!--- Show footer --->
+				<cfif arguments.options['minimumRows'] GT 0
+					AND (
+						(isArray(arguments.data) AND arrayLen(arguments.data) GTE arguments.options['minimumRows'])
+						OR (isQuery(arguments.data) AND arguments.data.recordCount GTE arguments.options['minimumRows'])
+					)>
+					<cfoutput>
 						<tfoot>
 							#htmlAggregates#
 							#htmlColumns#
 						</tfoot>
-					</cfif>
-				</table>
-			</cfoutput>
+					</cfoutput>
+				</cfif>
+			</table>
 		</cfsavecontent>
 		
 		<cfreturn html />

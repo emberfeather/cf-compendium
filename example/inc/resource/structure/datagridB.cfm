@@ -160,14 +160,16 @@
 	<code>
 		data = []<br />
 		
-		from="1" to="2000" index="i"<br />
+		from="1" to="40" index="i"<br />
 			person = createObject('component', 'cf-compendium.inc.resource.base.object').init()<br />
 			person.setFirstName(( randRange(0,100) GT 50 ? 'John' : 'Jane' ))<br />
 			person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' ))<br />
 			person.setValue(randRange(0,100))<br />
 			person.setAction('&lt;a href="#"&gt;Action&lt;/a&gt')<br />
 		
-		datagrid.toHTML(data)
+		datagrid.toHTML(data, {
+				numPerPage = 40
+			})
 	</code>
 </blockquote>
 
@@ -183,7 +185,9 @@
 	<cfset arrayAppend(data, person) />
 </cfloop>
 
-<cfoutput>#datagrid.toHTML(data)#</cfoutput>
+<cfoutput>#datagrid.toHTML(data, {
+		numPerPage = 40
+	})#</cfoutput>
 
 <h2>JavaScript</h2>
 
