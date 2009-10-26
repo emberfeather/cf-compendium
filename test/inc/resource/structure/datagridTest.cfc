@@ -20,7 +20,7 @@
 		
 		<cfset data = [ 11, 22, 33, 44 ] />
 		
-		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', '', data, 4)) />
+		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', '', data, 4, { startRow = 1 })) />
 	</cffunction>
 	
 	<!---
@@ -35,7 +35,7 @@
 		
 		<cfset data = [ 11, 22, 33, 44 ] />
 		
-		<cfset assertEquals(110, datagrid.calculateDerived({'sum-' = 66}, 'sum', '', data, 4)) />
+		<cfset assertEquals(110, datagrid.calculateDerived({'sum-' = 66}, 'sum', '', data, 4, { startRow = 1 })) />
 	</cffunction>
 	
 	<!---
@@ -71,7 +71,7 @@
 		
 		<cfset arrayAppend(data, obj) />
 		
-		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4)) />
+		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4, { startRow = 1 })) />
 	</cffunction>
 	
 	<!---
@@ -106,7 +106,7 @@
 		
 		<cfset arrayAppend(data, obj) />
 		
-		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4)) />
+		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4, { startRow = 1 })) />
 	</cffunction>
 	
 	<!---
@@ -137,7 +137,7 @@
 				value = 4
 			}) />
 		
-		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4)) />
+		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4, { startRow = 1 })) />
 	</cffunction>
 	
 	<!---
@@ -168,7 +168,7 @@
 				value = 4
 			}) />
 		
-		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4)) />
+		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4, { startRow = 1 })) />
 	</cffunction>
 	
 	<!---
@@ -195,7 +195,7 @@
 		<cfset queryAddRow(data) />
 		<cfset querySetCell(data, 'value', 4) />
 		
-		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4)) />
+		<cfset assertEquals(4, datagrid.calculateDerived({}, 'currentRow', 'value', data, 4, { startRow = 1 })) />
 	</cffunction>
 	
 	<!---
@@ -222,6 +222,6 @@
 		<cfset queryAddRow(data) />
 		<cfset querySetCell(data, 'value', 4) />
 		
-		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4)) />
+		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4, { startRow = 1 })) />
 	</cffunction>
 </cfcomponent>
