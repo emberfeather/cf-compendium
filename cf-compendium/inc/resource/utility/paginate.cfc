@@ -120,9 +120,9 @@
 		<cfset variables.total = arguments.total />
 		
 		<!--- Validate numPerPage --->
-		<cfif arguments.numPerPage LTE 0 OR arguments.numPerPage GT 1000>
+		<cfif arguments.numPerPage LTE 0>
 			<!--- Use a default value --->
-			<cfset arguments.numPerPage = 30 />
+			<cfset arguments.numPerPage = 20 />
 		</cfif>
 		
 		<cfset variables.numPerPage = arguments.numPerPage />

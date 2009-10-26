@@ -7,18 +7,7 @@
 		
 		<cfset paginator.init(100, -1, 1) />
 		
-		<cfset assertEquals(30, paginator.getNumPerPage()) />
-	</cffunction>
-	
-	<!---
-		Tests the init function with a negative number per page to ensure it fails
-	--->
-	<cffunction name="testInitFailWithExtremeNumPerPage" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate') />
-		
-		<cfset paginator.init(100, 1001, 1) />
-		
-		<cfset assertEquals(30, paginator.getNumPerPage()) />
+		<cfset assertEquals(20, paginator.getNumPerPage()) />
 	</cffunction>
 	
 	<!---
