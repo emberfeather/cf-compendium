@@ -17,8 +17,8 @@
 
 .pagination li {
 	float: left;
-	margin-right: .5em;
 	line-height: 2em;
+	margin: 0 .5em 0 0;
 }
 
 .pagination a {
