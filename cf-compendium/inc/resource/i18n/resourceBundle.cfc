@@ -64,6 +64,15 @@
 	</cffunction>
 	
 	<!---
+		Returns true if the key exists in the bundle
+	--->
+	<cffunction name="hasKey" access="public" returntype="boolean" output="false">
+		<cfargument name="key" type="string" required="true" />
+		
+		<cfreturn structKeyExists(variables.bundle, arguments.key) />
+	</cffunction>
+	
+	<!---
 		Adds a trailing slash if needed
 	--->
 	<cffunction name="normalizePath" access="private" returntype="string" output="false">

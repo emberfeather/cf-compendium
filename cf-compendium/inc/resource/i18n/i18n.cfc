@@ -92,17 +92,15 @@
 			
 			<!--- Check the bundle path --->
 			<cfif NOT directoryExists(bundlePath)>
-				<!--- Try just expanding the path --->
-				<cfset bundlePath = expandPath(arguments.path) />
-				
-				<!--- Resort to the base dir with an append --->
-				<cfif NOT directoryExists(bundlePath)>
+				<!--- Try searching for the path --->
+				<cfif directoryExists(variables.baseDirectory & arguments.path)>
 					<cfset bundlePath = variables.baseDirectory & arguments.path />
-					
-					<!--- Resort to the base dir with an append --->
-					<cfif NOT directoryExists(bundlePath)>
-						<cfthrow message="Bundle directory not found." detail="The bundle directory was not found at #bundlePath#" />
-					</cfif>
+				<cfelseif directoryExists(expandPath(arguments.path))>
+					<cfset bundlePath = expandPath(arguments.path) />
+				<cfelseif directoryExists(expandPath('/' & arguments.path))>
+					<cfset bundlePath = expandPath('/' & arguments.path) />
+				<cfelse>
+					<cfthrow message="Bundle directory not found." detail="The bundle directory was not found at #bundlePath#" />
 				</cfif>
 			</cfif>
 			
@@ -118,7 +116,7 @@
 	--->
 	<cffunction name="getValidation" access="public" returntype="component" output="false">
 		<cfargument name="locale" type="string" default="en_US" />
-		<cfargument name="bundlePath" type="string" default="/cf-compendium/i18n/resource/utility" />
+		<cfargument name="bundlePath" type="string" default="/cf-compendium/i18n/inc/resource/utility" />
 		<cfargument name="bundleName" type="string" default="validation" />
 		<cfargument name="componentPath" type="string" default="cf-compendium.inc.resource.utility.validation" />
 		
