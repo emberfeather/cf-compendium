@@ -1,12 +1,18 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
 	<cffunction name="init" access="public" returnType="component" output="false">
-		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="i18n" type="component" required="true" />
+		<cfargument name="locale" type="string" default="en_US" />
 		
 		<cfset super.init() />
 		
-		<cfset variables.theURL = arguments.theURL />
+		<cfset variables.i18n = arguments.i18n />
+		<cfset variables.locale = arguments.locale />
 		
 		<cfset variables.columns = [] />
+		<cfset variables.bundles = [] />
+		
+		<!--- Set base bundle for translation --->
+		<cfset addI18NBundle('/cf-compendium/i18n/inc/resource/structure', 'datagrid') />
 		
 		<cfreturn this />
 	</cffunction>
@@ -22,6 +28,13 @@
 			} />
 		
 		<cfset arrayAppend(variables.columns, extend(defaults, arguments.options)) />
+	</cffunction>
+	
+	<cffunction name="addI18NBundle" access="public" returntype="void" output="false">
+		<cfargument name="path" type="string" required="true" />
+		<cfargument name="name" type="string" required="true" />
+		
+		<cfset arrayAppend(variables.bundles, variables.i18n.getResourceBundle(arguments.path, arguments.name, variables.locale)) />
 	</cffunction>
 	
 	<cffunction name="calculateDerived" access="private" returntype="string" output="false">
@@ -75,6 +88,26 @@
 		<cfreturn '' />
 	</cffunction>
 	
+	<cffunction name="getLabel" access="public" returntype="string" output="false">
+		<cfargument name="key" type="string" required="true" />
+		
+		<cfset var i = '' />
+		
+		<!--- Check for no label --->
+		<cfif arguments.key EQ ''>
+			<cfreturn '' />
+		</cfif>
+		
+		<!--- Find the first (LIFO) value for the label --->
+		<cfloop from="#arrayLen(variables.bundles)#" to="1" index="i" step="-1">
+			<cfif variables.bundles[i].hasKey(arguments.key)>
+				<cfreturn variables.bundles[i].getValue(arguments.key) />
+			</cfif>
+		</cfloop>
+		
+		<cfreturn '' />
+	</cffunction>
+	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="data" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
@@ -108,7 +141,7 @@
 					
 					<cfloop array="#variables.columns#" index="col">
 						<th class="col #col.key# #col.class# column-#counter++#">
-							#col.label#
+							#getLabel(col.label)#
 						</th>
 						
 						<cfif structKeyExists(col, 'aggregate')>

@@ -6,13 +6,27 @@
 
 <blockquote>
 	<code>
-		theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init()<br />
-		datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL)
+		i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init( expandPath('/i18n/') )<br />
+		datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n)
 	</code>
 </blockquote>
 
-<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-<cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
+<cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n) />
+
+<h2>addI18NBundle([options])</h2>
+
+<p>
+	Adds an i18n bundle for label translation.
+</p>
+
+<blockquote>
+	<code>
+		datagrid.addI18NBundle('inc/resource/structure', 'datagrid')
+	</code>
+</blockquote>
+
+<cfset datagrid.addI18NBundle('inc/resource/structure', 'datagrid') />
 
 <h2>addColumn([options])</h2>
 
@@ -36,42 +50,42 @@
 	<code>
 		datagrid.addColumn({
 				key = 'FirstName',
-				label = 'First Name'
+				label = 'firstName'
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
 		key = 'FirstName',
-		label = 'First Name'
+		label = 'firstName'
 	}) />
 
 <blockquote>
 	<code>
 		datagrid.addColumn({
 				key = 'LastName',
-				label = 'Last Name'
+				label = 'lastName'
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
 		key = 'LastName',
-		label = 'Last Name'
+		label = 'lastName'
 	}) />
 
 <blockquote>
 	<code>
 		datagrid.addColumn({
 				key = 'Email',
-				label = 'Email Address'
+				label = 'email'
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
 		key = 'Email',
-		label = 'Email Address'
+		label = 'email'
 	}) />
 
 <h2>toHTML(data[, options])</h2>

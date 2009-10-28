@@ -6,13 +6,27 @@
 
 <blockquote>
 	<code>
-		theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init()<br />
-		datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL)
+		i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init( expandPath('/i18n/') )<br />
+		datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n)
 	</code>
 </blockquote>
 
-<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-<cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
+<cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n) />
+
+<h2>addI18NBundle([options])</h2>
+
+<p>
+	Adds an i18n bundle for label translation.
+</p>
+
+<blockquote>
+	<code>
+		datagrid.addI18NBundle('inc/resource/structure', 'datagrid')
+	</code>
+</blockquote>
+
+<cfset datagrid.addI18NBundle('inc/resource/structure', 'datagrid') />
 
 <h2>addColumn([options])</h2>
 
@@ -36,28 +50,28 @@
 	<code>
 		datagrid.addColumn({
 				key = 'FirstName',
-				label = 'First Name'
+				label = 'firstName'
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
 		key = 'FirstName',
-		label = 'First Name'
+		label = 'firstName'
 	}) />
 
 <blockquote>
 	<code>
 		datagrid.addColumn({
 				key = 'LastName',
-				label = 'Last Name'
+				label = 'lastName'
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
 		key = 'LastName',
-		label = 'Last Name'
+		label = 'lastName'
 	}) />
 
 <blockquote>
@@ -65,7 +79,7 @@
 		datagrid.addColumn({
 				aggregate = 'Sum',
 				key = 'Value',
-				label = 'Sum'
+				label = 'sum'
 			})
 	</code>
 </blockquote>
@@ -73,7 +87,7 @@
 <cfset datagrid.addColumn({
 		aggregate = 'Sum',
 		key = 'Value',
-		label = 'Sum'
+		label = 'sum'
 	}) />
 
 <blockquote>
@@ -81,7 +95,7 @@
 		datagrid.addColumn({
 				aggregate = 'Avg',
 				key = 'Value',
-				label = 'Avg'
+				label = 'avg'
 			})
 	</code>
 </blockquote>
@@ -89,7 +103,7 @@
 <cfset datagrid.addColumn({
 		aggregate = 'Avg',
 		key = 'Value',
-		label = 'Avg'
+		label = 'avg'
 	}) />
 
 <blockquote>
@@ -97,7 +111,7 @@
 		datagrid.addColumn({
 				aggregate = 'Min',
 				key = 'Value',
-				label = 'Min'
+				label = 'min'
 			})
 	</code>
 </blockquote>
@@ -105,7 +119,7 @@
 <cfset datagrid.addColumn({
 		aggregate = 'Min',
 		key = 'Value',
-		label = 'Min'
+		label = 'min'
 	}) />
 
 <blockquote>
@@ -113,7 +127,7 @@
 		datagrid.addColumn({
 				aggregate = 'Max',
 				key = 'Value',
-				label = 'Max'
+				label = 'max'
 			})
 	</code>
 </blockquote>
@@ -121,7 +135,7 @@
 <cfset datagrid.addColumn({
 		aggregate = 'Max',
 		key = 'Value',
-		label = 'Max'
+		label = 'max'
 	}) />
 
 <blockquote>
@@ -129,7 +143,7 @@
 		datagrid.addColumn({
 				derived = 'sum',
 				keys = 'value',
-				label = 'Running Sum'
+				label = 'runningSum'
 			})
 	</code>
 </blockquote>
@@ -137,7 +151,7 @@
 <cfset datagrid.addColumn({
 		derived = 'sum',
 		keys = 'value',
-		label = 'Running Sum'
+		label = 'runningSum'
 	}) />
 
 <blockquote>
@@ -150,8 +164,7 @@
 </blockquote>
 
 <cfset datagrid.addColumn({
-		class = 'phantom align-right',
-		key = 'action'
+		class = 'phantom align-right'
 	}) />
 
 <h2>toHTML(data[, options])</h2>
@@ -165,7 +178,6 @@
 			person.setFirstName(( randRange(0,100) GT 50 ? 'John' : 'Jane' ))<br />
 			person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' ))<br />
 			person.setValue(randRange(0,100))<br />
-			person.setAction('&lt;a href="#"&gt;Action&lt;/a&gt')<br />
 		
 		datagrid.toHTML(data, {
 				numPerPage = 40
@@ -180,7 +192,7 @@
 	<cfset person.setFirstName(( randRange(0,100) GT 50 ? 'Sam' : 'Jane' )) />
 	<cfset person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' )) />
 	<cfset person.setValue(randRange(0,100)) />
-	<cfset person.setAction('<a href="##">Action</a>') />
+	<cfset person.setAction('Action') />
 	
 	<cfset arrayAppend(data, person) />
 </cfloop>
