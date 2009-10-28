@@ -122,9 +122,23 @@
 									Examples
 								</a>
 							</dt>
+							
 							<dd>
 								See examples of the components in action!
 							</dd>
+							
+							<!--- Check for a setup utility --->
+							<cfif fileExists(expandPath(pathRoot & 'setup/index.cfm'))>
+								<dt>
+									<a href="<cfoutput>#pathRoot#</cfoutput>setup/">
+										Setup
+									</a>
+								</dt>
+								
+								<dd>
+									Use the setup wizards to setup your projects.
+								</dd>
+							</cfif>
 						</dl>
 					</div>
 					
@@ -135,15 +149,18 @@
 									Profiling
 								</a>
 							</dt>
+							
 							<dd>
 								Test out just how fast the <cfoutput>#project#</cfoutput> components 
 								are on your engine.
 							</dd>
+							
 							<dt>
 								<a href="<cfoutput>#pathRoot#</cfoutput>test/">
 									Unit Tests
 								</a>
 							</dt>
+							
 							<dd>
 								Run the MXUnit Tests in your browser.
 							</dd>
