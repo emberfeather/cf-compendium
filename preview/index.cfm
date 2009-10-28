@@ -1,4 +1,5 @@
 <cfsilent>
+	<cfparam name="project" default="cf-compendium" />
 	<cfparam name="title" default="Home" />
 	<cfparam name="paths" default="" />
 	<cfparam name="pathRoot" default="" />
@@ -14,7 +15,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		
-		<title><cfoutput>#title#</cfoutput> : cf-compendium</title>
+		<title><cfoutput>#title# : #project#</cfoutput></title>
 		
 		<link rel="stylesheet" type="text/css" href="<cfoutput>#pathRoot#</cfoutput>preview/styles/reset.css" media="all" /> 
 		<link rel="stylesheet" type="text/css" href="<cfoutput>#pathRoot#</cfoutput>preview/styles/960.css" media="all" /> 
@@ -25,7 +26,7 @@
 		<div class="container_12">
 			<div id="header">
 				<div class="grid_12">
-					<h1>cf-compendium : <cfoutput>#title#</cfoutput></h1>
+					<h1><cfoutput>#project# : #title#</cfoutput></h1>
 				</div>
 				
 				<div class="clear"><!-- clear --></div>
@@ -64,29 +65,40 @@
 								<cfinclude template="#basePath#/#incFile#">
 							<cfelse>
 								<!--- Remove slashes --->
-								<cfset incFile = replaceList(incFile, '/,\', '.,.') />
+								<cfset incFile = "test." & replaceList(incFile, '/,\', '.,.') />
 								
 								<!--- Remove file extension --->
 								<cfset incFile = left(incFile, len(incFile) - len('.cfc')) />
 								
 								<!--- Create a test suite --->
 								<cfset testSuite = createObject("component","mxunit.framework.TestSuite").TestSuite() />
-								<cfset testSuite.addAll("test." & incFile) />
+								<cfset testSuite.addAll(incFile) />
 								<cfset results = testSuite.run().getResultsOutput('array') />
 								
 								<cfoutput>
 									<cfif arrayLen(results)>
 										<h2>#results[1].component#</h2>
 										
-										<cfloop array="#results#" index="test">
-											<h3 style="color: ##<cfif test.testStatus EQ 'Passed'>090<cfelse>900</cfif>">#test.testStatus# - #test.testName# ( #test.time# ms )</h3>
-											
-											<cfif test.error NEQ ''>
-												<cfdump var="#test.error#" expand="false" />
-											</cfif>
-										</cfloop>
+										<p>
+											The following tests were run:
+										</p>
+										
+										<ul>
+											<cfloop array="#results#" index="test">
+												<li style="color: ##<cfif test.testStatus EQ 'Passed'>090<cfelse>900</cfif>">
+													#test.testStatus# - #test.testName# ( #test.time# ms )
+													
+													<!--- Check if it has an error to show --->
+													<cfif test.error NEQ ''>
+														<cfdump var="#test.error#" expand="false" />
+													</cfif>
+												</li>
+											</cfloop>
+										</ul>
 									<cfelse>
-										<strong>No tests found.</strong>
+										<p>
+											<strong>No MXUnit tests found for #incFile#.</strong>
+										</p>
 									</cfif>
 								</cfoutput>
 							</cfif>
@@ -99,7 +111,7 @@
 				<cfelse>
 					<div class="grid_12">
 						<p>
-							Welcome to the cf-compendium project!
+							Welcome to the <cfoutput>#project#</cfoutput> project!
 						</p>
 					</div>
 					
@@ -124,7 +136,7 @@
 								</a>
 							</dt>
 							<dd>
-								Test out just how fast the cf-compendium components 
+								Test out just how fast the <cfoutput>#project#</cfoutput> components 
 								are on your engine.
 							</dd>
 							<dt>
