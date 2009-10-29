@@ -1,13 +1,14 @@
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="component" output="false">
-		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="i18n" type="component" required="true" />
+		<cfargument name="locale" type="string" default="en_US" />
 		
-		<cfset variables.theURL = arguments.theURL />
+		<cfset variables.i18n = arguments.i18n />
+		<cfset variables.locale = arguments.locale />
+		
+		<cfset variables.bundles = [] />
 		<cfset variables.filters = [] />
 		<cfset variables.numFilters = 0 />
-		
-		<!--- Reset the current page for the filter --->
-		<cfset arguments.theURL.setFilter('onPage', 1) />
 		
 		<cfreturn this />
 	</cffunction>
@@ -17,20 +18,14 @@
 	</cffunction>
 	
 	<cffunction name="addFilter" access="public" returntype="void" output="false">
-		<cfargument name="label" type="string" required="true" />
 		<cfargument name="key" type="string" required="true" />
 		<cfargument name="options" type="component" required="false" />
 		
 		<cfset var filter = {
-				label = trim(arguments.label),
+				label = getLabel(arguments.key),
 				key = trim(arguments.key),
 				options = ''
 			} />
-		
-		<!--- Ensure the label is not blank --->
-		<cfif filter.label EQ ''>
-			<cfthrow message="Cannot have a blank filter label" detail="The filter label was blank" />
-		</cfif>
 		
 		<!--- Ensure the key is not blank --->
 		<cfif filter.key EQ ''>
@@ -49,18 +44,42 @@
 		<cfset variables.numFilters++ />
 	</cffunction>
 	
-	<cffunction name="length" access="public" returntype="numeric" output="false">
-		<cfreturn variables.numFilters />
+	<cffunction name="addI18NBundle" access="public" returntype="void" output="false">
+		<cfargument name="path" type="string" required="true" />
+		<cfargument name="name" type="string" required="true" />
+		
+		<cfset arrayAppend(variables.bundles, variables.i18n.getResourceBundle(arguments.path, arguments.name, variables.locale)) />
+	</cffunction>
+	
+	<cffunction name="getLabel" access="public" returntype="string" output="false">
+		<cfargument name="key" type="string" required="true" />
+		
+		<cfset var i = '' />
+		
+		<!--- Check for no label --->
+		<cfif arguments.key EQ ''>
+			<cfreturn '' />
+		</cfif>
+		
+		<!--- Find the first (LIFO) value for the label --->
+		<cfloop from="#arrayLen(variables.bundles)#" to="1" index="i" step="-1">
+			<cfif variables.bundles[i].hasKey(arguments.key)>
+				<cfreturn variables.bundles[i].getValue(arguments.key) />
+			</cfif>
+		</cfloop>
+		
+		<cfreturn 'N/A' />
 	</cffunction>
 	
 	<cffunction name="filterCheckbox" access="private" returntype="string" output="false">
+		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<cfset var group = '' />
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = variables.theURL.search(arguments.filter.key) />
+		<cfset var value = arguments.theURL.search(arguments.filter.key) />
 		
 		<cfset html &= '<strong>' & filter.label & ':</strong> ' />
 		
@@ -80,13 +99,14 @@
 	</cffunction>
 	
 	<cffunction name="filterRadio" access="private" returntype="string" output="false">
+		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<cfset var group = '' />
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = variables.theURL.search(arguments.filter.key) />
+		<cfset var value = arguments.theURL.search(arguments.filter.key) />
 		
 		<cfset html &= '<strong>' & filter.label & ':</strong> ' />
 		
@@ -106,13 +126,14 @@
 	</cffunction>
 	
 	<cffunction name="filterSelect" access="private" returntype="string" output="false">
+		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<cfset var group = '' />
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = variables.theURL.search(arguments.filter.key) />
+		<cfset var value = arguments.theURL.search(arguments.filter.key) />
 		
 		<cfset html &= '<label><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
 		
@@ -142,18 +163,28 @@
 	</cffunction>
 	
 	<cffunction name="filterText" access="private" returntype="string" output="false">
+		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<cfset var html = '' />
 		
-		<cfset html &= '<label><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & variables.theURL.search(arguments.filter.key) & '" /></label>' />
+		<cfset html &= '<label><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & arguments.theURL.search(arguments.filter.key) & '" /></label>' />
 		
 		<cfreturn html />
 	</cffunction>
 	
+	<cffunction name="length" access="public" returntype="numeric" output="false">
+		<cfreturn variables.numFilters />
+	</cffunction>
+	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
+		<cfargument name="theURL" type="component" required="true" />
+		
 		<cfset var html = '' />
 		<cfset var filter = '' />
+		
+		<!--- Reset the current page for the filter --->
+		<cfset arguments.theURL.setFilter('onPage', 1) />
 		
 		<!--- Check to make sure we have filters to display --->
 		<cfif NOT length()>
@@ -166,30 +197,30 @@
 			<cfif isStruct(filter)>
 				<!--- Check if it is a text filter --->
 				<cfif NOT isObject(filter.options)>
-					<cfset html &= filterText(filter) />
+					<cfset html &= filterText(arguments.theURL, filter) />
 				<cfelse>
 					<!--- Check the number of filters --->
 					<cfif length() EQ 1>
 						<!--- 'Smartly' determine what type of output would be best --->
 						<cfswitch expression="#filter.options.length()#">
 							<cfcase value="1">
-								<cfset html &= filterCheckbox(filter) />
+								<cfset html &= filterCheckbox(arguments.theURL, filter) />
 							</cfcase>
 							<cfcase value="2,3,4">
-								<cfset html &= filterRadio(filter) />
+								<cfset html &= filterRadio(arguments.theURL, filter) />
 							</cfcase>
 							<cfdefaultcase>
-								<cfset html &= filterSelect(filter) />
+								<cfset html &= filterSelect(arguments.theURL, filter) />
 							</cfdefaultcase>
 						</cfswitch>
 					<cfelse>
 						<!--- 'Smartly' determine what type of output would be best --->
 						<cfswitch expression="#filter.options.length()#">
 							<cfcase value="1">
-								<cfset html &= filterCheckbox(filter) />
+								<cfset html &= filterCheckbox(arguments.theURL, filter) />
 							</cfcase>
 							<cfdefaultcase>
-								<cfset html &= filterSelect(filter) />
+								<cfset html &= filterSelect(arguments.theURL, filter) />
 							</cfdefaultcase>
 						</cfswitch>
 					</cfif>
@@ -201,7 +232,7 @@
 		</cfloop>
 		
 		<!--- Wrap with the filter div --->
-		<cfset html = '<div class="filter"><form method="POST" action="' & variables.theURL.getFilter() & '">' & html & '<input type="submit" value="filter"></form></div>' />
+		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theURL.getFilter() & '">' & html & '<input type="submit" value="filter"></form></div>' />
 		
 		<cfreturn html />
 	</cffunction>
