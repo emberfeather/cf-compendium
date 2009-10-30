@@ -10,6 +10,9 @@
 		<cfset variables.filters = [] />
 		<cfset variables.numFilters = 0 />
 		
+		<!--- Set base bundle for translation --->
+		<cfset addI18NBundle('/cf-compendium/i18n/inc/resource/utility', 'filter') />
+		
 		<cfreturn this />
 	</cffunction>
 	
@@ -179,9 +182,12 @@
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var html = '' />
 		<cfset var filter = '' />
+		
+		<cfparam name="arguments.options.submit" default="filter">
 		
 		<!--- Reset the current page for the filter --->
 		<cfset arguments.theURL.setFilter('onPage', 1) />
@@ -232,7 +238,7 @@
 		</cfloop>
 		
 		<!--- Wrap with the filter div --->
-		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theURL.getFilter() & '">' & html & '<input type="submit" value="filter"></form></div>' />
+		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theURL.getFilter() & '">' & html & '<input type="submit" value="' & getLabel(arguments.options.submit) & '"></form></div>' />
 		
 		<cfreturn html />
 	</cffunction>
