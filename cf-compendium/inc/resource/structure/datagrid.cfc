@@ -115,12 +115,17 @@
 		<cfset var link = '' />
 		<cfset var value = '' />
 		
+		<!--- Adjust for the startRow --->
+		<cfset arguments.rowNum += arguments.options.startRow - 1 />
+		
 		<cfsavecontent variable="html">
 			<cfoutput>
 				<cfloop from="1" to="#arrayLen(arguments.column.link)#" index="i">
 					<cfloop list="#structKeyList(arguments.column.link[i])#" index="j">
 						<!--- Get the link value --->
-						<cfif isQuery(arguments.data) AND structKeyExists(arguments.data, j)>
+						<cfif isNumeric(arguments.column.link[i][j])>
+							<cfset value = arguments.column.link[i][j] />
+						<cfelseif isQuery(arguments.data) AND structKeyExists(arguments.data, j)>
 							<cfset value = arguments.data[j][arguments.rowNum] />
 						<cfelseif isObject(arguments.data[arguments.rowNum]) AND arguments.data[arguments.rowNum].hasKey(j)>
 							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#j#" returnvariable="value" />
