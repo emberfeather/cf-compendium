@@ -6,11 +6,13 @@
 
 <blockquote>
 	<code>
+		theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('')<br />
 		i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init( expandPath('/i18n/') )<br />
 		datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n)
 	</code>
 </blockquote>
 
+<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 <cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
 <cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n) />
 
@@ -34,176 +36,191 @@
 	Adds a column to be displayed in the dataGrid.
 </p>
 
-<blockquote>
-	<code>
-		datagrid.addColumn({
-				derived = 'currentRow'
-			})
-	</code>
-</blockquote>
-
-<cfset datagrid.addColumn({
-		derived = 'currentRow'
-	}) />
+<p>
+	Links can use a data key name as the value to use the value from the data.
+</p>
 
 <blockquote>
 	<code>
 		datagrid.addColumn({
 				key = 'FirstName',
-				label = 'firstName'
+				label = 'firstName',
+				link = {
+					'userID' = 'userID'
+				}
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
 		key = 'FirstName',
-		label = 'firstName'
+		label = 'firstName',
+		link = {
+			'userID' = 'userID'
+		}
 	}) />
+
+<p>
+	Links can use hard-coded values if the the value is not the key in the data.
+</p>
 
 <blockquote>
 	<code>
 		datagrid.addColumn({
 				key = 'LastName',
-				label = 'lastName'
+				label = 'lastName',
+				link = {
+					'lastName' = 'Martian'
+				}
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
 		key = 'LastName',
-		label = 'lastName'
-	}) />
-
-<blockquote>
-	<code>
-		datagrid.addColumn({
-				aggregate = 'Sum',
-				key = 'Value',
-				label = 'sum'
-			})
-	</code>
-</blockquote>
-
-<cfset datagrid.addColumn({
-		aggregate = 'Sum',
-		key = 'Value',
-		label = 'sum'
-	}) />
-
-<blockquote>
-	<code>
-		datagrid.addColumn({
-				aggregate = 'Avg',
-				key = 'Value',
-				label = 'avg'
-			})
-	</code>
-</blockquote>
-
-<cfset datagrid.addColumn({
-		aggregate = 'Avg',
-		key = 'Value',
-		label = 'avg'
-	}) />
-
-<blockquote>
-	<code>
-		datagrid.addColumn({
-				aggregate = 'Min',
-				key = 'Value',
-				label = 'min'
-			})
-	</code>
-</blockquote>
-
-<cfset datagrid.addColumn({
-		aggregate = 'Min',
-		key = 'Value',
-		label = 'min'
-	}) />
-
-<blockquote>
-	<code>
-		datagrid.addColumn({
-				aggregate = 'Max',
-				key = 'Value',
-				label = 'max'
-			})
-	</code>
-</blockquote>
-
-<cfset datagrid.addColumn({
-		aggregate = 'Max',
-		key = 'value',
-		label = 'max'
-	}) />
-
-<blockquote>
-	<code>
-		datagrid.addColumn({
-				derived = 'sum',
-				key = 'value',
-				label = 'runningSum'
-			})
-	</code>
-</blockquote>
-
-<cfset datagrid.addColumn({
-		derived = 'sum',
-		key = 'value',
-		label = 'runningSum'
+		label = 'lastName',
+		link = {
+			'lastName' = 'Martian'
+		}
 	}) />
 
 <p>
-	A value can be given as a key from the i18n labels.
+	Links can have multiple keys changed each row.
 </p>
 
 <blockquote>
 	<code>
 		datagrid.addColumn({
 				class = 'phantom align-right',
-				value = 'action'
+				value = 'action',
+				link = {
+					'userID' = 'userID',
+					'action' = 'action'
+				}
 			})
 	</code>
 </blockquote>
 
 <cfset datagrid.addColumn({
 		class = 'phantom align-right',
-		value = 'action'
+		value = 'action',
+		link = {
+			'userID' = 'userID',
+			'action' = 'action'
+		}
+	}) />
+
+<p>
+	Can also have multiple links with labels from the i18n or columns as the values
+	with multiple keys changes each row.
+</p>
+
+<p>
+	Links are able to also have classes associated with them.
+</p>
+
+<blockquote>
+	<code>
+		datagrid.addColumn({
+				class = 'phantom align-right',
+				value = [
+					'delete',
+					'edit'
+				],
+				link = [
+					{
+						'userID' = 'userID',
+						'action' = 'delete'
+					},
+					{
+						'userID' = 'userID',
+						'action' = 'edit'
+					}
+				],
+				linkClass = [
+					'delete',
+					''
+				]
+			})
+	</code>
+</blockquote>
+
+<cfset datagrid.addColumn({
+		class = 'phantom align-right',
+		value = [
+			'delete',
+			'edit'
+		],
+		value = [
+			'delete',
+			'edit'
+		],
+		link = [
+			{
+				'userID' = 'userID',
+				'action' = 'delete'
+			},
+			{
+				'userID' = 'userID',
+				'action' = 'edit'
+			}
+		],
+		linkClass = [
+			'delete',
+			''
+		]
 	}) />
 
 <h2>toHTML(data[, options])</h2>
 
 <blockquote>
 	<code>
-		data = []<br />
-		
-		from="1" to="40" index="i"<br />
-			person = createObject('component', 'cf-compendium.inc.resource.base.object').init()<br />
-			person.setFirstName(( randRange(0,100) GT 50 ? 'John' : 'Jane' ))<br />
-			person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' ))<br />
-			person.setValue(randRange(0,100))<br />
+		data = [
+				{
+					userID = 1,
+					firstname = "John",
+					lastName= "Doe"
+				},
+				{
+					userID = 2,
+					firstname = "Jane",
+					lastName="Doe"
+				},
+				{
+					userID = 3,
+					firstname = "Bobby",
+					lastName="Joe"
+				}
+			]<br />
 		
 		datagrid.toHTML(data, {
-				numPerPage = 40
+				numPerPage = 2000,
+				theURL = theURL
 			})
 	</code>
 </blockquote>
 
-<cfset data = [] />
-
-<cfloop from="1" to="40" index="i">
-	<cfset person = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
-	<cfset person.setFirstName(( randRange(0,100) GT 50 ? 'Sam' : 'Jane' )) />
-	<cfset person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' )) />
-	<cfset person.setValue(randRange(0,100)) />
-	<cfset person.setAction('Action') />
-	
-	<cfset arrayAppend(data, person) />
-</cfloop>
+<cfset data = [
+		{
+			userID = 1,
+			firstname = "John",
+			lastName= "Doe"
+		},
+		{
+			userID = 2,
+			firstname = "Jane",
+			lastName="Doe"
+		},
+		{
+			userID = 3,
+			firstname = "Bobby",
+			lastName="Joe"
+		}
+	] />
 
 <cfoutput>#datagrid.toHTML(data, {
-		numPerPage = 40
+		numPerPage = 2000,
+		theURL = theURL
 	})#</cfoutput>
 
 <h2>JavaScript</h2>

@@ -3,7 +3,7 @@
 		<cfset variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
 	</cffunction>
 	
-	<cffunction name="testInInvalid" access="public" returntype="void" output="false">
+	<cffunction name="testIn_Invalid" access="public" returntype="void" output="false">
 		<cfset var validator = variables.i18n.getValidation('en_US') />
 		
 		<cftry>
@@ -21,7 +21,7 @@
 		</cftry>
 	</cffunction>
 	
-	<cffunction name="testInValid" access="public" returntype="void" output="false">
+	<cffunction name="testIn_Valid" access="public" returntype="void" output="false">
 		<cfset var validator = variables.i18n.getValidation('en_US') />
 		
 		<cftry>
@@ -33,7 +33,7 @@
 		</cftry>
 	</cffunction>
 	
-	<cffunction name="testNotInInvalid" access="public" returntype="void" output="false">
+	<cffunction name="testNotIn_Invalid" access="public" returntype="void" output="false">
 		<cfset var validator = variables.i18n.getValidation('en_US') />
 		
 		<cftry>
@@ -51,7 +51,7 @@
 		</cftry>
 	</cffunction>
 	
-	<cffunction name="testNotInValid" access="public" returntype="void" output="false">
+	<cffunction name="testNotIn_Valid" access="public" returntype="void" output="false">
 		<cfset var validator = variables.i18n.getValidation('en_US') />
 		
 		<cftry>

@@ -21,11 +21,22 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
+				class = '',
 				key = '',
-				keys = '',
-				label = '&nbsp;',
-				class = ''
+				label = '',
+				link = [],
+				linkClass = [],
+				value = ''
 			} />
+		
+		<!--- Normalize the options --->
+		<cfif structKeyExists(arguments.options, 'link') AND NOT isArray(arguments.options.link)>
+			<cfset arguments.options.link = [ arguments.options.link ] />
+		</cfif>
+		
+		<cfif structKeyExists(arguments.options, 'linkClass') AND NOT isArray(arguments.options.linkClass)>
+			<cfset arguments.options.linkClass = [ arguments.options.linkClass ] />
+		</cfif>
 		
 		<cfset arrayAppend(variables.columns, extend(defaults, arguments.options)) />
 	</cffunction>
@@ -40,19 +51,19 @@
 	<cffunction name="calculateDerived" access="private" returntype="string" output="false">
 		<cfargument name="derived" type="struct" required="true" />
 		<cfargument name="type" type="string" required="true" />
-		<cfargument name="keys" type="string" required="true" />
+		<cfargument name="key" type="string" required="true" />
 		<cfargument name="data" type="any" required="true" />
-		<cfargument name="row" type="numeric" required="true" />
+		<cfargument name="rowNum" type="numeric" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var currentKey = '' />
 		<cfset var key = '' />
 		<cfset var result = '' />
-		<cfset var safeKey = reReplace(arguments.keys, '[^a-zA-Z0-9]', '-', 'all') />
+		<cfset var safeKey = reReplace(arguments.key, '[^a-zA-Z0-9]', '-', 'all') />
 		
 		<cfswitch expression="#arguments.type#">
 			<cfcase value="currentRow">
-				<cfreturn arguments.row + arguments.options.startRow - 1 />
+				<cfreturn arguments.rowNum + arguments.options.startRow - 1 />
 			</cfcase>
 			
 			<cfcase value="sum">
@@ -63,22 +74,22 @@
 					<cfset arguments.derived[currentKey] = 0 />
 				</cfif>
 				
-				<cfif listLen(arguments.keys)>
-					<cfloop list="#arguments.keys#" index="key">
-						<cfif isQuery(data)>
-							<cfset arguments.derived[currentKey] += data[key][row] />
-						<cfelseif isObject(data[row])>
-							<cfinvoke component="#data[row]#" method="get#key#" returnvariable="result" />
+				<cfif listLen(arguments.key)>
+					<cfloop list="#arguments.key#" index="key">
+						<cfif isQuery(arguments.data)>
+							<cfset arguments.derived[currentKey] += arguments.data[key][arguments.rowNum] />
+						<cfelseif isObject(arguments.data[arguments.rowNum])>
+							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#key#" returnvariable="result" />
 							
 							<cfset arguments.derived[currentKey] += result />
-						<cfelseif isStruct(data[row])>
-							<cfset arguments.derived[currentKey] += data[row][key] />
+						<cfelseif isStruct(arguments.data[arguments.rowNum])>
+							<cfset arguments.derived[currentKey] += arguments.data[arguments.rowNum][key] />
 						<cfelse>
 							<cfthrow message="Multiple keys not valid" detail="Cannot do a running sum with multiple keys if it is not a struct or object" />
 						</cfif>
 					</cfloop>
 				<cfelse>
-					<cfset arguments.derived[currentKey] += data[row] />
+					<cfset arguments.derived[currentKey] += data[arguments.rowNum] />
 				</cfif>
 				
 				<cfreturn arguments.derived[currentKey] />
@@ -86,6 +97,63 @@
 		</cfswitch>
 		
 		<cfreturn '' />
+	</cffunction>
+	
+	<cffunction name="createLink" access="private" returntype="string" output="false">
+		<cfargument name="text" type="any" required="true" />
+		<cfargument name="column" type="struct" required="true" />
+		<cfargument name="data" type="any" required="true" />
+		<cfargument name="rowNum" type="numeric" required="true" />
+		<cfargument name="colNum" type="numeric" required="true" />
+		<cfargument name="options" type="struct" default="#{}#" />
+		
+		<cfset var class = '' />
+		<cfset var href = '' />
+		<cfset var html = '' />
+		<cfset var i = '' />
+		<cfset var j = '' />
+		<cfset var link = '' />
+		<cfset var value = '' />
+		
+		<cfsavecontent variable="html">
+			<cfoutput>
+				<cfloop from="1" to="#arrayLen(arguments.column.link)#" index="i">
+					<cfloop list="#structKeyList(arguments.column.link[i])#" index="j">
+						<!--- Get the link value --->
+						<cfif isQuery(arguments.data) AND structKeyExists(arguments.data, j)>
+							<cfset value = arguments.data[j][arguments.rowNum] />
+						<cfelseif isObject(arguments.data[arguments.rowNum]) AND arguments.data[arguments.rowNum].hasKey(j)>
+							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#j#" returnvariable="result" />
+							
+							<cfset value = result />
+						<cfelseif isStruct(arguments.data[arguments.rowNum]) AND structKeyExists(arguments.data[arguments.rowNum], j)>
+							<cfset value = arguments.data[arguments.rowNum][j] />
+						<cfelse>
+							<cfset value = arguments.column.link[i][j] />
+						</cfif>
+						
+						<cfinvoke component="#arguments.options.theURL#" method="setDGCol#arguments.colNum#Link#i#">
+							<cfinvokeargument name="name" value="#j#" />
+							<cfinvokeargument name="value" value="#value#" />
+						</cfinvoke>
+					</cfloop>
+					
+					<!--- Check if the value of the link is provided --->
+					<cfif isArray(arguments.column.value)>
+						<cfset arguments.text = getLabel(arguments.column.value[i]) />
+					<cfelseif arguments.column.value NEQ ''>
+						<cfset arguments.text = getLabel(arguments.column.value) />
+					</cfif>
+					
+					<!--- Retrieve the URL --->
+					<cfinvoke component="#arguments.options.theURL#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
+					
+					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) GTE i ? arguments.column.linkClass[i] : '')#">#arguments.text#</a>
+				</cfloop>
+			</cfoutput>
+		</cfsavecontent>
+		
+		<cfreturn html />
 	</cffunction>
 	
 	<cffunction name="getLabel" access="public" returntype="string" output="false">
@@ -129,7 +197,7 @@
 		<cfset var hasAggregate = false />
 		<cfset var item = '' />
 		<cfset var result = '' />
-		<cfset var row = '' />
+		<cfset var rowNum = '' />
 		<cfset var value = '' />
 		
 		<cfset arguments.options = extend(defaults, arguments.options) />
@@ -290,10 +358,10 @@
 				</cfoutput>
 				<tbody>
 					<cfif isArray(arguments.data)>
-						<cfset row = 0 />
+						<cfset rowNum = 0 />
 						
 						<cfloop array="#arguments.data#" index="item">
-							<cfset row++ />
+							<cfset rowNum++ />
 							
 							<cfoutput>
 								<tr>
@@ -302,14 +370,20 @@
 										
 										<cfloop array="#variables.columns#" index="col">
 											<td class="#col.key# #col.class# column-#counter++#">
+												<!--- Determine the value --->
 												<cfif col.key NEQ ''>
-													<cfinvoke component="#item#" method="get#col.key#" returnvariable="result" />
-													
-													#result#
+													<cfinvoke component="#item#" method="get#col.key#" returnvariable="value" />
 												<cfelseif structKeyExists(col, 'derived')>
-													#calculateDerived( derived, col.derived, col.keys, data, row, arguments.options )#
+													<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
 												<cfelse>
-													&nbsp;
+													<cfset value = '&nbsp;' />
+												</cfif>
+												
+												<!--- Check for a link --->
+												<cfif structKeyExists(col, 'link')>
+													#createLink(value, col, data, rowNum, counter, arguments.options)#
+												<cfelse>
+													#value#
 												</cfif>
 											</td>
 										</cfloop>
@@ -318,18 +392,31 @@
 										
 										<cfloop array="#variables.columns#" index="col">
 											<td class="#col.key# #col.class# column-#counter++#">
+												<!--- Determine Value --->
 												<cfif col.key NEQ ''>
-													#item[col.key]#
+													<cfset value = item[col.key] />
 												<cfelseif structKeyExists(col, 'derived')>
-													#calculateDerived( derived, col.derived, col.keys, data, row, arguments.options )#
+													<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
 												<cfelse>
-													&nbsp;
+													<cfset value = '&nbsp;' />
+												</cfif>
+												
+												<!--- Check for a link --->
+												<cfif structKeyExists(col, 'link')>
+													#createLink(value, col, data, rowNum, counter, arguments.options)#
+												<cfelse>
+													#value#
 												</cfif>
 											</td>
 										</cfloop>
 									<cfelseif isSimpleValue(item)>
 										<td class="#col.key# #col.class# column-#counter++#">
-											#item#
+											<!--- Check for a link --->
+											<cfif structKeyExists(col, 'link')>
+												#createLink(item, col, data, rowNum, counter, arguments.options)#
+											<cfelse>
+												#item#
+											</cfif>
 										</td>
 									<cfelse>
 										<cfthrow message="The data type passed in is not suported." detail="The type of the data in the array is not of type struct, object or simpleValue.">
@@ -338,26 +425,34 @@
 							</cfoutput>
 							
 							<!--- Check if we have enough rows displayed --->
-							<cfif row GTE arguments.options.numPerPage>
+							<cfif rowNum GTE arguments.options.numPerPage>
 								<cfbreak />
 							</cfif>
 						</cfloop>
 					<cfelseif isQuery(arguments.data)>
-						<cfset row = 0 />
+						<cfset rowNum = 0 />
 						
 						<cfoutput query="arguments.data" startrow="#arguments.options.startRow#" maxrows="#arguments.options.numPerPage#">
-							<cfset row++ />
+							<cfset rowNum++ />
 							<tr>
 								<cfset counter = 0 />
 								
 								<cfloop array="#variables.columns#" index="col">
 									<td class="#col.key# #col.class# column-#counter++#">
+										<!--- Determine Value --->
 										<cfif col.key NEQ ''>
-											#arguments.data[col.key]#
+											<cfset value = arguments.data[col.key] />
 										<cfelseif structKeyExists(col, 'derived')>
-											#calculateDerived( derived, col.derived, col.keys, data, row, arguments.options )#
+											<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
 										<cfelse>
-											&nbsp;
+											<cfset value = '&nbsp;' />
+										</cfif>
+										
+										<!--- Check for a link --->
+										<cfif structKeyExists(col, 'link')>
+											#createLink(value, col, data, rowNum, counter, arguments.options)#
+										<cfelse>
+											#value#
 										</cfif>
 									</td>
 								</cfloop>
