@@ -123,9 +123,7 @@
 						<cfif isQuery(arguments.data) AND structKeyExists(arguments.data, j)>
 							<cfset value = arguments.data[j][arguments.rowNum] />
 						<cfelseif isObject(arguments.data[arguments.rowNum]) AND arguments.data[arguments.rowNum].hasKey(j)>
-							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#j#" returnvariable="result" />
-							
-							<cfset value = result />
+							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#j#" returnvariable="value" />
 						<cfelseif isStruct(arguments.data[arguments.rowNum]) AND structKeyExists(arguments.data[arguments.rowNum], j)>
 							<cfset value = arguments.data[arguments.rowNum][j] />
 						<cfelse>
