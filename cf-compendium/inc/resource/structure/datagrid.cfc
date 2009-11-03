@@ -378,7 +378,7 @@
 												</cfif>
 												
 												<!--- Check for a link --->
-												<cfif structKeyExists(col, 'link')>
+												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
 												<cfelse>
 													#value#
@@ -400,7 +400,7 @@
 												</cfif>
 												
 												<!--- Check for a link --->
-												<cfif structKeyExists(col, 'link')>
+												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
 												<cfelse>
 													#value#
@@ -410,7 +410,7 @@
 									<cfelseif isSimpleValue(item)>
 										<td class="#col.key# #col.class# column-#counter++#">
 											<!--- Check for a link --->
-											<cfif structKeyExists(col, 'link')>
+											<cfif arrayLen(col.link)>
 												#createLink(item, col, data, rowNum, counter, arguments.options)#
 											<cfelse>
 												#item#
@@ -447,7 +447,7 @@
 										</cfif>
 										
 										<!--- Check for a link --->
-										<cfif structKeyExists(col, 'link')>
+										<cfif arrayLen(col.link)>
 											#createLink(value, col, data, rowNum, counter, arguments.options)#
 										<cfelse>
 											#value#
