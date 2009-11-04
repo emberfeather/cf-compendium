@@ -11,14 +11,16 @@
 	margin: 0 .5em;
 }
 
-.pagination {
+.filterActive, .pagination {
 	list-style: none;
+	margin: 0;
+	padding: .5em 0;
 }
 
-.pagination li {
-	float: left;
-	line-height: 2em;
+.filterActive li, .pagination li {
 	margin: 0 .5em 0 0;
+	padding: 0;
+	float: left;
 }
 
 .pagination a {
