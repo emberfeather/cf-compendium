@@ -26,7 +26,7 @@
 		<cfargument name="value" type="string" required="true" />
 		<cfargument name="href" type="string" required="true" />
 		
-		<cfreturn getLabel(arguments.key) & ': ' & arguments.value & ' <sup>(<a href="' & arguments.href & '">x</a>)</sup>' />
+		<cfreturn getLabel(arguments.key) & ': <strong>' & arguments.value & '</strong> <sup>(<a href="' & arguments.href & '">x</a>)</sup>' />
 	</cffunction>
 	
 	<cffunction name="getLabel" access="public" returntype="string" output="false">
