@@ -360,7 +360,7 @@
 					</thead>
 				</cfoutput>
 				<tbody>
-					<cfif isArray(arguments.data)>
+					<cfif isArray(arguments.data) AND arrayLen(arguments.data)>
 						<cfset rowNum = 0 />
 						
 						<cfloop array="#arguments.data#" index="item">
@@ -432,7 +432,7 @@
 								<cfbreak />
 							</cfif>
 						</cfloop>
-					<cfelseif isQuery(arguments.data)>
+					<cfelseif isQuery(arguments.data) AND arguments.data.recordCount GT 0>
 						<cfset rowNum = 0 />
 						
 						<cfoutput query="arguments.data" startrow="#arguments.options.startRow#" maxrows="#arguments.options.numPerPage#">
@@ -462,7 +462,13 @@
 							</tr>
 						</cfoutput>
 					<cfelse>
-						<cfthrow message="The data type passed in is not supported." detail="The type of the data passed in is not a query or array.">
+						<cfoutput>
+							<tr>
+								<td colspan="#arrayLen(variables.columns)#">
+									#getLabel('noRecords')#
+								</td>
+							</tr>
+						</cfoutput>
 					</cfif>
 				</tbody>
 				<!--- Show footer --->
