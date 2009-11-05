@@ -22,6 +22,32 @@
 		
 		<cfset assertEquals('?', theUrl.get()) />
 	</cffunction>
+	
+	<!---
+		Test cloning an existing URL
+	--->
+	<cffunction name="testCloneUrl_shouldMatch" access="public" returntype="void" output="false">
+		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+		
+		<cfset theUrl.setTesting('test', 'something') />
+		
+		<!--- test cleaning an instance --->
+		<cfset theUrl.cloneRedirect('testing') />
+		
+		<cfset assertEquals('?test=something', theUrl.getRedirect()) />
+	</cffunction>
+	
+	<!---
+		Test cloning the master
+	--->
+	<cffunction name="testCloneUrl_withMaster_shouldMatch" access="public" returntype="void" output="false">
+		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test=something') />
+		
+		<!--- test cleaning an instance --->
+		<cfset theUrl.cloneRedirect() />
+		
+		<cfset assertEquals('?test=something', theUrl.getRedirect()) />
+	</cffunction>
 
 	<!---
 		Test extending a url

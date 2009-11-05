@@ -89,7 +89,7 @@
 													#test.testStatus# - #test.testName# ( #test.time# ms )
 													
 													<!--- Check if it has an error to show --->
-													<cfif test.error NEQ ''>
+													<cfif NOT isSimpleValue(test.error)>
 														<cfdump var="#test.error#" expand="false" />
 													</cfif>
 												</li>

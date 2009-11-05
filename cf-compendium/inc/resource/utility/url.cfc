@@ -60,8 +60,8 @@
 		If the destination location is blank, clone the master
 	--->
 	<cffunction name="clone" access="private" returntype="void" output="false">
-		<cfargument name="sourceLocation" type="string" required="true" />
 		<cfargument name="destinationLocation" type="string" required="true" />
+		<cfargument name="sourceLocation" type="string" default="" />
 		
 		<cfset var location = duplicate(findLocation(arguments.sourceLocation)) />
 		
@@ -188,7 +188,7 @@
 		<cfset arguments.missingMethodName = lCase(arguments.missingMethodName) />
 		
 		<!--- Find the parts of the function name we are interested in --->
-		<cfset findParts = reFind('^(clean|extend|get|has|override|remove|reset|searchid|search|set)(.*)', arguments.missingMethodName, 1, true) />
+		<cfset findParts = reFind('^(clean|clone|extend|get|has|override|remove|reset|searchid|search|set)(.*)', arguments.missingMethodName, 1, true) />
 		
 		<!--- Check if not one that we are equiped to handle --->
 		<cfif NOT findParts.pos[1]>
@@ -211,6 +211,16 @@
 				</cfif>
 				
 				<cfreturn clean(extra) />
+			</cfcase>
+			
+			<cfcase value="clone">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+					<cfreturn clone(extra, arguments.missingMethodArguments[1]) />
+				<cfelseif arrayLen(arguments.missingMethodArguments) EQ 2>
+					<cfreturn clone(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				</cfif>
+				
+				<cfreturn clone(extra) />
 			</cfcase>
 			
 			<cfcase value="extend">
@@ -373,7 +383,7 @@
 	</cffunction>
 	
 	<!---
-		Reset a URL location off of a query string or duplicate the master if no string given.
+		Reset a URL location off of a query string
 	--->
 	<cffunction name="reset" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" default="" />
