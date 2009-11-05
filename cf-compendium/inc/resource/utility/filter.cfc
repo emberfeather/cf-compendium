@@ -189,7 +189,7 @@
 		
 		<cfparam name="arguments.options.submit" default="filter">
 		
-		<!--- Reset the current page for the filter --->
+		<!--- Reset the current page --->
 		<cfset arguments.theURL.setFilter('onPage', 1) />
 		
 		<!--- Check to make sure we have filters to display --->
