@@ -38,13 +38,7 @@
 		<cfargument name="missingMethodName" type="string" required="true" />
 		<cfargument name="missingMethodArguments" type="struct" required="true" />
 		
-		<cfset var attribute = '' />
-		<cfset var attributeSet = '' />
-		<cfset var attributeValue = '' />
-		<cfset var childAttribute = '' />
-		<cfset var i = '' />
-		<cfset var isUnique = '' />
-		<cfset var j = '' />
+		<cfset var newArguments = {} />
 		<cfset var prefix = '' />
 		<cfset var result = '' />
 		
@@ -59,24 +53,28 @@
 		<!--- Find the prefix --->
 		<cfset prefix = mid(arguments.missingMethodName, result.pos[2], result.len[2]) />
 		
-		<!--- Find the attribute --->
-		<cfset attribute = mid(arguments.missingMethodName, result.pos[3], result.len[3]) />
-		
-		<!--- Make the attribute the first argument --->
-		<cfset arrayPrepend(arguments.missingMethodArguments, attribute) />
+		<!--- Find the token --->
+		<cfset newArguments.token = mid(arguments.missingMethodName, result.pos[3], result.len[3]) />
 		
 		<!--- Do the fun stuff --->
 		<cfswitch expression="#prefix#">
 			<cfcase value="confirm">
-				<cfreturn confirm( argumentCollection = arguments.missingMethodArguments ) />
+				<cfset newArguments.value = arguments.missingMethodArguments[1] />
+				
+				<cfreturn confirm( argumentCollection = newArguments ) />
 			</cfcase>
 			
 			<cfcase value="get">
-				<cfreturn get( argumentCollection = arguments.missingMethodArguments ) />
+				<!--- Check for reset flag --->
+				<cfif arrayLen(arguments.missingMethodArguments)>
+					<cfset newArguments.doReset = arguments.missingMethodArguments[1] />
+				</cfif>
+				
+				<cfreturn get( argumentCollection = newArguments ) />
 			</cfcase>
 			
 			<cfcase value="has">
-				<cfreturn has( argumentCollection = arguments.missingMethodArguments ) />
+				<cfreturn has( argumentCollection = newArguments ) />
 			</cfcase>
 		</cfswitch>
 	</cffunction>

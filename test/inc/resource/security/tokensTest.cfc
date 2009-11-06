@@ -14,7 +14,7 @@
 	<!---
 		Tests that the confirm token fails when there is no token
 	--->
-	<cffunction name="testConfirmTokenSansToken" access="public" returntype="void" output="false">
+	<cffunction name="testConfirmToken_SansToken" access="public" returntype="void" output="false">
 		<cfset var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init() />
 		
 		<cfset assertFalse( tokens.confirmTest('someVal'), 'Tokens that are not created should return false' ) />
@@ -23,7 +23,7 @@
 	<!---
 		Tests that the token changes when requesting a reset token
 	--->
-	<cffunction name="testGetTokenReset" access="public" returntype="void" output="false">
+	<cffunction name="testGetToken_Reset" access="public" returntype="void" output="false">
 		<cfset var token1 = '' />
 		<cfset var token2 = '' />
 		<cfset var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init() />
@@ -49,7 +49,7 @@
 	<!---
 		Tests that the has token works
 	--->
-	<cffunction name="testHasTokenSansToken" access="public" returntype="void" output="false">
+	<cffunction name="testHasToken_SansToken" access="public" returntype="void" output="false">
 		<cfset var token1 = '' />
 		<cfset var token2 = '' />
 		<cfset var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init() />
