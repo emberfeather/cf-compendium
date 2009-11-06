@@ -57,7 +57,7 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var currentKey = '' />
-		<cfset var key = '' />
+		<cfset var i = '' />
 		<cfset var result = '' />
 		<cfset var safeKey = reReplace(arguments.key, '[^a-zA-Z0-9]', '-', 'all') />
 		
@@ -75,15 +75,15 @@
 				</cfif>
 				
 				<cfif listLen(arguments.key)>
-					<cfloop list="#arguments.key#" index="key">
+					<cfloop list="#arguments.key#" index="i">
 						<cfif isQuery(arguments.data)>
-							<cfset arguments.derived[currentKey] += arguments.data[key][arguments.rowNum] />
+							<cfset arguments.derived[currentKey] += arguments.data[i][arguments.rowNum] />
 						<cfelseif isObject(arguments.data[arguments.rowNum])>
-							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#key#" returnvariable="result" />
+							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#i#" returnvariable="result" />
 							
 							<cfset arguments.derived[currentKey] += result />
 						<cfelseif isStruct(arguments.data[arguments.rowNum])>
-							<cfset arguments.derived[currentKey] += arguments.data[arguments.rowNum][key] />
+							<cfset arguments.derived[currentKey] += arguments.data[arguments.rowNum][i] />
 						<cfelse>
 							<cfthrow message="Multiple keys not valid" detail="Cannot do a running sum with multiple keys if it is not a struct or object" />
 						</cfif>
