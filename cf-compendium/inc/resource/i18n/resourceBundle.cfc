@@ -112,7 +112,13 @@
 		
 		<!--- Check that the file path exists --->
 		<cfif NOT directoryExists(filePath)>
-			<cfthrow message="Bundle directory not found" detail="The bundle directory for resource bundle was not found at #filePath#" />
+			<cfif directoryExists(expandPath(filePath))>
+				<cfset filePath = expandPath(filePath) />
+			<cfelseif directoryExists(expandPath('/' & filePath))>
+				<cfset filePath = expandPath('/' & filePath) />
+			<cfelse>
+				<cfthrow message="Bundle directory not found" detail="The bundle directory for resource bundle was not found at #filePath#" />
+			</cfif>
 		</cfif>
 		
 		<!--- Keep adding to the file path for the bundle name --->
