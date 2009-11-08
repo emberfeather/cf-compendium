@@ -37,12 +37,17 @@
 	<cffunction name="authenticate" access="public" returntype="struct" output="false">
 		<cfargument name="identifier" type="string" required="true" />
 		<cfargument name="returnURL" type="string" required="true" />
-		<cfargument name="realm" type="string" default="#(CGI.HTTPS EQ 'ON' ? 'https' : 'http')#://#CGI.HTTP_HOST#/" />
+		<cfargument name="realm" type="string" default="" />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var openID = {} />
 		<cfset var results = '' />
 		<cfset var token = '' />
+		
+		<!--- Check for no realm --->
+		<cfif arguments.realm EQ ''>
+			<cfset arguments.realm = (CGI.HTTPS EQ 'ON' ? 'https' : 'http') & '://#CGI.HTTP_HOST#/' />
+		</cfif>
 		
 		<!--- Options --->
 		<cfparam name="arguments.options.sregRequired" default="" />
