@@ -74,6 +74,42 @@
 		<cfreturn 'N/A' />
 	</cffunction>
 	
+	<cffunction name="filterItem" access="private" returntype="string" output="false">
+		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="filter" type="struct" required="true" />
+		
+		<!--- Check if it is a text filter --->
+		<cfif NOT isObject(arguments.filter.options)>
+			<cfreturn filterText(arguments.theURL, arguments.filter) />
+		<cfelse>
+			<!--- Check the number of filters --->
+			<cfif length() EQ 1>
+				<!--- 'Smartly' determine what type of output would be best --->
+				<cfswitch expression="#arguments.filter.options.length()#">
+					<cfcase value="1">
+						<cfreturn filterCheckbox(arguments.theURL, arguments.filter) />
+					</cfcase>
+					<cfcase value="2,3,4">
+						<cfreturn filterRadio(arguments.theURL, arguments.filter) />
+					</cfcase>
+					<cfdefaultcase>
+						<cfreturn filterSelect(arguments.theURL, arguments.filter) />
+					</cfdefaultcase>
+				</cfswitch>
+			<cfelse>
+				<!--- 'Smartly' determine what type of output would be best --->
+				<cfswitch expression="#arguments.filter.options.length()#">
+					<cfcase value="1">
+						<cfreturn filterCheckbox(arguments.theURL, arguments.filter) />
+					</cfcase>
+					<cfdefaultcase>
+						<cfreturn filterSelect(arguments.theURL, arguments.filter) />
+					</cfdefaultcase>
+				</cfswitch>
+			</cfif>
+		</cfif>
+	</cffunction>
+	
 	<cffunction name="filterCheckbox" access="private" returntype="string" output="false">
 		<cfargument name="theURL" type="component" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
@@ -201,36 +237,7 @@
 		<cfloop array="#variables.filters#" index="filter">
 			<!--- Check for a filter or a break --->
 			<cfif isStruct(filter)>
-				<!--- Check if it is a text filter --->
-				<cfif NOT isObject(filter.options)>
-					<cfset html &= filterText(arguments.theURL, filter) />
-				<cfelse>
-					<!--- Check the number of filters --->
-					<cfif length() EQ 1>
-						<!--- 'Smartly' determine what type of output would be best --->
-						<cfswitch expression="#filter.options.length()#">
-							<cfcase value="1">
-								<cfset html &= filterCheckbox(arguments.theURL, filter) />
-							</cfcase>
-							<cfcase value="2,3,4">
-								<cfset html &= filterRadio(arguments.theURL, filter) />
-							</cfcase>
-							<cfdefaultcase>
-								<cfset html &= filterSelect(arguments.theURL, filter) />
-							</cfdefaultcase>
-						</cfswitch>
-					<cfelse>
-						<!--- 'Smartly' determine what type of output would be best --->
-						<cfswitch expression="#filter.options.length()#">
-							<cfcase value="1">
-								<cfset html &= filterCheckbox(arguments.theURL, filter) />
-							</cfcase>
-							<cfdefaultcase>
-								<cfset html &= filterSelect(arguments.theURL, filter) />
-							</cfdefaultcase>
-						</cfswitch>
-					</cfif>
-				</cfif>
+				<cfset html &= filterItem(arguments.theURL, filter) />
 			<cfelse>
 				<!--- Found a break --->
 				<cfset html &= '<br />' />
