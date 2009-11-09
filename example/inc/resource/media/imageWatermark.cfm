@@ -31,8 +31,8 @@
 	<code>
 		resolutions = [
 				{
-					maxWidth: 400,
-					maxHeight: 400
+					maxWidth = 400,
+					maxHeight = 400
 				}
 			]<br />
 		
@@ -42,8 +42,8 @@
 
 <cfset resolutions = [
 		{
-			maxWidth: 400,
-			maxHeight: 400
+			maxWidth = 400,
+			maxHeight = 400
 		}
 	] />
 

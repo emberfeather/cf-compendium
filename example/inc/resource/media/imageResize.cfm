@@ -23,8 +23,8 @@
 	<code>
 		resolutions = [
 				{
-					maxWidth: 200,
-					maxHeight: 200
+					maxWidth = 200,
+					maxHeight = 200
 				}
 			]<br />
 		
@@ -34,8 +34,8 @@
 
 <cfset resolutions = [
 		{
-			maxWidth: 200,
-			maxHeight: 200
+			maxWidth = 200,
+			maxHeight = 200
 		}
 	] />
 
@@ -57,8 +57,8 @@
 	<code>
 		resolutions = [
 				{
-					width: 200,
-					height: 200
+					width = 200,
+					height = 200
 				}
 			]<br />
 		
@@ -68,8 +68,8 @@
 
 <cfset resolutions = [
 		{
-			width: 200,
-			height: 200
+			width = 200,
+			height = 200
 		}
 	] />
 
@@ -127,8 +127,8 @@
 	<code>
 		resolutions = [
 				{
-					width: 300,
-					height: 300
+					width = 300,
+					height = 300
 				}
 			]<br />
 		
@@ -138,8 +138,8 @@
 
 <cfset resolutions = [
 		{
-			width: 300,
-			height: 300
+			width = 300,
+			height = 300
 		}
 	] />
 
