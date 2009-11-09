@@ -118,7 +118,7 @@
 					<div class="grid_6">
 						<dl>
 							<dt>
-								<a href="<cfoutput>#pathRoot#</cfoutput>example/">
+								<a href="<cfoutput>#pathRoot#</cfoutput>example/index.cfm">
 									Examples
 								</a>
 							</dt>
@@ -130,7 +130,7 @@
 							<!--- Check for a setup utility --->
 							<cfif fileExists(expandPath(pathRoot & 'setup/index.cfm'))>
 								<dt>
-									<a href="<cfoutput>#pathRoot#</cfoutput>setup/">
+									<a href="<cfoutput>#pathRoot#</cfoutput>setup/index.cfm">
 										Setup
 									</a>
 								</dt>
@@ -145,7 +145,7 @@
 					<div class="grid_6">
 						<dl>
 							<dt>
-								<a href="<cfoutput>#pathRoot#</cfoutput>profile/">
+								<a href="<cfoutput>#pathRoot#</cfoutput>profile/index.cfm">
 									Profiling
 								</a>
 							</dt>
@@ -156,7 +156,7 @@
 							</dd>
 							
 							<dt>
-								<a href="<cfoutput>#pathRoot#</cfoutput>test/">
+								<a href="<cfoutput>#pathRoot#</cfoutput>test/index.cfm">
 									Unit Tests
 								</a>
 							</dt>
