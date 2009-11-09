@@ -35,64 +35,7 @@
 		<cfset var value = '' />
 		
 		<!--- Figure out the type --->
-		<cfif isSimpleValue(arguments.input) AND isXML(arguments.input)>
-			<!--- Read in the object from xml --->
-			<cfloop list="#structKeyList(variables.instance)#" index="i">
-				<!--- Check for the xml root --->
-				<cfif structKeyExists(arguments.input, 'xmlRoot')>
-					<cfset arguments.input = arguments.input.xmlRoot />
-				</cfif>
-				
-				<!--- If the current value is an array it should be pulled in as an array --->
-				<cfif isArray(variables.instance[i])>
-					<!--- Check if it exists as a child --->
-					<cfset exists = false />
-					
-					<cfloop array="#arguments.input.xmlChildren#" index="j">
-						<cfif j.xmlName EQ i>
-							<cfset exists = true />
-							
-							<cfbreak />
-						</cfif>
-					</cfloop>
-					
-					<!--- Pull in the values --->
-					<cfif exists>
-						<!--- Reset the value --->
-						<cfset variables.instance[i] = [] />
-						
-						<cfloop array="#arguments.input.xmlChildren#" index="j">
-							<cftry>
-								<cfif j.xmlName EQ i>
-									<cfinvoke component="#this#" method="add#i#">
-										<cfinvokeargument name="value" value="#trim(j.xmlText)#" />
-									</cfinvoke>
-								</cfif>
-								
-								<!--- Catch any validation errors --->
-								<cfcatch type="validation">
-									<cfset arrayAppend(messages, cfcatch.message) />
-								</cfcatch>
-							</cftry>
-						</cfloop>
-					</cfif>
-				<cfelse>
-					<!--- If it exists in the xml attributes pull it in --->
-					<cfif structKeyExists(arguments.input.xmlAttributes, i)>
-						<cftry>
-							<cfinvoke component="#this#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(arguments.input.xmlAttributes[i])#" />
-							</cfinvoke>
-							
-							<!--- Catch any validation errors --->
-							<cfcatch type="validation">
-								<cfset arrayAppend(messages, cfcatch.message) />
-							</cfcatch>
-						</cftry>
-					</cfif>
-				</cfif>
-			</cfloop>
-		<cfelseif isStruct(arguments.input)>
+		<cfif isStruct(arguments.input)>
 			<!--- Read in the object from a struct --->
 			<cfloop list="#structKeyList(variables.instance)#" index="i">
 				<cftry>
@@ -148,6 +91,63 @@
 						<cfset arrayAppend(messages, cfcatch.message) />
 					</cfcatch>
 				</cftry>
+			</cfloop>
+		<cfelseif isXML(arguments.input)>
+			<!--- Read in the object from xml --->
+			<cfloop list="#structKeyList(variables.instance)#" index="i">
+				<!--- Check for the xml root --->
+				<cfif structKeyExists(arguments.input, 'xmlRoot')>
+					<cfset arguments.input = arguments.input.xmlRoot />
+				</cfif>
+				
+				<!--- If the current value is an array it should be pulled in as an array --->
+				<cfif isArray(variables.instance[i])>
+					<!--- Check if it exists as a child --->
+					<cfset exists = false />
+					
+					<cfloop array="#arguments.input.xmlChildren#" index="j">
+						<cfif j.xmlName EQ i>
+							<cfset exists = true />
+							
+							<cfbreak />
+						</cfif>
+					</cfloop>
+					
+					<!--- Pull in the values --->
+					<cfif exists>
+						<!--- Reset the value --->
+						<cfset variables.instance[i] = [] />
+						
+						<cfloop array="#arguments.input.xmlChildren#" index="j">
+							<cftry>
+								<cfif j.xmlName EQ i>
+									<cfinvoke component="#this#" method="add#i#">
+										<cfinvokeargument name="value" value="#trim(j.xmlText)#" />
+									</cfinvoke>
+								</cfif>
+								
+								<!--- Catch any validation errors --->
+								<cfcatch type="validation">
+									<cfset arrayAppend(messages, cfcatch.message) />
+								</cfcatch>
+							</cftry>
+						</cfloop>
+					</cfif>
+				<cfelse>
+					<!--- If it exists in the xml attributes pull it in --->
+					<cfif structKeyExists(arguments.input.xmlAttributes, i)>
+						<cftry>
+							<cfinvoke component="#this#" method="set#i#">
+								<cfinvokeargument name="value" value="#trim(arguments.input.xmlAttributes[i])#" />
+							</cfinvoke>
+							
+							<!--- Catch any validation errors --->
+							<cfcatch type="validation">
+								<cfset arrayAppend(messages, cfcatch.message) />
+							</cfcatch>
+						</cftry>
+					</cfif>
+				</cfif>
 			</cfloop>
 		<cfelseif isJSON(arguments.input)>
 			<!--- Read in the object from json --->
