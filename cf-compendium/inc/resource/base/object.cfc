@@ -32,6 +32,7 @@
 		<cfset var exists = '' />
 		<cfset var value = '' />
 		<cfset var messages = [] />
+		<cfset var value = '' />
 		
 		<!--- Figure out the type --->
 		<cfif isSimpleValue(arguments.input) AND isXML(arguments.input)>
@@ -127,15 +128,17 @@
 							
 							<!--- Loop through and append --->
 							<cfloop query="arguments.input">
+								<cfset value = arguments.input[i] />
+								
 								<cfinvoke component="#this#" method="add#i#">
-									<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
+									<cfinvokeargument name="value" value="#trim(value)#" />
 								</cfinvoke>
 							</cfloop>
 						<cfelse>
+							<cfset value = arguments.input[i] />
+							
 							<cfinvoke component="#this#" method="set#i#">
-								<cfset value = arguments.input[i] />
-								
-								<cfinvokeargument name="value" value="#value#" />
+								<cfinvokeargument name="value" value="#trim(value)#" />
 							</cfinvoke>
 						</cfif>
 					</cfif>
