@@ -12,7 +12,7 @@
 <cfset filterActive = createObject('component', 'cf-compendium.inc.resource.utility.filterActive').init(i18n) />
 <cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test1=here&test2=out') />
 
-<h2>addI18NBundle(path, name)</h2>
+<h2>addBundle(path, name)</h2>
 
 <p>
 	Adds an i18n bundle for label translation.
@@ -20,11 +20,11 @@
 
 <blockquote>
 	<code>
-		filterActive.addI18NBundle('inc/resource/utility', 'filter')
+		filterActive.addBundle('inc/resource/utility', 'filter')
 	</code>
 </blockquote>
 
-<cfset filterActive.addI18NBundle('inc/resource/utility', 'filter') />
+<cfset filterActive.addBundle('inc/resource/utility', 'filter') />
 
 <h2>toHTML( filter, theURL[, keys] )</h2>
 

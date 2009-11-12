@@ -5,20 +5,19 @@
 		
 		<cfset variables.i18n = arguments.i18n />
 		<cfset variables.locale = arguments.locale />
-		
-		<cfset variables.bundles = [] />
+		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
 		
 		<!--- Set base bundle for translation --->
-		<cfset addI18NBundle('/cf-compendium/i18n/inc/resource/utility', 'filter') />
+		<cfset addBundle('/cf-compendium/i18n/inc/resource/utility', 'filter') />
 		
 		<cfreturn this />
 	</cffunction>
 	
-	<cffunction name="addI18NBundle" access="public" returntype="void" output="false">
+	<cffunction name="addBundle" access="public" returntype="void" output="false">
 		<cfargument name="path" type="string" required="true" />
 		<cfargument name="name" type="string" required="true" />
 		
-		<cfset arrayAppend(variables.bundles, variables.i18n.getResourceBundle(arguments.path, arguments.name, variables.locale)) />
+		<cfset variables.label.addBundle( argumentCollection = arguments ) />
 	</cffunction>
 	
 	<cffunction name="filterItem" access="private" returntype="string" output="false">
@@ -26,27 +25,7 @@
 		<cfargument name="value" type="string" required="true" />
 		<cfargument name="href" type="string" required="true" />
 		
-		<cfreturn getLabel(arguments.key) & ': <strong>' & arguments.value & '</strong> <sup>(<a href="' & arguments.href & '">x</a>)</sup>' />
-	</cffunction>
-	
-	<cffunction name="getLabel" access="public" returntype="string" output="false">
-		<cfargument name="key" type="string" required="true" />
-		
-		<cfset var i = '' />
-		
-		<!--- Check for no label --->
-		<cfif arguments.key EQ ''>
-			<cfreturn '' />
-		</cfif>
-		
-		<!--- Find the first (LIFO) value for the label --->
-		<cfloop from="#arrayLen(variables.bundles)#" to="1" index="i" step="-1">
-			<cfif variables.bundles[i].hasKey(arguments.key)>
-				<cfreturn variables.bundles[i].getValue(arguments.key) />
-			</cfif>
-		</cfloop>
-		
-		<cfreturn 'N/A' />
+		<cfreturn variables.label.get(arguments.key) & ': <strong>' & arguments.value & '</strong> <sup>(<a href="' & arguments.href & '">x</a>)</sup>' />
 	</cffunction>
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">

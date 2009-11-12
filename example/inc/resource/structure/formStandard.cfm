@@ -1,5 +1,28 @@
 <h1>Form Standard Examples</h1>
-<cfset theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test') />
+
+<blockquote>
+	<code>
+		i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init( expandPath('/i18n/') )<br />
+		theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', i18n, 'en_US')
+	</code>
+</blockquote>
+
+<cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
+<cfset theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', i18n, 'en_US') />
+
+<h2>addBundle(path, name)</h2>
+
+<p>
+	Adds an i18n bundle for label translation.
+</p>
+
+<blockquote>
+	<code>
+		theForm.addBundle('inc/resource/structure', 'form')
+	</code>
+</blockquote>
+
+<cfset theForm.addBundle('inc/resource/structure', 'form') />
 
 <h2>Button</h2>
 
@@ -7,7 +30,7 @@
 	<code>
 		theForm.addElement('button', {
 				name = "testButton",
-				label = "Button",
+				label = "button",
 				value = "Testing Button"
 			})
 	</code>
@@ -16,7 +39,7 @@
 <!--- Button --->
 <cfset theForm.addElement('button', {
 		name = "testButton",
-		label = "Button",
+		label = "button",
 		value = "Testing Button"
 	}) />
 
@@ -26,7 +49,7 @@
 	<code>
 		theForm.addElement('checkbox', {
 				name = "testCheckbox",
-				label = "Checkbox",
+				label = "checkbox",
 				value = "true"
 			})
 	</code>
@@ -35,7 +58,7 @@
 <!--- Checkbox --->
 <cfset theForm.addElement('checkbox', {
 		name = "testCheckbox",
-		label = "Checkbox",
+		label = "checkbox",
 		value = "true"
 	}) />
 
@@ -45,7 +68,7 @@
 	<code>
 		theForm.addElement('file', {
 				name = "testFile",
-				label = "File"
+				label = "file"
 			})
 	</code>
 </blockquote>
@@ -53,7 +76,7 @@
 <!--- File --->
 <cfset theForm.addElement('file', {
 		name = "testFile",
-		label = "File"
+		label = "file"
 	}) />
 
 <h2>Hidden</h2>
@@ -62,7 +85,6 @@
 	<code>
 		theForm.addElement('hidden', {
 				name = "testHidden",
-				label = "Hidden",
 				value = "true"
 			})
 	</code>
@@ -71,7 +93,6 @@
 <!--- Hidden --->
 <cfset theForm.addElement('hidden', {
 		name = "testHidden",
-		label = "Hidden",
 		value = "true"
 	}) />
 
@@ -81,7 +102,7 @@
 	<code>
 		theForm.addElement('image', {
 				name = "testImage",
-				label = "Image",
+				label = "image",
 				value = "true"
 			})
 	</code>
@@ -90,7 +111,7 @@
 <!--- Image --->
 <cfset theForm.addElement('image', {
 		name = "testImage",
-		label = "Image",
+		label = "image",
 		value = "true"
 	}) />
 
@@ -100,7 +121,7 @@
 	<code>
 		theForm.addElement('password', {
 				name = "testPassword",
-				label = "Password",
+				label = "password",
 				value = "passwd"
 			})
 	</code>
@@ -109,7 +130,7 @@
 <!--- Password --->
 <cfset theForm.addElement('password', {
 		name = "testPassword",
-		label = "Password",
+		label = "password",
 		value = "passwd"
 	}) />
 
@@ -119,7 +140,7 @@
 	<code>
 		theForm.addElement('radio', {
 				name = "testRadio",
-				label = "Radio",
+				label = "radio",
 				value = "true"
 			})
 	</code>
@@ -128,7 +149,7 @@
 <!--- Radio --->
 <cfset theForm.addElement('radio', {
 		name = "testRadio",
-		label = "Radio",
+		label = "radio",
 		value = "true"
 	}) />
 
@@ -138,7 +159,7 @@
 	<code>
 		element = {
 				name = "testSelect",
-				label = "Select",
+				label = "select",
 				options = createObject('component', 'cf-compendium.inc.resource.utility.options').init()
 			}<br />
 		
@@ -154,7 +175,7 @@
 <!--- Select --->
 <cfset element = {
 		name = "testSelect",
-		label = "Select",
+		label = "select",
 		options = createObject('component', 'cf-compendium.inc.resource.utility.options').init()
 	} />
 
@@ -171,7 +192,7 @@
 	<code>
 		theForm.addElement('text', {
 				name = "testText",
-				label = "Text",
+				label = "text",
 				value = "true"
 			})
 	</code>
@@ -180,7 +201,7 @@
 <!--- Text --->
 <cfset theForm.addElement('text', {
 		name = "testText",
-		label = "Text",
+		label = "text",
 		value = "true"
 	}) />
 
@@ -190,7 +211,7 @@
 	<code>
 		theForm.addElement('textarea', {
 				name = "testTextarea",
-				label = "Textarea",
+				label = "textarea",
 				value = "true"
 			})
 	</code>
@@ -199,7 +220,7 @@
 <!--- Textarea --->
 <cfset theForm.addElement('textarea', {
 		name = "testTextarea",
-		label = "Textarea",
+		label = "textarea",
 		value = "true"
 	}) />
 

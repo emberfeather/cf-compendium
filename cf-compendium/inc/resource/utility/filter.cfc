@@ -5,13 +5,13 @@
 		
 		<cfset variables.i18n = arguments.i18n />
 		<cfset variables.locale = arguments.locale />
+		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
 		
-		<cfset variables.bundles = [] />
 		<cfset variables.filters = [] />
 		<cfset variables.numFilters = 0 />
 		
 		<!--- Set base bundle for translation --->
-		<cfset addI18NBundle('/cf-compendium/i18n/inc/resource/utility', 'filter') />
+		<cfset addBundle('/cf-compendium/i18n/inc/resource/utility', 'filter') />
 		
 		<cfreturn this />
 	</cffunction>
@@ -20,12 +20,19 @@
 		<cfset arrayAppend(variables.filters, 'Filter Break') />
 	</cffunction>
 	
+	<cffunction name="addBundle" access="public" returntype="void" output="false">
+		<cfargument name="path" type="string" required="true" />
+		<cfargument name="name" type="string" required="true" />
+		
+		<cfset variables.label.addBundle(argumentCollection = arguments) />
+	</cffunction>
+	
 	<cffunction name="addFilter" access="public" returntype="void" output="false">
 		<cfargument name="key" type="string" required="true" />
 		<cfargument name="options" type="component" required="false" />
 		
 		<cfset var filter = {
-				label = getLabel(arguments.key),
+				label = variables.label.get(arguments.key),
 				key = trim(arguments.key),
 				options = ''
 			} />
@@ -45,33 +52,6 @@
 		
 		<!--- Increase the filter count --->
 		<cfset variables.numFilters++ />
-	</cffunction>
-	
-	<cffunction name="addI18NBundle" access="public" returntype="void" output="false">
-		<cfargument name="path" type="string" required="true" />
-		<cfargument name="name" type="string" required="true" />
-		
-		<cfset arrayAppend(variables.bundles, variables.i18n.getResourceBundle(arguments.path, arguments.name, variables.locale)) />
-	</cffunction>
-	
-	<cffunction name="getLabel" access="public" returntype="string" output="false">
-		<cfargument name="key" type="string" required="true" />
-		
-		<cfset var i = '' />
-		
-		<!--- Check for no label --->
-		<cfif arguments.key EQ ''>
-			<cfreturn '' />
-		</cfif>
-		
-		<!--- Find the first (LIFO) value for the label --->
-		<cfloop from="#arrayLen(variables.bundles)#" to="1" index="i" step="-1">
-			<cfif variables.bundles[i].hasKey(arguments.key)>
-				<cfreturn variables.bundles[i].getValue(arguments.key) />
-			</cfif>
-		</cfloop>
-		
-		<cfreturn 'N/A' />
 	</cffunction>
 	
 	<cffunction name="filterItem" access="private" returntype="string" output="false">
@@ -245,7 +225,7 @@
 		</cfloop>
 		
 		<!--- Wrap with the filter div --->
-		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theURL.getFilter() & '">' & html & '<input type="submit" value="' & getLabel(arguments.options.submit) & '"></form></div>' />
+		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theURL.getFilter() & '">' & html & '<input type="submit" value="' & variables.label.get(arguments.options.submit) & '"></form></div>' />
 		
 		<cfreturn html />
 	</cffunction>

@@ -12,7 +12,7 @@
 <cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(i18n) />
 <cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 
-<h2>addI18NBundle(path, name)</h2>
+<h2>addBundle(path, name)</h2>
 
 <p>
 	Adds an i18n bundle for label translation.
@@ -20,11 +20,11 @@
 
 <blockquote>
 	<code>
-		filter.addI18NBundle('inc/resource/utility', 'filter')
+		filter.addBundle('inc/resource/utility', 'filter')
 	</code>
 </blockquote>
 
-<cfset filter.addI18NBundle('inc/resource/utility', 'filter') />
+<cfset filter.addBundle('inc/resource/utility', 'filter') />
 
 <h2>addFilter() - No Options</h2>
 
@@ -41,7 +41,7 @@
 <h2>addFilter() - One Option</h2>
 
 <cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(i18n) />
-<cfset filter.addI18NBundle('inc/resource/utility', 'filter') />
+<cfset filter.addBundle('inc/resource/utility', 'filter') />
 
 <blockquote>
 	<code>
@@ -62,7 +62,7 @@
 <h2>addFilter() - Few Options</h2>
 
 <cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(i18n) />
-<cfset filter.addI18NBundle('inc/resource/utility', 'filter') />
+<cfset filter.addBundle('inc/resource/utility', 'filter') />
 
 <blockquote>
 	<code>
@@ -87,7 +87,7 @@
 <h2>addFilter() - Many options</h2>
 
 <cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(i18n) />
-<cfset filter.addI18NBundle('inc/resource/utility', 'filter') />
+<cfset filter.addBundle('inc/resource/utility', 'filter') />
 
 <blockquote>
 	<code>

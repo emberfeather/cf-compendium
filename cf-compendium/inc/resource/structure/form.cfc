@@ -5,6 +5,11 @@
 <cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="any" output="false">
 		<cfargument name="id" type="string" required="true" />
+		<cfargument name="i18n" type="component" required="true" />
+		<cfargument name="locale" type="string" default="en_US" />
+		
+		<cfset variables.i18n = arguments.i18n />
+		<cfset variables.locale = arguments.locale />
 		
 		<!--- Store the name of the form --->
 		<!--- Used for keeping multiple forms on the same page unique --->
@@ -19,10 +24,21 @@
 		<cfset variables.fieldsets = arrayNew(1) />
 		<cfset variables.elements = arrayNew(1) />
 		
-		<!--- Create an extender --->
+		<!--- Create an objects --->
 		<cfset variables.extender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
+		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
+		
+		<!--- Set base bundle for translation --->
+		<cfset addBundle('/cf-compendium/i18n/inc/resource/structure', 'form') />
 		
 		<cfreturn this />
+	</cffunction>
+	
+	<cffunction name="addBundle" access="public" returntype="void" output="false">
+		<cfargument name="path" type="string" required="true" />
+		<cfargument name="name" type="string" required="true" />
+		
+		<cfset variables.label.addBundle(argumentCollection = arguments) />
 	</cffunction>
 	
 	<!--- 
@@ -295,12 +311,12 @@
 		
 		<!--- Submit --->
 		<cfif extendedOptions.submit NEQ ''>
-			<cfset formatted &= '<input type="submit" value="' & extendedOptions.submit & '" />' />
+			<cfset formatted &= '<input type="submit" value="' & variables.label.get(extendedOptions.submit) & '" />' />
 		</cfif>
 		
 		<!--- Reset --->
 		<cfif extendedOptions.reset NEQ ''>
-			<cfset formatted &= '<input type="reset" value="' & extendedOptions.reset & '" />' />
+			<cfset formatted &= '<input type="reset" value="' & variables.label.get(extendedOptions.reset) & '" />' />
 		</cfif>
 		
 		<!--- Close --->
@@ -345,7 +361,7 @@
 					<cfset formatted &= ' for="' & arguments.element.id & '"' />
 				</cfif>
 				
-				<cfset formatted &= '>' & arguments.element.label & ':</label> ' />
+				<cfset formatted &= '>' & variables.label.get(arguments.element.label) & ':</label> ' />
 			</cfif>
 		</cfif>
 		

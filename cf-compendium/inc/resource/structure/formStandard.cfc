@@ -507,7 +507,7 @@
 		<!--- Output the options --->
 		<cfloop array="#optGroups#" index="group">
 			<cfif group.label NEQ ''>
-				<cfset formatted &= '<optgroup label="' & group.label & '">' />
+				<cfset formatted &= '<optgroup label="' & variables.label.get(group.label) & '">' />
 			</cfif>
 			
 			<cfloop array="#group.options#" index="option">

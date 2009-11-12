@@ -1,9 +1,13 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
+	<cffunction name="setup" access="public" returntype="void" output="false">
+		<cfset variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
+	</cffunction>
+	
 	<!---
 		Tests to ensure that the form throws an error if requested without an action.
 	--->
 	<cffunction name="testShowFormSansAction" access="public" returntype="void" output="false">
-		<cfset var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test') />
+		<cfset var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n) />
 		
 		<!--- Hidden --->
 		<cfset theForm.addElement('hidden', {
@@ -31,7 +35,7 @@
 		Tests to ensure that the form throws an error if requested without any elements added.
 	--->
 	<cffunction name="testShowFormSansElement" access="public" returntype="void" output="false">
-		<cfset var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test') />
+		<cfset var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n) />
 		
 		<cftry>
 			<cfset theForm.toHTML('/') />

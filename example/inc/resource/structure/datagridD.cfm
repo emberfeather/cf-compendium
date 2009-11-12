@@ -16,7 +16,7 @@
 <cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
 <cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n) />
 
-<h2>addI18NBundle(path, name)</h2>
+<h2>addBundle(path, name)</h2>
 
 <p>
 	Adds an i18n bundle for label translation.
@@ -24,11 +24,11 @@
 
 <blockquote>
 	<code>
-		datagrid.addI18NBundle('inc/resource/structure', 'datagrid')
+		datagrid.addBundle('inc/resource/structure', 'datagrid')
 	</code>
 </blockquote>
 
-<cfset datagrid.addI18NBundle('inc/resource/structure', 'datagrid') />
+<cfset datagrid.addBundle('inc/resource/structure', 'datagrid') />
 
 <h2>addColumn([options])</h2>
 
