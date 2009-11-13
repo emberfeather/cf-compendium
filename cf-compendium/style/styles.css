@@ -92,6 +92,10 @@
 	font-weight: bold;
 }
 
+.light {
+	color: #666;
+}
+
 .float-left {
 	float: left;
 }
