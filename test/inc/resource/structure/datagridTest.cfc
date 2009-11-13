@@ -1,7 +1,10 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<cffunction name="testAddColumnWithOptions" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="setup" access="public" returntype="void" output="false">
+		<cfset variables.theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+	</cffunction>
+	
+	<cffunction name="testAddColumn_WithOptions" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		
 		<cfset datagrid.addColumn({
 				label = "First Name"
@@ -11,9 +14,8 @@
 	<!---
 		Test the calculate derived with simple array for the currentRow
 	--->
-	<cffunction name="testCalculateDerivedArrayCurrentRow" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="testCalculateDerived_WithArray_CurrentRow" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		<cfset var data = '' />
 		
 		<cfset makePublic(datagrid, 'calculateDerived') />
@@ -26,9 +28,8 @@
 	<!---
 		Test the calculate derived with simple array for a running sum
 	--->
-	<cffunction name="testCalculateDerivedArrayRunningSum" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="testCalculateDerived_WithArray_RunningSum" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		<cfset var data = '' />
 		
 		<cfset makePublic(datagrid, 'calculateDerived') />
@@ -41,9 +42,8 @@
 	<!---
 		Test the calculate derived with array of structs for the currentRow
 	--->
-	<cffunction name="testCalculateDerivedArrayObjectsCurrentRow" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="testCalculateDerived_WithArrayObjects_CurrentRow" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		<cfset var data = '' />
 		<cfset var obj = '' />
 		
@@ -77,9 +77,8 @@
 	<!---
 		Test the calculate derived with array of structs for a running sum
 	--->
-	<cffunction name="testCalculateDerivedArrayObjectsRunningSum" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="testCalculateDerived_WithArrayObjects_RunningSum" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		<cfset var data = '' />
 		
 		<cfset makePublic(datagrid, 'calculateDerived') />
@@ -112,9 +111,8 @@
 	<!---
 		Test the calculate derived with array of structs for the currentRow
 	--->
-	<cffunction name="testCalculateDerivedArrayStructsCurrentRow" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="testCalculateDerived_WithArrayStructs_CurrentRow" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		<cfset var data = '' />
 		
 		<cfset makePublic(datagrid, 'calculateDerived') />
@@ -143,9 +141,8 @@
 	<!---
 		Test the calculate derived with array of structs for a running sum
 	--->
-	<cffunction name="testCalculateDerivedArrayStructsRunningSum" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="testCalculateDerived_WithArrayStructs_RunningSum" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		<cfset var data = '' />
 		
 		<cfset makePublic(datagrid, 'calculateDerived') />
@@ -174,9 +171,8 @@
 	<!---
 		Test the calculate derived with query for the currentRow
 	--->
-	<cffunction name="testCalculateDerivedQueryCurrentRow" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="testCalculateDerived_WithQuery_CurrentRow" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		<cfset var data = '' />
 		
 		<cfset makePublic(datagrid, 'calculateDerived') />
@@ -201,9 +197,8 @@
 	<!---
 		Test the calculate derived with query for a running sum
 	--->
-	<cffunction name="testCalculateDerivedQueryRunningSum" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(theURL) />
+	<cffunction name="testCalculateDerived_WithQuery_RunningSum" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
 		<cfset var data = '' />
 		
 		<cfset makePublic(datagrid, 'calculateDerived') />
@@ -223,5 +218,33 @@
 		<cfset querySetCell(data, 'value', 4) />
 		
 		<cfset assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4, { startRow = 1 })) />
+	</cffunction>
+	
+	<!---
+		Test the formatValue with a date format
+	--->
+	<cffunction name="testFormatValue_WithDate" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
+		<cfset var value = '' />
+		
+		<cfset makePublic(datagrid, 'formatValue') />
+		
+		<cfset value = createDate(2009, 11, 13) />
+		
+		<cfset assertEquals('13 Nov 2009', datagrid.formatValue({ type = 'date', format = 'd mmm yyyy' }, value)) />
+	</cffunction>
+	
+	<!---
+		Test the formatValue with a time format
+	--->
+	<cffunction name="testFormatValue_WithTime" access="public" returntype="void" output="false">
+		<cfset var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theURL) />
+		<cfset var value = '' />
+		
+		<cfset makePublic(datagrid, 'formatValue') />
+		
+		<cfset value = createTime(14, 34, 12) />
+		
+		<cfset assertEquals('02:34:12 PM', datagrid.formatValue({ type = 'time', format = 'hh:mm:ss tt' }, value)) />
 	</cffunction>
 </cfcomponent>

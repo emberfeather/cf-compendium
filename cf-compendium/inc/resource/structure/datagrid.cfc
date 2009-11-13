@@ -161,13 +161,17 @@
 		<cfreturn html />
 	</cffunction>
 	
-	<cffunction name="formatValue" access="public" returntype="string" output="false">
+	<cffunction name="formatValue" access="private" returntype="string" output="false">
 		<cfargument name="column" type="struct" required="true" />
 		<cfargument name="value" type="string" required="true" />
 		
 		<cfswitch expression="#arguments.column.type#">
 			<cfcase value="date">
 				<cfreturn dateFormat(arguments.value, arguments.column.format) />
+			</cfcase>
+			
+			<cfcase value="time">
+				<cfreturn timeFormat(arguments.value, arguments.column.format) />
 			</cfcase>
 			
 			<!--- Use the format as a holder for a formatter --->
