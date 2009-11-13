@@ -22,10 +22,12 @@
 		
 		<cfset var defaults = {
 				class = '',
+				format = '',
 				key = '',
 				label = '',
 				link = [],
 				linkClass = [],
+				type = 'text',
 				value = ''
 			} />
 		
@@ -157,6 +159,26 @@
 		</cfsavecontent>
 		
 		<cfreturn html />
+	</cffunction>
+	
+	<cffunction name="formatValue" access="public" returntype="string" output="false">
+		<cfargument name="column" type="struct" required="true" />
+		<cfargument name="value" type="string" required="true" />
+		
+		<cfswitch expression="#arguments.column.type#">
+			<cfcase value="date">
+				<cfreturn dateFormat(arguments.value, arguments.column.format) />
+			</cfcase>
+			
+			<!--- Use the format as a holder for a formatter --->
+			<cfcase value="custom">
+				<cfreturn arguments.column.format.toHTML(arguments.value) />
+			</cfcase>
+			
+			<cfdefaultcase>
+				<cfreturn arguments.value />
+			</cfdefaultcase>
+		</cfswitch>
 	</cffunction>
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
@@ -366,7 +388,7 @@
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
 												<cfelse>
-													#value#
+													#formatValue(col, value)#
 												</cfif>
 											</td>
 										</cfloop>
@@ -388,7 +410,7 @@
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
 												<cfelse>
-													#value#
+													#formatValue(col, value)#
 												</cfif>
 											</td>
 										</cfloop>
@@ -435,7 +457,7 @@
 										<cfif arrayLen(col.link)>
 											#createLink(value, col, data, rowNum, counter, arguments.options)#
 										<cfelse>
-											#value#
+											#formatValue(col, value)#
 										</cfif>
 									</td>
 								</cfloop>
