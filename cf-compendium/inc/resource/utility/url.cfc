@@ -188,7 +188,7 @@
 		<cfset arguments.missingMethodName = lCase(arguments.missingMethodName) />
 		
 		<!--- Find the parts of the function name we are interested in --->
-		<cfset findParts = reFind('^(clean|clone|extend|get|has|override|remove|reset|searchid|search|set)(.*)', arguments.missingMethodName, 1, true) />
+		<cfset findParts = reFind('^(clean|clone|extend|get|has|override|remove|reset|searchid|searchboolean|search|set)(.*)', arguments.missingMethodName, 1, true) />
 		
 		<!--- Check if not one that we are equiped to handle --->
 		<cfif NOT findParts.pos[1]>
@@ -279,6 +279,14 @@
 				</cfif>
 				
 				<cfreturn search(extra, arguments.missingMethodArguments[1]) />
+			</cfcase>
+			
+			<cfcase value="searchBoolean">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+					<cfreturn searchBoolean(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				</cfif>
+				
+				<cfreturn searchBoolean(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="searchid">
