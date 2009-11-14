@@ -151,10 +151,6 @@
 			'delete',
 			'edit'
 		],
-		value = [
-			'delete',
-			'edit'
-		],
 		link = [
 			{
 				'userID' = 'userID',
