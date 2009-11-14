@@ -420,6 +420,23 @@
 	</cffunction>
 	
 	<!---
+		Searches an location or the master for an variable that is an Boolean.
+	--->
+	<cffunction name="searchBoolean" access="private" returntype="boolean" output="false">
+		<cfargument name="locationName" type="string" default="" />
+		<cfargument name="variableName" type="string" required="true" />
+		
+		<cfset var value = search(argumentCollection=arguments) />
+		
+		<!--- If not a number return a zero --->
+		<cfif NOT isBoolean(value)>
+			<cfreturn false />
+		</cfif>
+		
+		<cfreturn value />
+	</cffunction>
+	
+	<!---
 		Searches an location or the master for an variable that is an id.
 	--->
 	<cffunction name="searchID" access="private" returntype="numeric" output="false">
