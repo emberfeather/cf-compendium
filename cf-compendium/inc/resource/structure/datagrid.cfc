@@ -112,6 +112,7 @@
 		<cfset var class = '' />
 		<cfset var href = '' />
 		<cfset var html = '' />
+		<cfset var key = '' />
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var link = '' />
@@ -124,17 +125,19 @@
 			<cfoutput>
 				<cfloop from="1" to="#arrayLen(arguments.column.link)#" index="i">
 					<cfloop list="#structKeyList(arguments.column.link[i])#" index="j">
+						<cfset key = arguments.column.link[i][j] />
+						
 						<!--- Get the link value --->
-						<cfif isNumeric(arguments.column.link[i][j])>
-							<cfset value = arguments.column.link[i][j] />
-						<cfelseif isQuery(arguments.data) AND structKeyExists(arguments.data, j)>
-							<cfset value = arguments.data[j][arguments.rowNum] />
-						<cfelseif isObject(arguments.data[arguments.rowNum]) AND arguments.data[arguments.rowNum].hasKey(j)>
-							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#j#" returnvariable="value" />
-						<cfelseif isStruct(arguments.data[arguments.rowNum]) AND structKeyExists(arguments.data[arguments.rowNum], j)>
-							<cfset value = arguments.data[arguments.rowNum][j] />
+						<cfif isNumeric(key)>
+							<cfset value = key />
+						<cfelseif isQuery(arguments.data) AND structKeyExists(arguments.data, key)>
+							<cfset value = arguments.data[key][arguments.rowNum] />
+						<cfelseif isArray(arguments.data) AND isObject(arguments.data[arguments.rowNum]) AND arguments.data[arguments.rowNum].hasKey(key)>
+							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#key#" returnvariable="value" />
+						<cfelseif isArray(arguments.data) AND isStruct(arguments.data[arguments.rowNum]) AND structKeyExists(arguments.data[arguments.rowNum], key)>
+							<cfset value = arguments.data[arguments.rowNum][key] />
 						<cfelse>
-							<cfset value = arguments.column.link[i][j] />
+							<cfset value = key />
 						</cfif>
 						
 						<cfinvoke component="#arguments.options.theURL#" method="setDGCol#arguments.colNum#Link#i#">
