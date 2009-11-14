@@ -19,6 +19,9 @@
 			// Add the alternating rows
 			$('tbody tr:even', $this).addClass(o.classAlt);
 			
+			// Add the delete confirmation
+			$('a.delete', $this).click(confirmDelete);
+			
 			// Add the row hovering
 			$('tbody tr', $this).hover(function() {
 				$(this).addClass(o.classHover);
@@ -68,5 +71,9 @@
 	 * Private
 	 */
 	
-	// None
+	function confirmDelete() {
+		title = $(this).attr('title') || 'this item';
+		
+		return confirm('Are you sure you want to remove ' + title + '?');
+	} // function
 })(jQuery);
