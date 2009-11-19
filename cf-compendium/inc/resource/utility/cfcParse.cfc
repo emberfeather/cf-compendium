@@ -561,7 +561,14 @@
 		<cfargument name="fileName" type="string" required="true" />
 		<cfargument name="bufferSize" type="string" default="#variables.buffersize#" />
 		
-		<!--- TODO Add in some searching functionality to search for the file if it doesn't exist --->
+		<!--- Check that the file path exists --->
+		<cfif NOT fileExists(arguments.fileName)>
+			<cfif fileExists(expandPath(arguments.fileName))>
+				<cfset arguments.fileName = expandPath(arguments.fileName) />
+			<cfelseif fileExists(expandPath('/' & arguments.fileName))>
+				<cfset arguments.fileName = expandPath('/' & arguments.fileName) />
+			</cfif>
+		</cfif>
 		
 		<!--- TODO Remove this when railo adds buffersize --->
 		<cfreturn fileRead(arguments.fileName) />
