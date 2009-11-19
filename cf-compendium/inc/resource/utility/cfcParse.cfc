@@ -4,8 +4,10 @@
 <cfcomponent output="false" hint="Parses through cfc files.">
 	<cffunction name="init" access="public" returntype="any" output="false">
 		<cfargument name="lazyLoad" type="boolean" default="true" />
+		<cfargument name="bufferSize" type="numeric" default="1000" />
 		
 		<cfset variables.lazyLoad = arguments.lazyLoad />
+		<cfset variables.bufferSize = arguments.bufferSize />
 		
 		<cfreturn this />
 	</cffunction>
@@ -14,79 +16,75 @@
 		Use this function to determine if a given file is a component
 	--->
 	<cffunction name="isComponent" access="public" returntype="boolean" output="false" hint="Determines if a cfc file is a component.">
-		<cfargument name="filename" type="string" required="true" />
-		<cfargument name="directory" type="string" required="true" />
-
-		<cfset var expression = "<cfcomponent" />
-		<cfset var fileContent = '' />
+		<cfargument name="fileName" type="string" required="true" />
 		
 		<!--- If lazy loading then don't even try --->
 		<cfif variables.lazyLoad>
 			<cfreturn true />
 		</cfif>
 		
-		<!--- Read the file contents --->
-		<cffile action="read" file="#checkFile(arguments.filename, arguments.directory)#" variable="fileContent" />
-		
-		<!--- Search for the component tag --->
-		<cfreturn reFindNoCase(expression, fileContent) />
+		<cfreturn checkIsComponent(trim(readFileContents(arguments.fileName, variables.bufferSize))) />
 	</cffunction>
 	
 	<!---
-		Checks to see if the file exists. Also tries checking for a relative path.
+		Use this function to determine if a given file is a script-based component
 	--->
-	<cffunction name="checkFile" access="private" returntype="string" output="false">
-		<cfargument name="filename" type="string" required="true" />
-		<cfargument name="directory" type="string" required="true" />
+	<cffunction name="isScript" access="public" returntype="boolean" output="false">
+		<cfargument name="fileName" type="string" required="true" />
 		
-		<cfset var filePath = '' />
+		<cfreturn checkIsScript(trim(readFileContents(arguments.fileName, variables.bufferSize))) />
+	</cffunction>
+	
+	<!---
+		Check the contents of a file to see if it is a component
+	--->
+	<cffunction name="checkIsComponent" access="private" returntype="boolean" output="false">
+		<cfargument name="fileContent" type="string" required="true" />
 		
-		<!--- Check for no directory --->
-		<cfif arguments.directory EQ ''>
-			<cfset arguments.directory = './' />
+		<cfset var expression = '' />
+		
+		<cfif checkIsScript(arguments.fileContent)>
+			<cfset expression = 'component' />
+		<cfelse>
+			<cfset expression = '<cfcomponent' />
 		</cfif>
 		
-		<!--- Check for trailing slash on directory --->
-		<cfif right(arguments.directory, 1) NEQ '/'>
-			<cfset arguments.directory &= '/' />
-		</cfif>
+		<!--- Search for the component keyword --->
+		<cfreturn reFindNoCase(expression, fileContent) GT 0 />
+	</cffunction>
+	
+	<!---
+		Check the contents of a file to see if it is a script
+	--->
+	<cffunction name="checkIsScript" access="private" returntype="boolean" output="false">
+		<cfargument name="fileContent" type="string" required="true" />
 		
-		<!--- Set the file path --->
-		<cfset filePath = arguments.directory & arguments.filename />
-		
-		<!--- Check to see if there is a file --->
-		<cfif NOT fileExists(filePath)>
-			<!--- Allow a relative path --->
-			<cfset filePath = expandPath(filePath) />
-			
-			<!--- Still no joy --->
-			<cfif NOT fileExists(filePath)>
-				<cfthrow message="File does not exist" detail="The file (#filePath#) does not exist." />
-			</cfif>
-		</cfif>
-		
-		<cfreturn filePath />
+		<!--- Search for the component tag --->
+		<cfreturn reFind('^<', fileContent) EQ 0 />
 	</cffunction>
 	
 	<!---
 		Executes the methods to open and parse a component.
 	--->
 	<cffunction name="parse" access="public" returntype="struct" output="false" hint="Parses a specified file into a struct.">
-		<cfargument name="filename" type="string" required="true" />
-		<cfargument name="directory" type="string" required="true" />
+		<cfargument name="fileName" type="string" required="true" />
 		<cfargument name="constructors" type="string" required="true" />
 
 		<cfset var fileContent = '' />
 		<cfset var parsed = '' />
 		
 		<!--- Read the file contents --->
-		<cffile action="read" file="#checkFile(arguments.filename, arguments.directory)#" variable="fileContent" />
+		<cfset fileContent = readFileContents(arguments.fileName) />
 		
 		<!--- Parse the component --->
-		<cfset parsed = parseComponent(fileContent, arguments.constructors) />
+		<cfif checkIsScript(fileContent)>
+			<cfset parsed = parseScriptComponent(fileContent, arguments.constructors) />
+		<cfelse>
+			<cfset parsed = parseComponent(fileContent, arguments.constructors) />
+		</cfif>
 		
-		<!--- Set the component name from the filename --->
-		<cfset parsed.attributes.name = left(arguments.filename, len(arguments.filename) - len('.cfc')) />
+		<!--- Set the component name from the fileName --->
+		<cfset parsed.attributes.name = left(arguments.fileName, len(arguments.fileName) - len('.cfc')) />
 		
 		<cfreturn parsed />
 	</cffunction>
@@ -99,7 +97,7 @@
 		
 		<cfset var i = '' />
 		<cfset var isComment = false />
-		<cfset var parsedComments = arrayNew(1) />
+		<cfset var parsedComments = [] />
 		
 		<cfloop list="#arguments.comments#" index="i" delimiters="#chr(10)##chr(13)#">
 			<cfset i = trim(i) />
@@ -143,15 +141,15 @@
 		
 		<cfset var expression = "<cf(component|interface)([^>]*)>(.*)</cf(component|interface)>" />
 		<cfset var location = '' />
-		<cfset var component = structNew() />
-		<cfset var comments = arrayNew(1) />
+		<cfset var component = {} />
+		<cfset var comments = [] />
 		<cfset var attributes = '' />
 		<cfset var contents = '' />
 		
 		<!--- Create the initial component values --->
-		<cfset component.comments = arrayNew(1) />
-		<cfset component.attributes = arrayNew(1) />
-		<cfset component.properties = arrayNew(1) />
+		<cfset component.comments = [] />
+		<cfset component.attributes = [] />
+		<cfset component.properties = [] />
 		
 		<!--- Find the component information --->
 		<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
@@ -196,14 +194,14 @@
 		
 		<cfset var expression = "<cffunction([^>]*)>(.*?)</cffunction>" />
 		<cfset var location = '' />
-		<cfset var functions = structNew() />
+		<cfset var functions = {} />
 		<cfset var tempFunction = '' />
 		<cfset var lastEnd = 1 />
 		<cfset var comments = '' />
 		
 		<!--- Create the function arrays --->
-		<cfset functions.constructors = arrayNew(1) />
-		<cfset functions.functions = arrayNew(1) />
+		<cfset functions.constructors = [] />
+		<cfset functions.functions = [] />
 		
 		<!--- find the expression in the contents --->
 		<cfset location = reFindNoCase(expression, arguments.contents, 1, true) />
@@ -211,11 +209,11 @@
 		<!--- Check if was successful --->
 		<cfloop condition="location.pos[1]">
 			<!--- Create the temp function --->
-			<cfset tempFunction = structNew() />
+			<cfset tempFunction = {} />
 			<cfset tempFunction.contents = '' />
-			<cfset tempFunction.comments = arrayNew(1) />
-			<cfset tempFunction.attributes = arrayNew(1) />
-			<cfset tempFunction.arguments = arrayNew(1) />
+			<cfset tempFunction.comments = [] />
+			<cfset tempFunction.attributes = [] />
+			<cfset tempFunction.arguments = [] />
 			
 			<!--- Parse out the comments --->
 			<cfset comments = parseComments(mid(arguments.contents, lastEnd, location.pos[1] - lastEnd)) />
@@ -250,6 +248,180 @@
 	</cffunction>
 	
 	<!---
+		Parses the comments out of a string.
+	--->
+	<cffunction name="parseScriptComments" access="private" returntype="array" output="false">
+		<cfargument name="comments" type="string" required="true" />
+		
+		<cfset var i = '' />
+		<cfset var isComment = false />
+		<cfset var parsedComments = [] />
+		
+		<cfloop list="#arguments.comments#" index="i" delimiters="#chr(10)##chr(13)#">
+			<cfset i = trim(i) />
+			
+			<!--- Determine state --->
+			<cfif left(i, 2) EQ '//'>
+				<cfset isComment = true />
+				
+				<cfset i = trim(right(i, len(i) - len('//'))) />
+			<cfelseif left(i, 2) EQ '/*'>
+				<cfset isComment = true />
+				
+				<cfif len(i) GT 2>
+					<cfset i = trim(right(i,  len(i) - len('//'))) />
+				<cfelse>
+					<cfset i = '' />
+				</cfif>
+			<cfelseif right(i, 2) EQ '*/'>
+				<cfset isComment = false />
+				
+				<cfif len(i) GT 4>
+					<cfset i = trim(left(i,  len(i) - len('*/'))) />
+				<cfelse>
+					<cfset i = '' />
+				</cfif>
+			</cfif>
+			
+			<!--- Trim multiline comment beginning with * --->
+			<cfif left(i, 1) EQ '*'>
+				<cfif len(i) EQ 1>
+					<cfset i = '' />
+				<cfelse>
+					<cfset i = trim(right(i, len(i) - 1)) />
+				</cfif>
+			</cfif>
+			
+			<cfif i NEQ '' AND isComment>
+				<cfset arrayAppend(parsedComments, i) />
+			</cfif>
+		</cfloop>
+		
+		<cfreturn parsedComments />
+	</cffunction>
+	
+	<!---
+		Parse a script component.
+	--->
+	<cffunction name="parseScriptComponent" access="private" returntype="struct" output="false">
+		<cfargument name="fileContents" type="string" required="true" />
+		<cfargument name="constructors" type="string" required="true" />
+		
+		<cfset var attributes = '' />
+		<cfset var comments = {} />
+		<cfset var component = {} />
+		<cfset var contents = '' />
+		<cfset var expression = '' />
+		<cfset var location = '' />
+		<cfset var buffer = '' />
+		
+		<!--- Create the initial component values --->
+		<cfset component.comments = {} />
+		<cfset component.attributes = {} />
+		<cfset component.properties = [] />
+		
+		<!--- Process the component comments --->
+		<cfset component.comments = trimScriptPreComments(arguments.fileContents) />
+		
+		<!--- Remove any found comments so it doesn't mess up the component parsing --->
+		<cfif component.comments.length GT 0>
+			<cfset arguments.fileContents = right(arguments.fileContents, len(arguments.fileContents) - component.comments.length) />
+		</cfif>
+		
+		<!--- Find the component information --->
+		<cfset expression = '(component|interface)([^{]*){(.*)}' />
+		
+		<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
+		
+		<!--- Check if was successful --->
+		<cfif location.pos[1] NEQ 0>
+			<!--- Set the type of component --->
+			<cfset component.type = mid(arguments.fileContents, location.pos[2], location.len[2]) />
+			
+			<!--- Parse out the information in the actual component --->
+			<cfset component.attributes = processAttributes(mid(arguments.fileContents, location.pos[3], location.len[3])) />
+			
+			<!--- Parse out the content of the actual component --->
+			<cfset contents = mid(arguments.fileContents, location.pos[4], location.len[4]) />
+			
+			<!--- Parse out the functions --->
+			<cfset component.methods = parseScriptFunctions(contents, arguments.constructors) />
+		<cfelse>
+			<cfthrow message="Error trying to parse the cfc file." detail="While trying to parse the cfc file there was no <cfcomponent> or <cfinterface> tags found" />
+		</cfif>
+		
+		<cfreturn component />
+	</cffunction>
+	
+	<!---
+		Parse through each function in the script component.
+		
+		TODO is greedy with end of function, need to stop at next function and go back to end of last function...
+	--->
+	<cffunction name="parseScriptFunctions" access="private" returntype="struct" output="false">
+		<cfargument name="contents" type="string" required="true" />
+		<cfargument name="constructors" type="string" required="true" />
+		
+		<cfset var expression = "(public|private) ([a-zA-Z]+) function ([a-zA-Z0-9-_]+)[ ]?\(([^\)]*)\)[ ]?{(.*)}" />
+		<cfset var location = '' />
+		<cfset var functions = {} />
+		<cfset var tempFunction = '' />
+		<cfset var lastEnd = 1 />
+		<cfset var comments = '' />
+		
+		<!--- Create the function arrays --->
+		<cfset functions.constructors = [] />
+		<cfset functions.functions = [] />
+		
+		<!--- find the expression in the contents --->
+		<cfset location = reFindNoCase(expression, arguments.contents, 1, true) />
+		
+		<!--- Check if was successful --->
+		<cfloop condition="location.pos[1]">
+			<!--- Create the temp function --->
+			<cfset tempFunction = {} />
+			<cfset tempFunction.contents = '' />
+			<cfset tempFunction.comments = {} />
+			<cfset tempFunction.attributes = {} />
+			<cfset tempFunction.arguments = [] />
+			
+			<!--- Parse out the comments --->
+			<cfset comments = parseScriptComments(mid(arguments.contents, lastEnd, location.pos[1] - lastEnd)) />
+			
+			<!--- Process the function comments --->
+			<cfset tempFunction.comments = processComments(comments) />
+			
+			<!--- Set where the function ends for commenting purposes --->
+			<cfset lastEnd = location.pos[1] + location.len[1] />
+			
+			<!--- Parse out the information in the component --->
+			<cfset tempFunction.attributes = duplicate(tempFunction.comments.meta) />
+			
+			<cfset tempFunction.attributes['access'] = mid(arguments.contents, location.pos[2], location.len[2]) />
+			<cfset tempFunction.attributes['returnType'] = mid(arguments.contents, location.pos[3], location.len[3]) />
+			<cfset tempFunction.attributes['name'] = mid(arguments.contents, location.pos[4], location.len[4]) />
+			
+			<!--- Parse out the content of the function --->
+			<cfset tempFunction.contents = mid(arguments.contents, location.pos[1], location.len[1]) />
+			
+			<!--- Parse out the arguments of the function --->
+			<cfset tempFunction.arguments = processScriptArguments(mid(arguments.contents, location.pos[5], location.len[5])) />
+			
+			<!--- Add to function array --->
+			<cfif ListFind(arguments.constructors, tempFunction.attributes.name)>
+				<cfset arrayAppend(functions.constructors, tempFunction) />
+			<cfelse>
+				<cfset arrayAppend(functions.functions, tempFunction) />
+			</cfif>
+			
+			<!--- Look for another function --->
+			<cfset location = reFindNoCase(expression, arguments.contents, lastEnd, true) />
+		</cfloop>
+		
+		<cfreturn functions />
+	</cffunction>
+	
+	<!---
 		Parse a given string for a tag and retrieve the attributes.
 	--->
 	<cffunction name="parseTag" access="private" returntype="array" output="false">
@@ -259,7 +431,7 @@
 
 		<cfset var expression = '<' & arguments.tagName & '([^>]*)[/]?>' />
 		<cfset var location = '' />
-		<cfset var tags = arrayNew(1) />
+		<cfset var tags = [] />
 		
 		<!--- find the expression in the contents --->
 		<cfset location = reFindNoCase(expression, arguments.contents, 1, true) />
@@ -281,7 +453,7 @@
 		<cfargument name="contents" type="string" required="true" hint="foo|bar" />
 		<cfargument name="attributeType" type="string" default="component" />
 		
-		<cfset var attributes = structNew() />
+		<cfset var attributes = {} />
 		<cfset var expression = "([\S]*)=[""']([^""']*)[""']" />
 		<cfset var location = '' />
 		<cfset var i = '' />
@@ -324,19 +496,42 @@
 	</cffunction>
 	
 	<!---
+		Process a string and pull out the arguments and their properties.
+	--->
+	<cffunction name="processScriptArguments" access="private" returntype="struct" output="false">
+		<cfargument name="contents" type="string" required="true" hint="foo|bar" />
+		
+		<cfset var attributes = {} />
+		<cfset var expression = "([\S]*) ([\S]*)(=[""']([^""']*)[""'])?" />
+		<cfset var location = '' />
+		<cfset var i = '' />
+		<cfset var temp = '' />
+		
+		<cfset location = reFindNoCase(expression, arguments.contents, 1, true) />
+		
+		<cfloop condition="location.pos[1]">
+			<cfset attributes[mid(arguments.contents, location.pos[2], location.len[2])] = mid(arguments.contents, location.pos[3], location.len[3]) />
+			
+			<cfset location = REFindNoCase(expression, arguments.contents, location.pos[3] + location.len[3], true) />
+		</cfloop>
+		
+		<cfreturn attributes />
+	</cffunction>
+	
+	<!---
 		Process through a string and pull out comments.
 	--->
 	<cffunction name="processComments" access="private" returntype="struct" output="false">
 		<cfargument name="contents" type="array" required="true" />
 		
-		<cfset var comments = structNew() />
+		<cfset var comments = {} />
 		<cfset var expression = '@([\S]*) (.*)' />
 		<cfset var location = '' />
 		<cfset var i = '' />
 		<cfset var temp = '' />
 		
-		<cfset comments.description = arrayNew(1) />
-		<cfset comments.meta = structNew() />
+		<cfset comments.description = [] />
+		<cfset comments.meta = {} />
 		<cfset comments.metaOrder = '' />
 		
 		<cfloop from="1" to="#arrayLen(arguments.contents)#" index="i">
@@ -354,6 +549,77 @@
 				<cfset comments.meta[temp] = mid(arguments.contents[i], location.pos[3], location.len[3]) />
 			</cfif>
 		</cfloop>
+		
+		<cfreturn comments />
+	</cffunction>
+	
+	<!---
+		Finds and reads in a file with the option of buffering with a set number of
+		characters from the file
+	--->
+	<cffunction name="readFileContents" access="private" returntype="string" output="false">
+		<cfargument name="fileName" type="string" required="true" />
+		<cfargument name="bufferSize" type="string" default="#variables.buffersize#" />
+		
+		<!--- TODO Add in some searching functionality to search for the file if it doesn't exist --->
+		
+		<!--- TODO Remove this when railo adds buffersize --->
+		<cfreturn fileRead(arguments.fileName) />
+		<cfreturn fileRead(arguments.fileName, arguments.buffersize) />
+	</cffunction>
+	
+	<cffunction name="trimScriptPreComments" access="private" returntype="struct" output="false">
+		<cfargument name="fileContents" type="string" required="true" />
+		
+		<cfset var bufferComments = '' />
+		<cfset var comments = '' />
+		<cfset var expression = '' />
+		<cfset var length = 0 />
+		<cfset var location = '' />
+		
+		<!--- Parse out the starting multi-line comments --->
+		<cfset expression = '^/\*(.*?)\*/' />
+		
+		<!--- Search for comment --->
+		<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
+		
+		<cfloop condition="location.pos[1] GT 0">
+			<cfset bufferComments &= left(arguments.fileContents, location.len[1]) & chr(10) />
+			
+			<!--- Remove the comments from the file content --->
+			<cfset arguments.fileContents = right(arguments.fileContents, len(arguments.fileContents) - location.len[1]) />
+			
+			<!--- Add to the total length of comments --->
+			<cfset length += location.len[1] />
+			
+			<!--- Re-search --->
+			<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
+		</cfloop>
+		
+		<!--- Parse out the starting single-line comments --->
+		<cfset expression = '^//(.*?)#chr(10)#' />
+		
+		<!--- Search for comment --->
+		<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
+		
+		<cfloop condition="location.pos[1] GT 0">
+			<cfset bufferComments &= left(arguments.fileContents, location.len[1]) & chr(10) />
+			
+			<!--- Remove the comments from the file content --->
+			<cfset arguments.fileContents = right(arguments.fileContents, len(arguments.fileContents) - location.len[1]) />
+			
+			<!--- Add to the total length of comments --->
+			<cfset length += location.len[1] />
+			
+			<!--- Re-search --->
+			<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
+		</cfloop>
+		
+		<!--- Parse and process the comments from the buffer --->
+		<cfset comments = processComments(parseScriptComments(bufferComments)) />
+		
+		<!--- Add the length to the processed comments --->
+		<cfset comments.length = length />
 		
 		<cfreturn comments />
 	</cffunction>
