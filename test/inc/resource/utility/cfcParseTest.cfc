@@ -81,13 +81,6 @@
 		<cfset assertEquals('Test Component Comment', parsed.comments.description[1]) />
 	</cffunction>
 	
-	<cffunction name="testParse_Tag_ComponentComment" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
-		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init') />
-		
-		<cfset assertEquals('Test Component Comment', parsed.comments.description[1]) />
-	</cffunction>
-	
 	<cffunction name="testParse_Script_FunctionComment" access="public" returntype="void" output="false">
 		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
 		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentScriptParse01.cfc', 'init') />
@@ -95,10 +88,31 @@
 		<cfset assertEquals('Test Function Comment', parsed.methods.constructors[1].comments.description[1]) />
 	</cffunction>
 	
+	<cffunction name="testParse_Script_FunctionComment2" access="public" returntype="void" output="false">
+		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
+		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentScriptParse01.cfc', 'init') />
+		
+		<cfset assertEquals('Test Function 2 Comment', parsed.methods.functions[1].comments.description[1]) />
+	</cffunction>
+	
+	<cffunction name="testParse_Tag_ComponentComment" access="public" returntype="void" output="false">
+		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
+		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init') />
+		
+		<cfset assertEquals('Test Component Comment', parsed.comments.description[1]) />
+	</cffunction>
+	
 	<cffunction name="testParse_Tag_FunctionComment" access="public" returntype="void" output="false">
 		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
 		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init') />
 		
 		<cfset assertEquals('Test Function Comment', parsed.methods.constructors[1].comments.description[1]) />
+	</cffunction>
+	
+	<cffunction name="testParse_Tag_FunctionComment2" access="public" returntype="void" output="false">
+		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
+		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init') />
+		
+		<cfset assertEquals('Test Function 2 Comment', parsed.methods.functions[1].comments.description[1]) />
 	</cffunction>
 </cfcomponent>
