@@ -354,31 +354,22 @@
 	</cffunction>
 	
 	<!---
-		Parse through each function in the script component.
-		
-		TODO is greedy with end of function, need to stop at next function and go back to end of last function...
+		Parse through an individual function in the script component.
 	--->
-	<cffunction name="parseScriptFunctions" access="private" returntype="struct" output="false">
+	<cffunction name="parseScriptFunction" access="private" returntype="struct" output="false">
 		<cfargument name="contents" type="string" required="true" />
-		<cfargument name="constructors" type="string" required="true" />
 		
-		<cfset var expression = "(public|private) ([a-zA-Z]+) function ([a-zA-Z0-9-_]+)[ ]?\(([^\)]*)\)[ ]?{(.*)}" />
+		<cfset var expression = "(public|private|package|remote) ([a-zA-Z]+) function ([a-zA-Z0-9-_]+)[ ]?\(([^\)]*)\)[ ]?{(.*)}" />
 		<cfset var location = '' />
-		<cfset var functions = {} />
 		<cfset var tempFunction = '' />
-		<cfset var lastEnd = 1 />
 		<cfset var comments = '' />
-		
-		<!--- Create the function arrays --->
-		<cfset functions.constructors = [] />
-		<cfset functions.functions = [] />
 		
 		<!--- find the expression in the contents --->
 		<cfset location = reFindNoCase(expression, arguments.contents, 1, true) />
 		
 		<!--- Check if was successful --->
-		<cfloop condition="location.pos[1]">
-			<!--- Create the temp function --->
+		<cfif location.pos[1]>
+			<!--- Create the function information --->
 			<cfset tempFunction = {} />
 			<cfset tempFunction.contents = '' />
 			<cfset tempFunction.comments = {} />
@@ -386,13 +377,10 @@
 			<cfset tempFunction.arguments = [] />
 			
 			<!--- Parse out the comments --->
-			<cfset comments = parseScriptComments(mid(arguments.contents, lastEnd, location.pos[1] - lastEnd)) />
+			<cfset comments = parseScriptComments(mid(arguments.contents, 1, location.pos[1] - 1)) />
 			
 			<!--- Process the function comments --->
 			<cfset tempFunction.comments = processComments(comments) />
-			
-			<!--- Set where the function ends for commenting purposes --->
-			<cfset lastEnd = location.pos[1] + location.len[1] />
 			
 			<!--- Parse out the information in the component --->
 			<cfset tempFunction.attributes = duplicate(tempFunction.comments.meta) />
@@ -406,6 +394,33 @@
 			
 			<!--- Parse out the arguments of the function --->
 			<cfset tempFunction.arguments = processScriptArguments(mid(arguments.contents, location.pos[5], location.len[5])) />
+		</cfif>
+		
+		<cfreturn tempFunction />
+	</cffunction>
+	
+	<!---
+		Parse through each function in the script component.
+	--->
+	<cffunction name="parseScriptFunctions" access="private" returntype="struct" output="false">
+		<cfargument name="contents" type="string" required="true" />
+		<cfargument name="constructors" type="string" required="true" />
+		
+		<cfset var functionBlock = '' />
+		<cfset var functionBlocks = '' />
+		<cfset var functions = {} />
+		<cfset var tempFunction = '' />
+		
+		<!--- Create the function arrays --->
+		<cfset functions.constructors = [] />
+		<cfset functions.functions = [] />
+		
+		<!--- Split the individual functions --->
+		<cfset functionBlocks = splitScriptFunctions(arguments.contents) />
+		
+		<cfloop array="#functionBlocks#" index="functionBlock">
+			<!--- Parse the temp function --->
+			<cfset tempFunction = parseScriptFunction(functionBlock) />
 			
 			<!--- Add to function array --->
 			<cfif ListFind(arguments.constructors, tempFunction.attributes.name)>
@@ -413,9 +428,6 @@
 			<cfelse>
 				<cfset arrayAppend(functions.functions, tempFunction) />
 			</cfif>
-			
-			<!--- Look for another function --->
-			<cfset location = reFindNoCase(expression, arguments.contents, lastEnd, true) />
 		</cfloop>
 		
 		<cfreturn functions />
@@ -573,6 +585,53 @@
 		<!--- TODO Remove this when railo adds buffersize --->
 		<cfreturn fileRead(arguments.fileName) />
 		<cfreturn fileRead(arguments.fileName, arguments.buffersize) />
+	</cffunction>
+	
+	<cffunction name="splitScriptFunctions" access="public" returntype="array" output="false">
+		<cfargument name="contents" type="string" required="true" />
+		
+		<cfset var expression = "(public|private|package|remote) [a-zA-Z]+ function [a-zA-Z0-9-_]+" />
+		<cfset var findLast = '' />
+		<cfset var functionBlocks = [] />
+		<cfset var functionClose = '}' />
+		<cfset var functionEnd = 0 />
+		<cfset var lastEnd = 1 />
+		<cfset var location = '' />
+		
+		<!--- find the expression in the contents --->
+		<cfset location = reFindNoCase(expression, arguments.contents, 1, true) />
+		
+		<!--- if nothing was found there are no functions --->
+		<cfif NOT location.pos[1]>
+			<cfreturn functionBlocks />
+		</cfif>
+		
+		<!--- search for the next function start --->
+		<cfset location = reFindNoCase(expression, arguments.contents, location.pos[1] + location.len[1], true) />
+		
+		<cfloop condition="location.pos[1] GT 0">
+			<cfset findLast = find(functionClose, arguments.contents, functionEnd) />
+			
+			<!--- Find the last } before the function --->
+			<cfloop condition="findLast GT 0 AND findLast LT location.pos[1]">
+				<cfset functionEnd = findLast + 1 />
+				
+				<cfset findLast = find(functionClose, arguments.contents, functionEnd) />
+			</cfloop>
+			
+			<!--- Append the function block --->
+			<cfset arrayAppend(functionBlocks, mid(arguments.contents, lastEnd, functionEnd)) />
+			
+			<cfset lastEnd = functionEnd />
+			
+			<!--- search for the next function start --->
+			<cfset location = reFindNoCase(expression, arguments.contents, location.pos[1] + location.len[1], true) />
+		</cfloop>
+		
+		<!--- Append the last function block --->
+		<cfset arrayAppend(functionBlocks, right(arguments.contents, len(arguments.contents) - lastEnd)) />
+		
+		<cfreturn functionBlocks />
 	</cffunction>
 	
 	<cffunction name="trimScriptPreComments" access="private" returntype="struct" output="false">
