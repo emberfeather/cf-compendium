@@ -103,6 +103,10 @@
 	color: #666;
 }
 
+.small {
+	font-size: 80%;
+}
+
 .float-left {
 	float: left;
 }
