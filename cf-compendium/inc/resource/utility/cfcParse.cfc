@@ -74,7 +74,7 @@
 		<cfset var parsed = '' />
 		
 		<!--- Read the file contents --->
-		<cfset fileContent = readFileContents(arguments.fileName) />
+		<cfset fileContent = readFileContents(arguments.fileName, -1) />
 		
 		<!--- Parse the component --->
 		<cfif checkIsScript(fileContent)>
@@ -571,7 +571,9 @@
 	--->
 	<cffunction name="readFileContents" access="private" returntype="string" output="false">
 		<cfargument name="fileName" type="string" required="true" />
-		<cfargument name="bufferSize" type="string" default="#variables.buffersize#" />
+		<cfargument name="bufferSize" type="numeric" default="#variables.bufferSize#" />
+		
+		<cfset var fileObj = '' />
 		
 		<!--- Check that the file path exists --->
 		<cfif NOT fileExists(arguments.fileName)>
@@ -582,9 +584,13 @@
 			</cfif>
 		</cfif>
 		
-		<!--- TODO Remove this when railo adds buffersize --->
+		<cfif arguments.bufferSize GT 0>
+			<cfset fileObj = fileOpen(arguments.fileName) />
+			
+			<cfreturn fileRead(fileObj, arguments.buffersize) />
+		</cfif>
+		
 		<cfreturn fileRead(arguments.fileName) />
-		<cfreturn fileRead(arguments.fileName, arguments.buffersize) />
 	</cffunction>
 	
 	<cffunction name="splitScriptFunctions" access="public" returntype="array" output="false">
