@@ -30,6 +30,7 @@
 			});
 			
 			// Add the column hovering
+			/*
 			$('thead th, thead td, tfoot th, tfoot td', $this).hover(function() {
 				// Get the column class
 				var column = o.columnExp.exec($(this).attr('class'));
@@ -47,6 +48,7 @@
 				
 				$('.' + column, $this).removeClass(o.classHover);
 			});
+			*/
 		});
 	};
 	
