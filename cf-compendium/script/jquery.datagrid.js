@@ -28,27 +28,6 @@
 			}, function() {
 				$(this).removeClass(o.classHover);
 			});
-			
-			// Add the column hovering
-			/*
-			$('thead th, thead td, tfoot th, tfoot td', $this).hover(function() {
-				// Get the column class
-				var column = o.columnExp.exec($(this).attr('class'));
-				
-				// Filter just the column
-				column = column ? column[0] : 0;
-				
-				$('.' + column, $this).addClass(o.classHover);
-			}, function() {
-				// Get the column class
-				var column = o.columnExp.exec($(this).attr('class'));
-				
-				// Filter just the column
-				column = column ? column[0] : 0;
-				
-				$('.' + column, $this).removeClass(o.classHover);
-			});
-			*/
 		});
 	};
 	
