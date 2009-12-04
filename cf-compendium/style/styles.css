@@ -99,6 +99,10 @@
 	font-weight: bold;
 }
 
+.capitalize {
+	text-transform: capitalize;
+}
+
 .light {
 	color: #666;
 }
