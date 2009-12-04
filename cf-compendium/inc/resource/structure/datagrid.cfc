@@ -220,7 +220,7 @@
 					<cfset counter = 0 />
 					
 					<cfloop array="#variables.columns#" index="col">
-						<th class="col #col.key# #col.class# column-#counter++#">
+						<th class="col #col.key# #col.class# column-#counter++# capitalize">
 							#variables.label.get(col.label)#
 						</th>
 						
@@ -240,7 +240,7 @@
 						<cfset counter = 0 />
 						
 						<cfloop array="#variables.columns#" index="col">
-							<td class="#col.key# #col.class# column-#counter++#">
+							<td class="#col.key# #col.class# column-#counter++# capitalize">
 								<cfif structKeyExists(col, 'aggregate')>
 									<cfset currentKey = col.key & '-' & col.aggregate />
 									
