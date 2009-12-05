@@ -124,13 +124,12 @@
 		<cfsavecontent variable="html">
 			<cfoutput>
 				<cfloop from="1" to="#arrayLen(arguments.column.link)#" index="i">
-					<!--- Setup the base link values --->
-					<cfloop list="#structKeyList(arguments.options.linkBase)#" index="j">
-						<cfinvoke component="#arguments.options.theURL#" method="setDGCol#arguments.colNum#Link#i#">
-							<cfinvokeargument name="name" value="#j#" />
-							<cfinvokeargument name="value" value="#arguments.options.linkBase[j]#" />
+					<!--- Setup the base link values using the url override --->
+					<cfif arguments.options.linkBase NEQ ''>
+						<cfinvoke component="#arguments.options.theURL#" method="overrideDGCol#arguments.colNum#Link#i#">
+							<cfinvokeargument name="value" value="#arguments.options.linkBase#" />
 						</cfinvoke>
-					</cfloop>
+					</cfif>
 					
 					<cfloop list="#structKeyList(arguments.column.link[i])#" index="j">
 						<cfset key = arguments.column.link[i][j] />
@@ -206,7 +205,7 @@
 		<cfset var currentKey = '' />
 		<cfset var defaults = {
 				class = '',
-				linkBase = {},
+				linkBase = '',
 				minimumRows = 15,
 				numPerPage = 30,
 				startRow = 1
