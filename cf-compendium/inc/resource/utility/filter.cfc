@@ -100,7 +100,7 @@
 		<cfset var option = '' />
 		<cfset var value = arguments.theURL.search(arguments.filter.key) />
 		
-		<cfset html &= '<strong>' & filter.label & ':</strong> ' />
+		<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfloop array="#group.options#" index="option">
@@ -127,7 +127,7 @@
 		<cfset var option = '' />
 		<cfset var value = arguments.theURL.search(arguments.filter.key) />
 		
-		<cfset html &= '<strong>' & filter.label & ':</strong> ' />
+		<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfloop array="#group.options#" index="option">
@@ -154,7 +154,7 @@
 		<cfset var option = '' />
 		<cfset var value = arguments.theURL.search(arguments.filter.key) />
 		
-		<cfset html &= '<label><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
+		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfif group.label NEQ ''>
@@ -187,7 +187,7 @@
 		
 		<cfset var html = '' />
 		
-		<cfset html &= '<label><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & arguments.theURL.search(arguments.filter.key) & '" /></label>' />
+		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & arguments.theURL.search(arguments.filter.key) & '" /></label>' />
 		
 		<cfreturn html />
 	</cffunction>

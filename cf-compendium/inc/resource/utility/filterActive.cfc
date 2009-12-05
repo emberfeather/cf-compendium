@@ -25,7 +25,7 @@
 		<cfargument name="value" type="string" required="true" />
 		<cfargument name="href" type="string" required="true" />
 		
-		<cfreturn variables.label.get(arguments.key) & ': <strong>' & arguments.value & '</strong> <sup>(<a href="' & arguments.href & '">x</a>)</sup>' />
+		<cfreturn '<span class="capitalize">' & variables.label.get(arguments.key) & '</span>: <strong>' & arguments.value & '</strong> <sup>(<a href="' & arguments.href & '">x</a>)</sup>' />
 	</cffunction>
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
