@@ -125,7 +125,13 @@
 			<cfoutput>
 				<cfloop from="1" to="#arrayLen(arguments.column.link)#" index="i">
 					<!--- Setup the base link values using the url override --->
-					<cfif arguments.options.linkBase NEQ ''>
+					<cfif isStruct(arguments.options.linkBase)>
+						<cfif structKeyExists(arguments.options.linkBase, arguments.column.key)>
+							<cfinvoke component="#arguments.options.theURL#" method="overrideDGCol#arguments.colNum#Link#i#">
+								<cfinvokeargument name="value" value="#arguments.options.linkBase[arguments.column.key]#" />
+							</cfinvoke>
+						</cfif>
+					<cfelseif arguments.options.linkBase NEQ ''>
 						<cfinvoke component="#arguments.options.theURL#" method="overrideDGCol#arguments.colNum#Link#i#">
 							<cfinvokeargument name="value" value="#arguments.options.linkBase#" />
 						</cfinvoke>
