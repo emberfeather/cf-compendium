@@ -1,3 +1,7 @@
+dt {
+	font-weight: bold;
+}
+
 .filter, .filterActive, .pagination {
 	line-height: 2em;
 }
@@ -101,6 +105,10 @@
 
 .capitalize {
 	text-transform: capitalize;
+}
+
+.indent {
+	text-indent: 3em;
 }
 
 .light {
