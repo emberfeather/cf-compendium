@@ -115,6 +115,10 @@ dt {
 	color: #666;
 }
 
+.large {
+	font-size: 120%;
+}
+
 .small {
 	font-size: 80%;
 }
