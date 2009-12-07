@@ -1,7 +1,7 @@
 <!---
 	This component is made for parsing cfc files, component or interfaces.
 --->
-<cfcomponent output="false" hint="Parses through cfc files.">
+<cfcomponent output="false">
 	<cffunction name="init" access="public" returntype="any" output="false">
 		<cfargument name="lazyLoad" type="boolean" default="true" />
 		<cfargument name="bufferSize" type="numeric" default="1000" />
@@ -15,7 +15,7 @@
 	<!---
 		Use this function to determine if a given file is a component
 	--->
-	<cffunction name="isComponent" access="public" returntype="boolean" output="false" hint="Determines if a cfc file is a component.">
+	<cffunction name="isComponent" access="public" returntype="boolean" output="false">
 		<cfargument name="fileName" type="string" required="true" />
 		
 		<!--- If lazy loading then don't even try --->
@@ -66,7 +66,7 @@
 	<!---
 		Executes the methods to open and parse a component.
 	--->
-	<cffunction name="parse" access="public" returntype="struct" output="false" hint="Parses a specified file into a struct.">
+	<cffunction name="parse" access="public" returntype="struct" output="false">
 		<cfargument name="fileName" type="string" required="true" />
 		<cfargument name="constructors" type="string" required="true" />
 
@@ -96,36 +96,51 @@
 		<cfargument name="comments" type="string" required="true" />
 		
 		<cfset var i = '' />
+		<cfset var line = '' />
 		<cfset var isComment = false />
+		<cfset var isSplit = true />
 		<cfset var parsedComments = [] />
 		
 		<cfloop list="#arguments.comments#" index="i" delimiters="#chr(10)##chr(13)#">
-			<cfset i = trim(i) />
+			<cfset line = trim(i) />
 			
-			<cfif left(i, 5) EQ '<!---' AND right(i, 4) EQ '--->'>
+			<cfif left(line, 5) EQ '<!---' AND right(line, 4) EQ '--->'>
 				<cfset isComment = true />
 				
-				<cfset i = trim(replaceList(i, '<!---,--->', ',')) />
-			<cfelseif left(i, 5) EQ '<!---'>
+				<cfset line = trim(replaceList(line, '<!---,--->', ',')) />
+			<cfelseif left(line, 5) EQ '<!---'>
 				<cfset isComment = true />
 				
-				<cfif len(i) GT 5>
-					<cfset i = right(i,  len(i) - 6) />
+				<cfif len(line) GT 5>
+					<cfset line = right(line,  len(line) - 6) />
 				<cfelse>
-					<cfset i = '' />
+					<cfset line = '' />
 				</cfif>
-			<cfelseif right(i, 4) EQ '--->'>
+			<cfelseif right(line, 4) EQ '--->'>
 				<cfset isComment = false />
 				
-				<cfif len(i) GT 4>
-					<cfset i = left(i,  len(i) - 5) />
+				<cfif len(line) GT 4>
+					<cfset line = left(line,  len(line) - 5) />
 				<cfelse>
-					<cfset i = '' />
+					<cfset line = '' />
 				</cfif>
 			</cfif>
 			
-			<cfif i NEQ '' AND isComment>
-				<cfset arrayAppend(parsedComments, i) />
+			<cfif isComment>
+				<!--- Want any lines that aren't split by a blank line to be one comment --->
+				<cfif line EQ '' OR line EQ '<p>'>
+					<cfset isSplit = true />
+				<cfelse>
+					<!--- Split comments or meta information does not belong together --->
+					<cfif isSplit OR left(line, 1) EQ '@'>
+						<cfset arrayAppend(parsedComments, line) />
+						
+						<!--- End the split --->
+						<cfset isSplit = false />
+					<cfelse>
+						<cfset parsedComments[arrayLen(parsedComments)] &= ' ' & line />
+					</cfif>
+				</cfif>
 			</cfif>
 		</cfloop>
 		
@@ -192,7 +207,7 @@
 		<cfargument name="contents" type="string" required="true" />
 		<cfargument name="constructors" type="string" required="true" />
 		
-		<cfset var expression = "<cffunction([^>]*)>(.*?)</cffunction>" />
+		<cfset var expression = "<cffunction([^>]*)>(.*?)</cffunction>[#chr(10)##chr(13)#]" />
 		<cfset var location = '' />
 		<cfset var functions = {} />
 		<cfset var tempFunction = '' />
@@ -213,7 +228,7 @@
 			<cfset tempFunction.contents = '' />
 			<cfset tempFunction.comments = [] />
 			<cfset tempFunction.attributes = [] />
-			<cfset tempFunction.arguments = [] />
+			<cfset tempFunction.theArguments = [] />
 			
 			<!--- Parse out the comments --->
 			<cfset comments = parseComments(mid(arguments.contents, lastEnd, location.pos[1] - lastEnd)) />
@@ -231,7 +246,7 @@
 			<cfset tempFunction.contents = mid(arguments.contents, location.pos[1], location.len[1]) />
 			
 			<!--- Parse out the arguments of the function --->
-			<cfset tempFunction.arguments = parseTag(tempFunction.contents, 'cfargument', 'argument') />
+			<cfset tempFunction.theArguments = parseTag(tempFunction.contents, 'cfargument', 'argument') />
 			
 			<!--- Add to function array --->
 			<cfif ListFind(arguments.constructors, tempFunction.attributes.name)>
@@ -254,46 +269,61 @@
 		<cfargument name="comments" type="string" required="true" />
 		
 		<cfset var i = '' />
+		<cfset var line = '' />
 		<cfset var isComment = false />
+		<cfset var isSplit = true />
 		<cfset var parsedComments = [] />
 		
 		<cfloop list="#arguments.comments#" index="i" delimiters="#chr(10)##chr(13)#">
-			<cfset i = trim(i) />
+			<cfset line = trim(i) />
 			
 			<!--- Determine state --->
-			<cfif left(i, 2) EQ '//'>
+			<cfif left(line, 2) EQ '//'>
 				<cfset isComment = true />
 				
-				<cfset i = trim(right(i, len(i) - len('//'))) />
-			<cfelseif left(i, 2) EQ '/*'>
+				<cfset line = trim(right(line, len(line) - len('//'))) />
+			<cfelseif left(line, 2) EQ '/*'>
 				<cfset isComment = true />
 				
-				<cfif len(i) GT 2>
-					<cfset i = trim(right(i,  len(i) - len('//'))) />
+				<cfif len(line) GT 2>
+					<cfset line = trim(right(line,  len(line) - len('//'))) />
 				<cfelse>
-					<cfset i = '' />
+					<cfset line = '' />
 				</cfif>
-			<cfelseif right(i, 2) EQ '*/'>
+			<cfelseif right(line, 2) EQ '*/'>
 				<cfset isComment = false />
 				
-				<cfif len(i) GT 4>
-					<cfset i = trim(left(i,  len(i) - len('*/'))) />
+				<cfif len(line) GT 4>
+					<cfset line = trim(left(line,  len(line) - len('*/'))) />
 				<cfelse>
-					<cfset i = '' />
+					<cfset line = '' />
 				</cfif>
 			</cfif>
 			
 			<!--- Trim multiline comment beginning with * --->
-			<cfif left(i, 1) EQ '*'>
-				<cfif len(i) EQ 1>
-					<cfset i = '' />
+			<cfif left(line, 1) EQ '*'>
+				<cfif len(line) EQ 1>
+					<cfset line = '' />
 				<cfelse>
-					<cfset i = trim(right(i, len(i) - 1)) />
+					<cfset line = trim(right(line, len(line) - 1)) />
 				</cfif>
 			</cfif>
 			
-			<cfif i NEQ '' AND isComment>
-				<cfset arrayAppend(parsedComments, i) />
+			<cfif isComment>
+				<!--- Want any lines that aren't split by a blank line to be one comment --->
+				<cfif line EQ '' OR line EQ '<p>'>
+					<cfset isSplit = true />
+				<cfelse>
+					<!--- Split comments or meta information does not belong together --->
+					<cfif isSplit OR left(line, 1) EQ '@'>
+						<cfset arrayAppend(parsedComments, line) />
+						
+						<!--- End the split --->
+						<cfset isSplit = false />
+					<cfelse>
+						<cfset parsedComments[arrayLen(parsedComments)] &= ' ' & line />
+					</cfif>
+				</cfif>
 			</cfif>
 		</cfloop>
 		
@@ -374,7 +404,7 @@
 			<cfset tempFunction.contents = '' />
 			<cfset tempFunction.comments = {} />
 			<cfset tempFunction.attributes = {} />
-			<cfset tempFunction.arguments = [] />
+			<cfset tempFunction.theArguments = [] />
 			
 			<!--- Parse out the comments --->
 			<cfset comments = parseScriptComments(mid(arguments.contents, 1, location.pos[1] - 1)) />
@@ -393,7 +423,7 @@
 			<cfset tempFunction.contents = mid(arguments.contents, location.pos[1], location.len[1]) />
 			
 			<!--- Parse out the arguments of the function --->
-			<cfset tempFunction.arguments = processScriptArguments(mid(arguments.contents, location.pos[5], location.len[5])) />
+			<cfset tempFunction.theArguments = processScriptArguments(mid(arguments.contents, location.pos[5], location.len[5])) />
 		</cfif>
 		
 		<cfreturn tempFunction />
@@ -462,7 +492,7 @@
 		Process a string and pull out the attributes and their values.
 	--->
 	<cffunction name="processAttributes" access="private" returntype="struct" output="false">
-		<cfargument name="contents" type="string" required="true" hint="foo|bar" />
+		<cfargument name="contents" type="string" required="true" />
 		<cfargument name="attributeType" type="string" default="component" />
 		
 		<cfset var attributes = {} />
@@ -511,7 +541,7 @@
 		Process a string and pull out the arguments and their properties.
 	--->
 	<cffunction name="processScriptArguments" access="private" returntype="struct" output="false">
-		<cfargument name="contents" type="string" required="true" hint="foo|bar" />
+		<cfargument name="contents" type="string" required="true" />
 		
 		<cfset var attributes = {} />
 		<cfset var expression = "([\S]*) ([\S]*)(=[""']([^""']*)[""'])?" />
