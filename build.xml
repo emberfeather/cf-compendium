@@ -121,9 +121,6 @@
 			<copy srcPath="${basedir}" destURL="${svn.privurl}/tags/${project.version}" message="Tagging release version: ${project.version}" />
 		</svn>
 		
-		<!-- Update the version tracking number -->
-		<echo append="false" file="${build.release.version.txt}" message="${project.version}" />
-		
 		<!-- Reset the release notes for the next version -->
 		<echo append="false" file="${build.release.notes.txt}" message="  * " />
 		
