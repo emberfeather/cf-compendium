@@ -20,17 +20,17 @@
 		<!--- Extend the form options --->
 		<cfset variables.urlOptions = theExtender.extend(defaults, arguments.options) />
 		
+		<!--- Create the variable for named locations --->
+		<cfset variables.locations = {} />
+		
 		<!--- Set the master URL location --->
 		<cfif isStruct(arguments.masterBase)>
 			<!--- Allow to pass in a struct as the master --->
-			<cfset variables.master = duplicate(arguments.masterBase) />
+			<cfset variables.locations[''] = duplicate(arguments.masterBase) />
 		<cfelse>
-			<!--- Parse the master form the queryString --->
-			<cfset variables.master = parseQueryString(arguments.masterBase) />
+			<!--- Parse the master from the queryString --->
+			<cfset variables.locations[''] = parseQueryString(arguments.masterBase) />
 		</cfif>
-		
-		<!--- Create the variable for named locations --->
-		<cfset variables.locations = structNew() />
 		
 		<cfreturn this />
 	</cffunction>
@@ -46,12 +46,7 @@
 	<cffunction name="clean" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" default=""/>
 		
-		<!--- check if an location or master --->
-		<cfif arguments.locationName EQ ''>
-			<cfset variables.master = structNew() />
-		<cfelse>
-			<cfset variables.locations[arguments.locationName] = structNew() />
-		</cfif>
+		<cfset variables.locations[arguments.locationName] = {} />
 	</cffunction>
 	
 	
@@ -68,11 +63,7 @@
 		<cfset arguments.destinationLocation = trim(arguments.destinationLocation) />
 		
 		<!--- check if a location or master --->
-		<cfif arguments.destinationLocation EQ ''>
-			<cfset variables.master = location />
-		<cfelse>
-			<cfset variables.locations[arguments.destinationLocation] = location />
-		</cfif>
+		<cfset variables.locations[arguments.destinationLocation] = location />
 	</cffunction>
 	
 	<!--- 
@@ -110,14 +101,10 @@
 		
 		<!--- Check for valid location --->
 		<cfif NOT has(arguments.locationName)>
-			<cfset variables.locations[arguments.locationName] = duplicate(variables.master) />
+			<cfset variables.locations[arguments.locationName] = duplicate(variables.locations['']) />
 		</cfif>
 		
-		<cfif arguments.locationName NEQ ''>
-			<cfreturn variables.locations[arguments.locationName] />
-		<cfelse>
-			<cfreturn variables.master />
-		</cfif>
+		<cfreturn variables.locations[arguments.locationName] />
 	</cffunction>
 	
 	<!---
@@ -156,6 +143,8 @@
 		<cfif len(formatted) GT len(ampChar)>
 			<cfset formatted = Left(formatted, len(formatted) - len(ampChar)) />
 		</cfif>
+		
+		<!--- Check for anchor --->
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -404,11 +393,7 @@
 		
 		<cfset newLocation = parseQueryString(arguments.queryString) />
 		
-		<cfif arguments.locationName EQ ''>
-			<cfset variables.master = newLocation />
-		<cfelse>
-			<cfset variables.locations[arguments.locationName] = newLocation />
-		</cfif>
+		<cfset variables.locations[arguments.locationName] = newLocation />
 	</cffunction>
 	
 	<!---
