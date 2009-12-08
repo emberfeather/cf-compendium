@@ -14,7 +14,7 @@
 	<!---
 		Test removing an anchor by setting it to a blank string.
 	--->
-	<cffunction name="testAnchorUrl_Blank" access="public" returntype="void" output="false">
+	<cffunction name="testAnchorUrl_RemoveAnchor_Blank" access="public" returntype="void" output="false">
 		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 		
 		<!--- set an anchor value to remove --->
@@ -27,13 +27,25 @@
 	</cffunction>
 	
 	<!---
-		Test removing an anchor by setting it to a blank string.
+		Test removing an anchor by not passing a new value.
 	--->
-	<cffunction name="testAnchorUrl_sansAnchor" access="public" returntype="void" output="false">
+	<cffunction name="testAnchorUrl_RemoveAnchor_sansArgument" access="public" returntype="void" output="false">
 		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 		
 		<!--- set an anchor value to remove --->
 		<cfset theUrl.anchorRedirect('top') />
+		
+		<!--- test removing an anchor on an instance --->
+		<cfset theUrl.anchorRedirect() />
+		
+		<cfset assertEquals('?', theUrl.getRedirect()) />
+	</cffunction>
+	
+	<!---
+		Test removing an anchor that was never set.
+	--->
+	<cffunction name="testAnchorUrl_RemoveAnchor_sansAnchor" access="public" returntype="void" output="false">
+		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 		
 		<!--- test removing an anchor on an instance --->
 		<cfset theUrl.anchorRedirect() />
