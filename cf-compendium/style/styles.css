@@ -42,22 +42,25 @@ dt {
 }
 
 .message,
+.warning,
 .error,
 .success {
-	color: #333333;
-	list-style: none;
-	line-height: 1.5em;
+	border: 1px solid;
+	margin: 1em 0;
+	padding: 1em;
 }
 
 .message ul,
+.warning ul,
 .error ul,
 .success ul {
 	list-style: none;
-	padding: 1em;
+	padding: 0;
 	margin: 0;
 }
 
 .message li,
+.warning li,
 .error li,
 .success li {
 	padding: 0;
@@ -65,18 +68,23 @@ dt {
 }
 
 .message {
-	border: 1px solid #000066;
-	background: #CCCCFF;
+	color: #00529B;
+	background-color: #BDE5F8;
+}
+
+.warning {
+	color: #9F6000;
+	background-color: #FEEFB3;
 }
 
 .error {
-	border: 1px solid #660000;
-	background: #FFCCCC;
+	color: #D8000C;
+	background-color: #FFBABA;
 }
 
 .success {
-	border: 1px solid #006600;
-	background: #CCFFCC;
+	color: #4F8A10;
+	background-color: #DFF2BF;
 }
 
 .padding {
