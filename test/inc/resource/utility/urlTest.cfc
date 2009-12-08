@@ -1,5 +1,47 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
 	<!---
+		Test adding an anchor by setting it to a value.
+	--->
+	<cffunction name="testAnchorUrl" access="public" returntype="void" output="false">
+		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+		
+		<!--- set an anchor --->
+		<cfset theUrl.anchorRedirect('top') />
+		
+		<cfset assertEquals('?##top', theUrl.getRedirect()) />
+	</cffunction>
+	
+	<!---
+		Test removing an anchor by setting it to a blank string.
+	--->
+	<cffunction name="testAnchorUrl_Blank" access="public" returntype="void" output="false">
+		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+		
+		<!--- set an anchor value to remove --->
+		<cfset theUrl.anchorRedirect('top') />
+		
+		<!--- test removing an anchor on an instance --->
+		<cfset theUrl.anchorRedirect('') />
+		
+		<cfset assertEquals('?', theUrl.getRedirect()) />
+	</cffunction>
+	
+	<!---
+		Test removing an anchor by setting it to a blank string.
+	--->
+	<cffunction name="testAnchorUrl_sansAnchor" access="public" returntype="void" output="false">
+		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+		
+		<!--- set an anchor value to remove --->
+		<cfset theUrl.anchorRedirect('top') />
+		
+		<!--- test removing an anchor on an instance --->
+		<cfset theUrl.anchorRedirect() />
+		
+		<cfset assertEquals('?', theUrl.getRedirect()) />
+	</cffunction>
+	
+	<!---
 		Test returning a cleaned (empty) url given a full one
 	--->
 	<cffunction name="testCleanUrl" access="public" returntype="void" output="false">
@@ -14,7 +56,7 @@
 	<!---
 		Test returning a cleaned (empty) url given a full one
 	--->
-	<cffunction name="testCleanUrlMaster" access="public" returntype="void" output="false">
+	<cffunction name="testCleanUrl_Master" access="public" returntype="void" output="false">
 		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('randy=dabomb') />
 		
 		<!--- test cleaning the master --->

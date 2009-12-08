@@ -32,7 +32,28 @@
 			<cfset variables.locations[''] = parseQueryString(arguments.masterBase) />
 		</cfif>
 		
+		<!--- Create the variable for location anchors --->
+		<cfset variables.anchors = {} />
+		
 		<cfreturn this />
+	</cffunction>
+	
+	<!---
+		Sets a variable for the URL location given.
+	--->
+	<cffunction name="anchor" access="private" returntype="void" output="false">
+		<cfargument name="locationName" type="string" required="true" />
+		<cfargument name="value" type="string" default="" />
+		
+		<!--- Trim the anchor --->
+		<cfset arguments.value = trim(arguments.value) />
+		
+		<!--- Set or remove the anchor --->
+		<cfif arguments.value EQ ''>
+			<cfset structDelete(variables.anchors, arguments.locationName) />
+		<cfelse>
+			<cfset variables.anchors[arguments.locationName] = arguments.value />
+		</cfif>
 	</cffunction>
 	
 	<!--- 
@@ -48,7 +69,6 @@
 		
 		<cfset variables.locations[arguments.locationName] = {} />
 	</cffunction>
-	
 	
 	<!--- 
 		Clone an existing location.
@@ -145,6 +165,9 @@
 		</cfif>
 		
 		<!--- Check for anchor --->
+		<cfif structKeyExists(variables.anchors, arguments.locationName)>
+			<cfset formatted &= '##' & variables.anchors[arguments.locationName] />
+		</cfif>
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -177,7 +200,7 @@
 		<cfset arguments.missingMethodName = lCase(arguments.missingMethodName) />
 		
 		<!--- Find the parts of the function name we are interested in --->
-		<cfset findParts = reFind('^(clean|clone|extend|get|has|override|remove|reset|searchid|searchboolean|search|set)(.*)', arguments.missingMethodName, 1, true) />
+		<cfset findParts = reFind('^(anchor|clean|clone|extend|get|has|override|remove|reset|searchid|searchboolean|search|set)(.*)', arguments.missingMethodName, 1, true) />
 		
 		<!--- Check if not one that we are equiped to handle --->
 		<cfif NOT findParts.pos[1]>
@@ -194,6 +217,14 @@
 		
 		<!--- Determine what we are really doing --->
 		<cfswitch expression="#name#">
+			<cfcase value="anchor">
+				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+					<cfreturn anchor(extra, arguments.missingMethodArguments[1]) />
+				</cfif>
+				
+				<cfreturn anchor(extra) />
+			</cfcase>
+			
 			<cfcase value="clean">
 				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
 					<cfreturn clean(arguments.missingMethodArguments[1]) />
