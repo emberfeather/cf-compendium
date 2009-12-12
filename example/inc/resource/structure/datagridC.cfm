@@ -98,10 +98,10 @@
 		from="1" to="2000" index="i"<br />
 			queryAddRow(data)<br />
 			
-			querySetCell(data, 'FirstName', ( randRange(0,100) GT 50 ? 'John' : 'Jane' ) & i )<br />
-			querySetCell(data, 'LastName', ( randRange(0,100) GT 50 ? 'Doe' : 'Downey' ) & i )<br />
+			querySetCell(data, 'FirstName', ( randRange(0,100) gt 50 ? 'John' : 'Jane' ) & i )<br />
+			querySetCell(data, 'LastName', ( randRange(0,100) gt 50 ? 'Doe' : 'Downey' ) & i )<br />
 			querySetCell(data, 'Value', randRange(0,100))<br />
-			querySetCell(data, 'Email', ( randRange(0,100) GT 50 ? 'Duck' : 'Goose' ) & i & '@example.com' )<br />
+			querySetCell(data, 'Email', ( randRange(0,100) gt 50 ? 'Duck' : 'Goose' ) & i & '@example.com' )<br />
 		
 		datagrid.toHTML(data, {
 				numPerPage = 2000
@@ -114,10 +114,10 @@
 <cfloop from="1" to="2000" index="i">
 	<cfset queryAddRow(data) />
 	
-	<cfset querySetCell(data, 'FirstName', ( randRange(0,100) GT 50 ? 'John' : 'Jane' ) & i ) />
-	<cfset querySetCell(data, 'LastName', ( randRange(0,100) GT 50 ? 'Doe' : 'Downey' ) & i ) />
+	<cfset querySetCell(data, 'FirstName', ( randRange(0,100) gt 50 ? 'John' : 'Jane' ) & i ) />
+	<cfset querySetCell(data, 'LastName', ( randRange(0,100) gt 50 ? 'Doe' : 'Downey' ) & i ) />
 	<cfset querySetCell(data, 'Value', randRange(0,100)) />
-	<cfset querySetCell(data, 'Email', ( randRange(0,100) GT 50 ? 'Duck' : 'Goose' ) & i & '@example.com' ) />
+	<cfset querySetCell(data, 'Email', ( randRange(0,100) gt 50 ? 'Duck' : 'Goose' ) & i & '@example.com' ) />
 </cfloop>
 
 <cfoutput>#datagrid.toHTML(data, {

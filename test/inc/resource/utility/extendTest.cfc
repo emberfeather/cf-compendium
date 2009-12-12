@@ -30,7 +30,7 @@
 			} />
 		<cfset var extended = variables.extender.extend(defaults, original, -1) />
 		
-		<cfif NOT structKeyExists(extended.two.twoTwo, 'twoTwoOne')>
+		<cfif not structKeyExists(extended.two.twoTwo, 'twoTwoOne')>
 			<cfset fail('The sub struct was not properly extended, ad infinitum') />
 		</cfif>
 		
@@ -60,7 +60,7 @@
 			} />
 		<cfset var extended = variables.extender.extend(defaults, original, 2) />
 		
-		<cfif NOT structKeyExists(extended.two, 'twoOne')>
+		<cfif not structKeyExists(extended.two, 'twoOne')>
 			<cfset fail('The sub struct extend failed to extend the depth required.') />
 		</cfif>
 	</cffunction>
@@ -102,7 +102,7 @@
 			<cfset fail('The sub struct extend went farther than the determined number of depth levels.') />
 		</cfif>
 		
-		<cfif NOT structKeyExists(extended.two, 'twoOne')>
+		<cfif not structKeyExists(extended.two, 'twoOne')>
 			<cfset fail('The sub struct extend failed to extend the depth required.') />
 		</cfif>
 	</cffunction>
@@ -146,7 +146,7 @@
 			} />
 		<cfset var extended = variables.extender.extend(defaults, original) />
 		
-		<cfif structCount(extended) NEQ 4>
+		<cfif structCount(extended) neq 4>
 			<cfset fail('Missing some of the default struct keys.') />
 		</cfif>
 	</cffunction>
@@ -184,7 +184,7 @@
 			} />
 		<cfset var extended = variables.extender.extend(defaults) />
 		
-		<cfif structCount(extended) NEQ 3>
+		<cfif structCount(extended) neq 3>
 			<cfset fail('Missing some of the default struct keys.') />
 		</cfif>
 	</cffunction>

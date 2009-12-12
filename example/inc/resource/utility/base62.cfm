@@ -39,10 +39,10 @@
 
 <div class="prefix_1 grid_2 alpha">
 	<cfloop from="0" to="61" index="i">
-		<cfif i EQ 16 OR i EQ 32>
+		<cfif i eq 16 or i eq 32>
 			</div>
 			<div class="grid_2">
-		<cfelseif i EQ 48>
+		<cfelseif i eq 48>
 			</div>
 			<div class="grid_2 omega">
 		</cfif>

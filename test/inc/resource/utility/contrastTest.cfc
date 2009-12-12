@@ -4,7 +4,7 @@
 	</cffunction>
 	
 	<!---
-		Tests to see if two elements DO NOT contain the same values pairs regardless of order of elements
+		Tests to see if two elements DO not contain the same values pairs regardless of order of elements
 	--->
 	<cffunction name="testAreEqualFalse" access="public" returntype="void" output="false">
 		<cfset var set1 = '' />
@@ -58,7 +58,7 @@
 	</cffunction>
 	
 	<!---
-		Tests to see if two elements DO NOT contain the same values pairs regardless of order of elements
+		Tests to see if two elements DO not contain the same values pairs regardless of order of elements
 		for a set
 	--->
 	<cffunction name="testAreEqualSetFalse" access="public" returntype="void" output="false">

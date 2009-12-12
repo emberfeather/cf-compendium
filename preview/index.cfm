@@ -33,7 +33,7 @@
 			</div>
 			
 			<div class="content">
-				<cfif paths NEQ ''>
+				<cfif paths neq ''>
 					<div class="grid_3">
 						<cfset pathLen = len(expandPath('./')) />
 						
@@ -60,8 +60,8 @@
 					<div class="grid_9">
 						<cfset incFile = theURL.search('file') />
 						
-						<cfif incFile NEQ ''>
-							<cfif NOT isUnitTest>
+						<cfif incFile neq ''>
+							<cfif not isUnitTest>
 								<cfinclude template="#basePath#/#incFile#">
 							<cfelse>
 								<!--- Remove slashes --->
@@ -85,11 +85,11 @@
 										
 										<ul>
 											<cfloop array="#results#" index="test">
-												<li style="color: ##<cfif test.testStatus EQ 'Passed'>090<cfelse>900</cfif>">
+												<li style="color: ##<cfif test.testStatus eq 'Passed'>090<cfelse>900</cfif>">
 													#test.testStatus# - #test.testName# ( #test.time# ms )
 													
 													<!--- Check if it has an error to show --->
-													<cfif NOT isSimpleValue(test.error)>
+													<cfif not isSimpleValue(test.error)>
 														<cfdump var="#test.error#" expand="false" />
 													</cfif>
 												</li>

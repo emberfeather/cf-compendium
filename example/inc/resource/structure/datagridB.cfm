@@ -180,8 +180,8 @@
 		
 		from="1" to="40" index="i"<br />
 			person = createObject('component', 'cf-compendium.inc.resource.base.object').init()<br />
-			person.setFirstName(( randRange(0,100) GT 50 ? 'John' : 'Jane' ))<br />
-			person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' ))<br />
+			person.setFirstName(( randRange(0,100) gt 50 ? 'John' : 'Jane' ))<br />
+			person.setLastName(( randRange(0,100) gt 50 ? 'Card' : 'Trump' ))<br />
 			person.setValue(randRange(0,100))<br />
 		
 		datagrid.toHTML(data, {
@@ -194,8 +194,8 @@
 
 <cfloop from="1" to="40" index="i">
 	<cfset person = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
-	<cfset person.setFirstName(( randRange(0,100) GT 50 ? 'Sam' : 'Jane' )) />
-	<cfset person.setLastName(( randRange(0,100) GT 50 ? 'Card' : 'Trump' )) />
+	<cfset person.setFirstName(( randRange(0,100) gt 50 ? 'Sam' : 'Jane' )) />
+	<cfset person.setLastName(( randRange(0,100) gt 50 ? 'Card' : 'Trump' )) />
 	<cfset person.setValue(randRange(0,100)) />
 	<cfset person.setAction('Action') />
 	

@@ -205,13 +205,13 @@
 		<cfset var result = theUrl.parseQueryString(theQueryString) />
 		
 		<cfset assertTrue(structKeyExists(result, "happy")) />
-		<cfset assertTrue(result["happy"] EQ "sad") />
+		<cfset assertTrue(result["happy"] eq "sad") />
 		
 		<cfset assertTrue(structKeyExists(result, "fun")) />
-		<cfset assertTrue(result["fun"] EQ "boring") />
+		<cfset assertTrue(result["fun"] eq "boring") />
 		
 		<cfset assertTrue(structKeyExists(result, "awesome")) />
-		<cfset assertTrue(result["awesome"] EQ "lame") />
+		<cfset assertTrue(result["awesome"] eq "lame") />
 	</cffunction>
 	
 	<!---

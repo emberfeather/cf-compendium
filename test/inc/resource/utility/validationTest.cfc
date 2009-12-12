@@ -28,7 +28,7 @@
 			<cfset validator.in('testing', 'is', 'is,it,in,here') />
 			
 			<cfcatch type="any">
-				<cfset fail("Set should NOT have thrown an error. ['val' is in 'val,is,in,here']")>
+				<cfset fail("Set should not have thrown an error. ['val' is in 'val,is,in,here']")>
 			</cfcatch>
 		</cftry>
 	</cffunction>
@@ -58,7 +58,7 @@
 			<cfset validator.notIn('testing', 'waldo', 'val,is,in,here') />
 			
 			<cfcatch type="any">
-				<cfset fail("Set should NOT have thrown an error. ['waldo' is not in 'val,is,in,here']")>
+				<cfset fail("Set should not have thrown an error. ['waldo' is not in 'val,is,in,here']")>
 			</cfcatch>
 		</cftry>
 	</cffunction>
