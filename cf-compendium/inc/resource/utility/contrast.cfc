@@ -16,7 +16,7 @@
 		
 		<cfset result = contrast(arguments.element1, arguments.element2, arguments.delimiter)>
 		
-		<cfif listLen(result.uniquetofirst) EQ 0 AND listLen(result.uniquetofirst) EQ 0>
+		<cfif listLen(result.uniquetofirst) eq 0 and listLen(result.uniquetofirst) eq 0>
 			<cfreturn true>
 		</cfif>
 		
@@ -34,7 +34,7 @@
 		<cfset var numArgs = arrayLen(arguments) />
 		
 		<!--- Need to at least call the function with something --->
-		<cfif NOT numArgs>
+		<cfif not numArgs>
 			<cfthrow message="Cannot compare nothing" detail="Cannot do a comparision with the absence of everything" />
 		</cfif>
 		
@@ -45,7 +45,7 @@
 		<cfloop from="2" to="#numArgs#" index="i">
 			<cfset equalSet[i] = contrast(arguments[1], arguments[i]) />
 			
-			<cfif listLen(equalset[i].uniqueToFirst) GT 0 OR listLen(equalset[i].uniqueToSecond) GT 0>
+			<cfif listLen(equalset[i].uniqueToFirst) gt 0 or listLen(equalset[i].uniqueToSecond) gt 0>
 				<cfreturn false />
 			</cfif>
 		</cfloop>
@@ -94,9 +94,9 @@
 		<!--- Loop through all possible values --->
 		<cfloop list="#set1##arguments.delimiter##set2#" index="i" delimiters="#arguments.delimiter#">
 			<!--- Make sure we haven't alreadly looked at this value --->
-			<cfif NOT listFindNoCase(uniqueList, i, arguments.delimiter)>
+			<cfif not listFindNoCase(uniqueList, i, arguments.delimiter)>
 				<!--- Check where it exists --->
-				<cfif listFindNoCase(set1, i, arguments.delimiter) AND listFindNoCase(set2, i, arguments.delimiter)>
+				<cfif listFindNoCase(set1, i, arguments.delimiter) and listFindNoCase(set2, i, arguments.delimiter)>
 					<cfset result.same = listAppend(result.same, i, arguments.delimiter) />
 				<cfelseif listFindNoCase(set1, i, arguments.delimiter)>
 					<cfset result.uniqueToFirst = listAppend(result.uniqueToFirst, i, arguments.delimiter) />
@@ -124,7 +124,7 @@
 		<cfset var y = '' />
 		
 		<!--- Need to at least call the function with something --->
-		<cfif NOT numArgs>
+		<cfif not numArgs>
 			<cfthrow message="Cannot contrast nothing" detail="Cannot do a contrast with the absence of everything" />
 		</cfif>
 		

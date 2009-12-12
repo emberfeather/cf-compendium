@@ -16,7 +16,7 @@
 		Returns true if the stack is empty, otherwise false
 	--->
 	<cffunction name="isEmpty" access="public" returntype="boolean" output="false">
-		<cfreturn arrayLen(variables.stack) EQ 0 />
+		<cfreturn arrayLen(variables.stack) eq 0 />
 	</cffunction>
 	
 	<!---

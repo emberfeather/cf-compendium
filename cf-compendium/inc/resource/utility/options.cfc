@@ -19,7 +19,7 @@
 			} />
 		
 		<!--- Make sure we are actually going to be adding options --->
-		<cfif NOT arrayLen(variables.options)>
+		<cfif not arrayLen(variables.options)>
 			<cfthrow message="Can not add an option group without options" detail="Need to add options before adding a group" />
 		</cfif>
 		
@@ -45,7 +45,7 @@
 	
 	<cffunction name="get" access="public" returntype="array" output="false">
 		<!--- Make sure we have at least one group and that all options are part of a group --->
-		<cfif NOT arrayLen(variables.groups) OR arrayLen(variables.options)>
+		<cfif not arrayLen(variables.groups) or arrayLen(variables.options)>
 			<cfset addGroup() />
 		</cfif>
 		

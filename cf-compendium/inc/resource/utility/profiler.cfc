@@ -26,7 +26,7 @@
 		<cfset var structList = '' />
 		
 		<!--- Check if calculating a single ticker or everything --->
-		<cfif arguments.tickerName EQ ''>
+		<cfif arguments.tickerName eq ''>
 			<cfset structList = structKeyList(variables.tickers) />
 		<cfelse>
 			<cfset structList = arguments.tickerName />
@@ -35,7 +35,7 @@
 		<!--- Loop through each ticker --->
 		<cfloop list="#structList#" index="i">
 			<!--- Check for mismatched start and stop --->
-			<cfif arrayLen(variables.tickers[i].start) NEQ arrayLen(variables.tickers[i].stop)>
+			<cfif arrayLen(variables.tickers[i].start) neq arrayLen(variables.tickers[i].stop)>
 				<cfthrow message="Ticker count mismatch" detail="The ticker (#i#) was not started and stopped the same number of times." />
 			</cfif>
 			
@@ -56,8 +56,8 @@
 		<cfset var unit = 'ms' />
 		<cfset var format = '_' />
 		
-		<cfif arguments.tickTime GTE 0>
-			<cfif arguments.tickTime GT 1000>
+		<cfif arguments.tickTime gte 0>
+			<cfif arguments.tickTime gt 1000>
 				<cfset arguments.tickTime /= 1000 />
 				<cfset unit = 'sec' />
 				<cfset format = '___.___' />
@@ -77,12 +77,12 @@
 		
 		<cfset var results = {} />
 		
-		<cfif NOT variables.isActive>
+		<cfif not variables.isActive>
 			<cfreturn results />
 		</cfif>
 		
 		<!--- Check if the ticker even exists --->
-		<cfif NOT structKeyExists(variables.tickers, arguments.tickerName)>
+		<cfif not structKeyExists(variables.tickers, arguments.tickerName)>
 			<cfthrow message="Ticker does not exist" detail="The ticker (#arguments.tickerName#) does not exist in the current tickers." />
 		</cfif>
 		
@@ -100,7 +100,7 @@
 		<cfset var results = queryNew('ticker,count,total,average,minimum,maximum') />
 		<cfset var tickList = '' />
 		
-		<cfif NOT variables.isActive>
+		<cfif not variables.isActive>
 			<cfreturn results />
 		</cfif>
 		
@@ -136,7 +136,7 @@
 		<cfset var loggedOn = '' />
 		<cfset var i = '' />
 		
-		<cfif NOT variables.isActive || structIsEmpty(variables.tickers)>
+		<cfif not variables.isActive || structIsEmpty(variables.tickers)>
 			<cfreturn />
 		</cfif>
 		
@@ -148,7 +148,7 @@
 		
 		<!--- Find the max length --->
 		<cfloop list="#tickList#" index="i">
-			<cfif len(i) GT maxLength>
+			<cfif len(i) gt maxLength>
 				<cfset maxLength = len(i) />
 			</cfif>
 		</cfloop>
@@ -164,7 +164,7 @@
 			<cfset newLogLines &= lJustify(i, maxLength + 3) />
 			
 			<!--- Check if this is a multi ticker --->
-			<cfif arrayLen(variables.tickers[i].count) GT 1>
+			<cfif arrayLen(variables.tickers[i].count) gt 1>
 				<cfset newLogLines &= 'Count: ' & lJustify(arrayLen(variables.tickers[i].count), 7) />
 				<cfset newLogLines &= 'Max: ' & lJustify(formatTickTime(arrayMax(variables.tickers[i].count)), 8) />
 				<cfset newLogLines &= 'Min: ' & lJustify(formatTickTime(arrayMin(variables.tickers[i].count)), 8) />
@@ -191,7 +191,7 @@
 		<cfset var i = '' />
 		<cfset var j = '' />
 		
-		<cfif NOT variables.isActive || structIsEmpty(variables.tickers)>
+		<cfif not variables.isActive || structIsEmpty(variables.tickers)>
 			<cfreturn tempHTML />
 		</cfif>
 		
@@ -203,7 +203,7 @@
 		
 		<!--- Find the max length --->
 		<cfloop list="#tickList#" index="i">
-			<cfif len(i) GT maxLength>
+			<cfif len(i) gt maxLength>
 				<cfset maxLength = len(i) />
 			</cfif>
 		</cfloop>
@@ -214,7 +214,7 @@
 			<cfset tempHTML &= '<!-- ' & lJustify(i, maxLength + 3) />
 			
 			<!--- Check if this is a multi ticker --->
-			<cfif arrayLen(variables.tickers[i].count) GT 1>
+			<cfif arrayLen(variables.tickers[i].count) gt 1>
 				<cfset tempHTML &= 'Count: ' & lJustify(arrayLen(variables.tickers[i].count), 7) />
 				<cfset tempHTML &= 'Max: ' & lJustify(formatTickTime(arrayMax(variables.tickers[i].count)), 8) />
 				<cfset tempHTML &= 'Min: ' & lJustify(formatTickTime(arrayMin(variables.tickers[i].count)), 8) />
@@ -238,16 +238,16 @@
 		
 		<cfset var tick = '' />
 		
-		<cfif NOT variables.isActive>
+		<cfif not variables.isActive>
 			<cfreturn />
 		</cfif>
 		
-		<cfif arguments.tickerName EQ ''>
+		<cfif arguments.tickerName eq ''>
 			<cfthrow message="Ticker name is required" detail="A name use for the ticker is required." />
 		</cfif>
 		
 		<!--- Check if the tick exists --->
-		<cfif NOT structKeyExists(variables.tickers, arguments.tickerName)>
+		<cfif not structKeyExists(variables.tickers, arguments.tickerName)>
 			<cfset variables.tickers[arguments.tickerName] = { start = [], stop = [], count = [] } />
 		</cfif>
 		
@@ -263,20 +263,20 @@
 		
 		<cfset var tickerLength = 0 />
 		
-		<cfif NOT variables.isActive>
+		<cfif not variables.isActive>
 			<cfreturn />
 		</cfif>
 		
-		<cfif arguments.tickerName EQ ''>
+		<cfif arguments.tickerName eq ''>
 			<cfthrow message="Ticker name is required" detail="A name use for the ticker is required." />
 		</cfif>
 		
-		<cfif NOT structKeyExists(variables.tickers, arguments.tickerName)>
+		<cfif not structKeyExists(variables.tickers, arguments.tickerName)>
 			<cfthrow message="Ticker name is not in use" detail="There is no ticker in use with the name '#arguments.tickerName#'. Please start it before you stop it." />
 		</cfif>
 		
 		<!--- Check if it has already been stopped --->
-		<cfif arrayLen(variables.tickers[arguments.tickerName].stop) GTE arrayLen(variables.tickers[arguments.tickerName].start)>
+		<cfif arrayLen(variables.tickers[arguments.tickerName].stop) gte arrayLen(variables.tickers[arguments.tickerName].start)>
 			<cfthrow message="Ticker already stopped." detail="The ticker '#arguments.tickerName#' has already been stopped." />
 		</cfif>
 		

@@ -6,7 +6,7 @@
 		<cfset variables.lang = listFirst(arguments.locale, "_") />
 		
 		<!--- Check if there are more language details --->
-		<cfif listLen(arguments.locale,"_") GT 1>
+		<cfif listLen(arguments.locale,"_") gt 1>
 			<cfset variables.country = listGetAt(arguments.locale, 2, "_") />
 			<cfset variables.variant = listLast(arguments.locale, "_") />
 		</cfif>
@@ -34,7 +34,7 @@
 		<cfset var theMessageFormat = createObject("java", "java.text.MessageFormat") />
 		
 		<!--- Check to make sure they passed in enough arguments to do some formatting with --->
-		<cfif arrayLen(arguments) LT 2>
+		<cfif arrayLen(arguments) lt 2>
 			<cfthrow message="Missing Substitutions" detail="Please provide additional arguments to be used as substitutions in the message" />
 		</cfif>
 		

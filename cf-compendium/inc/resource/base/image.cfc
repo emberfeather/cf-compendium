@@ -12,7 +12,7 @@
 		<cfset search = reFind('(.*)(\.[^\.]*)$', arguments.imageName, 1, true) />
 		
 		<!--- Check if we were able to locate the image name --->
-		<cfif NOT search.pos[1]>
+		<cfif not search.pos[1]>
 			<cfthrow message="#arguments.imageName# is an invalid image name." />
 		</cfif>
 		

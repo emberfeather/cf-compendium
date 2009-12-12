@@ -16,7 +16,7 @@
 		Returns true if the queue is empty, otherwise false
 	--->
 	<cffunction name="isEmpty" access="public" returntype="boolean" output="false">
-		<cfreturn arrayLen(variables.queue) EQ 0 />
+		<cfreturn arrayLen(variables.queue) eq 0 />
 	</cffunction>
 	
 	<!---

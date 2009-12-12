@@ -32,11 +32,11 @@
 			} />
 		
 		<!--- Normalize the options --->
-		<cfif structKeyExists(arguments.options, 'link') AND NOT isArray(arguments.options.link)>
+		<cfif structKeyExists(arguments.options, 'link') and not isArray(arguments.options.link)>
 			<cfset arguments.options.link = [ arguments.options.link ] />
 		</cfif>
 		
-		<cfif structKeyExists(arguments.options, 'linkClass') AND NOT isArray(arguments.options.linkClass)>
+		<cfif structKeyExists(arguments.options, 'linkClass') and not isArray(arguments.options.linkClass)>
 			<cfset arguments.options.linkClass = [ arguments.options.linkClass ] />
 		</cfif>
 		
@@ -72,7 +72,7 @@
 				<cfset currentKey = 'sum-' & safeKey />
 				
 				<!--- Prime the variable --->
-				<cfif NOT structKeyExists(arguments.derived, currentKey)>
+				<cfif not structKeyExists(arguments.derived, currentKey)>
 					<cfset arguments.derived[currentKey] = 0 />
 				</cfif>
 				
@@ -131,7 +131,7 @@
 								<cfinvokeargument name="value" value="#arguments.options.linkBase[arguments.column.key]#" />
 							</cfinvoke>
 						</cfif>
-					<cfelseif arguments.options.linkBase NEQ ''>
+					<cfelseif arguments.options.linkBase neq ''>
 						<cfinvoke component="#arguments.options.theURL#" method="overrideDGCol#arguments.colNum#Link#i#">
 							<cfinvokeargument name="value" value="#arguments.options.linkBase#" />
 						</cfinvoke>
@@ -143,11 +143,11 @@
 						<!--- Get the link value --->
 						<cfif isNumeric(key)>
 							<cfset value = key />
-						<cfelseif isQuery(arguments.data) AND structKeyExists(arguments.data, key)>
+						<cfelseif isQuery(arguments.data) and structKeyExists(arguments.data, key)>
 							<cfset value = arguments.data[key][arguments.rowNum] />
-						<cfelseif isArray(arguments.data) AND isObject(arguments.data[arguments.rowNum]) AND arguments.data[arguments.rowNum].hasKey(key)>
+						<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].hasKey(key)>
 							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#key#" returnvariable="value" />
-						<cfelseif isArray(arguments.data) AND isStruct(arguments.data[arguments.rowNum]) AND structKeyExists(arguments.data[arguments.rowNum], key)>
+						<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], key)>
 							<cfset value = arguments.data[arguments.rowNum][key] />
 						<cfelse>
 							<cfset value = key />
@@ -162,14 +162,14 @@
 					<!--- Check if the value of the link is provided --->
 					<cfif isArray(arguments.column.value)>
 						<cfset arguments.text = variables.label.get(arguments.column.value[i]) />
-					<cfelseif arguments.column.value NEQ ''>
+					<cfelseif arguments.column.value neq ''>
 						<cfset arguments.text = variables.label.get(arguments.column.value) />
 					</cfif>
 					
 					<!--- Retrieve the URL --->
 					<cfinvoke component="#arguments.options.theURL#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
 					
-					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) GTE i ? arguments.column.linkClass[i] : '')#">#arguments.text#</a>
+					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#arguments.text#</a>
 				</cfloop>
 			</cfoutput>
 		</cfsavecontent>
@@ -268,7 +268,7 @@
 									<cfif isArray(arguments.data)>
 										<cfloop array="#arguments.data#" index="item">
 											<cfif isObject(item)>
-												<cfif col.key NEQ ''>
+												<cfif col.key neq ''>
 													<cfinvoke component="#item#" method="get#col.key#" returnvariable="value" />
 												</cfif>
 											<cfelseif isStruct(item)>
@@ -285,27 +285,27 @@
 												</cfcase>
 												
 												<cfcase value="min">
-													<cfif NOT structKeyExists(aggregate, currentKey)>
+													<cfif not structKeyExists(aggregate, currentKey)>
 														<cfset aggregate[currentKey] = value />
 													</cfif>
 													
-													<cfif value LT aggregate[currentKey]>
+													<cfif value lt aggregate[currentKey]>
 														<cfset aggregate[currentKey] = value />
 													</cfif>
 												</cfcase>
 												
 												<cfcase value="max">
-													<cfif NOT structKeyExists(aggregate, currentKey)>
+													<cfif not structKeyExists(aggregate, currentKey)>
 														<cfset aggregate[currentKey] = value />
 													</cfif>
 													
-													<cfif value GT aggregate[currentKey]>
+													<cfif value gt aggregate[currentKey]>
 														<cfset aggregate[currentKey] = value />
 													</cfif>
 												</cfcase>
 												
 												<cfcase value="avg">
-													<cfif NOT structKeyExists(aggregate, currentKey)>
+													<cfif not structKeyExists(aggregate, currentKey)>
 														<cfset aggregate[currentKey] = 0 />
 														<cfset aggregate[currentKey & '-cnt'] = 0 />
 													</cfif>
@@ -323,27 +323,27 @@
 												</cfcase>
 												
 												<cfcase value="min">
-													<cfif NOT structKeyExists(aggregate, currentKey)>
+													<cfif not structKeyExists(aggregate, currentKey)>
 														<cfset aggregate[currentKey] = arguments.data[col.key] />
 													</cfif>
 													
-													<cfif value LT aggregate[currentKey]>
+													<cfif value lt aggregate[currentKey]>
 														<cfset aggregate[currentKey] = arguments.data[col.key] />
 													</cfif>
 												</cfcase>
 												
 												<cfcase value="max">
-													<cfif NOT structKeyExists(aggregate, currentKey)>
+													<cfif not structKeyExists(aggregate, currentKey)>
 														<cfset aggregate[currentKey] = arguments.data[col.key] />
 													</cfif>
 													
-													<cfif value GT aggregate[currentKey]>
+													<cfif value gt aggregate[currentKey]>
 														<cfset aggregate[currentKey] = arguments.data[col.key] />
 													</cfif>
 												</cfcase>
 												
 												<cfcase value="avg">
-													<cfif NOT structKeyExists(aggregate, currentKey)>
+													<cfif not structKeyExists(aggregate, currentKey)>
 														<cfset aggregate[currentKey] = 0 />
 														<cfset aggregate[currentKey & '-cnt'] = 0 />
 													</cfif>
@@ -383,7 +383,7 @@
 					</thead>
 				</cfoutput>
 				<tbody>
-					<cfif isArray(arguments.data) AND arrayLen(arguments.data)>
+					<cfif isArray(arguments.data) and arrayLen(arguments.data)>
 						<cfset rowNum = 0 />
 						
 						<cfloop array="#arguments.data#" index="item">
@@ -397,7 +397,7 @@
 										<cfloop array="#variables.columns#" index="col">
 											<td class="#col.key# #col.class# column-#counter++#">
 												<!--- Determine the value --->
-												<cfif col.key NEQ ''>
+												<cfif col.key neq ''>
 													<cfinvoke component="#item#" method="get#col.key#" returnvariable="value" />
 												<cfelseif structKeyExists(col, 'derived')>
 													<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
@@ -419,7 +419,7 @@
 										<cfloop array="#variables.columns#" index="col">
 											<td class="#col.key# #col.class# column-#counter++#">
 												<!--- Determine Value --->
-												<cfif col.key NEQ ''>
+												<cfif col.key neq ''>
 													<cfset value = item[col.key] />
 												<cfelseif structKeyExists(col, 'derived')>
 													<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
@@ -451,11 +451,11 @@
 							</cfoutput>
 							
 							<!--- Check if we have enough rows displayed --->
-							<cfif rowNum GTE arguments.options.numPerPage>
+							<cfif rowNum gte arguments.options.numPerPage>
 								<cfbreak />
 							</cfif>
 						</cfloop>
-					<cfelseif isQuery(arguments.data) AND arguments.data.recordCount GT 0>
+					<cfelseif isQuery(arguments.data) and arguments.data.recordCount gt 0>
 						<cfset rowNum = 0 />
 						
 						<cfoutput query="arguments.data" startrow="#arguments.options.startRow#" maxrows="#arguments.options.numPerPage#">
@@ -466,7 +466,7 @@
 								<cfloop array="#variables.columns#" index="col">
 									<td class="#col.key# #col.class# column-#counter++#">
 										<!--- Determine Value --->
-										<cfif col.key NEQ ''>
+										<cfif col.key neq ''>
 											<cfset value = arguments.data[col.key] />
 										<cfelseif structKeyExists(col, 'derived')>
 											<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
@@ -495,10 +495,10 @@
 					</cfif>
 				</tbody>
 				<!--- Show footer --->
-				<cfif arguments.options['minimumRows'] GT 0
-					AND (
-						(isArray(arguments.data) AND arrayLen(arguments.data) GTE arguments.options['minimumRows'])
-						OR (isQuery(arguments.data) AND arguments.data.recordCount GTE arguments.options['minimumRows'])
+				<cfif arguments.options['minimumRows'] gt 0
+					and (
+						(isArray(arguments.data) and arrayLen(arguments.data) gte arguments.options['minimumRows'])
+						or (isQuery(arguments.data) and arguments.data.recordCount gte arguments.options['minimumRows'])
 					)>
 					<cfoutput>
 						<tfoot>

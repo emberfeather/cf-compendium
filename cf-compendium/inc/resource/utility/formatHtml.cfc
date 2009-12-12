@@ -58,11 +58,11 @@
 		 	<cfset value = matcher.group() />
 		 	
 		 	<!--- Check if we are not in a pre, code, or script tag --->
-		 	<cfif NOT inIgnoreTag>
+		 	<cfif not inIgnoreTag>
 			 	<cfswitch expression="#value#">
 				 	<cfcase value=""",&quot;,&##8220;,&##8221;">
 					 	<!--- Check if we should be converting the &quot; --->
-					 	<cfif value NEQ '&quot;' OR arguments.doQuote>
+					 	<cfif value neq '&quot;' or arguments.doQuote>
 							<!--- Check if already opened a double quote --->
 							<cfif inDouble>
 								<cfset value = '&##8221;' />
@@ -70,7 +70,7 @@
 								<cfset value = '&##8220;' />
 							</cfif>
 							
-							<cfset inDouble = NOT inDouble />
+							<cfset inDouble = not inDouble />
 						</cfif>
 					</cfcase>
 				 	<cfcase value="``">
@@ -91,7 +91,7 @@
 							<cfset value = '&##8216;' />
 						</cfif>
 						
-						<cfset inSingle = NOT inSingle />
+						<cfset inSingle = not inSingle />
 					</cfcase>
 				 	<cfcase value="s','s,'d,'t">
 					 	<!--- Apostrophe --->
@@ -146,7 +146,7 @@
 			</cfif>
 			
 			<!--- Check if still in ignore tag --->
-		 	<cfset inIgnoreTag = (inPre OR inCode OR inScript OR inKbd) />
+		 	<cfset inIgnoreTag = (inPre or inCode or inScript or inKbd) />
 			
 			<cfset matcher.appendReplacement(buffer, value.replaceAll("([\\\$])", "\\$1")) />
 		</cfloop>
@@ -185,7 +185,7 @@
 		 	
 		 	<!--- Check to see if we are in script. If we are, we need to do things very differently. --->
 		 	<cfif inScript>
-		 		<!--- Check to see if found a cloase cfscript tag and that we NOT in a comment tag. --->
+		 		<!--- Check to see if found a cloase cfscript tag and that we not in a comment tag. --->
 			 	<cfif reFindNoCase("^&lt;/cfscript", value)>
 				 	<cfset value = '<span class="cfmlCodeColor">' & value />
 				 	
@@ -194,28 +194,28 @@
 				</cfif>
 				
 				<!--- Check to see if we found a close tag. --->
-				<cfif REFindNoCase( "/?&gt;$", value ) AND inCF>
+				<cfif REFindNoCase( "/?&gt;$", value ) and inCF>
 					<cfset value &= '</span>' />
 					
 					<cfset inCF = false />
 				</cfif>
 			<cfelse>
 				<!--- Check to see if found a comment. --->
-				<cfif value EQ '&lt;!--'>
+				<cfif value eq '&lt;!--'>
 					<cfset value = '<span class="commentCodeColor">' & value />
 					
 					<cfset inComment = true />
 				</cfif>
 				
 				<!--- Check to see if found a close comment and that we are already in a comment. --->
-				<cfif value EQ '--&gt;' AND inComment>
+				<cfif value eq '--&gt;' and inComment>
 					<cfset value &= '</span>' />
 					
 					<cfset inComment = false />
 				</cfif>
 				
-				<!--- Check to see if found a cf tag and that we are NOT in a comment tag. --->
-				<cfif reFindNoCase('^&lt;cf', value) AND NOT inComment>
+				<!--- Check to see if found a cf tag and that we are not in a comment tag. --->
+				<cfif reFindNoCase('^&lt;cf', value) and not inComment>
 					<!--- Check to see if we started a script tag. --->
 					<cfif reFindNoCase('^&lt;cfscript', value)>
 						<cfset inScript = true />
@@ -226,8 +226,8 @@
 					<cfset inCF = true />
 				</cfif>
 				
-				<!--- Check to see if found a close cf tag and that we NOT in a comment tag. --->
-				<cfif reFindNoCase('^&lt;/cf', value) AND NOT inComment>
+				<!--- Check to see if found a close cf tag and that we not in a comment tag. --->
+				<cfif reFindNoCase('^&lt;/cf', value) and not inComment>
 					<cfset value = '<span class="cfmlCodeColor">' & value />
 					
 					<cfset inCF = true />
@@ -235,14 +235,14 @@
 			</cfif>
 		 	
 		 	<!--- Check to see if found an open HTML tag and that we are not in a comment. --->
-		 	<cfif reFindNoCase('^&lt;(?!cf)', value) AND NOT inComment>
+		 	<cfif reFindNoCase('^&lt;(?!cf)', value) and not inComment>
 			 	<cfset value = '<span class="htmlCodeColor">' & value />
 			 	
 			 	<cfset inHTML = true />
 			</cfif>
 			
 			<!--- Check to see if we found a self closing tag. --->
-			<cfif reFindNoCase('/?&gt;$', value) AND NOT inComment AND NOT inAttribute AND (inCF OR inHTML)>
+			<cfif reFindNoCase('/?&gt;$', value) and not inComment and not inAttribute and (inCF or inHTML)>
 				<cfset value &= '</span>' />
 				
 				<cfif inCF>
@@ -253,9 +253,9 @@
 			</cfif>
 			
 			<!--- Check to see if we found a attribute of a tag --->
-			<cfif value EQ '&quot;' AND value EQ "'" AND (inCF OR inHTML)>
+			<cfif value eq '&quot;' and value eq "'" and (inCF or inHTML)>
 				<!--- Are we starting or ending the attribute --->
-				<cfif NOT inAttribute>
+				<cfif not inAttribute>
 					<cfset value = '<span class="attributeCodeColor">' & value />
 					
 					<cfset inAttribute = true />

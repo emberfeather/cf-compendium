@@ -38,7 +38,7 @@
 			} />
 		
 		<!--- Ensure the key is not blank --->
-		<cfif filter.key EQ ''>
+		<cfif filter.key eq ''>
 			<cfthrow message="Cannot have a blank filter key" detail="The filter key was blank" />
 		</cfif>
 		
@@ -59,11 +59,11 @@
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<!--- Check if it is a text filter --->
-		<cfif NOT isObject(arguments.filter.options)>
+		<cfif not isObject(arguments.filter.options)>
 			<cfreturn filterText(arguments.theURL, arguments.filter) />
 		<cfelse>
 			<!--- Check the number of filters --->
-			<cfif length() EQ 1>
+			<cfif length() eq 1>
 				<!--- 'Smartly' determine what type of output would be best --->
 				<cfswitch expression="#arguments.filter.options.length()#">
 					<cfcase value="1">
@@ -106,7 +106,7 @@
 			<cfloop array="#group.options#" index="option">
 				<cfset html &= '<label><input type="checkbox" name="' & arguments.filter.key & '" value="' & option.value & '"' />
 				
-				<cfif option.value EQ value>
+				<cfif option.value eq value>
 					<cfset html &= ' checked="checked"' />
 				</cfif>
 				
@@ -133,7 +133,7 @@
 			<cfloop array="#group.options#" index="option">
 				<cfset html &= '<label><input type="radio" name="' & arguments.filter.key & '" value="' & option.value & '"' />
 				
-				<cfif option.value EQ value>
+				<cfif option.value eq value>
 					<cfset html &= ' checked="checked"' />
 				</cfif>
 				
@@ -157,21 +157,21 @@
 		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
 		
 		<cfloop array="#optGroups#" index="group">
-			<cfif group.label NEQ ''>
+			<cfif group.label neq ''>
 				<cfset html &= '<optgroup label="' & group.label & '">' />
 			</cfif>
 			
 			<cfloop array="#group.options#" index="option">
 				<cfset html &= '<option value="' & option.value & '"' />
 				
-				<cfif option.value EQ value>
+				<cfif option.value eq value>
 					<cfset html &= ' selected="selected"' />
 				</cfif>
 				
 				<cfset html &= '>' & option.title & '</option>' />
 			</cfloop>
 			
-			<cfif group.label NEQ ''>
+			<cfif group.label neq ''>
 				<cfset html &= '</optgroup>' />
 			</cfif>
 		</cfloop>
@@ -209,7 +209,7 @@
 		<cfset arguments.theURL.setFilter('onPage', 1) />
 		
 		<!--- Check to make sure we have filters to display --->
-		<cfif NOT length()>
+		<cfif not length()>
 			<cfthrow message="Missing filters" detail="Cannot generate filter html without filters" />
 		</cfif>
 		

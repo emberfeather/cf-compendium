@@ -8,7 +8,7 @@
 		<!--- Normalize the baseDirectory --->
 		<cfset arguments.baseDirectory = normalizePath(arguments.baseDirectory) />
 		
-		<cfif NOT directoryExists(arguments.baseDirectory)>
+		<cfif not directoryExists(arguments.baseDirectory)>
 			<cfthrow message="Base directory not found" detail="The base directory for resource bundles was not found" />
 		</cfif>
 		
@@ -30,7 +30,7 @@
 		<cfargument name="locale" type="string" default="en_US" />
 		
 		<!--- Check if we already have one for the locale requested --->
-		<cfif NOT structKeyExists(variables.formatters, arguments.locale)>
+		<cfif not structKeyExists(variables.formatters, arguments.locale)>
 			<cfset variables.formatters[arguments.locale] = createObject('component', 'cf-compendium.inc.resource.i18n.messageFormat').init(arguments.locale) />
 		</cfif>
 		
@@ -44,7 +44,7 @@
 		<cfargument name="directoryPath" type="string" required="true" />
 		
 		<!--- Test for trailing slash --->
-		<cfif right(arguments.directoryPath, 1) NEQ '/'>
+		<cfif right(arguments.directoryPath, 1) neq '/'>
 			<cfreturn arguments.directoryPath & '/' />
 		</cfif>
 		
@@ -72,26 +72,26 @@
 		<cfset arguments.path = normalizePath(arguments.path) />
 		
 		<!--- Check if we are doing the base locale --->
-		<cfif arguments.bundleLocale EQ ''>
+		<cfif arguments.bundleLocale eq ''>
 			<cfset arguments.bundleLocale = 'base' />
 		</cfif>
 		
 		<!--- Check if we already have a place for the bundle path --->
-		<cfif NOT structKeyExists(variables.bundles, arguments.path)>
+		<cfif not structKeyExists(variables.bundles, arguments.path)>
 			<cfset variables.bundles[arguments.path] = {} />
 		</cfif>
 		
 		<!--- Check if we already have a place for the bundle name --->
-		<cfif NOT structKeyExists(variables.bundles[arguments.path], arguments.bundleName)>
+		<cfif not structKeyExists(variables.bundles[arguments.path], arguments.bundleName)>
 			<cfset variables.bundles[arguments.path][arguments.bundleName] = {} />
 		</cfif>
 		
 		<!--- Check if we already have a place for the bundle locale --->
-		<cfif NOT structKeyExists(variables.bundles[arguments.path][arguments.bundleName], arguments.bundleLocale)>
+		<cfif not structKeyExists(variables.bundles[arguments.path][arguments.bundleName], arguments.bundleLocale)>
 			<cfset bundlePath = arguments.path />
 			
 			<!--- Check the bundle path --->
-			<cfif NOT directoryExists(bundlePath)>
+			<cfif not directoryExists(bundlePath)>
 				<!--- Try searching for the path --->
 				<cfif directoryExists(variables.baseDirectory & arguments.path)>
 					<cfset bundlePath = variables.baseDirectory & arguments.path />
@@ -124,10 +124,10 @@
 		<cfset var format = '' />
 		
 		<!--- Check if we already have one for the locale requested --->
-		<cfif NOT structKeyExists(variables.validators, arguments.locale)>
+		<cfif not structKeyExists(variables.validators, arguments.locale)>
 			<cfset variables.validators[arguments.locale] = {} />
 			
-			<cfif NOT structKeyExists(variables.validators[arguments.locale], arguments.componentPath)>
+			<cfif not structKeyExists(variables.validators[arguments.locale], arguments.componentPath)>
 				<!--- Grab the required args for a validation object --->
 				<cfset bundle = this.getResourceBundle(arguments.bundlePath, arguments.bundleName, arguments.locale) />
 				<cfset format = this.getMessageFormat(arguments.locale) />

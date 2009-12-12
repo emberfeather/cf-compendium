@@ -10,12 +10,12 @@
 		<cfset var value = asc(left(arguments.character, 1)) - asc('0') />
 		
 		<!--- Skip the first set of punctuation --->
-		<cfif value GT 9>
+		<cfif value gt 9>
 			<cfset offset -= 7 />
 		</cfif>
 		
 		<!--- Skip the second part of punctuation --->
-		<cfif value GT 42>
+		<cfif value gt 42>
 			<cfset offset -= 6 />
 		</cfif>
 		
@@ -38,7 +38,7 @@
 			
 			<cfset value = characterToValue(character) * ( 62 ^ (length - 1) ) />
 			
-			<cfif length GT 1>
+			<cfif length gt 1>
 				<cfset extra = right(arguments.original, length - 1) />
 				
 				<cfset value += base62ToValue(extra) />
@@ -58,7 +58,7 @@
 		<cfset remainder = arguments.original MOD 62 />
 		<cfset divided = int(arguments.original / 62) />
 		
-		<cfif divided GT 0>
+		<cfif divided gt 0>
 			<cfreturn valueToBase62(divided) & valueToCharacter(remainder) />
 		<cfelse>
 			<cfreturn valueToCharacter(remainder) />
@@ -71,12 +71,12 @@
 		<cfset var offset = asc('0') />
 		
 		<!--- Skip the first set of punctuation --->
-		<cfif arguments.value GT 9>
+		<cfif arguments.value gt 9>
 			<cfset offset += 7 />
 		</cfif>
 		
 		<!--- Skip the second part of punctuation --->
-		<cfif arguments.value GT 35>
+		<cfif arguments.value gt 35>
 			<cfset offset += 6 />
 		</cfif>
 		

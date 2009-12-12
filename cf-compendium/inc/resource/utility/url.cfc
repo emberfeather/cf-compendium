@@ -49,7 +49,7 @@
 		<cfset arguments.value = trim(arguments.value) />
 		
 		<!--- Set or remove the anchor --->
-		<cfif arguments.value EQ ''>
+		<cfif arguments.value eq ''>
 			<cfset structDelete(variables.anchors, arguments.locationName) />
 		<cfelse>
 			<cfset variables.anchors[arguments.locationName] = arguments.value />
@@ -120,7 +120,7 @@
 		<cfset arguments.locationName = trim(arguments.locationName) />
 		
 		<!--- Check for valid location --->
-		<cfif NOT has(arguments.locationName)>
+		<cfif not has(arguments.locationName)>
 			<cfset variables.locations[arguments.locationName] = duplicate(variables.locations['']) />
 		</cfif>
 		
@@ -160,7 +160,7 @@
 		</cfloop>
 		
 		<!--- Remove the extra amp character --->
-		<cfif len(formatted) GT len(ampChar)>
+		<cfif len(formatted) gt len(ampChar)>
 			<cfset formatted = Left(formatted, len(formatted) - len(ampChar)) />
 		</cfif>
 		
@@ -181,7 +181,7 @@
 		<cfargument name="locationName" type="string" default="" />
 		
 		<!--- Check if is master --->
-		<cfif arguments.locationName EQ ''>
+		<cfif arguments.locationName eq ''>
 			<cfreturn true />
 		</cfif>
 		
@@ -203,7 +203,7 @@
 		<cfset findParts = reFind('^(anchor|clean|clone|extend|get|has|override|remove|reset|searchid|searchboolean|search|set)(.*)', arguments.missingMethodName, 1, true) />
 		
 		<!--- Check if not one that we are equiped to handle --->
-		<cfif NOT findParts.pos[1]>
+		<cfif not findParts.pos[1]>
 			<cfthrow message="The #arguments.missingMethodName# method was not found" />
 		</cfif>
 		
@@ -218,7 +218,7 @@
 		<!--- Determine what we are really doing --->
 		<cfswitch expression="#name#">
 			<cfcase value="anchor">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
 					<cfreturn anchor(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
@@ -226,7 +226,7 @@
 			</cfcase>
 			
 			<cfcase value="clean">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
 					<cfreturn clean(arguments.missingMethodArguments[1]) />
 				</cfif>
 				
@@ -234,9 +234,9 @@
 			</cfcase>
 			
 			<cfcase value="clone">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
 					<cfreturn clone(extra, arguments.missingMethodArguments[1]) />
-				<cfelseif arrayLen(arguments.missingMethodArguments) EQ 2>
+				<cfelseif arrayLen(arguments.missingMethodArguments) eq 2>
 					<cfreturn clone(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
@@ -244,7 +244,7 @@
 			</cfcase>
 			
 			<cfcase value="extend">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
 					<cfreturn extend(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
@@ -252,9 +252,9 @@
 			</cfcase>
 			
 			<cfcase value="get">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
 					<cfreturn get(extra, arguments.missingMethodArguments[1]) />
-				<cfelseif arrayLen(arguments.missingMethodArguments) EQ 2>
+				<cfelseif arrayLen(arguments.missingMethodArguments) eq 2>
 					<cfreturn get(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
@@ -262,7 +262,7 @@
 			</cfcase>
 			
 			<cfcase value="has">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
 					<cfreturn has(arguments.missingMethodArguments[1]) />
 				</cfif>
 				
@@ -270,7 +270,7 @@
 			</cfcase>
 			
 			<cfcase value="override">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
 					<cfreturn override(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
@@ -278,7 +278,7 @@
 			</cfcase>
 			
 			<cfcase value="remove">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
 					<cfreturn remove(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
@@ -286,7 +286,7 @@
 			</cfcase>
 			
 			<cfcase value="reset">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 1>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
 					<cfreturn reset(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
@@ -294,7 +294,7 @@
 			</cfcase>
 			
 			<cfcase value="search">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
 					<cfreturn search(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
@@ -302,7 +302,7 @@
 			</cfcase>
 			
 			<cfcase value="searchBoolean">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
 					<cfreturn searchBoolean(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
@@ -310,7 +310,7 @@
 			</cfcase>
 			
 			<cfcase value="searchid">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 2>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
 					<cfreturn searchID(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
@@ -318,7 +318,7 @@
 			</cfcase>
 			
 			<cfcase value="set">
-				<cfif arrayLen(arguments.missingMethodArguments) EQ 3>
+				<cfif arrayLen(arguments.missingMethodArguments) eq 3>
 					<cfreturn set(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2], arguments.missingMethodArguments[3]) />
 				</cfif>
 				
@@ -371,10 +371,10 @@
 		<cfloop list="#arguments.queryString#" index="current" delimiters="&">
 			<cfset i = find('=', current) />
 			
-			<cfif i GT 0 AND len(current) NEQ i>
+			<cfif i gt 0 and len(current) neq i>
 				<!--- Add the value to the struct --->
 				<cfset tempUrl[left(current, i - 1)] = right(current, len(current) - i) />
-			<cfelseif i GT 0>
+			<cfelseif i gt 0>
 				<!--- Add the value to the struct --->
 				<cfset tempUrl[left(current, i - 1)] = '' />
 			<cfelse>
@@ -453,7 +453,7 @@
 		<cfset var value = search(argumentCollection=arguments) />
 		
 		<!--- If not a number return a zero --->
-		<cfif NOT isBoolean(value)>
+		<cfif not isBoolean(value)>
 			<cfreturn false />
 		</cfif>
 		
@@ -470,7 +470,7 @@
 		<cfset var value = search(argumentCollection=arguments) />
 		
 		<!--- If not a number return a zero --->
-		<cfif NOT isNumeric(value)>
+		<cfif not isNumeric(value)>
 			<cfreturn 0 />
 		</cfif>
 		

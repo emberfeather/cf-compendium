@@ -17,7 +17,7 @@
 		<cfargument name="original" type="struct" default="#{}#" />
 		<cfargument name="depth" type="numeric" default="1" />
 		
-		<cfif NOT structKeyExists(variables, 'extender')>
+		<cfif not structKeyExists(variables, 'extender')>
 			<cfset variables.extender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		</cfif>
 		

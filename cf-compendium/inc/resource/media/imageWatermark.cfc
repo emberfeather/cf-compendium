@@ -20,7 +20,7 @@
 		<cfset var height = 0 />
 		<cfset var parts = '' />
 		
-		<cfif NOT isImage(variables.watermark.image)>
+		<cfif not isImage(variables.watermark.image)>
 			<cfthrow message="Missing watermark image" detail="Please set the watermark image before applying a watermark." />
 		</cfif>
 		
@@ -33,11 +33,11 @@
 		<cfset width = newImage.getWidth() />
 		<cfset height = newImage.getHeight() />
 		
-		<cfif width + arguments.offsetX LT variables.watermark.width>
+		<cfif width + arguments.offsetX lt variables.watermark.width>
 			<cfthrow message="Image size is smaller than watermark" detail="The width of the watermark (#variables.watermark.width#) is greater than the width of the image (#width#) with a #arguments.offsetX# offset." />
 		</cfif>
 		
-		<cfif height + arguments.offsetY LT variables.watermark.height>
+		<cfif height + arguments.offsetY lt variables.watermark.height>
 			<cfthrow message="Image size is smaller than watermark" detail="The height of the watermark (#variables.watermark.height#) is greater than the height of the image (#height#) with a #arguments.offsetY# offset." />
 		</cfif>
 		

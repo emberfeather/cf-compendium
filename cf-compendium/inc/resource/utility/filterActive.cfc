@@ -39,7 +39,7 @@
 		<cfset var currVal = '' />
 		
 		<!--- Check if there are no keys given --->
-		<cfif arguments.keys EQ '' AND isStruct(arguments.filter)>
+		<cfif arguments.keys eq '' and isStruct(arguments.filter)>
 			<!--- Set the keys to everything alphebetically --->
 			<cfset arguments.keys = listSort(structKeyList(arguments.filter), 'text') />
 		</cfif>
@@ -62,7 +62,7 @@
 					<cfset arguments.theURL.removeFilterActive(key) />
 					
 					<!--- If not blank add the item to the filter --->
-					<cfif value NEQ ''>
+					<cfif value neq ''>
 						<li>
 							<cfoutput>#filterItem(key, value, arguments.theURL.getFilterActive())#</cfoutput>
 						</li>

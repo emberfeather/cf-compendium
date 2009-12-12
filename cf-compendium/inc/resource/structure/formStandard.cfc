@@ -11,7 +11,7 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<!--- Check for a file form type --->
-		<cfif arguments.elementType EQ 'file'>
+		<cfif arguments.elementType eq 'file'>
 			<cfset variables.isMultipart = true />
 		</cfif>
 		
@@ -97,7 +97,7 @@
 		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
@@ -107,7 +107,7 @@
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -149,22 +149,22 @@
 		<cfset formatted &= 'value="' & arguments.element.value & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Checked --->
-		<cfif arguments.element.checked EQ true>
+		<cfif arguments.element.checked eq true>
 			<cfset formatted &= 'checked="checked" ' />
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled EQ true>
+		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -197,22 +197,22 @@
 		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Accept --->
-		<cfif arguments.element.accept NEQ ''>
+		<cfif arguments.element.accept neq ''>
 			<cfset formatted &= 'accept="' & arguments.element.accept & '" ' />
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled EQ true>
+		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -245,7 +245,7 @@
 		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -279,37 +279,37 @@
 		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled EQ true>
+		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
 		<!--- Size --->
-		<cfif isNumeric(arguments.element.size) AND arguments.element.size GT 0>
+		<cfif isNumeric(arguments.element.size) and arguments.element.size gt 0>
 			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
 		</cfif>
 		
 		<!--- Alt --->
-		<cfif arguments.element.alt NEQ ''>
+		<cfif arguments.element.alt neq ''>
 			<cfset formatted &= 'alt="' & arguments.element.alt & '" ' />
 		</cfif>
 		
 		<!--- Src --->
-		<cfif arguments.element.src NEQ ''>
+		<cfif arguments.element.src neq ''>
 			<cfset formatted &= 'src="' & arguments.element.src & '" ' />
 		</cfif>
 		
 		<!--- Value --->
-		<cfif arguments.element.value NEQ ''>
+		<cfif arguments.element.value neq ''>
 			<cfset formatted &= 'value="' & arguments.element.value & '" ' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -344,37 +344,37 @@
 		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Max Length --->
-		<cfif isNumeric(arguments.element.maxLength) AND arguments.element.maxLength GT 0>
+		<cfif isNumeric(arguments.element.maxLength) and arguments.element.maxLength gt 0>
 			<cfset formatted &= 'maxLength="' & arguments.element.maxLength & '" ' />
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled EQ true>
+		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
 		<!--- Read Only --->
-		<cfif arguments.element.readOnly EQ true>
+		<cfif arguments.element.readOnly eq true>
 			<cfset formatted &= 'readonly="readonly" ' />
 		</cfif>
 		
 		<!--- Size --->
-		<cfif isNumeric(arguments.element.size) AND arguments.element.size GT 0>
+		<cfif isNumeric(arguments.element.size) and arguments.element.size gt 0>
 			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
 		</cfif>
 		
 		<!--- Value --->
-		<cfif arguments.element.value NEQ ''>
+		<cfif arguments.element.value neq ''>
 			<cfset formatted &= 'value="' & arguments.element.value & '" ' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -411,27 +411,27 @@
 		<cfset formatted &= 'value="' & arguments.element.value & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Checked --->
-		<cfif arguments.element.checked EQ true>
+		<cfif arguments.element.checked eq true>
 			<cfset formatted &= 'checked="checked" ' />
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled EQ true>
+		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
 		<!--- Size --->
-		<cfif isNumeric(arguments.element.size) AND arguments.element.size GT 0>
+		<cfif isNumeric(arguments.element.size) and arguments.element.size gt 0>
 			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -460,7 +460,7 @@
 		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
 		
 		<!--- check for options --->
-		<cfif NOT structKeyExists( arguments.element, 'options' )>
+		<cfif not structKeyExists( arguments.element, 'options' )>
 			<cfthrow message="Need options for select element" detail="Need to pass options to the select type of element" />
 		</cfif>
 		
@@ -470,22 +470,22 @@
 		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Name --->
-		<cfif arguments.element.name NEQ ''>
+		<cfif arguments.element.name neq ''>
 			<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		</cfif>
 		
 		<!--- Multiple --->
-		<cfif arguments.element.multiple EQ true>
+		<cfif arguments.element.multiple eq true>
 			<cfset formatted &= 'multiple="multiple" ' />
 		</cfif>
 		
 		<!--- Size --->
-		<cfif arguments.element.size NEQ ''>
+		<cfif arguments.element.size neq ''>
 			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
 		</cfif>
 		
@@ -495,7 +495,7 @@
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -506,7 +506,7 @@
 		
 		<!--- Output the options --->
 		<cfloop array="#optGroups#" index="group">
-			<cfif group.label NEQ ''>
+			<cfif group.label neq ''>
 				<cfset formatted &= '<optgroup label="' & variables.label.get(group.label) & '">' />
 			</cfif>
 			
@@ -514,14 +514,14 @@
 				<cfset formatted &= '<option value="' & option.value & '"' />
 				
 				<!--- Selected --->
-				<cfif option.value EQ arguments.element.value>
+				<cfif option.value eq arguments.element.value>
 					<cfset formatted &= ' selected="selected"' />
 				</cfif>
 				
 				<cfset formatted &= '>' & option.title & '</option>' />
 			</cfloop>
 			
-			<cfif group.label NEQ ''>
+			<cfif group.label neq ''>
 				<cfset formatted &= '</optgroup>' />
 			</cfif>
 		</cfloop>
@@ -556,22 +556,22 @@
 		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Name --->
-		<cfif arguments.element.name NEQ ''>
+		<cfif arguments.element.name neq ''>
 			<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		</cfif>
 		
 		<!--- Multiple --->
-		<cfif arguments.element.multiple EQ true>
+		<cfif arguments.element.multiple eq true>
 			<cfset formatted &= 'multiple="multiple" ' />
 		</cfif>
 		
 		<!--- Size --->
-		<cfif arguments.element.size NEQ ''>
+		<cfif arguments.element.size neq ''>
 			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
 		</cfif>
 		
@@ -581,7 +581,7 @@
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -593,7 +593,7 @@
 			<cfset formatted &= '<option value="#i#"' />
 			
 			<!--- Check for a selected value --->
-			<cfif arguments.element.value EQ i>
+			<cfif arguments.element.value eq i>
 				<cfset formatted &= ' selected="selected"' />
 			</cfif>
 			
@@ -631,37 +631,37 @@
 		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Max Length --->
-		<cfif isNumeric(arguments.element.maxLength) AND arguments.element.maxLength GT 0>
+		<cfif isNumeric(arguments.element.maxLength) and arguments.element.maxLength gt 0>
 			<cfset formatted &= 'maxLength="' & arguments.element.maxLength & '" ' />
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled EQ true>
+		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
 		<!--- Read Only --->
-		<cfif arguments.element.readOnly EQ true>
+		<cfif arguments.element.readOnly eq true>
 			<cfset formatted &= 'readonly="readonly" ' />
 		</cfif>
 		
 		<!--- Size --->
-		<cfif isNumeric(arguments.element.size) AND arguments.element.size GT 0>
+		<cfif isNumeric(arguments.element.size) and arguments.element.size gt 0>
 			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
 		</cfif>
 		
 		<!--- Value --->
-		<cfif arguments.element.value NEQ ''>
+		<cfif arguments.element.value neq ''>
 			<cfset formatted &= 'value="' & arguments.element.value & '" ' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -703,22 +703,22 @@
 		<cfset formatted &= 'cols="' & arguments.element.cols & '" ' />
 		
 		<!--- Title --->
-		<cfif arguments.element.title NEQ ''>
+		<cfif arguments.element.title neq ''>
 			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled EQ true>
+		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
 		<!--- Read Only --->
-		<cfif arguments.element.readOnly EQ true>
+		<cfif arguments.element.readOnly eq true>
 			<cfset formatted &= 'readonly="readonly" ' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.element.class NEQ ''>
+		<cfif arguments.element.class neq ''>
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
@@ -741,12 +741,12 @@
 		
 		<cfset var objectValue = '' />
 		
-		<cfif arguments.attribute.form.type EQ 'checkbox'>
+		<cfif arguments.attribute.form.type eq 'checkbox'>
 			<!--- For the checkbox we want to see if the value that the object has is the same as the value for the form --->
 			<cfinvoke component="#arguments.object#" method="get#arguments.name#" returnvariable="objectValue" />
 			
-			<cfset arguments.attribute.form.checked = objectValue EQ attribute.form.value />
-		<cfelseif arguments.attribute.form.type EQ 'password' AND structKeyExists(attribute.form, 'value')>
+			<cfset arguments.attribute.form.checked = objectValue eq attribute.form.value />
+		<cfelseif arguments.attribute.form.type eq 'password' and structKeyExists(attribute.form, 'value')>
 			<!--- For Password elements that have a value defined as part of the meta information do nothing --->
 		<cfelse>
 			<cfset super.fromObjectAttribute(argumentCollection = arguments) />

@@ -20,7 +20,7 @@
 	--->
 	<cffunction name="getEndRow" access="public" returntype="numeric" output="false">
 		<!--- If there are no rows we are nowhere --->
-		<cfif variables.total EQ 0>
+		<cfif variables.total eq 0>
 			<cfreturn 0 />
 		</cfif>
 		
@@ -46,7 +46,7 @@
 		Returns the next page
 	--->
 	<cffunction name="getNext" access="public" returntype="numeric" output="false">
-		<cfif variables.page LT variables.lastPage>
+		<cfif variables.page lt variables.lastPage>
 			<cfreturn variables.page + 1 />
 		</cfif>
 		
@@ -71,7 +71,7 @@
 		Returns the previous page
 	--->
 	<cffunction name="getPrevious" access="public" returntype="numeric" output="false">
-		<cfif variables.page GT 1>
+		<cfif variables.page gt 1>
 			<cfreturn variables.page - 1 />
 		</cfif>
 		
@@ -83,7 +83,7 @@
 	--->
 	<cffunction name="getStartRow" access="public" returntype="numeric" output="false">
 		<!--- If there are no rows we are nowhere --->
-		<cfif variables.total EQ 0>
+		<cfif variables.total eq 0>
 			<cfreturn 1 />
 		</cfif>
 		
@@ -95,11 +95,11 @@
 	</cffunction>
 	
 	<cffunction name="hasNext" access="public" returntype="boolean" output="false">
-		<cfreturn variables.page LT variables.lastPage />
+		<cfreturn variables.page lt variables.lastPage />
 	</cffunction>
 	
 	<cffunction name="hasPrevious" access="public" returntype="boolean" output="false">
-		<cfreturn variables.page GT 1 />
+		<cfreturn variables.page gt 1 />
 	</cffunction>
 	
 	<!---
@@ -113,14 +113,14 @@
 		<cfargument name="page" type="numeric" required="true" />
 		
 		<!--- Validate total --->
-		<cfif arguments.total LT 0>
+		<cfif arguments.total lt 0>
 			<cfthrow message="Invalid total number of rows" detail="The total number of rows cannot be less than 0" />
 		</cfif>
 		
 		<cfset variables.total = arguments.total />
 		
 		<!--- Validate numPerPage --->
-		<cfif arguments.numPerPage LTE 0>
+		<cfif arguments.numPerPage lte 0>
 			<!--- Use a default value --->
 			<cfset arguments.numPerPage = 20 />
 		</cfif>
@@ -132,11 +132,11 @@
 		<cfset variables.lastPage = max(ceiling(variables.total / variables.numPerPage), 1) />
 		
 		<!--- Validate page --->
-		<cfif arguments.page LT 1>
+		<cfif arguments.page lt 1>
 			<cfset arguments.page = 1 />
 		</cfif>
 		
-		<cfif arguments.page GT variables.lastPage>
+		<cfif arguments.page gt variables.lastPage>
 			<cfset arguments.page = variables.lastPage />
 		</cfif>
 		
@@ -159,33 +159,33 @@
 			<cfoutput>
 				<ul class="pagination">
 					<li>Page: </li>
-					<cfif variables.page GT middleLink>
+					<cfif variables.page gt middleLink>
 						<cfset arguments.theURL.setNavQuery(arguments.queryVar, 1)>
 						<li><a href="#arguments.theURL.getNavQuery()#" title="Page 1">1</a></li>
-						<cfif variables.page GT middleLink + 1>
+						<cfif variables.page gt middleLink + 1>
 							<li>&##8230;</li><!--- Ellipis --->
 						</cfif>
 					</cfif>
 					
 					<cfloop from="#max(1, variables.page - middleLink + 1)#" to="#min(variables.lastPage, variables.page + middleLink - 1)#" index="i">
 						<cfset arguments.theURL.setNavQuery(arguments.queryVar, i)>
-						<li class="<cfif i EQ variables.page>selected</cfif>"><a href="#arguments.theURL.getNavQuery()#" title="Page #i#">#i#</a></li>
+						<li class="<cfif i eq variables.page>selected</cfif>"><a href="#arguments.theURL.getNavQuery()#" title="Page #i#">#i#</a></li>
 					</cfloop>
 					
-					<cfif variables.page LT variables.lastPage - middleLink + 1>
-						<cfif variables.page LT variables.lastPage - middleLink>
+					<cfif variables.page lt variables.lastPage - middleLink + 1>
+						<cfif variables.page lt variables.lastPage - middleLink>
 							<li>&##8230;</li><!--- Ellipis --->
 						</cfif>
 						<cfset arguments.theURL.setNavQuery(arguments.queryVar, variables.lastPage)>
 						<li><a href="#arguments.theURL.getNavQuery()#" title="Page #variables.lastPage#">#variables.lastPage#</a></li>
 					</cfif>
 					
-					<cfif variables.page GT 1>
+					<cfif variables.page gt 1>
 						<cfset arguments.theURL.setNavQuery(arguments.queryVar, variables.page - 1)>
 						<li><a href="#arguments.theURL.getNavQuery()#" title="Previous Page">&laquo;</a></li>
 					</cfif>
 					
-					<cfif variables.page LT variables.lastPage>
+					<cfif variables.page lt variables.lastPage>
 						<cfset arguments.theURL.setNavQuery(arguments.queryVar, variables.page + 1)>
 						<li><a href="#arguments.theURL.getNavQuery()#" title="Next Page">&raquo;</a></li>
 					</cfif>

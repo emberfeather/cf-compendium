@@ -9,11 +9,11 @@
 		<cfargument name="token" type="string" required="true" />
 		<cfargument name="value" type="string" required="true" />
 		
-		<cfif NOT has(arguments.token)>
+		<cfif not has(arguments.token)>
 			<cfreturn false />
 		</cfif>
 		
-		<cfreturn variables.instance[arguments.token] EQ value />
+		<cfreturn variables.instance[arguments.token] eq value />
 	</cffunction>
 	
 	<cffunction name="get" access="public" returntype="string" output="false">
@@ -21,7 +21,7 @@
 		<cfargument name="doReset" type="boolean" default="false" />
 		
 		<!--- Generate a new UUID token --->
-		<cfif arguments.doReset OR NOT structKeyExists(variables.instance, arguments.token)>
+		<cfif arguments.doReset or not structKeyExists(variables.instance, arguments.token)>
 			<cfset variables.instance[arguments.token] = createUUID() />
 		</cfif>
 		
@@ -46,7 +46,7 @@
 		<cfset result = reFindNoCase('^(get|has|confirm)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
-		<cfif NOT result.pos[1]>
+		<cfif not result.pos[1]>
 			<cfthrow message="Function not found" detail="The component has no function with name the name #arguments.missingMethodName#" />
 		</cfif>
 		

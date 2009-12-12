@@ -50,7 +50,7 @@
 		</cfif>
 		
 		<!--- Search for the component keyword --->
-		<cfreturn reFindNoCase(expression, fileContent) GT 0 />
+		<cfreturn reFindNoCase(expression, fileContent) gt 0 />
 	</cffunction>
 	
 	<!---
@@ -60,7 +60,7 @@
 		<cfargument name="fileContent" type="string" required="true" />
 		
 		<!--- Search for the component tag --->
-		<cfreturn reFind('^<', fileContent) EQ 0 />
+		<cfreturn reFind('^<', fileContent) eq 0 />
 	</cffunction>
 	
 	<!---
@@ -104,22 +104,22 @@
 		<cfloop list="#arguments.comments#" index="i" delimiters="#chr(10)##chr(13)#">
 			<cfset line = trim(i) />
 			
-			<cfif left(line, 5) EQ '<!---' AND right(line, 4) EQ '--->'>
+			<cfif left(line, 5) eq '<!---' and right(line, 4) eq '--->'>
 				<cfset isComment = true />
 				
 				<cfset line = trim(replaceList(line, '<!---,--->', ',')) />
-			<cfelseif left(line, 5) EQ '<!---'>
+			<cfelseif left(line, 5) eq '<!---'>
 				<cfset isComment = true />
 				
-				<cfif len(line) GT 5>
+				<cfif len(line) gt 5>
 					<cfset line = right(line,  len(line) - 6) />
 				<cfelse>
 					<cfset line = '' />
 				</cfif>
-			<cfelseif right(line, 4) EQ '--->'>
+			<cfelseif right(line, 4) eq '--->'>
 				<cfset isComment = false />
 				
-				<cfif len(line) GT 4>
+				<cfif len(line) gt 4>
 					<cfset line = left(line,  len(line) - 5) />
 				<cfelse>
 					<cfset line = '' />
@@ -128,11 +128,11 @@
 			
 			<cfif isComment>
 				<!--- Want any lines that aren't split by a blank line to be one comment --->
-				<cfif line EQ '' OR line EQ '<p>'>
+				<cfif line eq '' or line eq '<p>'>
 					<cfset isSplit = true />
 				<cfelse>
 					<!--- Split comments or meta information does not belong together --->
-					<cfif isSplit OR left(line, 1) EQ '@'>
+					<cfif isSplit or left(line, 1) eq '@'>
 						<cfset arrayAppend(parsedComments, line) />
 						
 						<!--- End the split --->
@@ -170,9 +170,9 @@
 		<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
 		
 		<!--- Check if was successful --->
-		<cfif location.pos[1] NEQ 0>
+		<cfif location.pos[1] neq 0>
 			<!--- Parse out the comments --->
-			<cfif location.pos[1] GT 1>
+			<cfif location.pos[1] gt 1>
 				<cfset comments = parseComments(left(arguments.fileContents, location.pos[1] - 1)) />
 			</cfif>
 			
@@ -278,22 +278,22 @@
 			<cfset line = trim(i) />
 			
 			<!--- Determine state --->
-			<cfif left(line, 2) EQ '//'>
+			<cfif left(line, 2) eq '//'>
 				<cfset isComment = true />
 				
 				<cfset line = trim(right(line, len(line) - len('//'))) />
-			<cfelseif left(line, 2) EQ '/*'>
+			<cfelseif left(line, 2) eq '/*'>
 				<cfset isComment = true />
 				
-				<cfif len(line) GT 2>
+				<cfif len(line) gt 2>
 					<cfset line = trim(right(line,  len(line) - len('//'))) />
 				<cfelse>
 					<cfset line = '' />
 				</cfif>
-			<cfelseif right(line, 2) EQ '*/'>
+			<cfelseif right(line, 2) eq '*/'>
 				<cfset isComment = false />
 				
-				<cfif len(line) GT 4>
+				<cfif len(line) gt 4>
 					<cfset line = trim(left(line,  len(line) - len('*/'))) />
 				<cfelse>
 					<cfset line = '' />
@@ -301,8 +301,8 @@
 			</cfif>
 			
 			<!--- Trim multiline comment beginning with * --->
-			<cfif left(line, 1) EQ '*'>
-				<cfif len(line) EQ 1>
+			<cfif left(line, 1) eq '*'>
+				<cfif len(line) eq 1>
 					<cfset line = '' />
 				<cfelse>
 					<cfset line = trim(right(line, len(line) - 1)) />
@@ -311,11 +311,11 @@
 			
 			<cfif isComment>
 				<!--- Want any lines that aren't split by a blank line to be one comment --->
-				<cfif line EQ '' OR line EQ '<p>'>
+				<cfif line eq '' or line eq '<p>'>
 					<cfset isSplit = true />
 				<cfelse>
 					<!--- Split comments or meta information does not belong together --->
-					<cfif isSplit OR left(line, 1) EQ '@'>
+					<cfif isSplit or left(line, 1) eq '@'>
 						<cfset arrayAppend(parsedComments, line) />
 						
 						<!--- End the split --->
@@ -354,7 +354,7 @@
 		<cfset component.comments = trimScriptPreComments(arguments.fileContents) />
 		
 		<!--- Remove any found comments so it doesn't mess up the component parsing --->
-		<cfif component.comments.length GT 0>
+		<cfif component.comments.length gt 0>
 			<cfset arguments.fileContents = right(arguments.fileContents, len(arguments.fileContents) - component.comments.length) />
 		</cfif>
 		
@@ -364,7 +364,7 @@
 		<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
 		
 		<!--- Check if was successful --->
-		<cfif location.pos[1] NEQ 0>
+		<cfif location.pos[1] neq 0>
 			<!--- Set the type of component --->
 			<cfset component.type = mid(arguments.fileContents, location.pos[2], location.len[2]) />
 			
@@ -579,7 +579,7 @@
 		<cfloop from="1" to="#arrayLen(arguments.contents)#" index="i">
 			<cfset location = REFindNoCase(expression, arguments.contents[i], 1, true) />
 			
-			<cfif location.pos[1] EQ 0>
+			<cfif location.pos[1] eq 0>
 				<cfset arrayAppend(comments.description, arguments.contents[i]) />
 			<cfelse>
 				<cfset temp = mid(arguments.contents[i], location.pos[2], location.len[2]) />
@@ -606,7 +606,7 @@
 		<cfset var fileObj = '' />
 		
 		<!--- Check that the file path exists --->
-		<cfif NOT fileExists(arguments.fileName)>
+		<cfif not fileExists(arguments.fileName)>
 			<cfif fileExists(expandPath(arguments.fileName))>
 				<cfset arguments.fileName = expandPath(arguments.fileName) />
 			<cfelseif fileExists(expandPath('/' & arguments.fileName))>
@@ -614,7 +614,7 @@
 			</cfif>
 		</cfif>
 		
-		<cfif arguments.bufferSize GT 0>
+		<cfif arguments.bufferSize gt 0>
 			<cfset fileObj = fileOpen(arguments.fileName) />
 			
 			<cfreturn fileRead(fileObj, arguments.buffersize) />
@@ -638,18 +638,18 @@
 		<cfset location = reFindNoCase(expression, arguments.contents, 1, true) />
 		
 		<!--- if nothing was found there are no functions --->
-		<cfif NOT location.pos[1]>
+		<cfif not location.pos[1]>
 			<cfreturn functionBlocks />
 		</cfif>
 		
 		<!--- search for the next function start --->
 		<cfset location = reFindNoCase(expression, arguments.contents, location.pos[1] + location.len[1], true) />
 		
-		<cfloop condition="location.pos[1] GT 0">
+		<cfloop condition="location.pos[1] gt 0">
 			<cfset findLast = find(functionClose, arguments.contents, functionEnd) />
 			
 			<!--- Find the last } before the function --->
-			<cfloop condition="findLast GT 0 AND findLast LT location.pos[1]">
+			<cfloop condition="findLast gt 0 and findLast lt location.pos[1]">
 				<cfset functionEnd = findLast + 1 />
 				
 				<cfset findLast = find(functionClose, arguments.contents, functionEnd) />
@@ -685,7 +685,7 @@
 		<!--- Search for comment --->
 		<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
 		
-		<cfloop condition="location.pos[1] GT 0">
+		<cfloop condition="location.pos[1] gt 0">
 			<cfset bufferComments &= left(arguments.fileContents, location.len[1]) & chr(10) />
 			
 			<!--- Remove the comments from the file content --->
@@ -704,7 +704,7 @@
 		<!--- Search for comment --->
 		<cfset location = reFindNoCase(expression, arguments.fileContents, 1, true) />
 		
-		<cfloop condition="location.pos[1] GT 0">
+		<cfloop condition="location.pos[1] gt 0">
 			<cfset bufferComments &= left(arguments.fileContents, location.len[1]) & chr(10) />
 			
 			<!--- Remove the comments from the file content --->

@@ -221,17 +221,17 @@
 		
 		<!--- Add additional attributes --->
 		<!--- Name --->
-		<cfif arguments.element.name NEQ ''>
+		<cfif arguments.element.name neq ''>
 			<cfset formatted &= 'name="' & arguments.element.name & '" ' />
 		</cfif>
 		
 		<!--- Disabled --->
-		<cfif arguments.element.disabled EQ true>
+		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
 		</cfif>
 		
 		<!--- Read Only --->
-		<cfif arguments.element.readOnly EQ true>
+		<cfif arguments.element.readOnly eq true>
 			<cfset formatted &= 'readonly="readonly" ' />
 		</cfif>
 		

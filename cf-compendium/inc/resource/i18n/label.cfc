@@ -24,7 +24,7 @@
 		<cfset var i = '' />
 		
 		<!--- Check for no label --->
-		<cfif arguments.key EQ ''>
+		<cfif arguments.key eq ''>
 			<cfreturn '' />
 		</cfif>
 		
@@ -54,7 +54,7 @@
 		<cfset result = reFindNoCase('^(get)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
-		<cfif NOT result.pos[1]>
+		<cfif not result.pos[1]>
 			<cfthrow message="Function not found" detail="The component has no function with name the name #arguments.missingMethodName#" />
 		</cfif>
 		

@@ -45,8 +45,8 @@
 		<cfset var token = '' />
 		
 		<!--- Check for no realm --->
-		<cfif arguments.realm EQ ''>
-			<cfset arguments.realm = (CGI.HTTPS EQ 'ON' ? 'https' : 'http') & '://#CGI.HTTP_HOST#/' />
+		<cfif arguments.realm eq ''>
+			<cfset arguments.realm = (CGI.HTTPS eq 'ON' ? 'https' : 'http') & '://#CGI.HTTP_HOST#/' />
 		</cfif>
 		
 		<!--- Options --->
@@ -75,7 +75,7 @@
 		<cfset results = discoverOpenIDServer( openID.request['openid.identity'] ) />
 		
 		<!--- If we can't find the OpenID --->
-		<cfif NOT results.status>
+		<cfif not results.status>
 			<cfthrow type="validation" message="Unable to locate OpenID server" detail="The OpenID server was not able to be located for #openID.request['openid.identity']#" />
 		</cfif>
 		
@@ -90,7 +90,7 @@
 		</cfif>
 		
 		<!--- OpenID v2 specific items --->
-		<cfif results.version GT 1>
+		<cfif results.version gt 1>
 			<!--- Namespace/protocol version --->
 			<cfset openID.request['openid.namespace'] = variables.ns['openID' & results.version] />
 			
@@ -112,7 +112,7 @@
 			
 			<!--- Save all returned keys --->
 			<cfloop collection="#results#" item="token">
-				<cfif token NEQ 'status'>
+				<cfif token neq 'status'>
 					<cfset openID.request[token] = results.token />
 				</cfif>
 			</cfloop>
@@ -144,7 +144,7 @@
 	</cffunction>
 	
 	<!---
-		To decrypt the MAC key, we need to XOR the hashed DH secret with the encrypted MAC key
+		To decrypt the MAC key, we need to Xor the hashed DH secret with the encrypted MAC key
 			http://openid.net/specs/openid-authentication-2_0.html#rfc.section.8.2.3
 	--->
 	<cffunction name="extractSecret" access="private" returntype="binary" output="false">
@@ -171,11 +171,11 @@
 		<cfset sharedHash = hash( charsetEncode( sharedBin, 'iso-8859-1' ), 'sha', 'iso-8859-1' ) />
 		<cfset sharedHashBin = binaryDecode( sharedHash, 'hex' ) />
 		
-		<!--- Convert hashed secret and encrypted MAC key to BigIntegers because it's easy to XOR BigIntegers --->
+		<!--- Convert hashed secret and encrypted MAC key to BigIntegers because it's easy to Xor BigIntegers --->
 		<cfset sharedBigInt = variables.bigInteger.init( sharedHashBin ) />
 		<cfset encMacKeyBigInt = variables.bigInteger.init( arguments.encMacKey ) />
 		
-		<!--- XOR values --->
+		<!--- Xor values --->
 		<cfset secret = sharedBigInt.xor( encMacKeyBigInt ) />
 		
 		<!--- Convert back into binary --->
@@ -195,7 +195,7 @@
 		<!--- Search for the link tag --->
 		<cfset match = reFindNoCase('<link[^>]*(rel=["'']' & arguments.relation & '["''][^>]*href=["'']([^"'']+)["'']|href=["'']([^"'']+)["''][^>]*rel=["'']' & arguments.relation & '["''])[^>]*\/?>', arguments.content, 1, true) />
 		
-		<cfif match.pos[1] NEQ 0>
+		<cfif match.pos[1] neq 0>
 			<!--- Check which grouping caught the descriptor --->
 			<cfif match.pos[3]>
 				<cfset identifier = mid(arguments.content, match.pos[3], match.len[3]) />
@@ -268,7 +268,7 @@
 				URL encoded because some OP's (eg. 1id.com) don't like that.
 		--->
 		<cfhttp method="post" url="#arguments.server#" result="results">
-			<cfif arguments.namespace NEQ ''>
+			<cfif arguments.namespace neq ''>
 				<cfhttpparam type="formfield" name="openid.ns" value="#urlEncodedFormat(arguments.namespace)#" encoded="false" />
 			</cfif>
 			<cfhttpparam type="formfield" name="openid.mode" value="associate" encoded="false" />
@@ -278,7 +278,7 @@
 		</cfhttp>
 		
 		<!--- Check for successful association --->
-		<cfif val( results.statusCode ) EQ 200 AND results.fileContent CONTAINS 'assoc_type:' AND results.fileContent DOES NOT CONTAIN 'error_code:'>
+		<cfif val( results.statusCode ) eq 200 and results.fileContent CONTAINS 'assoc_type:' and results.fileContent DOES not CONTAIN 'error_code:'>
 			<cfset response['status'] = true />
 		</cfif>
 		
@@ -325,7 +325,7 @@
 		
 		<cfset keyLen = len(hexKex) / 2 />
 		
-		<cfif keyLen GT 64>
+		<cfif keyLen gt 64>
 			<cfset hexKey = hash( charsetEncode( binaryDecode( hexKey, 'hex' ), 'iso-8859-1' ), 'sha', 'iso-8859-1' ) />
 			
 			<cfset keyLen = len(hexKex) / 2 />
@@ -367,7 +367,7 @@
 		<cfset var token = '' />
 		<cfset var tokenContents = '' />
 		
-		<cfif arguments.encMacKey NEQ ''>
+		<cfif arguments.encMacKey neq ''>
 			<!---
 				Encrypted (Diffie-Hellman) association
 					http://openid.net/specs/openid-authentication-2_0.html#rfc.section.8.4.2
@@ -376,7 +376,7 @@
 			<cfset server64 = binaryDecode( arguments.server, 'base64' ) />
 			<cfset public = variables.bigInteger.init( server64 ) />
 			<cfset macKey64 = extractSecret( encMacKey64, public, arguments.private, arguments.prime ) />
-		<cfelseif arguments.macKey NEQ ''>
+		<cfelseif arguments.macKey neq ''>
 			<cfset macKey64 = binaryDecode( arguments.macKey, 'base64' ) />
 		<cfelse>
 			<cfreturn false />
@@ -401,7 +401,7 @@
 		<cfset signature64 = binaryEncode( signature, 'base64' ) />
 		
 		<!--- Verify calculated signature with signature returned by OP --->
-		<cfreturn signature64 EQ arguments.theURL.search('openid.sig') />
+		<cfreturn signature64 eq arguments.theURL.search('openid.sig') />
 	</cffunction>
 	
 	<!---
@@ -423,7 +423,7 @@
 		--->
 		
 		<cfhttp method="post" url="#arguments.server#" result="results">
-			<cfif arguments.namespace NEQ ''>
+			<cfif arguments.namespace neq ''>
 				<cfhttpparam type="formfield" name="openid.ns" value="#UrlEncodedFormat( arguments.namespace )#" encoded="false" />
 			</cfif>
 			
@@ -433,13 +433,13 @@
 			<cfhttpparam type="formfield" name="openid.signed" value="#UrlEncodedFormat(arguments.theURL.search('openid.signed'))#" encoded="false" />
 			
 			<cfloop list="#arguments.theURL.search('openid.signed')#" index="token">
-				<cfif token NEQ 'mode'>
+				<cfif token neq 'mode'>
 					<cfhttpparam type="formfield" name="openid.#LCase(token)#" value="#UrlEncodedFormat(arguments.theURL.search('openid.' & token))#" encoded="false" />
 				</cfif>
 			</cfloop>
 		</cfhttp>
 		
-		<cfreturn results.statusCode CONTAINS '200' AND results.fileContent CONTAINS 'is_valid:true' />
+		<cfreturn results.statusCode CONTAINS '200' and results.fileContent CONTAINS 'is_valid:true' />
 	</cffunction>
 	
 	<!---
@@ -452,14 +452,14 @@
 		<cfset arguments.identifier = trim(arguments.identifier) />
 		
 		<!--- Remove XRI prefix --->
-		<cfif left(arguments.identifier, 6) EQ "xri://">
+		<cfif left(arguments.identifier, 6) eq "xri://">
 			<cfset arguments.identifier = removeChars(arguments.identifier, 1, 6) />
 		</cfif>
 		
 		<!--- Normal URLs --->
-		<cfif NOT listFind("=,@,+,$,!,(", Left(arguments.identifier, 1))>
+		<cfif not listFind("=,@,+,$,!,(", Left(arguments.identifier, 1))>
 			<!--- Add protocol, if missing, to the URL --->
-			<cfif NOT reFindNoCase('^http(s)?://', arguments.identifier)>
+			<cfif not reFindNoCase('^http(s)?://', arguments.identifier)>
 				<cfset arguments.identifier = 'http://' & arguments.identifier />
 			</cfif>
 			
@@ -585,13 +585,13 @@
 		<cfset var value = '' />
 		
 		<!--- Start off with the scheme --->
-		<cfset baseURL = (CGI.HTTPS EQ 'ON' ? 'https' : 'http') & '://' />
+		<cfset baseURL = (CGI.HTTPS eq 'ON' ? 'https' : 'http') & '://' />
 		
 		<!--- Add the server information --->
 		<cfset baseURL &= CGI.SERVER_NAME & CGI.SCRIPT_NAME & CGI.PATH_INFO />
 		
 		<!--- Verify the bases match --->
-		<cfif baseURL NEQ listFirst(arguments.returnURL, '?')>
+		<cfif baseURL neq listFirst(arguments.returnURL, '?')>
 			<cfreturn false />
 		</cfif>
 		
@@ -600,7 +600,7 @@
 		
 		<!--- Check the values --->
 		<cfloop list="#theReturnURL.querystringKeyList()#" index="i">
-			<cfif theReturnURL.search( i ) NEQ arguments.theURL.search( i )>
+			<cfif theReturnURL.search( i ) neq arguments.theURL.search( i )>
 				<cfreturn false />
 			</cfif>
 		</cfloop>

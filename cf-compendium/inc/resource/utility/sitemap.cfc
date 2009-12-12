@@ -2,7 +2,7 @@
 	Used to generate sitemaps for search engines.
 	
 	@link http://sitemaps.org
-	@link http://www.w3.org/TR/NOTE-datetime
+	@link http://www.w3.org/TR/notE-datetime
 --->
 <cfcomponent output="false">
 	<!---
@@ -27,7 +27,7 @@
 		<cfset variables.extender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		
 		<!--- Check that the time offset is in a valid format --->
-		<cfif NOT reFind('^(Z|[-+]{1}[01][0-9]:00)$', variables.timeZoneDesignator)>
+		<cfif not reFind('^(Z|[-+]{1}[01][0-9]:00)$', variables.timeZoneDesignator)>
 			<cfthrow message="Invalid time offset" detail="The W3C Datetime offset must be in the format +hh:mm or -hh:mm." />
 		</cfif>
 		
@@ -62,25 +62,25 @@
 		<cfset urlElement.loc = XMLFormat(trim(arguments.loc)) />
 		
 		<!--- Check for a modified date --->
-		<cfif urlElement.lastMod NEQ ''>
+		<cfif urlElement.lastMod neq ''>
 			<!--- Check if it was given an invalid date --->
-			<cfif NOT isDate(urlElement.lastMod)>
+			<cfif not isDate(urlElement.lastMod)>
 				<cfthrow message="Invalid last modification date" detail="The value '#urlElement.lastMod#' is not a valid date." />
 			</cfif>
 			
 			<!--- Check if this is the latest url --->
-			<cfif variables.latestUrl EQ '' OR urlElement.lastMod GT variables.lastestUpdate>
+			<cfif variables.latestUrl eq '' or urlElement.lastMod gt variables.lastestUpdate>
 				<cfset variables.latestUrl = urlElement.lastMod />
 			</cfif>
 		</cfif>
 		
 		<!--- Check if the last modified is one of the valid options for the change frequency --->
-		<cfif urlElement.changeFreq NEQ '' AND NOT listFindNoCase('always,hourly,daily,weekly,monthly,yearly,never', urlElement.changeFreq)>
+		<cfif urlElement.changeFreq neq '' and not listFindNoCase('always,hourly,daily,weekly,monthly,yearly,never', urlElement.changeFreq)>
 			<cfthrow message="Invalid change frequency" detail="The value '#urlElement.changeFreq#' is not a valid frequency." />
 		</cfif>
 		
 		<!--- Check if the priority is one of the valid options --->
-		<cfif urlElement.priority NEQ '' AND ( urlElement.priority GT 1 OR urlElement.priority LT 0 )>
+		<cfif urlElement.priority neq '' and ( urlElement.priority gt 1 or urlElement.priority lt 0 )>
 			<cfthrow message="Invalid priority" detail="The priority (#urlElement.priority#) is not a valid priority. Priority need to be between 0 and 1." />
 		</cfif>
 		
@@ -103,18 +103,18 @@
 			
 			<cfset sitemap &= chr(10) & '		<loc>' & i.loc & '</loc>' />
 			
-			<cfif i.lastMod NEQ ''>
+			<cfif i.lastMod neq ''>
 				<!--- Complete date plus hours, minutes and seconds: --->
 				<!--- YYYY-MM-DDThh:mm:ssTZD (eg 1997-07-16T19:20:30+01:00) --->
 				<cfset sitemap &= chr(10) & '		<lastmod>' & dateFormat(i.lastMod, 'yyyy-mm-dd') & 'T' & timeFormat(i.lastMod, 'HH:mm:ss') & variables.timeZoneDesignator & '</lastmod>' />
 			</cfif>
 			
-			<cfif i.changeFreq NEQ ''>
+			<cfif i.changeFreq neq ''>
 				<!--- always, hourly, daily, weekly, monthly, yearly, never  --->
 				<cfset sitemap &= chr(10) & '		<changefreq>' & i.changeFreq & '</changefreq>' />
 			</cfif>
 			
-			<cfif i.priority NEQ ''>
+			<cfif i.priority neq ''>
 				<cfset sitemap &= chr(10) & '		<priority>' & i.priority & '</priority>' />
 			</cfif>
 			
@@ -139,7 +139,7 @@
 			
 			<cfset sitemapIndex &= chr(10) & '		<loc>' & i.loc & '</loc>' />
 			
-			<cfif i.lastMod NEQ ''>
+			<cfif i.lastMod neq ''>
 				<!--- Complete date plus hours, minutes and seconds: --->
 				<!--- YYYY-MM-DDThh:mm:ssTZD (eg 1997-07-16T19:20:30+01:00) --->
 				<cfset sitemapIndex &= chr(10) & '		<lastmod>' & dateFormat(i.lastMod, 'yyyy-mm-dd') & 'T' & timeFormat(i.lastMod, 'HH:mm:ss') & variables.timeZoneDesignator & '</lastmod>' />
@@ -160,7 +160,7 @@
 		<cfargument name="path" type="string" required="true" />
 		
 		<!--- Check for trailing slash --->
-		<cfif right(arguments.path, 1) NEQ '/'>
+		<cfif right(arguments.path, 1) neq '/'>
 			<cfset arguments.path &= '/' />
 		</cfif>
 		
@@ -195,21 +195,21 @@
 		<!--- Google --->
 		<cfhttp url="http://www.google.com/webmasters/sitemaps/ping?sitemap=#arguments.sitemapURL#" result="result" />
 		
-		<cfif NOT find(result.statusCode, '200')>
+		<cfif not find(result.statusCode, '200')>
 			<cfthrow message="Failed to ping Google" detail="Google returned a #result.statusCode# code when trying to ping with #arguments.sitemapURL#" />
 		</cfif>
 		
 		<!--- Ask --->
 		<cfhttp url="http://submissions.ask.com/ping?sitemap=#arguments.sitemapURL#" result="result" />
 		
-		<cfif NOT find(result.statusCode, '200')>
+		<cfif not find(result.statusCode, '200')>
 			<cfthrow message="Failed to ping Ask" detail="Ask returned a #result.statusCode# code when trying to ping with #arguments.sitemapURL#" />
 		</cfif>
 		
 		<!--- Microsoft --->
 		<cfhttp url="http://webmaster.live.com/ping.aspx?siteMap=#arguments.sitemapURL#" result="result" />
 		
-		<cfif NOT find(result.statusCode, '200')>
+		<cfif not find(result.statusCode, '200')>
 			<cfthrow message="Failed to ping Microsoft" detail="Microsoft returned a #result.statusCode# code when trying to ping with #arguments.sitemapURL#" />
 		</cfif>
 		
@@ -217,7 +217,7 @@
 		<cfif structKeyExists(variables.keys, 'yahoo')>
 			<cfhttp url="http://search.yahooapis.com/SiteExplorerService/V1/updateNotification?appid=#variables.keys.yahoo#&url=#arguments.sitemapURL#" result="result" />
 			
-			<cfif NOT find(result.statusCode, '200')>
+			<cfif not find(result.statusCode, '200')>
 				<cfthrow message="Failed to ping Yahoo!" detail="Yahoo! returned a #result.statusCode# code when trying to ping with #arguments.sitemapURL#" />
 			</cfif>
 		</cfif>

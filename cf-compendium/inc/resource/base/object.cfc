@@ -106,7 +106,7 @@
 					<cfset exists = false />
 					
 					<cfloop array="#arguments.input.xmlChildren#" index="j">
-						<cfif j.xmlName EQ i>
+						<cfif j.xmlName eq i>
 							<cfset exists = true />
 							
 							<cfbreak />
@@ -120,7 +120,7 @@
 						
 						<cfloop array="#arguments.input.xmlChildren#" index="j">
 							<cftry>
-								<cfif j.xmlName EQ i>
+								<cfif j.xmlName eq i>
 									<cfinvoke component="#this#" method="add#i#">
 										<cfinvokeargument name="value" value="#trim(j.xmlText)#" />
 									</cfinvoke>
@@ -200,7 +200,7 @@
 		<cfset result = reFindNoCase('^(get|set|addUnique|add|length|reset)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
-		<cfif NOT result.pos[1]>
+		<cfif not result.pos[1]>
 			<cfthrow message="Function not found" detail="The component has no function with name the name #arguments.missingMethodName#" />
 		</cfif>
 		
@@ -214,18 +214,18 @@
 		<cfswitch expression="#prefix#">
 			<cfcase value="add,addUnique">
 				<!--- If it doesn't exist or isn't an array make it into an array --->
-				<cfif NOT structKeyExists(variables.instance, attribute) OR NOT isArray(variables.instance[attribute])>
+				<cfif not structKeyExists(variables.instance, attribute) or not isArray(variables.instance[attribute])>
 					<cfset variables.instance[attribute] = [] />
 				</cfif>
 				
 				<!--- Add each of the arguments --->
 				<cfloop array="#arguments.missingMethodArguments#" index="i">
-					<cfif prefix EQ 'addUnique'>
+					<cfif prefix eq 'addUnique'>
 						<cfset isUnique = true />
 						
 						<!--- Check if it is already in the array --->
 						<cfloop array="#variables.instance[attribute]#" index="j">
-							<cfif j EQ i>
+							<cfif j eq i>
 								<cfset isUnique = false />
 								
 								<cfbreak />
@@ -245,7 +245,7 @@
 				<cfset result = reFindNoCase('(.+)By(.*)', attribute, 1, true) />
 				
 				<!--- Check if it is a simple get or a search --->
-				<cfif NOT result.pos[1]>
+				<cfif not result.pos[1]>
 					<!--- Simple get --->
 					<cfreturn variables.instance[attribute] />
 				<cfelse>
@@ -263,7 +263,7 @@
 					<cfinvoke component="#this#" method="get#attribute#" returnvariable="attributeSet" />
 					
 					<!--- Check if it is an array --->
-					<cfif NOT isArray(attributeSet)>
+					<cfif not isArray(attributeSet)>
 						<cfthrow message="Cannot find matches" detail="In order to find matching attibutes the attribute much be an array." />
 					</cfif>
 					
@@ -273,7 +273,7 @@
 					<!--- Loop through and find the matches --->
 					<cfloop array="#attributeSet#" index="i">
 						<!--- Does this require an additional get? --->
-						<cfif childAttribute NEQ '' AND isObject(i)>
+						<cfif childAttribute neq '' and isObject(i)>
 							<cfinvoke component="#i#" method="get#childAttribute#" returnvariable="attributeValue" />
 						<cfelse>
 							<cfset attributeValue = i />

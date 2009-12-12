@@ -95,7 +95,7 @@
 		<cfset fieldset.id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-fieldset' & arrayLen(variables.fieldsets) + 1 />
 		
 		<!--- Check if there are elements to use to create a fieldset --->
-		<cfif arrayLen(variables.elements) GT 0>
+		<cfif arrayLen(variables.elements) gt 0>
 			<!--- Add the current and clear the array --->
 			<cfset fieldset.elements = variables.elements />
 			<cfset variables.elements = [] />
@@ -127,7 +127,7 @@
 		<!--- Close out any open tabs --->
 		<cfset addTab() />
 		
-		<cfif arrayLen(variables.tabs) GT 0>
+		<cfif arrayLen(variables.tabs) gt 0>
 			<!--- Add the current clear the array --->
 			<cfset section.tabs = variables.tabs />
 			<cfset variables.tabs = [] />
@@ -159,7 +159,7 @@
 		<!--- Close out any open fieldset --->
 		<cfset addFieldset() />
 		
-		<cfif arrayLen(variables.fieldsets) GT 0>
+		<cfif arrayLen(variables.fieldsets) gt 0>
 			<!--- Add the current and clear the array --->
 			<cfset tab.fieldsets = variables.fieldsets />
 			<cfset variables.fieldsets = [] />
@@ -222,7 +222,7 @@
 		<cfset extendedOptions = variables.extender.extend(defaults, arguments.options) />
 		
 		<!--- Check for valid action --->
-		<cfif trim(arguments.action) EQ ''>
+		<cfif trim(arguments.action) eq ''>
 			<cfthrow message="Invalid form action" detail="A form action is required." />
 		</cfif>
 		
@@ -241,32 +241,32 @@
 		</cfif>
 		
 		<!--- Title --->
-		<cfif extendedOptions.title NEQ ''>
+		<cfif extendedOptions.title neq ''>
 			<cfset formatted &= ' title="' & extendedOptions.title & '"' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif extendedOptions.class NEQ ''>
+		<cfif extendedOptions.class neq ''>
 			<cfset formatted &= ' class="' & extendedOptions.class & '"' />
 		</cfif>
 		
 		<!--- Output accepts --->
-		<cfif extendedOptions.accept NEQ ''>
+		<cfif extendedOptions.accept neq ''>
 			<cfset formatted &= ' accept="' & extendedOptions.accept & '"' />
 		</cfif>
 		
 		<!--- Output acceptCharset --->
-		<cfif extendedOptions.acceptCharset NEQ ''>
+		<cfif extendedOptions.acceptCharset neq ''>
 			<cfset formatted &= ' accept-charset="' & extendedOptions.acceptCharset & '"' />
 		</cfif>
 		
 		<!--- Output target --->
-		<cfif extendedOptions.target NEQ ''>
+		<cfif extendedOptions.target neq ''>
 			<cfset formatted &= ' target="' & extendedOptions.target & '"' />
 		</cfif>
 		
 		<!--- Check for multipart form --->
-		<cfif extendedOptions.method EQ 'POST'>
+		<cfif extendedOptions.method eq 'POST'>
 			<cfset formatted &= ' method="POST"' />
 		<cfelse>
 			<cfset formatted &= ' method="GET"' />
@@ -310,12 +310,12 @@
 		<cfset formatted &= '>' />
 		
 		<!--- Submit --->
-		<cfif extendedOptions.submit NEQ ''>
+		<cfif extendedOptions.submit neq ''>
 			<cfset formatted &= '<input type="submit" value="' & variables.label.get(extendedOptions.submit) & '" />' />
 		</cfif>
 		
 		<!--- Reset --->
-		<cfif extendedOptions.reset NEQ ''>
+		<cfif extendedOptions.reset neq ''>
 			<cfset formatted &= '<input type="reset" value="' & variables.label.get(extendedOptions.reset) & '" />' />
 		</cfif>
 		
@@ -341,7 +341,7 @@
 		<cfset var formatted = '' />
 		
 		<!--- hidden elements should not be shown --->
-		<cfif arguments.element.elementType NEQ 'hidden'>
+		<cfif arguments.element.elementType neq 'hidden'>
 			<!--- Start the tag --->
 			<cfset formatted = '<div class="element' />
 			
@@ -354,10 +354,10 @@
 			<cfset formatted &= '">' />
 			
 			<!--- Output the label --->
-			<cfif arguments.element.label NEQ ''>
+			<cfif arguments.element.label neq ''>
 				<cfset formatted &= '<label' />
 				
-				<cfif arguments.element.id NEQ ''>
+				<cfif arguments.element.id neq ''>
 					<cfset formatted &= ' for="' & arguments.element.id & '"' />
 				</cfif>
 				
@@ -369,7 +369,7 @@
 		<cfset formatted &= elementToHTML(arguments.element) />
 		
 		<!--- hidden elements should not be shown --->
-		<cfif arguments.element.elementType NEQ 'hidden'>
+		<cfif arguments.element.elementType neq 'hidden'>
 			<!--- End the tag --->
 			<cfset formatted &= '</div>' />
 		</cfif>
@@ -392,17 +392,17 @@
 		<!--- Start the tag --->
 		<cfset formatted = '<fieldset' />
 		
-		<cfif arguments.fieldset.id NEQ ''>
+		<cfif arguments.fieldset.id neq ''>
 			<cfset formatted &= ' id="' & arguments.fieldset.id & '"' />
 		</cfif>
 		
 		<!--- Title --->
-		<cfif arguments.fieldset.title NEQ ''>
+		<cfif arguments.fieldset.title neq ''>
 			<cfset formatted &= ' title="' & arguments.fieldset.title & '"' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.fieldset.class NEQ ''>
+		<cfif arguments.fieldset.class neq ''>
 			<cfset formatted &= ' class="' & arguments.fieldset.class & '"' />
 		</cfif>
 		
@@ -410,7 +410,7 @@
 		<cfset formatted &= '>' />
 		
 		<!--- Output legend --->
-		<cfif arguments.fieldset.legend NEQ ''>
+		<cfif arguments.fieldset.legend neq ''>
 			<cfset formatted &= '<legend>' & arguments.fieldset.legend & '</legend>' />
 		</cfif>
 		
@@ -449,14 +449,14 @@
 		<cfset numSections = getNumSections() />
 		
 		<!--- Check for an empty form --->
-		<cfif numSections EQ 0>
+		<cfif numSections eq 0>
 			<cfthrow message="There are no form elements." detail="Please add at least one form element before showing the form." />
 		</cfif>
 		
 		<!--- Check if showing just a section --->
-		<cfif defaults.section GT 0>
+		<cfif defaults.section gt 0>
 			<!--- Check for out of bounds section --->
-			<cfif defaults.section GT numSections>
+			<cfif defaults.section gt numSections>
 				<cfthrow message="There are not #defaults.section# sections." detail="Please select a section that is between 1 and #numSections#." />
 			</cfif>
 			
@@ -494,7 +494,7 @@
 		<cfset numTabs = arrayLen(arguments.section.tabs) />
 		
 		<!--- Create the tabs navigation if multiple --->
-		<cfif numTabs GT 1>
+		<cfif numTabs gt 1>
 			<cfset formatted &= '<ul class="tabs">' />
 			
 			<cfloop from="1" to="#numTabs#" index="i">
@@ -511,12 +511,12 @@
 		<cfset formatted &= ' id="' & arguments.section.id & '"' />
 		
 		<!--- Title --->
-		<cfif arguments.section.title NEQ ''>
+		<cfif arguments.section.title neq ''>
 			<cfset formatted &= ' title="' & arguments.section.title & '"' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.section.class NEQ ''>
+		<cfif arguments.section.class neq ''>
 			<cfset formatted &= ' class="section ' & arguments.section.class & '"' />
 		</cfif>
 		
@@ -550,12 +550,12 @@
 		<cfset formatted &= ' id="' & arguments.tab.id & '"' />
 		
 		<!--- Title --->
-		<cfif arguments.tab.title NEQ ''>
+		<cfif arguments.tab.title neq ''>
 			<cfset formatted &= ' title="' & arguments.tab.title & '"' />
 		</cfif>
 		
 		<!--- Class --->
-		<cfif arguments.tab.class NEQ ''>
+		<cfif arguments.tab.class neq ''>
 			<cfset formatted &= ' class="tab ' & arguments.tab.class & '"' />
 		</cfif>
 		

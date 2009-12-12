@@ -17,14 +17,14 @@
 			<cfset resolution.hwRatio = resolution.height / resolution.width />
 			<cfset resolution.ratio = numberFormat(resolution.whRatio, "__.__") />
 			
-			<cfif NOT structKeyExists(maxResolutionClip, resolution.ratio)>
+			<cfif not structKeyExists(maxResolutionClip, resolution.ratio)>
 				<cfset maxResolutionClip[resolution.ratio] = {
 						width = 0,
 						height = 0
 					} />
 				
-				<cfif maxWHRatio GT 1>
-					<cfif maxWHRatio LT resolution.whRatio>
+				<cfif maxWHRatio gt 1>
+					<cfif maxWHRatio lt resolution.whRatio>
 						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxWidth />
 						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxWidth * resolution.hwRatio />
 					<cfelse>
@@ -32,7 +32,7 @@
 						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxHeight />
 					</cfif>
 				<cfelse>
-					<cfif maxWHRatio LT resolution.whRatio OR resolution.whRatio GT 1>
+					<cfif maxWHRatio lt resolution.whRatio or resolution.whRatio gt 1>
 						<cfset maxResolutionClip[resolution.ratio].width = arguments.maxWidth />
 						<cfset maxResolutionClip[resolution.ratio].height = arguments.maxWidth * resolution.hwRatio />
 					<cfelse>
@@ -84,21 +84,21 @@
 		<cfset width = original.getWidth() />
 		<cfset height = original.getHeight() />
 		
-		<cfif arguments.x LT 0>
+		<cfif arguments.x lt 0>
 			<cfset arguments.x = ceiling((width - max(arguments.clipWidth, 0) / 2)) />
 		</cfif>
 		
-		<cfif arguments.y LT 0>
+		<cfif arguments.y lt 0>
 			<cfset arguments.y = ceiling((height - max(arguments.clipHeight, 0) / 2)) />
 		</cfif>
 		
 		<!--- Check if using only a portion of the image --->
-		<cfif arguments.clipWidth GT 0 AND arguments.clipHeight GT 0>
-			<cfif arguments.x LT 0 OR width - arguments.x LT arguments.clipWidth>
+		<cfif arguments.clipWidth gt 0 and arguments.clipHeight gt 0>
+			<cfif arguments.x lt 0 or width - arguments.x lt arguments.clipWidth>
 				<cfthrow message="Image size is smaller than resize" detail="The width of the resize (#arguments.clipWidth#) is greater than the width of the image (#width#) with a #arguments.x# starting position." />
 			</cfif>
 			
-			<cfif arguments.y LT 0 OR height - arguments.y LT arguments.clipHeight>
+			<cfif arguments.y lt 0 or height - arguments.y lt arguments.clipHeight>
 				<cfthrow message="Image size is smaller than resize" detail="The height of the resize (#arguments.clipHeight#) is greater than the height of the image (#height#) with a #arguments.y# starting position." />
 			</cfif>
 			
@@ -113,7 +113,7 @@
 		
 		<cfloop array="#arguments.resolutions#" index="i">
 			<!--- Check if we already have the modified image for the width/height ratio --->
-			<cfif NOT structKeyExists(modified, i.whRatio)>
+			<cfif not structKeyExists(modified, i.whRatio)>
 				<cfset resolutionClips[i.ratio] = imageCopy(original, 0, 0, resolutionClips[i.ratio].width, resolutionClips[i.ratio].height) />
 			</cfif>
 			

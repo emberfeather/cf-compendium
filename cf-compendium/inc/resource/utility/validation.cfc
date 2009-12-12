@@ -19,7 +19,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif NOT isNumeric(arguments.value) OR arguments.value LT 0>
+		<cfif not isNumeric(arguments.value) or arguments.value lt 0>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('id') />
 			
@@ -37,7 +37,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif NOT listFind(arguments.extra, arguments.value)>
+		<cfif not listFind(arguments.extra, arguments.value)>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('in') />
 			
@@ -55,7 +55,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif NOT isNumeric(arguments.value)>
+		<cfif not isNumeric(arguments.value)>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('isNumber') />
 			
@@ -73,7 +73,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif len(arguments.value) GT arguments.extra>
+		<cfif len(arguments.value) gt arguments.extra>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('maxLength') />
 			
@@ -91,7 +91,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif len(arguments.value) LT arguments.extra>
+		<cfif len(arguments.value) lt arguments.extra>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('minLength') />
 			
@@ -109,7 +109,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif trim(arguments.value) EQ ''>
+		<cfif trim(arguments.value) eq ''>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('notEmpty') />
 			
@@ -127,7 +127,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif arguments.value GT now()>
+		<cfif arguments.value gt now()>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('notFuture') />
 			
@@ -148,7 +148,7 @@
 		<!--- Replace all non-numeric characters in case it is money --->
 		<cfset arguments.value = reReplace(arguments.value, '[^0-9.]', '', 'all') />
 		
-		<cfif arguments.value GT arguments.extra>
+		<cfif arguments.value gt arguments.extra>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('notGreaterThan') />
 			
@@ -187,7 +187,7 @@
 		<!--- Replace all non-numeric characters in case it is money --->
 		<cfset arguments.value = reReplace(arguments.value, '[^0-9.]', '', 'all') />
 		
-		<cfif arguments.value LT arguments.extra>
+		<cfif arguments.value lt arguments.extra>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('notLessThan') />
 			
@@ -205,7 +205,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif arguments.value LT now()>
+		<cfif arguments.value lt now()>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('notPast') />
 			
@@ -223,7 +223,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif NOT REFind("^[a-zA-Z][\.a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9]+([a-zA-Z0-9-][a-zA-Z0-9]+)?\.([a-z]+(\.[a-z]+)?){2,5}$", arguments.value)>
+		<cfif not REFind("^[a-zA-Z][\.a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9]+([a-zA-Z0-9-][a-zA-Z0-9]+)?\.([a-z]+(\.[a-z]+)?){2,5}$", arguments.value)>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('validEmail') />
 			
@@ -241,7 +241,7 @@
 		
 		<cfset var message = '' />
 		
-		<cfif NOT REFind("^http[s]?://", arguments.value)>
+		<cfif not REFind("^http[s]?://", arguments.value)>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('validURL') />
 			

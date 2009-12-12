@@ -24,9 +24,9 @@
 		
 		<!--- Loop through and test each value in the values struct and see if it has been set already --->
 		<cfloop list="#structKeyList(arguments.defaults)#" index="i">
-			<cfif NOT structKeyExists(extended, i)>
+			<cfif not structKeyExists(extended, i)>
 				<cfset extended[i] = arguments.defaults[i] />
-			<cfelseif (arguments.depth GT 1 OR arguments.depth LT 0) AND isStruct(arguments.defaults[i]) AND isStruct(extended[i])>
+			<cfelseif (arguments.depth gt 1 or arguments.depth lt 0) and isStruct(arguments.defaults[i]) and isStruct(extended[i])>
 				<cfset extended[i] = extend(arguments.defaults[i], extended[i], arguments.depth - 1) />
 			</cfif>
 		</cfloop>

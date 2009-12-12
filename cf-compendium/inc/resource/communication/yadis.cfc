@@ -42,14 +42,14 @@
 			<cfset xrdsURL = result.responseHeader['X-XRDS-Location'] />
 			
 			<!--- Recurse if not the same URL --->
-			<cfif xrdsURL NEQ arguments.yadisURL>
+			<cfif xrdsURL neq arguments.yadisURL>
 				<cfreturn discover( xrdsURL ) />
 			</cfif>
 		<cfelse>
 			<!--- Retrieve from URL in <meta> HTML element --->
 			<cfset xrdsURL = findMetaDescriptor( results.fileContent ) />
 			
-			<cfif xrdsURL NEQ ''>
+			<cfif xrdsURL neq ''>
 				<cfreturn discover( xrdsURL ) />
 			</cfif>
 		</cfif>
@@ -71,7 +71,7 @@
 		<!--- Look for <meta http-equiv="x-xrds-locationi" content="" /> element --->
 		<cfset match = reFindNoCase("<meta[^>]*(http-equiv=[""']x-xrds-location[""'][^>]*content=[""']([^""']+)[""']|content=[""']([^""']+)[""'][^>]*http-equiv=[""']x-xrds-location[""'])[^>]*\/?>", arguments.content, 1, true) />
 		
-		<cfif match.pos[1] NEQ 0>
+		<cfif match.pos[1] neq 0>
 			<!--- Check which grouping caught the descriptor --->
 			<cfif match.pos[3]>
 				<cfset descriptorURL = mid(arguments.content, match.pos[3], match.len[3]) />
@@ -146,7 +146,7 @@
 			</cfif>
 			
 			<!--- Create a new array if it does not exist --->
-			<cfif NOT structKeyExists(priorities, priority)>
+			<cfif not structKeyExists(priorities, priority)>
 				<cfset priorities[priority] = [] />
 			</cfif>
 			

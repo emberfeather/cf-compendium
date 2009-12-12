@@ -56,7 +56,7 @@
 		<cfargument name="key" type="string" required="true" />
 		
 		<!--- Check if the key exists --->
-		<cfif NOT structKeyExists(variables.bundle, arguments.key)>
+		<cfif not structKeyExists(variables.bundle, arguments.key)>
 			<cfthrow message="Bundle Key Does Not Exist" detail="The bundle key (#arguments.key#) does not exist in the bundle" />
 		</cfif>
 		
@@ -79,7 +79,7 @@
 		<cfargument name="directoryPath" type="string" required="true" />
 		
 		<!--- Test for trailing slash --->
-		<cfif right(arguments.directoryPath, 1) NEQ '/'>
+		<cfif right(arguments.directoryPath, 1) neq '/'>
 			<cfreturn arguments.directoryPath & '/' />
 		</cfif>
 		
@@ -106,12 +106,12 @@
 		<cfset filePath = normalizePath(arguments.path) />
 		
 		<!--- Check if we are doing the base bundle --->
-		<cfif arguments.bundleLocale EQ ''>
+		<cfif arguments.bundleLocale eq ''>
 			<cfset arguments.bundleLocale = 'base' />
 		</cfif>
 		
 		<!--- Check that the file path exists --->
-		<cfif NOT directoryExists(filePath)>
+		<cfif not directoryExists(filePath)>
 			<cfif directoryExists(expandPath(filePath))>
 				<cfset filePath = expandPath(filePath) />
 			<cfelseif directoryExists(expandPath('/' & filePath))>
@@ -125,7 +125,7 @@
 		<cfset filePath &= arguments.bundleName />
 		
 		<!--- Keep adding to the file path for the locale --->
-		<cfif arguments.bundleLocale NEQ 'base'>
+		<cfif arguments.bundleLocale neq 'base'>
 			<cfset filePath &= '_' & arguments.bundleLocale />
 		</cfif>
 		
@@ -133,7 +133,7 @@
 		<cfset filePath &= '.properties' />
 		
 		<!--- Check if the resource bundle exists --->
-		<cfif NOT fileExists(filePath)>
+		<cfif not fileExists(filePath)>
 			<cfthrow message="Resource bundle not found" detail="The resource bundle was not found at #filepath#" />
 		</cfif>
 		
@@ -171,7 +171,7 @@
 		<cfset fileStream.close() />
 		
 		<!--- If this is not the base bundle extend it to provide defaults --->
-		<cfif arguments.bundleLocale NEQ 'base'>
+		<cfif arguments.bundleLocale neq 'base'>
 			<cfset base = read(arguments.path, arguments.bundleName, '') />
 			
 			<cfset bundleResource.keys = duplicate(base.keys) />

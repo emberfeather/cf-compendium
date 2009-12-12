@@ -18,7 +18,7 @@
 		<cfargument name="name" type="string" required="true" />
 		<cfargument name="step" type="numeric" required="true" />
 		
-		<cfif step LTE 0 OR step GTE variables.limit>
+		<cfif step lte 0 or step gte variables.limit>
 			<cfthrow message="Value for variable 'Step' is out of bounds." />	
 		<cfelse>
 			<cfset variables.location[arguments.name] = step />
@@ -28,7 +28,7 @@
 	<cffunction name="get" access="public" returntype="numeric" output="false">
 		<cfargument name="name" type="string" required="true" />
 		
-		<cfif NOT structKeyExists(variables.location, arguments.name)>
+		<cfif not structKeyExists(variables.location, arguments.name)>
 			<cfset this.set(arguments.name, 1) />
 		</cfif>
 		
@@ -53,7 +53,7 @@
 		<cfset result = reFindNoCase('^(get|set|next|prev|reset)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
-		<cfif NOT result.pos[1]>
+		<cfif not result.pos[1]>
 			<cfthrow message="Function not found" detail="The component has no function with name the name #arguments.missingMethodName#" />
 		</cfif>
 		
@@ -90,7 +90,7 @@
 	<cffunction name="next" access="public" returntype="void" output="false">
 		<cfargument name="name" type="string" required="true" />
 		
-		<cfif (variables.location[arguments.name] + 1) GTE variables.limit>
+		<cfif (variables.location[arguments.name] + 1) gte variables.limit>
 			<cfthrow message="Next step for #arguments.name# is out of bounds." />
 		<cfelse>
 			<cfset variables.location[arguments.name]++ />
@@ -100,7 +100,7 @@
 	<cffunction name="prev" access="public" returntype="void" output="false">
 		<cfargument name="name" type="string" required="true" />
 		
-		<cfif (variables.location[arguments.name] - 1) LTE 0>
+		<cfif (variables.location[arguments.name] - 1) lte 0>
 			<cfthrow message="Previous step for #arguments.name# is out of bounds." />
 		<cfelse>
 			<cfset variables.location[arguments.name]-- />
