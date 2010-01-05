@@ -1,113 +1,116 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<!---
-		Test the Empty functions
-	--->
-	<cffunction name="testEmpty" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
-		
-		<cfset theQueue.push('test1') />
-		<cfset theQueue.push('test2') />
-		<cfset theQueue.push('test3') />
-		
-		<cfset theQueue.empty() />
-		
-		<cfset assertEquals(0, theQueue.length()) />
-	</cffunction>
-	
-	<!---
-		Test the isEmpty function for true
-	--->
-	<cffunction name="testIsEmptyTrue" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
-		
-		<cfset assertTrue(theQueue.isEmpty()) />
-	</cffunction>
-	
-	<!---
-		Test the isEmpty function for false
-	--->
-	<cffunction name="testIsEmptyFalse" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
-		
-		<cfset theQueue.push('test') />
-		
-		<cfset assertFalse(theQueue.isEmpty()) />
-	</cffunction>
-	
-	<!---
-		Tests the length function with no values
-	--->
-	<cffunction name="testLengthEmpty" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
-		
-		<cfset assertEquals(0, theQueue.length()) />
-	</cffunction>
-	
-	<!---
-		Tests the length function with multiple values
-	--->
-	<cffunction name="testLengthMultiple" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
-		
-		<cfset theQueue.push('test1') />
-		<cfset theQueue.push('test2') />
-		<cfset theQueue.push('test3') />
-		<cfset theQueue.push('test4') />
-		
-		<cfset assertEquals(4, theQueue.length()) />
-	</cffunction>
-	
-	<!---
-		Tests the pop function
-	--->
-	<cffunction name="testPop" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
-		
-		<cfset theQueue.push('test') />
-		
-		<cfset assertEquals('test', theQueue.pop()) />
-	</cffunction>
-	
-	<!---
-		Tests the pop function with an empty queue
-	--->
-	<cffunction name="testPopFailOnEmpty" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
-		
-		<cftry>
-			<cfset theQueue.pop() />
-			<cfset fail('should not be able to pop off an empty queue') />
+	<cfscript>
+		/**
+		 * Test the Empty functions
+		 */
+		public void function testEmpty() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
 			
-			<cfcatch type="mxunit.exception.AssertionFailedError"><cfrethrow /></cfcatch>
-			<cfcatch type="any"><!--- Expect to get here ---></cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Tests the pop function with multiple values
-	--->
-	<cffunction name="testPopMultiple" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
+			theQueue.push('test1');
+			theQueue.push('test2');
+			theQueue.push('test3');
+			
+			theQueue.empty();
+			
+			assertEquals(0, theQueue.length());
+		}
 		
-		<cfset theQueue.push('test1') />
-		<cfset theQueue.push('test2') />
-		<cfset theQueue.push('test3') />
-		<cfset theQueue.push('test4') />
+		/**
+		 * Test the isEmpty function for true
+		 */
+		public void function testIsEmptyTrue() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
+			
+			assertTrue(theQueue.isEmpty());
+		}
 		
-		<cfset assertEquals('test1', theQueue.pop()) />
-		<cfset assertEquals('test2', theQueue.pop()) />
-		<cfset assertEquals('test3', theQueue.pop()) />
-		<cfset assertEquals('test4', theQueue.pop()) />
-	</cffunction>
-	
-	<!---
-		Tests the push function
-	--->
-	<cffunction name="testPush" access="public" returntype="void" output="false">
-		<cfset var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init() />
+		/**
+		 * Test the isEmpty function for false
+		 */
+		public void function testIsEmptyFalse() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
+			
+			theQueue.push('test');
+			
+			assertFalse(theQueue.isEmpty());
+		}
 		
-		<cfset theQueue.push('test') />
+		/**
+		 * Tests the length function with no values
+		 */
+		public void function testLengthEmpty() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
+			
+			assertEquals(0, theQueue.length());
+		}
 		
-		<cfset assertFalse(theQueue.isEmpty()) />
-	</cffunction>
+		/**
+		 * Tests the length function with multiple values
+		 */
+		public void function testLengthMultiple() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
+			
+			theQueue.push('test1');
+			theQueue.push('test2');
+			theQueue.push('test3');
+			theQueue.push('test4');
+			
+			assertEquals(4, theQueue.length());
+		}
+		
+		/**
+		 * Tests the pop function
+		 */
+		public void function testPop() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
+			
+			theQueue.push('test');
+			
+			assertEquals('test', theQueue.pop());
+		}
+		
+		/**
+		 * Tests the pop function with an empty queue
+		 */
+		public void function testPopFailOnEmpty() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
+			
+			try {
+				theQueue.pop();
+				fail('should not be able to pop off an empty queue');
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// Expect to get here
+			}
+		}
+		
+		/**
+		 * Tests the pop function with multiple values
+		 */
+		public void function testPopMultiple() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
+			
+			theQueue.push('test1');
+			theQueue.push('test2');
+			theQueue.push('test3');
+			theQueue.push('test4');
+			
+			assertEquals('test1', theQueue.pop());
+			assertEquals('test2', theQueue.pop());
+			assertEquals('test3', theQueue.pop());
+			assertEquals('test4', theQueue.pop());
+		}
+		
+		/**
+		 * Tests the push function
+		 */
+		public void function testPush() {
+			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
+			
+			theQueue.push('test');
+			
+			assertFalse(theQueue.isEmpty());
+		}
+	</cfscript>
 </cfcomponent>

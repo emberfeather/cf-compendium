@@ -1,363 +1,365 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<!---
-		Test adding an anchor by setting it to a value.
-	--->
-	<cffunction name="testAnchorUrl" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+	<cfscript>
+		/**
+		 * Test adding an anchor by setting it to a value.
+		 */
+		public void function testAnchorUrl() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
+			
+			// set an anchor
+			theUrl.anchorRedirect('top');
+			
+			assertEquals('?##top', theUrl.getRedirect());
+		}
 		
-		<!--- set an anchor --->
-		<cfset theUrl.anchorRedirect('top') />
+		/**
+		 * Test removing an anchor by setting it to a blank string.
+		 */
+		public void function testAnchorUrl_RemoveAnchor_Blank() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
+			
+			// set an anchor value to remove
+			theUrl.anchorRedirect('top');
+			
+			// test removing an anchor on an instance
+			theUrl.anchorRedirect('');
+			
+			assertEquals('?', theUrl.getRedirect());
+		}
 		
-		<cfset assertEquals('?##top', theUrl.getRedirect()) />
-	</cffunction>
-	
-	<!---
-		Test removing an anchor by setting it to a blank string.
-	--->
-	<cffunction name="testAnchorUrl_RemoveAnchor_Blank" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+		/**
+		 * Test removing an anchor by not passing a new value.
+		 */
+		public void function testAnchorUrl_RemoveAnchor_sansArgument() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
+			
+			// set an anchor value to remove
+			theUrl.anchorRedirect('top');
+			
+			// test removing an anchor on an instance
+			theUrl.anchorRedirect();
+			
+			assertEquals('?', theUrl.getRedirect());
+		}
 		
-		<!--- set an anchor value to remove --->
-		<cfset theUrl.anchorRedirect('top') />
+		/**
+		 * Test removing an anchor that was never set.
+		 */
+		public void function testAnchorUrl_RemoveAnchor_sansAnchor() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
+			
+			// test removing an anchor on an instance
+			theUrl.anchorRedirect();
+			
+			assertEquals('?', theUrl.getRedirect());
+		}
 		
-		<!--- test removing an anchor on an instance --->
-		<cfset theUrl.anchorRedirect('') />
+		/**
+		 * Test returning a cleaned (empty) url given a full one
+		 */
+		public void function testCleanUrl() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('randy=dabomb');
+			
+			// test cleaning an instance
+			theUrl.cleanRedirect();
+			
+			assertEquals('?', theUrl.getRedirect());
+		}
 		
-		<cfset assertEquals('?', theUrl.getRedirect()) />
-	</cffunction>
-	
-	<!---
-		Test removing an anchor by not passing a new value.
-	--->
-	<cffunction name="testAnchorUrl_RemoveAnchor_sansArgument" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+		/**
+		 * Test returning a cleaned (empty) url given a full one
+		 */
+		public void function testCleanUrl_Master() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('randy=dabomb');
+			
+			// test cleaning the master
+			theUrl.clean();
+			
+			assertEquals('?', theUrl.get());
+		}
 		
-		<!--- set an anchor value to remove --->
-		<cfset theUrl.anchorRedirect('top') />
+		/**
+		 * Test cloning an existing URL
+		 */
+		public void function testCloneUrl_shouldMatch() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
+			
+			theUrl.setTesting('test', 'something');
+			
+			// test cleaning an instance
+			theUrl.cloneRedirect('testing');
+			
+			assertEquals('?test=something', theUrl.getRedirect());
+		}
 		
-		<!--- test removing an anchor on an instance --->
-		<cfset theUrl.anchorRedirect() />
+		/**
+		 * Test cloning the master
+		 */
+		public void function testCloneUrl_withMaster_shouldMatch() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test=something');
+			
+			// test cleaning an instance
+			theUrl.cloneRedirect();
+			
+			assertEquals('?test=something', theUrl.getRedirect());
+		}
 		
-		<cfset assertEquals('?', theUrl.getRedirect()) />
-	</cffunction>
-	
-	<!---
-		Test removing an anchor that was never set.
-	--->
-	<cffunction name="testAnchorUrl_RemoveAnchor_sansAnchor" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+		/**
+		 * Test extending a url
+		 */
+		public void function testExtend() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var theContrast = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init();
+			var newUrl = '';
+			
+			theUrl.setBrandNewLocation('sarah', 'awesome');
+			
+			theUrl.extendBrandNewLocation('sarah=new&tj=awesome');
+			
+			newUrl = replace(theUrl.getBrandNewLocation(false),'?','&', 'ALL');
+			
+			assertTrue(theContrast.areEqual('sarah=awesome&tj=awesome', newUrl, '&'));
+		}
 		
-		<!--- test removing an anchor on an instance --->
-		<cfset theUrl.anchorRedirect() />
+		/**
+		 * Test getting the getting location
+		 */
+		public void function testGet() {
+			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			
+			theURL.setMylocation('ef', 'cool');
+			
+			assertEquals('?ef=cool', theURL.getMyLocation());
+		}
 		
-		<cfset assertEquals('?', theUrl.getRedirect()) />
-	</cffunction>
-	
-	<!---
-		Test returning a cleaned (empty) url given a full one
-	--->
-	<cffunction name="testCleanUrl" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('randy=dabomb') />
+		/**
+		 * Want to test getting back the correct url given a url
+		 */
+		public void function testGetMaster() {
+			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			
+			assertEquals('?ef=cool', theURL.get());
+		}
 		
-		<!--- test cleaning an instance --->
-		<cfset theUrl.cleanRedirect() />
+		/**
+		 * Test getLocation for existence of named location
+		 */
+		public void function testHasLocationTrue() {
+			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			
+			theURL.setMyLocation('test', 'true');
+			
+			assertTrue(theURL.hasMylocation());
+		}
 		
-		<cfset assertEquals('?', theUrl.getRedirect()) />
-	</cffunction>
-	
-	<!---
-		Test returning a cleaned (empty) url given a full one
-	--->
-	<cffunction name="testCleanUrl_Master" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('randy=dabomb') />
+		/**
+		 * Test getLocation for FALSE existence of named location
+		 */
+		public void function testHasLocationFalse() {
+			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			
+			assertFalse(theURL.hasMyLocation());
+		}
 		
-		<!--- test cleaning the master --->
-		<cfset theUrl.clean() />
+		/**
+		 * Test getLocation for existence of master location
+		 */
+		public void function testHasLocationMaster() {
+			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			
+			assertTrue(theURL.has());
+		}
 		
-		<cfset assertEquals('?', theUrl.get()) />
-	</cffunction>
-	
-	<!---
-		Test cloning an existing URL
-	--->
-	<cffunction name="testCloneUrl_shouldMatch" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+		/**
+		 * Test overriding a url
+		 * 
+		 * Override is similar to extend, except that it will override any of the already existing parameters in the URL,
+		 * where extend will only append non existing parameters
+		 * 
+		 * EX:
+		 * 
+		 *   XXXXX    (original values)
+		 *  +   OOOO  (new values)
+		 *  ----------
+		 *   XXXOOOO  
+		 */
+		public void function testOverride() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var theContrast = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init();
+			var newUrl = '';
+			
+			theUrl.setBrandNewLocation('sarah', 'awesome');
+			
+			theUrl.overrideBrandNewLocation('sarah=new&tj=awesome');
+			
+			newUrl = replace(theUrl.getBrandNewLocation(false),'?','&', 'ALL');
+			
+			assertTrue(theContrast.areEqual('sarah=new&tj=awesome', newUrl, '&'));
+		}
 		
-		<cfset theUrl.setTesting('test', 'something') />
+		/**
+		 * Test parseQueryString. Should return a struct given a correctly formatted query string
+		 */
+		public void function testParseQueryString() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var theQueryString = "happy=sad&fun=boring&awesome=lame";
+			var result = theUrl.parseQueryString(theQueryString);
+			
+			assertTrue(structKeyExists(result, "happy"));
+			assertTrue(result["happy"] eq "sad");
+			
+			assertTrue(structKeyExists(result, "fun"));
+			assertTrue(result["fun"] eq "boring");
+			
+			assertTrue(structKeyExists(result, "awesome"));
+			assertTrue(result["awesome"] eq "lame");
+		}
 		
-		<!--- test cleaning an instance --->
-		<cfset theUrl.cloneRedirect('testing') />
+		/**
+		 * Test parseQueryString. Should return a struct given a correctly formatted query string
+		 */
+		public void function testParseQueryStringWithQuestion() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var theQueryString = "?happy=sad";
+			var result = theUrl.parseQueryString(theQueryString);
+			
+			assertFalse(structKeyExists(result, "?happy"));
+		}
 		
-		<cfset assertEquals('?test=something', theUrl.getRedirect()) />
-	</cffunction>
-	
-	<!---
-		Test cloning the master
-	--->
-	<cffunction name="testCloneUrl_withMaster_shouldMatch" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test=something') />
+		/**
+		 * Test parseQueryStringWithBlank. Should return a struct given a correctly formatted query string
+		 */
+		public void function testParseQueryStringWithBlank() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var theQueryString =  "";
+			
+			assertTrue(structIsEmpty(theUrl.parseQueryString(theQueryString)));
+		}
 		
-		<!--- test cleaning an instance --->
-		<cfset theUrl.cloneRedirect() />
+		/**
+		 * Test queryKeyList returns the correct list of tokens
+		 */
+		public void function testQueryKeyList() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			
+			theURL.set('test1', '1');
+			theURL.set('test2', '2');
+			theURL.set('test3', '3');
+			theURL.set('test4', '4');
+			
+			assertEquals('test1,test2,test3,test4', listSort( theURL.querystringKeyList(), 'text' ) );
+		}
 		
-		<cfset assertEquals('?test=something', theUrl.getRedirect()) />
-	</cffunction>
-
-	<!---
-		Test extending a url
-	--->
-	<cffunction name="testExtend" access="public" returnType="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var theContrast = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init() />
-		<cfset var newUrl = '' />
+		/**
+		 * Test the search function for fail
+		 */
+		public void function testSearchFail() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			var locationName = "";
+			var searchString = "boo";
+			
+			assertEquals("", theUrl.searchLocationName(searchString));
+		}
 		
-		<cfset theUrl.setBrandNewLocation('sarah', 'awesome') />
+		/**
+		 * Test the search function without giving a location
+		 */
+		public void function testSearchMaster() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			var locationName = "";
+			var searchString = "ef";
+			
+			assertEquals("cool", theUrl.search(searchString));
+		}
 		
-		<cfset theUrl.extendBrandNewLocation('sarah=new&tj=awesome') />
+		/**
+		 * Test the search function giving a location
+		 */
+		public void function testSearchWithLocation() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			var searchString = "randy";	
+			
+			theUrl.setMyLocation('randy', 'smart');
+			
+			assertEquals("smart", theUrl.searchMyLocation(searchString));
+		}
 		
-		<cfset newUrl = replace(theUrl.getBrandNewLocation(false),'?','&', 'ALL') />
+		/**
+		 * Test the searchID function 
+		 */
+		public void function testSearchID() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool&pid=101');
+			
+			assertEquals(101, theUrl.searchID('pid'));
+		}
 		
-		<cfset assertTrue(theContrast.areEqual('sarah=awesome&tj=awesome', newUrl, '&')) />
-	</cffunction>
-	
-	<!---
-		test getting the getting location
-	--->
-	<cffunction name="testGet" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+		/**
+		 * Test the searchID function for FAIL
+		 */
+		public void function testSearchIDFail() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool&pid=101');
+			
+			assertEquals(0, theUrl.searchID('ef'));
+		}
 		
-		<cfset theURL.setMylocation('ef', 'cool')>
+		/**
+		 * Test the searchID function with location
+		 */
+		public void function testSearchIDWithLocation() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool&pid=101');
+			var myQueryString =  "pid=200&randy=spiffy";
+			var myLocation = "theLocation";
+			
+			theUrl.setMyLocation('pid', 200);
+			
+			assertEquals(200, theUrl.searchIDMyLocation('pid'));
+		}
 		
-		<cfset assertEquals('?ef=cool', theURL.getMyLocation())>
-	</cffunction>
-
-	<!---
-		want to test getting back the correct url given a url
-	--->
-	<cffunction name="testGetMaster" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool') />
+		/**
+		 * Test the setLocation function with a blank location string and a blank query string
+		 */
+		public void function testResetMasterBlankQuery() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			
+			theUrl.reset('');
+			
+			assertEquals("?", theUrl.get());
+		}
 		
-		<cfset assertEquals('?ef=cool', theURL.get()) />
-	</cffunction>
-
-	<!---
-		Test getLocation for existence of named location
-	--->
-	<cffunction name="testHasLocationTrue" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool') />
+		/**
+		 * Test the setLocation function with a blank location string and a query string
+		 */
+		public void function testResetMasterWithQuery() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var strQueryString =  "randy=cool";
+			
+			theUrl.reset(strQueryString);
+			
+			assertEquals("?" & strQueryString, theUrl.get());
+		}
 		
-		<cfset theURL.setMyLocation('test', 'true') />
+		/**
+		 * Test the setLocation function with a location string and a blank query string
+		 */
+		public void function testResetLocationBlankQuery() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var strQueryString =  "";
+			
+			theUrl.resetMyLocation(strQueryString);
+			
+			assertEquals("?" & strQueryString, theUrl.getMyLocation());
+		}
 		
-		<cfset assertTrue(theURL.hasMylocation()) />
-	</cffunction>
-	
-	<!---
-		Test getLocation for FALSE existence of named location
-	--->
-	<cffunction name="testHasLocationFalse" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool') />
-		
-		<cfset assertFalse(theURL.hasMyLocation()) />
-	</cffunction>
-	
-	<!---
-		Test getLocation for existence of master location
-	--->
-	<cffunction name="testHasLocationMaster" access="public" returntype="void" output="false">
-		<cfset var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool') />
-		
-		<cfset assertTrue(theURL.has()) />
-	</cffunction>
-
-	<!--- 
-		Test overriding a url
-		
-		Override is similar to extend, except that it will override any of the already existing parameters in the URL,
-		where extend will only append non existing parameters
-		
-		EX:
-		
-		  XXXXX    (original values)
-		 +   OOOO  (new values)
-		 ----------
-		  XXXOOOO  
-	--->
-	<cffunction name="testOverride" access="public" returnType="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var theContrast = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init() />
-		<cfset var newUrl = '' />
-		
-		<cfset theUrl.setBrandNewLocation('sarah', 'awesome') />
-		
-		<cfset theUrl.overrideBrandNewLocation('sarah=new&tj=awesome') />
-		
-		<cfset newUrl = replace(theUrl.getBrandNewLocation(false),'?','&', 'ALL') />
-		
-		<cfset assertTrue(theContrast.areEqual('sarah=new&tj=awesome', newUrl, '&')) />
-	</cffunction>
-
-	<!---
-		Test parseQueryString. Should return a struct given a correctly formatted query string
-	--->
-	<cffunction name="testParseQueryString" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var theQueryString = "happy=sad&fun=boring&awesome=lame" />
-		<cfset var result = theUrl.parseQueryString(theQueryString) />
-		
-		<cfset assertTrue(structKeyExists(result, "happy")) />
-		<cfset assertTrue(result["happy"] eq "sad") />
-		
-		<cfset assertTrue(structKeyExists(result, "fun")) />
-		<cfset assertTrue(result["fun"] eq "boring") />
-		
-		<cfset assertTrue(structKeyExists(result, "awesome")) />
-		<cfset assertTrue(result["awesome"] eq "lame") />
-	</cffunction>
-	
-	<!---
-		Test parseQueryString. Should return a struct given a correctly formatted query string
-	--->
-	<cffunction name="testParseQueryStringWithQuestion" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var theQueryString = "?happy=sad" />
-		<cfset var result = theUrl.parseQueryString(theQueryString) />
-		
-		<cfset assertFalse(structKeyExists(result, "?happy")) />
-	</cffunction>
-	
-	<!---
-		Test parseQueryStringWithBlank. Should return a struct given a correctly formatted query string
-	--->
-	<cffunction name="testParseQueryStringWithBlank" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var theQueryString =  "" />
-		
-		<cfset assertTrue(structIsEmpty(theUrl.parseQueryString(theQueryString))) />
-	</cffunction>
-	
-	<!---
-		Test queryKeyList returns the correct list of tokens
-	--->
-	<cffunction name="testQueryKeyList" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		
-		<cfset theURL.set('test1', '1') />
-		<cfset theURL.set('test2', '2') />
-		<cfset theURL.set('test3', '3') />
-		<cfset theURL.set('test4', '4') />
-		
-		<cfset assertEquals('test1,test2,test3,test4', listSort( theURL.querystringKeyList(), 'text' ) ) />
-	</cffunction>
-	
-	<!---
-		Test the search function for fail
-	--->
-	<cffunction name="testSearchFail" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool') />
-		<cfset var locationName = "" />
-		<cfset var searchString = "boo" />
-		
-		<cfset assertEquals("", theUrl.searchLocationName(searchString)) />
-	</cffunction>
-	
-	<!---
-		Test the search function without giving a location
-	--->
-	<cffunction name="testSearchMaster" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool') />
-		<cfset var locationName = "" />
-		<cfset var searchString = "ef" />
-		
-		<cfset assertEquals("cool", theUrl.search(searchString)) />
-	</cffunction>
-	
-	<!---
-		Test the search function giving a location
-	--->
-	<cffunction name="testSearchWithLocation" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool') />
-		<cfset var searchString = "randy" />	
-		
-		<cfset theUrl.setMyLocation('randy', 'smart') />
-		
-		<cfset assertEquals("smart", theUrl.searchMyLocation(searchString)) />
-	</cffunction>
-	
-	<!---
-		Test the searchID function 
-	--->
-	<cffunction name="testSearchID" access="public" returnType="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool&pid=101') />
-		
-		<cfset assertEquals(101, theUrl.searchID('pid')) />
-	</cffunction>
-	
-	<!---
-		Test the searchID function for FAIL
-	--->
-	<cffunction name="testSearchIDFail" access="public" returnType="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool&pid=101') />
-		
-		<cfset assertEquals(0, theUrl.searchID('ef')) />
-	</cffunction>
-	
-	<!---
-		Test the searchID function with location
-	--->
-	<cffunction name="testSearchIDWithLocation" access="public" returnType="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool&pid=101') />
-		<cfset var myQueryString =  "pid=200&randy=spiffy"/>
-		<cfset var myLocation = "theLocation" />
-		
-		<cfset theUrl.setMyLocation('pid', 200) />
-		
-		<cfset assertEquals(200, theUrl.searchIDMyLocation('pid')) />
-	</cffunction>
-	
-	<!---
-		Test the setLocation function with a blank location string and a blank query string
-	--->
-	<cffunction name="testResetMasterBlankQuery" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		
-		<cfset theUrl.reset('') />
-		
-		<cfset assertEquals("?", theUrl.get()) />
-	</cffunction>
-	
-	<!---
-		Test the setLocation function with a blank location string and a query string
-	--->
-	<cffunction name="testResetMasterWithQuery" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var strQueryString =  "randy=cool"/>
-		
-		<cfset theUrl.reset(strQueryString) />
-		
-		<cfset assertEquals("?" & strQueryString, theUrl.get()) >
-	</cffunction>
-	
-	<!---
-		Test the setLocation function with a location string and a blank query string
-	--->
-	<cffunction name="testResetLocationBlankQuery" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var strQueryString =  ""/>
-		
-		<cfset theUrl.resetMyLocation(strQueryString) />
-		
-		<cfset assertEquals("?" & strQueryString, theUrl.getMyLocation()) />
-	</cffunction>
-	
-	<!---
-		Test the setLocation function with a location string and a query string
-	--->
-	<cffunction name="testResetLocationWithLocationWithQuery" access="public" returntype="void" output="false">
-		<cfset var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
-		<cfset var strQueryString =  "randy=cool"/>
-		
-		<cfset theUrl.resetMyLocation(strQueryString) />
-		
-		<cfset assertEquals("?" & strQueryString, theUrl.getMyLocation()) />
-	</cffunction>
+		/**
+		 * Test the setLocation function with a location string and a query string
+		 */
+		public void function testResetLocationWithLocationWithQuery() {
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var strQueryString =  "randy=cool";
+			
+			theUrl.resetMyLocation(strQueryString);
+			
+			assertEquals("?" & strQueryString, theUrl.getMyLocation());
+		}
+	</cfscript>
 </cfcomponent>

@@ -2,117 +2,173 @@
 	Unit testing for the cfc parser
 --->
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<cffunction name="testIsComponent_Script_WithComponent_NonLazy" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
+	<cfscript>
+		/**
+		 * 
+		 */
+		public void function testIsComponent_Script_WithComponent_NonLazy() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			
+			assertTrue(theParser.isComponent('/implementation/inc/resource/utility/componentScriptParse01.cfc'));
+		}
 		
-		<cfset assertTrue(theParser.isComponent('/implementation/inc/resource/utility/componentScriptParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsComponent_Tag_WithComponent_NonLazy" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
+		/**
+		 * 
+		 */
+		public void function testIsComponent_Tag_WithComponent_NonLazy() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			
+			assertTrue(theParser.isComponent('/implementation/inc/resource/utility/componentParse01.cfc'));
+		}
 		
-		<cfset assertTrue(theParser.isComponent('/implementation/inc/resource/utility/componentParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsComponent_Script_WithComponent_Lazy" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true) />
+		/**
+		 * 
+		 */
+		public void function testIsComponent_Script_WithComponent_Lazy() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true);
+			
+			assertTrue(theParser.isComponent('/implementation/inc/resource/utility/componentScriptParse01.cfc'));
+		}
 		
-		<cfset assertTrue(theParser.isComponent('/implementation/inc/resource/utility/componentScriptParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsComponent_Tag_WithComponent_Lazy" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true) />
+		/**
+		 * 
+		 */
+		public void function testIsComponent_Tag_WithComponent_Lazy() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true);
+			
+			assertTrue(theParser.isComponent('/implementation/inc/resource/utility/componentParse01.cfc'));
+		}
 		
-		<cfset assertTrue(theParser.isComponent('/implementation/inc/resource/utility/componentParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsComponent_Script_WithInterface_NonLazy" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
+		/**
+		 * 
+		 */
+		public void function testIsComponent_Script_WithInterface_NonLazy() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			
+			assertFalse(theParser.isComponent('/implementation/inc/resource/utility/interfaceScriptParse01.cfc'));
+		}
 		
-		<cfset assertFalse(theParser.isComponent('/implementation/inc/resource/utility/interfaceScriptParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsComponent_Tag_WithInterface_NonLazy" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
+		/**
+		 * 
+		 */
+		public void function testIsComponent_Tag_WithInterface_NonLazy() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			
+			assertFalse(theParser.isComponent('/implementation/inc/resource/utility/interfaceParse01.cfc'));
+		}
 		
-		<cfset assertFalse(theParser.isComponent('/implementation/inc/resource/utility/interfaceParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsComponent_Script_WithInterface_Lazy" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true) />
+		/**
+		 * 
+		 */
+		public void function testIsComponent_Script_WithInterface_Lazy() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true);
+			
+			assertTrue(theParser.isComponent('/implementation/inc/resource/utility/interfaceScriptParse01.cfc'));
+		}
 		
-		<cfset assertTrue(theParser.isComponent('/implementation/inc/resource/utility/interfaceScriptParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsComponent_Tag_WithInterface_Lazy" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true) />
+		/**
+		 * 
+		 */
+		public void function testIsComponent_Tag_WithInterface_Lazy() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true);
+			
+			assertTrue(theParser.isComponent('/implementation/inc/resource/utility/interfaceParse01.cfc'));
+		}
 		
-		<cfset assertTrue(theParser.isComponent('/implementation/inc/resource/utility/interfaceParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsScript_Script_WithComponent" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true) />
+		/**
+		 * 
+		 */
+		public void function testIsScript_Script_WithComponent() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true);
+			
+			assertTrue(theParser.isScript('/implementation/inc/resource/utility/componentScriptParse01.cfc'));
+		}
 		
-		<cfset assertTrue(theParser.isScript('/implementation/inc/resource/utility/componentScriptParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsScript_Tag_WithComponent" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true) />
+		/**
+		 * 
+		 */
+		public void function testIsScript_Tag_WithComponent() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true);
+			
+			assertFalse(theParser.isScript('/implementation/inc/resource/utility/componentParse01.cfc'));
+		}
 		
-		<cfset assertFalse(theParser.isScript('/implementation/inc/resource/utility/componentParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsScript_Script_WithInterface" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true) />
+		/**
+		 * 
+		 */
+		public void function testIsScript_Script_WithInterface() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true);
+			
+			assertTrue(theParser.isScript('/implementation/inc/resource/utility/interfaceScriptParse01.cfc'));
+		}
 		
-		<cfset assertTrue(theParser.isScript('/implementation/inc/resource/utility/interfaceScriptParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testIsScript_Tag_WithInterface" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true) />
+		/**
+		 * 
+		 */
+		public void function testIsScript_Tag_WithInterface() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(true);
+			
+			assertFalse(theParser.isScript('/implementation/inc/resource/utility/interfaceParse01.cfc'));
+		}
 		
-		<cfset assertFalse(theParser.isScript('/implementation/inc/resource/utility/interfaceParse01.cfc')) />
-	</cffunction>
-	
-	<cffunction name="testParse_Script_ComponentComment" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
-		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentScriptParse01.cfc', 'init') />
+		/**
+		 * 
+		 */
+		public void function testParse_Script_ComponentComment() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			var parsed = theParser.parse('/implementation/inc/resource/utility/componentScriptParse01.cfc', 'init');
+			
+			assertEquals('Test Component Comment', parsed.comments.description[1]);
+		}
 		
-		<cfset assertEquals('Test Component Comment', parsed.comments.description[1]) />
-	</cffunction>
-	
-	<cffunction name="testParse_Script_FunctionComment" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
-		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentScriptParse01.cfc', 'init') />
+		/**
+		 * 
+		 */
+		public void function testParse_Script_FunctionComment() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			var parsed = theParser.parse('/implementation/inc/resource/utility/componentScriptParse01.cfc', 'init');
+			
+			assertEquals('Test Function Comment', parsed.methods.constructors[1].comments.description[1]);
+		}
 		
-		<cfset assertEquals('Test Function Comment', parsed.methods.constructors[1].comments.description[1]) />
-	</cffunction>
-	
-	<cffunction name="testParse_Script_FunctionComment2" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
-		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentScriptParse01.cfc', 'init') />
+		/**
+		 * 
+		 */
+		public void function testParse_Script_FunctionComment2() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			var parsed = theParser.parse('/implementation/inc/resource/utility/componentScriptParse01.cfc', 'init');
+			
+			assertEquals('Test Function 2 Comment', parsed.methods.functions[1].comments.description[1]);
+		}
 		
-		<cfset assertEquals('Test Function 2 Comment', parsed.methods.functions[1].comments.description[1]) />
-	</cffunction>
-	
-	<cffunction name="testParse_Tag_ComponentComment" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
-		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init') />
+		/**
+		 * 
+		 */
+		public void function testParse_Tag_ComponentComment() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init');
+			
+			assertEquals('Test Component Comment', parsed.comments.description[1]);
+		}
 		
-		<cfset assertEquals('Test Component Comment', parsed.comments.description[1]) />
-	</cffunction>
-	
-	<cffunction name="testParse_Tag_FunctionComment" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
-		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init') />
+		/**
+		 * 
+		 */
+		public void function testParse_Tag_FunctionComment() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init');
+			
+			assertEquals('Test Function Comment', parsed.methods.constructors[1].comments.description[1]);
+		}
 		
-		<cfset assertEquals('Test Function Comment', parsed.methods.constructors[1].comments.description[1]) />
-	</cffunction>
-	
-	<cffunction name="testParse_Tag_FunctionComment2" access="public" returntype="void" output="false">
-		<cfset var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false) />
-		<cfset var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init') />
-		
-		<cfset assertEquals('Test Function 2 Comment', parsed.methods.functions[1].comments.description[1]) />
-	</cffunction>
+		/**
+		 * 
+		 */
+		public void function testParse_Tag_FunctionComment2() {
+			var theParser = createObject('component', 'cf-compendium.inc.resource.utility.cfcParse').init(false);
+			var parsed = theParser.parse('/implementation/inc/resource/utility/componentParse01.cfc', 'init');
+			
+			assertEquals('Test Function 2 Comment', parsed.methods.functions[1].comments.description[1]);
+		}
+	</cfscript>
 </cfcomponent>

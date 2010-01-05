@@ -1,59 +1,61 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<!---
-		Tests that the confirm token works correctly
-	--->
-	<cffunction name="testConfirmToken" access="public" returntype="void" output="false">
-		<cfset var token = '' />
-		<cfset var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init() />
+	<cfscript>
+		/**
+		 * Tests that the confirm token works correctly
+		 */
+		public void function testConfirmToken() {
+			var token = '';
+			var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init();
+			
+			token = tokens.getTest();
+			
+			assertTrue( tokens.confirmTest(token), 'Token given did not confirm correctly' );
+		}
 		
-		<cfset token = tokens.getTest() />
+		/**
+		 * Tests that the confirm token fails when there is no token
+		 */
+		public void function testConfirmToken_SansToken() {
+			var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init();
+			
+			assertFalse( tokens.confirmTest('someVal'), 'Tokens that are not created should return false' );
+		}
 		
-		<cfset assertTrue( tokens.confirmTest(token), 'Token given did not confirm correctly' ) />
-	</cffunction>
-	
-	<!---
-		Tests that the confirm token fails when there is no token
-	--->
-	<cffunction name="testConfirmToken_SansToken" access="public" returntype="void" output="false">
-		<cfset var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init() />
+		/**
+		 * Tests that the token changes when requesting a reset token
+		 */
+		public void function testGetToken_Reset() {
+			var token1 = '';
+			var token2 = '';
+			var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init();
+			
+			token1 = tokens.getTest();
+			
+			token2 = tokens.getTest( true );
+			
+			assertNotEquals(token1, token2, 'Tokens should be different when requesting a token with the reset flag');
+		}
 		
-		<cfset assertFalse( tokens.confirmTest('someVal'), 'Tokens that are not created should return false' ) />
-	</cffunction>
-	
-	<!---
-		Tests that the token changes when requesting a reset token
-	--->
-	<cffunction name="testGetToken_Reset" access="public" returntype="void" output="false">
-		<cfset var token1 = '' />
-		<cfset var token2 = '' />
-		<cfset var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init() />
+		/**
+		 * Tests that the has token works
+		 */
+		public void function testHasToken() {
+			var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init();
+			
+			tokens.getTest();
+			
+			assertTrue(tokens.hasTest(), 'The token should exist since it was generated');
+		}
 		
-		<cfset token1 = tokens.getTest() />
-		
-		<cfset token2 = tokens.getTest( true ) />
-		
-		<cfset assertNotEquals(token1, token2, 'Tokens should be different when requesting a token with the reset flag') />
-	</cffunction>
-	
-	<!---
-		Tests that the has token works
-	--->
-	<cffunction name="testHasToken" access="public" returntype="void" output="false">
-		<cfset var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init() />
-		
-		<cfset tokens.getTest() />
-		
-		<cfset assertTrue(tokens.hasTest(), 'The token should exist since it was generated') />
-	</cffunction>
-	
-	<!---
-		Tests that the has token works
-	--->
-	<cffunction name="testHasToken_SansToken" access="public" returntype="void" output="false">
-		<cfset var token1 = '' />
-		<cfset var token2 = '' />
-		<cfset var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init() />
-		
-		<cfset assertFalse(tokens.hasTest(), 'The token should not exist since it was not generated') />
-	</cffunction>
+		/**
+		 * Tests that the has token works without a token
+		 */
+		public void function testHasToken_SansToken() {
+			var token1 = '';
+			var token2 = '';
+			var tokens = createObject('component', 'cf-compendium.inc.resource.security.tokens').init();
+			
+			assertFalse(tokens.hasTest(), 'The token should not exist since it was not generated');
+		}
+	</cfscript>
 </cfcomponent>

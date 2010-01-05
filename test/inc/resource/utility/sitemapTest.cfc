@@ -1,181 +1,157 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<!---
-		Test the init function without a time offset given.
-	--->
-	<cffunction name="testInitSansTimeOffset" access="public" returntype="void" output="false">
-		<cfset var theSitemap = '' />
+	<cfscript>
+		/**
+		 * Test the init function without a time offset given.
+		 */
+		public void function testInitSansTimeOffset() {
+			var theSitemap = '';
+			
+			try {
+				theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
+			} catch(any exception) {
+				fail('Creating a sitemap object without a time zone designator should work.');
+			}
+		}
 		
-		<cftry>
-			<cfset theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init() />
+		/**
+		 * Test the init function with a valid time offset given using UTC.
+		 */
+		public void function testInitWithValidTimeOffsetUTC() {
+			var theSitemap = '';
 			
-			<cfcatch type="any">
-				<cfset fail('Creating a sitemap object without a time zone designator should work.') />
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Test the init function with a valid time offset given using UTC.
-	--->
-	<cffunction name="testInitWithValidTimeOffsetUTC" access="public" returntype="void" output="false">
-		<cfset var theSitemap = '' />
+			theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init('Z');
+		}
 		
-		<cfset theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init('Z') />
-	</cffunction>
-	
-	<!---
-		Test the init function with a valid time offset given using UTC.
-	--->
-	<cffunction name="testInitWithValidTimeOffsetNegative" access="public" returntype="void" output="false">
-		<cfset var theSitemap = '' />
+		/**
+		 * Test the init function with a valid time offset given using UTC.
+		 */
+		public void function testInitWithValidTimeOffsetNegative() {
+			var theSitemap = '';
+			
+			theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init('-02:00');
+		}
 		
-		<cfset theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init('-02:00') />
-	</cffunction>
-	
-	<!---
-		Test the init function with a valid positive time offset.
-	--->
-	<cffunction name="testInitWithValidTimeOffsetPositive" access="public" returntype="void" output="false">
-		<cfset var theSitemap = '' />
+		/**
+		 * Test the init function with a valid positive time offset.
+		 */
+		public void function testInitWithValidTimeOffsetPositive() {
+			var theSitemap = '';
+			
+			theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init('+10:00');
+		}
 		
-		<cfset theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init('+10:00') />
-	</cffunction>
-	
-	<!---
-		Test the init function with an invalid time offset given.
-	--->
-	<cffunction name="testInitWithInvalidTimeOffset1" access="public" returntype="void" output="false">
-		<cfset var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap') />
+		/**
+		 * Test the init function with an invalid time offset given.
+		 */
+		public void function testInitWithInvalidTimeOffset1() {
+			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap');
+			
+			try {
+				theSitemap.init('+1:00');
+				
+				fail('Should not be a valid time offset');
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// Expect to get here
+			}
+		}
 		
-		<cftry>
-			<cfset theSitemap.init('+1:00') />
+		/**
+		 * Test the init function with an invalid time offset given.
+		 */
+		public void function testInitWithInvalidTimeOffset2() {
+			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap');
 			
-			<cfset fail('Should not be a valid time offset') />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Test the init function with an invalid time offset given.
-	--->
-	<cffunction name="testInitWithInvalidTimeOffset2" access="public" returntype="void" output="false">
-		<cfset var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap') />
+			try {
+				theSitemap.init('-21:00');
+				
+				fail('Should not be a valid time offset');
+			} catch (mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch (any exception) {
+				// Expect to get here
+			}
+		}
 		
-		<cftry>
-			<cfset theSitemap.init('-21:00') />
+		/**
+		 * Test the addUrl function with an invalid last modification date.
+		 */
+		public void function testAddUrlWithInvalidLastModification() {
+			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
+			var options = {};
 			
-			<cfset fail('Should not be a valid time offset') />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Test the addUrl function with an invalid last modification date.
-	--->
-	<cffunction name="testAddUrlWithInvalidLastModification" access="public" returntype="void" output="false">
-		<cfset var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init() />
-		<cfset var options = {} />
+			try {
+				options.lastMod = 'Yo';
+				
+				theSitemap.addUrl('http://google.com', options);
+				
+				fail('Should not be a valid last modification date');
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// Expect to get here
+			}
+		}
 		
-		<cftry>
-			<cfset options.lastMod = 'Yo' />
+		/**
+		 * Test the addUrl function with an invalid change frequency.
+		 */
+		public void function testAddUrlWithInvalidChangeFrequency() {
+			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
+			var options = {};
 			
-			<cfset theSitemap.addUrl('http://google.com', options) />
-			
-			<cfset fail('Should not be a valid last modification date') />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Test the addUrl function with an invalid change frequency.
-	--->
-	<cffunction name="testAddUrlWithInvalidChangeFrequency" access="public" returntype="void" output="false">
-		<cfset var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init() />
-		<cfset var options = {} />
+			try {
+				options.changeFreq = 'whenever';
+				
+				theSitemap.addUrl('http://google.com', options);
+				
+				fail('Should not be a valid change frequency');
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// Expect to get here
+			}
+		}
 		
-		<cftry>
-			<cfset options.changeFreq = 'whenever' />
+		/**
+		 * Test the addUrl function with an invalid priority.
+		 */
+		public void function testAddUrlWithInvalidPriority1() {
+			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
+			var options = {};
 			
-			<cfset theSitemap.addUrl('http://google.com', options) />
-			
-			<cfset fail('Should not be a valid change frequency') />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Test the addUrl function with an invalid priority.
-	--->
-	<cffunction name="testAddUrlWithInvalidPriority1" access="public" returntype="void" output="false">
-		<cfset var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init() />
-		<cfset var options = {} />
+			try {
+				options.priority = -1;
+				
+				theSitemap.addUrl('http://google.com', options);
+				
+				fail('Should not be a valid priority');
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow;
+			} catch(any exception) {
+				// Expect to get here
+			}
+		}
 		
-		<cftry>
-			<cfset options.priority = -1 />
+		/**
+		 * Test the addUrl function with an invalid priority.
+		 */
+		public void function testAddUrlWithInvalidPriority2() {
+			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
+			var options = {};
 			
-			<cfset theSitemap.addUrl('http://google.com', options) />
-			
-			<cfset fail('Should not be a valid priority') />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Test the addUrl function with an invalid priority.
-	--->
-	<cffunction name="testAddUrlWithInvalidPriority2" access="public" returntype="void" output="false">
-		<cfset var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init() />
-		<cfset var options = {} />
-		
-		<cftry>
-			<cfset options.priority = 2 />
-			
-			<cfset theSitemap.addUrl('http://google.com', options) />
-			
-			<cfset fail('Should not be a valid priority') />
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
+			try {
+				options.priority = 2;
+				
+				theSitemap.addUrl('http://google.com', options);
+				
+				fail('Should not be a valid priority');
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// Expect to get here
+			}
+		}
+	</cfscript>
 </cfcomponent>

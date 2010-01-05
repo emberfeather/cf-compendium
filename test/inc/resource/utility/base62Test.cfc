@@ -1,41 +1,64 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<cffunction name="setup" access="public" returntype="void" output="false">
-		<cfset variables.base62 = createObject('component', 'cf-compendium.inc.resource.utility.base62').init() />
-	</cffunction>
-	
-	<cffunction name="testBase62ToValueWith2bI" access="public" returntype="void" output="false">
-		<cfset var base = '2bI' />
+	<cfscript>
+		/**
+		 * 
+		 */
+		public void function setup() {
+			variables.base62 = createObject('component', 'cf-compendium.inc.resource.utility.base62').init();
+		}
 		
-		<cfset assertEquals(10000, variables.base62.base62ToValue(base), 'Incorrectly converted #base# to value') />
-	</cffunction>
-	
-	<cffunction name="testBase62ToValueWith8M0kX" access="public" returntype="void" output="false">
-		<cfset var base = '8M0kX' />
+		/**
+		 * 
+		 */
+		public void function testBase62ToValue_With2bI() {
+			var base = '2bI';
+			
+			assertEquals(10000, variables.base62.base62ToValue(base), 'Incorrectly converted #base# to value');
+		}
 		
-		<cfset assertEquals(123456789, variables.base62.base62ToValue(base), 'Incorrectly converted #base# to value') />
-	</cffunction>
-	
-	<cffunction name="testBase62ToValueWithG8" access="public" returntype="void" output="false">
-		<cfset var base = 'G8' />
+		/**
+		 * 
+		 */
+		public void function testBase62ToValue_With8M0kX() {
+			var base = '8M0kX';
+			
+			assertEquals(123456789, variables.base62.base62ToValue(base), 'Incorrectly converted #base# to value');
+		}
 		
-		<cfset assertEquals(1000, variables.base62.base62ToValue(base), 'Incorrectly converted #base# to value') />
-	</cffunction>
-	
-	<cffunction name="testValueToBase62With1000" access="public" returntype="void" output="false">
-		<cfset var value = 1000 />
+		/**
+		 * 
+		 */
+		public void function testBase62ToValue_WithG8() {
+			var base = 'G8';
+			
+			assertEquals(1000, variables.base62.base62ToValue(base), 'Incorrectly converted #base# to value');
+		}
 		
-		<cfset assertEquals('G8', variables.base62.valueToBase62(1000), 'Incorrectly converted #value# to base62') />
-	</cffunction>
-	
-	<cffunction name="testValueToBase62With10000" access="public" returntype="void" output="false">
-		<cfset var value = 10000 />
+		/**
+		 * 
+		 */
+		public void function testValueToBase62_With1000() {
+			var value = 1000;
+			
+			assertEquals('G8', variables.base62.valueToBase62(1000), 'Incorrectly converted #value# to base62');
+		}
 		
-		<cfset assertEquals('2bI', variables.base62.valueToBase62(value), 'Incorrectly converted #value# to base62') />
-	</cffunction>
-	
-	<cffunction name="testValueToBase62With123456789" access="public" returntype="void" output="false">
-		<cfset var value = 123456789 />
+		/**
+		 * 
+		 */
+		public void function testValueToBase62_With10000() {
+			var value = 10000;
+			
+			assertEquals('2bI', variables.base62.valueToBase62(value), 'Incorrectly converted #value# to base62');
+		}
 		
-		<cfset assertEquals('8M0kX', variables.base62.valueToBase62(value), 'Incorrectly converted #value# to base62') />
-	</cffunction>
+		/**
+		 * 
+		 */
+		public void function testValueToBase62_With123456789() {
+			var value = 123456789;
+			
+			assertEquals('8M0kX', variables.base62.valueToBase62(value), 'Incorrectly converted #value# to base62');
+		}
+	</cfscript>
 </cfcomponent>

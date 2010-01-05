@@ -1,256 +1,242 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<cffunction name="setup" access="public" returntype="void" output="false">
-		<cfset variables.contrastor = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init() />
-	</cffunction>
-	
-	<!---
-		Tests to see if two elements DO not contain the same values pairs regardless of order of elements
-	--->
-	<cffunction name="testAreEqualFalse" access="public" returntype="void" output="false">
-		<cfset var set1 = '' />
-		<cfset var set2 = '' />
+	<cfscript>
+		/**
+		 * 
+		 */
+		public void function setup() {
+			variables.contrastor = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init();
+		}
+		
+		/**
+		 * Tests to see if two elements DO not contain the same values pairs regardless of order of elements
+		 */
+		public void function testAreEqualFalse() {
+			var set1 = '';
+			var set2 = '';
+			
+			// Lists
+			set1 = 'four,five,six';
+			set2 = 'three,one,two';
+			
+			assertFalse(variables.contrastor.areEqual(set1, set2));
+			
+			// Arrays
+			set1 = [4,5,6,7];
+			set2 = [3,1,2];
+			
+			assertFalse(variables.contrastor.areEqual(set1, set2));
+			
+			// Structs
+			set1 = { test8 = 0, test3 = 0, test1 = 0 };
+			set2 = { test1 = 0, test2 = 0, test3 = 0 };
+			
+			assertFalse(variables.contrastor.areEqual(set1, set2));
+		}
+		
+		/**
+		 * Tests to see if two elements contain the same values pairs regardless of order of elements
+		 */
+		public void function testAreEqualTrue() {
+			var set1 = '';
+			var set2 = '';
+			
+			// Lists
+			set1 = 'one,two,three';
+			set2 = 'three,one,two';
+			
+			assertTrue(variables.contrastor.areEqual(set1, set2));
+			
+			// Arrays
+			set1 = [1,2,3];
+			set2 = [3,1,2];
+			
+			assertTrue(variables.contrastor.areEqual(set1, set2));
+			
+			// Structs
+			set1 = { test2 = 0, test3 = 0, test1 = 0 };
+			set2 = { test1 = 0, test2 = 0, test3 = 0 };
+			
+			assertTrue(variables.contrastor.areEqual(set1, set2));
+		}
+		
+		/**
+		 * Tests to see if two elements DO not contain the same values pairs regardless of order of elements
+		 * for a set
+		 */
+		public void function testAreEqualSetFalse() {
+			var set1 = '';
+			var set2 = '';
+			var set3 = '';
+			
+			// Lists
+			set1 = 'four,five,six';
+			set2 = 'three,one,two';
+			set3 = 'seven, eight, nine';
+			
+			assertFalse(variables.contrastor.areEqualSet(set1, set2, set3));
+			
+			// Arrays
+			set1 = [4,5,6,7];
+			set2 = [3,1,2];
+			set3 = [9];
+			
+			assertFalse(variables.contrastor.areEqualSet(set1, set2, set3));
+			
+			// Structs
+			set1 = { test8 = 0, test3 = 0, test1 = 0 };
+			set2 = { test1 = 0, test2 = 0, test3 = 0 };
+			set3 = { test9 = 0, test11 = 0, test10 = 0 };
+			
+			assertFalse(variables.contrastor.areEqualSet(set1, set2, set3));
+		}
+		
+		/**
+		 * Tests to see if two elements contain the same values pairs regardless of order of elements
+		 * for a set
+		 */
+		public void function testAreEqualSetTrue() {
+			var set1 = '';
+			var set2 = '';
+			var set3 = '';
+			
+			// Lists
+			set1 = 'one,two,three';
+			set2 = 'three,one,two';
+			set3 = 'two,three,one';
+			
+			assertTrue(variables.contrastor.areEqualSet(set1, set2, set3));
+			
+			// Arrays
+			set1 = [1,2,3];
+			set2 = [3,1,2];
+			set3 = [2,3,1];
+			
+			assertTrue(variables.contrastor.areEqualSet(set1, set2, set3));
+			
+			// Structs
+			set1 = { test2 = 0, test3 = 0, test1 = 0 };
+			set2 = { test1 = 0, test2 = 0, test3 = 0 };
+			set3 = { test3 = 0, test1 = 0, test2 = 0 };
+			
+			assertTrue(variables.contrastor.areEqualSet(set1, set2, set3));
+		}
+		
+		/**
+		 * Tests to see if the contrast will fail if given two different types
+		 * that it will fail. With the exception of array and list collusion.
+		 */
+		public void function testContrastFailWithTypeMismatch() {
+			var set1 = '';
+			var set2 = '';
+			
+			try {
+				set1 = queryNew('something,also,here');
+				set2 = 'cannot,be,done';
 				
-		<!--- Lists --->
-		<cfset set1 = 'four,five,six' />
-		<cfset set2 = 'three,one,two' />
-		
-		<cfset assertFalse(variables.contrastor.areEqual(set1, set2)) />
-		
-		
-		<!--- Arrays --->
-		<cfset set1 = [4,5,6,7] />
-		<cfset set2 = [3,1,2] />
-		
-		<cfset assertFalse(variables.contrastor.areEqual(set1, set2)) />
-		
-		<!--- Structs --->
-		<cfset set1 = { test8 = 0, test3 = 0, test1 = 0 } />
-		<cfset set2 = { test1 = 0, test2 = 0, test3 = 0 } />
-		
-		<cfset assertFalse(variables.contrastor.areEqual(set1, set2)) />
-	</cffunction>
-	
-	<!---
-		Tests to see if two elements contain the same values pairs regardless of order of elements
-	--->
-	<cffunction name="testAreEqualTrue" access="public" returntype="void" output="false">
-		<cfset var set1 = '' />
-		<cfset var set2 = '' />
+				variables.contrastor.contrast(set1, set2);
 				
-		<!--- Lists --->
-		<cfset set1 = 'one,two,three' />
-		<cfset set2 = 'three,one,two' />
+				fail('Should not be able to contrast the two given types');
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// Expect to get here
+			}
+		}
 		
-		<cfset assertTrue(variables.contrastor.areEqual(set1, set2)) />
+		/**
+		 * Tests the contrast with same types
+		 */
+		public void function testContrast() {
+			var set1 = '';
+			var set2 = '';
+			
+			// Lists
+			set1 = 'testing,this,here';
+			set2 = 'can,be,done';
+			
+			variables.contrastor.contrast(set1, set2);
+			
+			// Arrays
+			set1 = [1,2,3];
+			set2 = [4,2,5];
+			
+			variables.contrastor.contrast(set1, set2);
+			
+			// Structs
+			set1 = { test4 = 0, test2 = 0, test0 = 0 };
+			set2 = { test1 = 0, test2 = 0, test3 = 0 };
+			
+			variables.contrastor.contrast(set1, set2);
+		}
 		
+		/**
+		 * Tests the contrast with different types
+		 */
+		public void function testContrast_WithTypeMismatch() {
+			var set1 = '';
+			var set2 = '';
+			
+			// Array and List
+			set1 = [1,2,3];
+			set2 = 'can,be,done';
+			
+			variables.contrastor.contrast(set1, set2);
+			
+			// List and Array
+			set1 = 'can,be,done';
+			set2 = [1,2,3];
+			
+			variables.contrastor.contrast(set1, set2);
+			
+			// Struct and List
+			set1 = { test1 = 0, test2 = 0, test3 = 0 };
+			set2 = 'can,be,done';
+			
+			variables.contrastor.contrast(set1, set2);
+			
+			// List and Struct
+			set1 = 'can,be,done';
+			set2 = { test1 = 0, test2 = 0, test3 = 0 };
+			
+			variables.contrastor.contrast(set1, set2);
+			
+			// Struct and Array
+			set1 = { test1 = 0, test2 = 0, test3 = 0 };
+			set2 = [4,3,5];
+			
+			variables.contrastor.contrast(set1, set2);
+			
+			// Array and Struct
+			set1 = [4,3,5];
+			set2 = { test1 = 0, test2 = 0, test3 = 0 };
+			
+			variables.contrastor.contrast(set1, set2);
+		}
 		
-		<!--- Arrays --->
-		<cfset set1 = [1,2,3] />
-		<cfset set2 = [3,1,2] />
-		
-		<cfset assertTrue(variables.contrastor.areEqual(set1, set2)) />
-		
-		<!--- Structs --->
-		<cfset set1 = { test2 = 0, test3 = 0, test1 = 0 } />
-		<cfset set2 = { test1 = 0, test2 = 0, test3 = 0 } />
-		
-		<cfset assertTrue(variables.contrastor.areEqual(set1, set2)) />
-	</cffunction>
-	
-	<!---
-		Tests to see if two elements DO not contain the same values pairs regardless of order of elements
-		for a set
-	--->
-	<cffunction name="testAreEqualSetFalse" access="public" returntype="void" output="false">
-		<cfset var set1 = '' />
-		<cfset var set2 = '' />
-		<cfset var set3 = '' />
-				
-		<!--- Lists --->
-		<cfset set1 = 'four,five,six' />
-		<cfset set2 = 'three,one,two' />
-		<cfset set3 = 'seven, eight, nine' />
-		
-		<cfset assertFalse(variables.contrastor.areEqualSet(set1, set2, set3)) />
-		
-		
-		<!--- Arrays --->
-		<cfset set1 = [4,5,6,7] />
-		<cfset set2 = [3,1,2] />
-		<cfset set3 = [9]>
-		
-		<cfset assertFalse(variables.contrastor.areEqualSet(set1, set2, set3)) />
-		
-		<!--- Structs --->
-		<cfset set1 = { test8 = 0, test3 = 0, test1 = 0 } />
-		<cfset set2 = { test1 = 0, test2 = 0, test3 = 0 } />
-		<cfset set3 = { test9 = 0, test11 = 0, test10 = 0 } />
-		
-		<cfset assertFalse(variables.contrastor.areEqualSet(set1, set2, set3)) />
-	</cffunction>
-	
-	<!---
-		Tests to see if two elements contain the same values pairs regardless of order of elements
-		for a set
-	--->
-	<cffunction name="testAreEqualSetTrue" access="public" returntype="void" output="false">
-		<cfset var set1 = '' />
-		<cfset var set2 = '' />
-		<cfset var set3 = '' />
-				
-		<!--- Lists --->
-		<cfset set1 = 'one,two,three' />
-		<cfset set2 = 'three,one,two' />
-		<cfset set3 = 'two,three,one' />
-		
-		<cfset assertTrue(variables.contrastor.areEqualSet(set1, set2, set3)) />
-		
-		<!--- Arrays --->
-		<cfset set1 = [1,2,3] />
-		<cfset set2 = [3,1,2] />
-		<cfset set3 = [2,3,1] />
-		
-		<cfset assertTrue(variables.contrastor.areEqualSet(set1, set2, set3)) />
-		
-		<!--- Structs --->
-		<cfset set1 = { test2 = 0, test3 = 0, test1 = 0 } />
-		<cfset set2 = { test1 = 0, test2 = 0, test3 = 0 } />
-		<cfset set3 = { test3 = 0, test1 = 0, test2 = 0 } />
-		
-		<cfset assertTrue(variables.contrastor.areEqualSet(set1, set2, set3)) />
-	</cffunction>
-	
-	<!---
-		Tests to see if the contrast will fail if given two different types
-		that it will fail. With the exception of array and list collusion.
-	--->
-	<cffunction name="testContrastFailWithTypeMismatch" access="public" returntype="void" output="false">
-		<cfset var set1 = '' />
-		<cfset var set2 = '' />
-		
-		<cftry>
-			<cfset set1 = queryNew('something,also,here') />
-			<cfset set2 = 'cannot,be,done' />
+		/**
+		 * Tests the contrast with same types and a custom delimiter
+		 */
+		public void function testContrastWithDelimiter() {
+			var set1 = '';
+			var set2 = '';
 			
-			<cfset variables.contrastor.contrast(set1, set2) />
-			<cfset fail('Should not be able to contrast the two given types') />
+			// Lists
+			set1 = 'testing|this|here';
+			set2 = 'can|be|done';
 			
-			<cfcatch type="mxunit.exception.AssertionFailedError"><cfrethrow /></cfcatch>
-			<cfcatch type="any"><!--- Expect to get here ---></cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Tests the contrast with same types
-	--->
-	<cffunction name="testContrast" access="public" returntype="void" output="false">
-		<cfset var set1 = '' />
-		<cfset var set2 = '' />
-		
-		<cftry>
-			<!--- Lists --->
-			<cfset set1 = 'testing,this,here' />
-			<cfset set2 = 'can,be,done' />
+			variables.contrastor.contrast(set1, set2, '|');
 			
-			<cfset variables.contrastor.contrast(set1, set2) />
+			// Arrays
+			set1 = [1,2,3];
+			set2 = [4,2,5];
 			
-			<!--- Arrays --->
-			<cfset set1 = [1,2,3] />
-			<cfset set2 = [4,2,5] />
+			variables.contrastor.contrast(set1, set2, '|');
 			
-			<cfset variables.contrastor.contrast(set1, set2) />
+			// Structs
+			set1 = { test4 = 0, test2 = 0, test0 = 0 };
+			set2 = { test1 = 0, test2 = 0, test3 = 0 };
 			
-			<!--- Structs --->
-			<cfset set1 = { test4 = 0, test2 = 0, test0 = 0 } />
-			<cfset set2 = { test1 = 0, test2 = 0, test3 = 0 } />
-			
-			<cfset variables.contrastor.contrast(set1, set2) />
-			
-			<cfcatch type="any">
-				<cfset fail('Should be able to contrast the two given types') />
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Tests the contrast with different types
-	--->
-	<cffunction name="testContrastWithTypeMismatch" access="public" returntype="void" output="false">
-		<cfset var set1 = '' />
-		<cfset var set2 = '' />
-		
-		<cftry>
-			<!--- Array and List --->
-			<cfset set1 = [1,2,3] />
-			<cfset set2 = 'can,be,done' />
-			
-			<cfset variables.contrastor.contrast(set1, set2) />
-			
-			<!--- List and Array --->
-			<cfset set1 = 'can,be,done' />
-			<cfset set2 = [1,2,3] />
-			
-			<cfset variables.contrastor.contrast(set1, set2) />
-			
-			<!--- Struct and List --->
-			<cfset set1 = { test1 = 0, test2 = 0, test3 = 0 } />
-			<cfset set2 = 'can,be,done' />
-			
-			<cfset variables.contrastor.contrast(set1, set2) />
-			
-			<!--- List and Struct --->
-			<cfset set1 = 'can,be,done' />
-			<cfset set2 = { test1 = 0, test2 = 0, test3 = 0 } />
-			
-			<cfset variables.contrastor.contrast(set1, set2) />
-			
-			<!--- Struct and Array --->
-			<cfset set1 = { test1 = 0, test2 = 0, test3 = 0 } />
-			<cfset set2 = [4,3,5] />
-			
-			<cfset variables.contrastor.contrast(set1, set2) />
-			
-			<!--- Array and Struct --->
-			<cfset set1 = [4,3,5] />
-			<cfset set2 = { test1 = 0, test2 = 0, test3 = 0 } />
-			
-			<cfset variables.contrastor.contrast(set1, set2) />
-			
-			<cfcatch type="any">
-				<cfset fail('Should be able to contrast the two given types') />
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Tests the contrast with same types and a custom delimiter
-	--->
-	<cffunction name="testContrastWithDelimiter" access="public" returntype="void" output="false">
-		<cfset var set1 = '' />
-		<cfset var set2 = '' />
-		
-		<cftry>
-			<!--- Lists --->
-			<cfset set1 = 'testing|this|here' />
-			<cfset set2 = 'can|be|done' />
-			
-			<cfset variables.contrastor.contrast(set1, set2, '|') />
-			
-			<!--- Arrays --->
-			<cfset set1 = [1,2,3] />
-			<cfset set2 = [4,2,5] />
-			
-			<cfset variables.contrastor.contrast(set1, set2, '|') />
-			
-			<!--- Structs --->
-			<cfset set1 = { test4 = 0, test2 = 0, test0 = 0 } />
-			<cfset set2 = { test1 = 0, test2 = 0, test3 = 0 } />
-			
-			<cfset variables.contrastor.contrast(set1, set2, '|') />
-			
-			<cfcatch type="any">
-				<cfset fail('Should be able to contrast the two given types') />
-			</cfcatch>
-		</cftry>
-	</cffunction>
+			variables.contrastor.contrast(set1, set2, '|');
+		}
+	</cfscript>
 </cfcomponent>

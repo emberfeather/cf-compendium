@@ -1,65 +1,67 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<cffunction name="setup" access="public" returntype="void" output="false">
-		<cfset variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/')) />
-	</cffunction>
-	
-	<cffunction name="testIn_Invalid" access="public" returntype="void" output="false">
-		<cfset var validator = variables.i18n.getValidation('en_US') />
+	<cfscript>
+		public void function setup() {
+			variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/'));
+		}
 		
-		<cftry>
-			<cfset validator.in('testing', 'val', 'is,it,in,here') />
+		/**
+		 * 
+		 */
+		public void function testIn_Invalid() {
+			var validator = variables.i18n.getValidation('en_US');
 			
-			<cfset fail("Set should have thrown an error. ['val' is not in 'is,it,in,here']")>
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<cffunction name="testIn_Valid" access="public" returntype="void" output="false">
-		<cfset var validator = variables.i18n.getValidation('en_US') />
+			try {
+				validator.in('testing', 'val', 'is,it,in,here');
+				
+				fail("Set should have thrown an error. ['val' is not in 'is,it,in,here']");
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// expect to get here
+			}
+		}
 		
-		<cftry>
-			<cfset validator.in('testing', 'is', 'is,it,in,here') />
+		/**
+		 * 
+		 */
+		public void function testIn_Valid() {
+			var validator = variables.i18n.getValidation('en_US');
 			
-			<cfcatch type="any">
-				<cfset fail("Set should not have thrown an error. ['val' is in 'val,is,in,here']")>
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<cffunction name="testNotIn_Invalid" access="public" returntype="void" output="false">
-		<cfset var validator = variables.i18n.getValidation('en_US') />
+			try {
+				validator.in('testing', 'is', 'is,it,in,here');
+			} catch (any exception) {
+				fail("Set should not have thrown an error. ['is' is in 'is,it,in,here']");
+			}
+		}
 		
-		<cftry>
-			<cfset validator.notIn('testing', 'val', 'val,is,in,here') />
+		/**
+		 * 
+		 */
+		public void function testNotIn_Invalid() {
+			var validator = variables.i18n.getValidation('en_US');
 			
-			<cfset fail("Set should have thrown an error. ['val' is in 'val,is,in,here']")>
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<cffunction name="testNotIn_Valid" access="public" returntype="void" output="false">
-		<cfset var validator = variables.i18n.getValidation('en_US') />
+			try {
+				validator.notIn('testing', 'val', 'val,is,in,here');
+				
+				fail("Set should have thrown an error. ['val' is in 'val,is,in,here']");
+			} catch (mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch (any exception) {
+				// expect to get here
+			}
+		}
 		
-		<cftry>
-			<cfset validator.notIn('testing', 'waldo', 'val,is,in,here') />
+		/**
+		 * 
+		 */
+		public void function testNotIn_Valid() {
+			var validator = variables.i18n.getValidation('en_US');
 			
-			<cfcatch type="any">
-				<cfset fail("Set should not have thrown an error. ['waldo' is not in 'val,is,in,here']")>
-			</cfcatch>
-		</cftry>
-	</cffunction>
+			try {
+				validator.notIn('testing', 'waldo', 'val,is,in,here');
+			} catch ( any exception ) {
+				fail("Set should not have thrown an error. ['waldo' is not in 'val,is,in,here']");
+			}
+		}
+	</cfscript>
 </cfcomponent>

@@ -1,86 +1,104 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<cffunction name="testGet" access="public" returntype="void" output="false">
-		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
-		
-		<cfset theBookmark.set('testAction', 1) />
-		
-		<cfset assertEquals(theBookmark.get('testAction'), 1, 'Get Function returned incorrect value.') />
-	</cffunction>
-	
-	<cffunction name="testGetInitialize" access="public" returntype="void" output="false">
-		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
-		
-		<cfset assertEquals(theBookmark.get('testAction'), 1, 'Get Function returned incorrect value.') />
-	</cffunction>
-	
-	<cffunction name="testSet" access="public" returntype="void" output="false">
-		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
-		
-		<cfset theBookmark.set('testAction', 4) />
-		
-		<cfset assertEquals(theBookmark.get('testAction'), 4, 'Set Function set an incorrect value.') />
-	</cffunction>
-	
-	<cffunction name="testSetNegative" access="public" returntype="void" output="false">
-		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
-		
-		<cftry>
-			<cfset theBookmark.set('testAction', -1) />
+	<cfscript>
+		/**
+		 * 
+		 */
+		public void function testGet() {
+			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
 			
-			<cfset fail("Set should have thrown an error. [negative value]")>
+			theBookmark.set('testAction', 1);
 			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
+			assertEquals(theBookmark.get('testAction'), 1, 'Get Function returned incorrect value.');
+		}
+		
+		/**
+		 * 
+		 */
+		public void function testGet_Initialize() {
+			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
 			
-			<cfcatch type="any">
-				<!--- expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<cffunction name="testSetLarge" access="public" returntype="void" output="false">
-		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
+			assertEquals(theBookmark.get('testAction'), 1, 'Get Function returned incorrect value.');
+		}
 		
-		<cftry>
-			<cfset theBookmark.set('testAction', 100) />
+		/**
+		 * 
+		 */
+		public void function testSet() {
+			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
 			
-			<cfset fail("Set should have thrown an error. [value is too big]")>
+			theBookmark.set('testAction', 4);
 			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
+			assertEquals(theBookmark.get('testAction'), 4, 'Set Function set an incorrect value.');
+		}
+		
+		/**
+		 * 
+		 */
+		public void function testSet_Negative() {
+			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
 			
-			<cfcatch type="any">
-				<!--- expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<cffunction name="testNext" access="public" returntype="void" output="false">
-		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
+			try {
+				theBookmark.set('testAction', -1);
+				
+				fail("Set should have thrown an error. [negative value]");
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// expect to get here
+			}
+		}
 		
-		<cfset theBookmark.set('testAction', 3) />
-		<cfset theBookmark.next('testAction') />
+		/**
+		 * 
+		 */
+		public void function testSet_Large() {
+			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
+			
+			try {
+				theBookmark.set('testAction', 100);
+				
+				fail("Set should have thrown an error. [value is too big]");
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// expect to get here
+			}
+		}
 		
-		<cfset assertEquals(theBookmark.get('testAction'), 4, 'Next Function returned an incorrect value.') />
-	</cffunction>
-	
-	<cffunction name="testPrev" access="public" returntype="void" output="false">
-		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
+		/**
+		 * 
+		 */
+		public void function testNext() {
+			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
+			
+			theBookmark.set('testAction', 3);
+			theBookmark.next('testAction');
+			
+			assertEquals(theBookmark.get('testAction'), 4, 'Next Function returned an incorrect value.');
+		}
 		
-		<cfset theBookmark.set('testAction', 3) />
-		<cfset theBookmark.prev('testAction') />
+		/**
+		 * 
+		 */
+		public void function testPrev() {
+			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
+			
+			theBookmark.set('testAction', 3);
+			theBookmark.prev('testAction');
+			
+			assertEquals(theBookmark.get('testAction'), 2, 'Prev Function returned an incorrect value.');
+		}
 		
-		<cfset assertEquals(theBookmark.get('testAction'), 2, 'Prev Function returned an incorrect value.') />
-	</cffunction>
-	
-	<cffunction name="testReset" access="public" returntype="void" output="false">
-		<cfset var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init() />
-		
-		<cfset theBookmark.set('testAction', 4) />
-		<cfset theBookmark.reset('testAction') />
-		
-		<cfset assertEquals(theBookmark.get('testAction'), 1, 'Prev Function returned an incorrect value.') />
-	</cffunction>
+		/**
+		 * 
+		 */
+		public void function testReset() {
+			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
+			
+			theBookmark.set('testAction', 4);
+			theBookmark.reset('testAction');
+			
+			assertEquals(theBookmark.get('testAction'), 1, 'Prev Function returned an incorrect value.');
+		}
+	</cfscript>
 </cfcomponent>

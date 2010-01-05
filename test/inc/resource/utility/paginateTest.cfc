@@ -1,217 +1,215 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<!---
-		Tests the init function with a negative number per page to ensure it fails
-	--->
-	<cffunction name="testInitFailWithNegativeNumPerPage" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate') />
-		
-		<cfset paginator.init(100, -1, 1) />
-		
-		<cfset assertEquals(20, paginator.getNumPerPage()) />
-	</cffunction>
-	
-	<!---
-		Tests the init function with a negative number per page to ensure it suceeds
-		<p>
-		If an invalid page is given it should automatically be brought into the closest bound.
-	--->
-	<cffunction name="testInitWithZeroPage" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 0) />
-		
-		<cfset assertEquals(1, paginator.getPage()) />
-	</cffunction>
-	
-	<!---
-		Tests the init function with a extreme page to ensure it succeeds.
-		<p>
-		If an invalid page is given it should automatically be brought into the closest bound.
-	--->
-	<cffunction name="testInitWithExtremePage" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 10) />
-		
-		<cfset assertEquals(4, paginator.getPage()) />
-	</cffunction>
-	
-	<!---
-		Tests the init function with a negative total to ensure it fails
-	--->
-	<cffunction name="testInitFailWithNegativeTotal" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate') />
-		
-		<cftry>
-			<cfset paginator.init(-1, 25, 1) />
+	<cfscript>
+		/**
+		 * Tests the init function with a negative number per page to ensure it fails
+		 */
+		public void function testInitFailWithNegativeNumPerPage() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate');
 			
-			<cfset fail('Should not be a valid total argument') />
+			paginator.init(100, -1, 1);
 			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
+			assertEquals(20, paginator.getNumPerPage());
+		}
+		
+		/**
+		 * Tests the init function with a negative number per page to ensure it suceeds
+		 * <p>
+		 * If an invalid page is given it should automatically be brought into the closest bound.
+		 */
+		public void function testInitWithZeroPage() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 0);
 			
-			<cfcatch type="any">
-				<!--- Expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Tests the getEndRow function
-	--->
-	<cffunction name="testGetEndRowSansTotal" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(0, 25, 1) />
+			assertEquals(1, paginator.getPage());
+		}
 		
-		<cfset assertEquals(0, paginator.getEndRow()) />
-	</cffunction>
-	
-	<!---
-		Tests the getEndRow function
-	--->
-	<cffunction name="testGetEndRowOnLast" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(90, 25, 4) />
+		/**
+		 * Tests the init function with a extreme page to ensure it succeeds.
+		 * <p>
+		 * If an invalid page is given it should automatically be brought into the closest bound.
+		 */
+		public void function testInitWithExtremePage() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 10);
+			
+			assertEquals(4, paginator.getPage());
+		}
 		
-		<cfset assertEquals(90, paginator.getEndRow()) />
-	</cffunction>
-	
-	<!---
-		Tests the getEndRow function
-	--->
-	<cffunction name="testGetEndRowOnNonLast" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2) />
+		/**
+		 * Tests the init function with a negative total to ensure it fails
+		 */
+		public void function testInitFailWithNegativeTotal() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate');
+			
+			try {
+				paginator.init(-1, 25, 1);
+				
+				fail('Should not be a valid total argument');
+			} catch(mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch(any exception) {
+				// Expect to get here
+			}
+		}
 		
-		<cfset assertEquals(50, paginator.getEndRow()) />
-	</cffunction>
-	
-	<!---
-		Tests the getFirst function
-	--->
-	<cffunction name="testGetFirst" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1) />
+		/**
+		 * Tests the getEndRow function
+		 */
+		public void function testGetEndRowSansTotal() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(0, 25, 1);
+			
+			assertEquals(0, paginator.getEndRow());
+		}
 		
-		<cfset assertEquals(1, paginator.getFirst()) />
-	</cffunction>
-	
-	<!---
-		Tests the getFirst function
-	--->
-	<cffunction name="testGetLast" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1) />
+		/**
+		 * Tests the getEndRow function
+		 */
+		public void function testGetEndRowOnLast() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(90, 25, 4);
+			
+			assertEquals(90, paginator.getEndRow());
+		}
 		
-		<cfset assertEquals(4, paginator.getLast()) />
-	</cffunction>
-	
-	<!---
-		Tests the getNumPerPage function
-	--->
-	<cffunction name="testGetNumPerPage" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1) />
+		/**
+		 * Tests the getEndRow function
+		 */
+		public void function testGetEndRowOnNonLast() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2);
+			
+			assertEquals(50, paginator.getEndRow());
+		}
 		
-		<cfset assertEquals(25, paginator.getNumPerPage()) />
-	</cffunction>
-	
-	<!---
-		Tests the getNext function
-	--->
-	<cffunction name="testGetNextOnLast" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 4) />
+		/**
+		 * Tests the getFirst function
+		 */
+		public void function testGetFirst() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1);
+			
+			assertEquals(1, paginator.getFirst());
+		}
 		
-		<cfset assertEquals(4, paginator.getNext()) />
-	</cffunction>
-	
-	<!---
-		Tests the getNext function
-	--->
-	<cffunction name="testGetNextOnNonLast" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2) />
+		/**
+		 * Tests the getFirst function
+		 */
+		public void function testGetLast() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1);
+			
+			assertEquals(4, paginator.getLast());
+		}
 		
-		<cfset assertEquals(3, paginator.getNext()) />
-	</cffunction>
-	
-	<!---
-		Tests the getPage function
-	--->
-	<cffunction name="testGetPage" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2) />
+		/**
+		 * Tests the getNumPerPage function
+		 */
+		public void function testGetNumPerPage() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1);
+			
+			assertEquals(25, paginator.getNumPerPage());
+		}
 		
-		<cfset assertEquals(2, paginator.getPage()) />
-	</cffunction>
-	
-	<!---
-		Tests the getPrevious function
-	--->
-	<cffunction name="testGetPreviousOnFirst" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1) />
+		/**
+		 * Tests the getNext function
+		 */
+		public void function testGetNextOnLast() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 4);
+			
+			assertEquals(4, paginator.getNext());
+		}
 		
-		<cfset assertEquals(1, paginator.getPrevious()) />
-	</cffunction>
-	
-	<!---
-		Tests the getPrevious function
-	--->
-	<cffunction name="testGetPreviousOnNonFirst" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 3) />
+		/**
+		 * Tests the getNext function
+		 */
+		public void function testGetNextOnNonLast() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2);
+			
+			assertEquals(3, paginator.getNext());
+		}
 		
-		<cfset assertEquals(2, paginator.getPrevious()) />
-	</cffunction>
-	
-	<!---
-		Tests the getStartRow function
-	--->
-	<cffunction name="testGetStartRowSansTotal" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(0, 25, 1) />
+		/**
+		 * Tests the getPage function
+		 */
+		public void function testGetPage() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2);
+			
+			assertEquals(2, paginator.getPage());
+		}
 		
-		<cfset assertEquals(1, paginator.getStartRow()) />
-	</cffunction>
-	
-	<!---
-		Tests the getStartRow function
-	--->
-	<cffunction name="testGetStartRowOnFirst" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1) />
+		/**
+		 * Tests the getPrevious function
+		 */
+		public void function testGetPreviousOnFirst() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1);
+			
+			assertEquals(1, paginator.getPrevious());
+		}
 		
-		<cfset assertEquals(1, paginator.getStartRow()) />
-	</cffunction>
-	
-	<!---
-		Tests the getStartRow function
-	--->
-	<cffunction name="testGetStartRowOnNonFirst" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2) />
+		/**
+		 * Tests the getPrevious function
+		 */
+		public void function testGetPreviousOnNonFirst() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 3);
+			
+			assertEquals(2, paginator.getPrevious());
+		}
 		
-		<cfset assertEquals(26, paginator.getStartRow()) />
-	</cffunction>
-	
-	<!---
-		Tests the hasPrevious function
-	--->
-	<cffunction name="testHasPreviousOnFirst" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1) />
+		/**
+		 * Tests the getStartRow function
+		 */
+		public void function testGetStartRowSansTotal() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(0, 25, 1);
+			
+			assertEquals(1, paginator.getStartRow());
+		}
 		
-		<cfset assertEquals(false, paginator.hasPrevious()) />
-	</cffunction>
-	
-	<!---
-		Tests the hasPrevious function
-	--->
-	<cffunction name="testHasPreviousOnNonFirst" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2) />
+		/**
+		 * Tests the getStartRow function
+		 */
+		public void function testGetStartRowOnFirst() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1);
+			
+			assertEquals(1, paginator.getStartRow());
+		}
 		
-		<cfset assertEquals(true, paginator.hasPrevious()) />
-	</cffunction>
-	
-	<!---
-		Tests the hasNext function
-	--->
-	<cffunction name="testHasNextOnLast" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 4) />
+		/**
+		 * Tests the getStartRow function
+		 */
+		public void function testGetStartRowOnNonFirst() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2);
+			
+			assertEquals(26, paginator.getStartRow());
+		}
 		
-		<cfset assertEquals(false, paginator.hasNext()) />
-	</cffunction>
-	
-	<!---
-		Tests the hasNext function
-	--->
-	<cffunction name="testHasNextOnNonLast" access="public" returntype="void" output="false">
-		<cfset var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2) />
+		/**
+		 * Tests the hasPrevious function
+		 */
+		public void function testHasPreviousOnFirst() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 1);
+			
+			assertEquals(false, paginator.hasPrevious());
+		}
 		
-		<cfset assertEquals(true, paginator.hasNext()) />
-	</cffunction>
+		/**
+		 * Tests the hasPrevious function
+		 */
+		public void function testHasPreviousOnNonFirst() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2);
+			
+			assertEquals(true, paginator.hasPrevious());
+		}
+		
+		/**
+		 * Tests the hasNext function
+		 */
+		public void function testHasNextOnLast() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 4);
+			
+			assertEquals(false, paginator.hasNext());
+		}
+		
+		/**
+		 * Tests the hasNext function
+		 */
+		public void function testHasNextOnNonLast() {
+			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate').init(100, 25, 2);
+			
+			assertEquals(true, paginator.hasNext());
+		}
+	</cfscript>
 </cfcomponent>

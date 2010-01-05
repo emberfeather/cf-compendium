@@ -1,54 +1,48 @@
 <cfcomponent extends="mxunit.framework.TestCase" output="false">
-	<cffunction name="setup" access="public" returntype="void" output="false">
-		<cfset variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
-	</cffunction>
-	
-	<!---
-		Tests to ensure that the form throws an error if requested without an action.
-	--->
-	<cffunction name="testShowFormSansAction" access="public" returntype="void" output="false">
-		<cfset var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n) />
+	<cfscript>
+		public void function setup() {
+			variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/'));
+		}
 		
-		<!--- Hidden --->
-		<cfset theForm.addElement('hidden', {
-				name = "testHidden",
-				label = "Hidden",
-				value = "true"
-			}) />
+		/**
+		 * Tests to ensure that the form throws an error if requested without an action.
+		 */
+		public void function testShowFormSansAction() {
+			var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n);
+			
+			<!--- Hidden --->
+			theForm.addElement('hidden', {
+					name = "testHidden",
+					label = "Hidden",
+					value = "true"
+				});
+			
+			try {
+				theForm.toHTML();
+				
+				fail("toHTML should have thrown an error. [no action given]");
+			} catch (mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch (any exception) {
+				// expect to get here
+			}
+		}
 		
-		<cftry>
-			<cfset theForm.toHTML() />
+		/**
+		 * Tests to ensure that the form throws an error if requested without any elements added.
+		 */
+		public void function testShowFormSansElement() {
+			var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n);
 			
-			<cfset fail("toHTML should have thrown an error. [no action given]")>
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
-	
-	<!---
-		Tests to ensure that the form throws an error if requested without any elements added.
-	--->
-	<cffunction name="testShowFormSansElement" access="public" returntype="void" output="false">
-		<cfset var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n) />
-		
-		<cftry>
-			<cfset theForm.toHTML('/') />
-			
-			<cfset fail("toHTML should have thrown an error. [no elements to show]")>
-			
-			<cfcatch type="mxunit.exception.AssertionFailedError">
-				<cfrethrow />
-			</cfcatch>
-			
-			<cfcatch type="any">
-				<!--- expect to get here --->
-			</cfcatch>
-		</cftry>
-	</cffunction>
+			try {
+				theForm.toHTML('/');
+				
+				fail('toHTML should have thrown an error. [no elements to show]');
+			} catch (mxunit.exception.AssertionFailedError exception) {
+				rethrow();
+			} catch (any exception) {
+				// expect to get here
+			}
+		}
+	</cfscript>
 </cfcomponent>
