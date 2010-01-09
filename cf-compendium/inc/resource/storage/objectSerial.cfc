@@ -25,6 +25,7 @@
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var exists = '' />
+		<cfset var instance = '' />
 		<cfset var value = '' />
 		<cfset var messages = [] />
 		<cfset var result = '' />
