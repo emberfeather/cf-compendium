@@ -10,7 +10,7 @@
 	</cffunction>
 	
 	<!---
-		Takes a input and attempts to read the information needed for the object.
+		Takes a input and attempts to read the information into an object.
 		<p>
 		Reads input in the following formats:
 		<ul>
@@ -18,9 +18,14 @@
 			<li>Query</li>
 			<li>XML</li>
 		</ul>
+		<p>
+		Has the ability to read all keys from the input instead of just the keys
+		already defined in the object by using the doComplete flag.
 	--->
 	<cffunction name="deserialize" access="public" returntype="component" output="false">
 		<cfargument name="input" type="any" required="true" />
+		<cfargument name="object" type="component" required="false" />
+		<cfargument name="doComplete" type="boolean" default="false" />
 		
 		<cfset var i = '' />
 		<cfset var j = '' />
@@ -34,10 +39,10 @@
 		<!--- Figure out the type --->
 		<cfif isStruct(arguments.input) and not isXML(arguments.input)>
 			<!--- Try to create the object from the structure information --->
-			<cfset result = getObject(arguments.input) />
+			<cfset result = (structKeyExists(arguments, 'object') and isObject(arguments.object) ? arguments.object : getObject(arguments.input)) />
 			
 			<!--- Read in the object from a struct --->
-			<cfloop list="#result.get__keyList()#" index="i">
+			<cfloop list="#(arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList())#" index="i">
 				<cftry>
 					<!--- If it exists in the struct pull it in --->
 					<cfif structKeyExists(arguments.input, i)>
@@ -45,7 +50,7 @@
 							<cfinvoke component="#result#" method="set#i#">
 								<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
 							</cfinvoke>
-						<cfelseif isStruct(arguments.input[i]) and structKeyExists(argument.input[i], '__fullname')>
+						<cfelseif isStruct(arguments.input[i]) and structKeyExists(arguments.input[i], '__fullname')>
 							<!--- Check if there is a fullname of a component defined that needs to be instantiated --->
 							<cfinvoke component="#result#" method="set#i#">
 								<cfinvokeargument name="value" value="#this.deserialize(arguments.input[i])#" />
@@ -53,7 +58,7 @@
 						<cfelseif isArray(arguments.input[i])>
 							<!--- Check if there is a fullname of a component defined that needs to be instantiated --->
 							<cfloop from="1" to="#arrayLen(arguments.input[i])#" index="j">
-								<cfif isStruct(arguments.input[i]) and structKeyExists(argument.input[i], '__fullname')>
+								<cfif isStruct(arguments.input[i]) and structKeyExists(arguments.input[i], '__fullname')>
 									<!--- Check if there is a fullname of a component defined that needs to be instantiated --->
 									<cfinvoke component="#result#" method="set#i#">
 										<cfinvokeargument name="value" value="#this.deserialize(arguments.input[i])#" />
@@ -79,12 +84,12 @@
 			</cfloop>
 		<cfelseif isQuery(arguments.input)>
 			<!--- Try to create the object from the structure information --->
-			<cfset result = getObject(arguments.input) />
+			<cfset result = (structKeyExists(arguments, 'object') and isObject(arguments.object) ? arguments.object : getObject(arguments.input)) />
 			
 			<cfset instance = result.get__instance() />
 			
 			<!--- Read in the object from a query --->
-			<cfloop list="#result.get__keyList()#" index="i">
+			<cfloop list="#(arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList())#" index="i">
 				<cftry>
 					<!--- If it exists in the query pull it in --->
 					<cfif listFindNoCase(arguments.input.columnList, i)>
@@ -123,12 +128,12 @@
 			</cfif>
 			
 			<!--- Try to create the object from the structure information --->
-			<cfset result = getObject(arguments.input) />
+			<cfset result = (structKeyExists(arguments, 'object') and isObject(arguments.object) ? arguments.object : getObject(arguments.input)) />
 			
 			<cfset instance = result.get__instance() />
 			
 			<!--- Read in the object from xml --->
-			<cfloop list="#result.get__keyList()#" index="i">
+			<cfloop list="#(arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList())#" index="i">
 				<!--- If the current value is an array it should be pulled in as an array --->
 				<cfif isArray(instance[i])>
 					<!--- Check if it exists as a child --->
@@ -180,7 +185,7 @@
 			</cfloop>
 		<cfelseif isJSON(arguments.input)>
 			<!--- Read in the object from json --->
-			<cfset result = this.deserialize(deserializeJSON(arguments.input)) />
+			<cfset result = this.deserialize(deserializeJSON(argumentCollection = arguments)) />
 		<cfelse>
 			<cfthrow message="Cannot read the object from given input" detail="At this time the format of the input is not able to be read into the object." />
 		</cfif>
