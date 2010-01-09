@@ -145,7 +145,7 @@
 							<cfset value = key />
 						<cfelseif isQuery(arguments.data) and structKeyExists(arguments.data, key)>
 							<cfset value = arguments.data[key][arguments.rowNum] />
-						<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].hasKey(key)>
+						<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].has__Key(key)>
 							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#key#" returnvariable="value" />
 						<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], key)>
 							<cfset value = arguments.data[arguments.rowNum][key] />

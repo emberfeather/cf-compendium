@@ -15,165 +15,24 @@
 	</cffunction>
 	
 	<!---
-		Takes a input and attempts to read the information needed for the object.
-		<p>
-		Reads input in the following formats:
-		<ul>
-		<li>Struct
-		<li>Query
-		<li>XML
-		</ul>
+		Used to return a copy of the instance variables.
 	--->
-	<cffunction name="deserialize" access="public" returntype="void" output="false">
-		<cfargument name="input" type="any" required="true" />
-		
-		<cfset var i = '' />
-		<cfset var j = '' />
-		<cfset var exists = '' />
-		<cfset var value = '' />
-		<cfset var messages = [] />
-		<cfset var value = '' />
-		
-		<!--- Figure out the type --->
-		<cfif isStruct(arguments.input)>
-			<!--- Read in the object from a struct --->
-			<cfloop list="#structKeyList(variables.instance)#" index="i">
-				<cftry>
-					<!--- If it exists in the struct pull it in --->
-					<cfif structKeyExists(arguments.input, i)>
-						<cfif isSimpleValue(arguments.input[i])>
-							<cfinvoke component="#this#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
-							</cfinvoke>
-						<cfelse>
-							<cfinvoke component="#this#" method="set#i#">
-								<cfinvokeargument name="value" value="#arguments.input[i]#" />
-							</cfinvoke>
-						</cfif>
-					</cfif>
-					
-					<!--- Catch any validation errors --->
-					<cfcatch type="validation">
-						<cfset arrayAppend(messages, cfcatch.message) />
-					</cfcatch>
-				</cftry>
-			</cfloop>
-		<cfelseif isQuery(arguments.input)>
-			<!--- Read in the object from a query --->
-			<cfloop list="#structKeyList(variables.instance)#" index="i">
-				<cftry>
-					<!--- If it exists in the query pull it in --->
-					<cfif listFindNoCase(arguments.input.columnList, i)>
-						<!--- If the current value is an array it should be pulled in as an array --->
-						<cfif isArray(variables.instance[i])>
-							<!--- Reset the value --->
-							<cfset variables.instance[i] = [] />
-							
-							<!--- Loop through and append --->
-							<cfloop query="arguments.input">
-								<cfset value = arguments.input[i] />
-								
-								<cfinvoke component="#this#" method="add#i#">
-									<cfinvokeargument name="value" value="#trim(value)#" />
-								</cfinvoke>
-							</cfloop>
-						<cfelse>
-							<cfset value = arguments.input[i] />
-							
-							<cfinvoke component="#this#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(value)#" />
-							</cfinvoke>
-						</cfif>
-					</cfif>
-					
-					<!--- Catch any validation errors --->
-					<cfcatch type="validation">
-						<cfset arrayAppend(messages, cfcatch.message) />
-					</cfcatch>
-				</cftry>
-			</cfloop>
-		<cfelseif isXML(arguments.input)>
-			<!--- Read in the object from xml --->
-			<cfloop list="#structKeyList(variables.instance)#" index="i">
-				<!--- Check for the xml root --->
-				<cfif structKeyExists(arguments.input, 'xmlRoot')>
-					<cfset arguments.input = arguments.input.xmlRoot />
-				</cfif>
-				
-				<!--- If the current value is an array it should be pulled in as an array --->
-				<cfif isArray(variables.instance[i])>
-					<!--- Check if it exists as a child --->
-					<cfset exists = false />
-					
-					<cfloop array="#arguments.input.xmlChildren#" index="j">
-						<cfif j.xmlName eq i>
-							<cfset exists = true />
-							
-							<cfbreak />
-						</cfif>
-					</cfloop>
-					
-					<!--- Pull in the values --->
-					<cfif exists>
-						<!--- Reset the value --->
-						<cfset variables.instance[i] = [] />
-						
-						<cfloop array="#arguments.input.xmlChildren#" index="j">
-							<cftry>
-								<cfif j.xmlName eq i>
-									<cfinvoke component="#this#" method="add#i#">
-										<cfinvokeargument name="value" value="#trim(j.xmlText)#" />
-									</cfinvoke>
-								</cfif>
-								
-								<!--- Catch any validation errors --->
-								<cfcatch type="validation">
-									<cfset arrayAppend(messages, cfcatch.message) />
-								</cfcatch>
-							</cftry>
-						</cfloop>
-					</cfif>
-				<cfelse>
-					<!--- If it exists in the xml attributes pull it in --->
-					<cfif structKeyExists(arguments.input.xmlAttributes, i)>
-						<cftry>
-							<cfinvoke component="#this#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(arguments.input.xmlAttributes[i])#" />
-							</cfinvoke>
-							
-							<!--- Catch any validation errors --->
-							<cfcatch type="validation">
-								<cfset arrayAppend(messages, cfcatch.message) />
-							</cfcatch>
-						</cftry>
-					</cfif>
-				</cfif>
-			</cfloop>
-		<cfelseif isJSON(arguments.input)>
-			<!--- Read in the object from json --->
-			<cfset this.deserialize(deserializeJSON(arguments.input)) />
-		<cfelse>
-			<cfthrow message="Cannot read the object from given input" detail="At this time the format of the input is not able to be read into the object." />
-		</cfif>
-		
-		<!--- Check if there were any validation errors to rethrow --->
-		<cfif arrayLen(messages)>
-			<cfthrow type="validation" message="#arrayToList(messages, '|')#" />
-		</cfif>
+	<cffunction name="get__instance" access="public" returntype="struct" output="false">
+		<cfreturn duplicate(variables.instance) />
 	</cffunction>
 	
 	<!---
 		Used to return a list of all the keys publicly available 
 		through the dynamic setters and getters.
 	--->
-	<cffunction name="getKeyList" access="public" returntype="string" output="false">
+	<cffunction name="get__keyList" access="public" returntype="string" output="false">
 		<cfreturn structKeyList(variables.instance) />
 	</cffunction>
 	
 	<!---
 		Checks for the existance of a key
 	--->
-	<cffunction name="hasKey" access="public" returntype="boolean" output="false">
+	<cffunction name="has__key" access="public" returntype="boolean" output="false">
 		<cfargument name="keyName" type="string" required="true" />
 		
 		<cfreturn structKeyExists(variables.instance, arguments.attributeName) />
@@ -197,7 +56,7 @@
 		<cfset var result = '' />
 		
 		<!--- Do a regex on the name --->
-		<cfset result = reFindNoCase('^(get|set|addUnique|add|length|reset)(.+)', arguments.missingMethodName, 1, true) />
+		<cfset result = reFindNoCase('^(get|set|addUnique|add|length|has|reset)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
 		<cfif not result.pos[1]>
@@ -246,6 +105,20 @@
 				
 				<!--- Check if it is a simple get or a search --->
 				<cfif not result.pos[1]>
+					<cfif left(attribute, 2) EQ '__'>
+						<cfset result = getMetaData(this) />
+						
+						<!--- If it's just the __, return the meta information --->
+						<cfif len(attribute) EQ 2>
+							<cfreturn result />
+						</cfif>
+						
+						<!--- Check for it in the meta data for the component --->
+						<cfif structKeyExists(result, right(attribute, len(attribute) - 2))>
+							<cfreturn result[right(attribute, len(attribute) - 2)] />
+						</cfif>
+					</cfif>
+					
 					<!--- Simple get --->
 					<cfreturn variables.instance[attribute] />
 				<cfelse>
@@ -291,6 +164,10 @@
 				</cfif>
 			</cfcase>
 			
+			<cfcase value="has">
+				<cfreturn this.has__key(attribute) />
+			</cfcase>
+			
 			<cfcase value="length">
 				<cfif isArray(variables.instance[attribute])>
 					<cfreturn arrayLen(variables.instance[attribute]) />
@@ -317,7 +194,7 @@
 		<p>
 		Similar in idea to the way jQuery uses extend with variables.
 	--->
-	<cffunction name="properties" access="private" output="false">
+	<cffunction name="set__properties" access="private" output="false">
 		<cfargument name="defaults" type="struct" required="true" />
 		<cfargument name="values" type="struct" default="#{}#" />
 		
@@ -345,68 +222,5 @@
 				<cfdump var="#variables.instance#" />
 			</cfif>
 		</cfloop>
-	</cffunction>
-	
-	<!---
-		Used to serialize the object into a given format type
-	--->
-	<cffunction name="serialize" access="public" returntype="any" output="false">
-		<cfargument name="format" type="string" default="struct" />
-		
-		<cfset var output = '' />
-		<cfset var inner = '' />
-		<cfset var i = '' />
-		<cfset var j = '' />
-		
-		<cfswitch expression="#arguments.format#">
-			<cfcase value="struct">
-				<!--- Duplicate the instance variables into a struct --->
-				<cfset output = duplicate(variables.instance) />
-			</cfcase>
-			<cfcase value="xml">
-				<!--- Generate the xml --->
-				<cfset output &= '<example' />
-				
-				<!--- Output the attributes --->
-				<cfloop list="#structKeyList(variables.instance)#" index="i">
-					<!--- Can handle a nested object? --->
-					<cfif isObject(variables.instance[i])>
-						<cfset inner &= chr(10) & variables.instance[i].serialize('xml') />
-					<cfelseif isArray(variables.instance[i])>
-						<!--- Loop and show each element --->
-						<cfloop array="#variables.instance[i]#" index="j">
-							<cfset inner &= chr(10) & '	<' & i & '>' />
-							
-							<cfif isObject(j)>
-								<!--- Handles other objects --->
-								<cfset inner &= chr(10) & j.serialize('xml') />
-							<cfelse>
-								<!--- Handles basic types --->
-								<cfset inner &= chr(10) & j />
-							</cfif>
-							
-							<cfset inner &= chr(10) & '</' & i & '>' />
-						</cfloop>
-					<cfelse>
-						<cfset output &= chr(10) & ' ' & i & '="' & variables.instance[i] & '"' />
-					</cfif>
-				</cfloop>
-				
-				<cfset output &= '>' />
-				
-				<cfset output &= inner />
-				
-				<cfset output &= '</example>' />
-			</cfcase>
-			<cfcase value="json">
-				<!--- Serialize the struct output to a json format --->
-				<cfset output = serializeJSON(this.serialize('struct')) />
-			</cfcase>
-			<cfdefaultcase>
-				<cfthrow message="Cannot output the object as a #arguments.format#" detail="At this time the #arguments.format# format is not available." />
-			</cfdefaultcase>
-		</cfswitch>
-		
-		<cfreturn output />
 	</cffunction>
 </cfcomponent>

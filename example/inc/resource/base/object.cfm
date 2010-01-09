@@ -177,7 +177,7 @@
 	<cfset i.print() />
 </cfloop>
 
-<h2>getKeyList()</h2>
+<h2>get__keyList()</h2>
 
 <cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 
@@ -199,9 +199,58 @@
 
 <blockquote>
 	<code>
-		getVariableList() --&gt; <cfoutput>#theObject.getKeyList()#</cfoutput>
+		get__keyList() --&gt; <cfoutput>#theObject.get__keyList()#</cfoutput>
 	</code>
 </blockquote>
+
+<h2>get__*()</h2>
+
+<p>Generally used to get meta information about the object by using the <code>__</code> prefix, such as <code>__name</code>, <code>__fullname</code>, or <code>__extends</code>.</p>
+
+<cfset theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+
+<blockquote>
+	<code>
+		get__name() --&gt; <cfoutput>#theObject.get__name()#</cfoutput>
+	</code>
+</blockquote>
+
+<blockquote>
+	<code>
+		get__fullname() --&gt; <cfoutput>#theObject.get__fullname()#</cfoutput>
+	</code>
+</blockquote>
+
+<blockquote>
+	<code>
+		get__extends().fullname --&gt; <cfoutput>#theObject.get__extends().fullname#</cfoutput>
+	</code>
+</blockquote>
+
+<p>Or just the <code>__</code> prefix to retrieve the complete meta information struct.</p>
+
+<blockquote>
+	<code>
+		get__() --&gt; 
+		<cfdump var="#theObject.get__()#" expand="false" />
+	</code>
+</blockquote>
+
+<h2>Properties</h2>
+
+<cfset object = createObject('component', 'implementation.inc.resource.base.object1').init() />
+
+<p>
+	Properties can be defined in the init of the object and have a default value.
+</p>
+
+<blockquote>
+	<code>
+		object = createObject('component', 'implementation.inc.resource.base.object1').init()
+	</code>
+</blockquote>
+
+<cfset object.print() />
 
 <h2>setVariable()</h2>
 
@@ -217,4 +266,4 @@
 
 <h2>The Object</h2>
 
-<cfset theObject.print() />
+<cfdump var="#theObject#" />

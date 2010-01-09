@@ -106,7 +106,7 @@
 			
 			theObject.setTester('value');
 			
-			assertEquals(3, listLen(theObject.getKeyList()));
+			assertEquals(3, listLen(theObject.get__KeyList()));
 		}
 		
 		/**
