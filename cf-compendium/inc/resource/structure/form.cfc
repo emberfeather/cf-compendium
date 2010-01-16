@@ -586,8 +586,7 @@
 	<!--- 
 		TODO Remove... debugging purposes only
 	--->
-	<cffunction name="print" access="public" returntype="void" output="false">
+	<cffunction name="print" access="public" returntype="void" output="true">
 		<cfdump var="#variables.sections#" />
-		<cfabort />
 	</cffunction>
 </cfcomponent>
