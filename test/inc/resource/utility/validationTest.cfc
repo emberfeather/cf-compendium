@@ -44,7 +44,7 @@
 		/**
 		 * 
 		 */
-		public void function testID_Valid() {
+		public void function testID_valid_numeric() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.ID('testing', 10, '');
@@ -53,7 +53,7 @@
 		/**
 		 * 
 		 */
-		public void function testIn_Valid() {
+		public void function testIn_valid_inList() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.in('testing', 'is', 'is,it,in,here');
@@ -62,7 +62,7 @@
 		/**
 		 * 
 		 */
-		public void function testIn_Invalid() {
+		public void function testIn_invalid_notInList() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try {
@@ -79,16 +79,7 @@
 		/**
 		 * 
 		 */
-		public void function testIn_Valid() {
-			var validator = variables.i18n.getValidation('en_US');
-			
-			validator.in('testing', 'is', 'is,it,in,here');
-		}
-		
-		/**
-		 * 
-		 */
-		public void function testNotIn_Invalid() {
+		public void function testNotIn_invalid_inList() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try {
@@ -105,7 +96,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotIn_Valid() {
+		public void function testNotIn_valid_notInList() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.notIn('testing', 'waldo', 'val,is,in,here');
@@ -114,7 +105,7 @@
 		/**
 		 * 
 		 */
-		public void function testIsNumer_Invalid() {
+		public void function testIsNumber_invalid_string() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try {
@@ -131,7 +122,7 @@
 		/**
 		 * 
 		 */
-		public void function testIsNumer_Valid() {
+		public void function testIsNumber_valid_number() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.isNumber('testing', 5, '');
@@ -140,7 +131,7 @@
 		/**
 		 * 
 		 */
-		public void function testMaxLength_Invalid() {
+		public void function testMaxLength_invalid_overLength() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try {
@@ -157,7 +148,7 @@
 		/**
 		 * 
 		 */
-		public void function testMaxLength_Valid() {
+		public void function testMaxLength_valid_underLength() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.maxLength('testing', "val", 5);
@@ -166,7 +157,7 @@
 		/**
 		 * 
 		 */
-		public void function testMinLength_Invalid() {
+		public void function testMinLength_invalid_underLength() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try{
@@ -183,7 +174,7 @@
 		/**
 		 * 
 		 */
-		public void function testMinLength_Valid() {
+		public void function testMinLength_valid_overLength() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.minLength('testing', "val", 2);
@@ -192,7 +183,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotEmpty_Invalid() {
+		public void function testNotEmpty_invalid_empty() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try{
@@ -209,7 +200,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotEmpty_Valid() {
+		public void function testNotEmpty_valid_notEmpty() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.notEmpty('testing', 'val', '');
@@ -218,7 +209,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotFuture_Invalid() {
+		public void function testNotFuture_invalid_future() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try{
@@ -235,7 +226,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotFuture_Valid() {
+		public void function testNotFuture_valid_now() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.notEmpty('testing', Now(), '');
@@ -244,7 +235,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotGreaterThan_Invalid() {
+		public void function testNotGreaterThan_invalid_greaterThan() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try{
@@ -261,7 +252,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotGreaterThan_Valid() {
+		public void function testNotGreaterThan_valid_lessThan() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.notGreaterThan('testing', 2, 3);
@@ -270,7 +261,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotLessThan_Invalid() {
+		public void function testNotLessThan_invalid_lessThan() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try{
@@ -287,7 +278,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotLessThan_Valid() {
+		public void function testNotLessThan_valid_greaterThan() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.notLessThan('testing', 3, 2);
@@ -296,7 +287,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotPast_Invalid() {
+		public void function testNotPast_invalid_past() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try{
@@ -313,7 +304,7 @@
 		/**
 		 * 
 		 */
-		public void function testNotPast_Valid() {
+		public void function testNotPast_valid_future() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.notPast('testing', Now() + 1, '');
@@ -322,7 +313,7 @@
 		/**
 		 * 
 		 */
-		public void function testValidEmail_Invalid() {
+		public void function testValidEmail_invalid_noDomain() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try{
@@ -339,7 +330,7 @@
 		/**
 		 * 
 		 */
-		public void function testValidEmail_Valid() {
+		public void function testValidEmail_valid_fullEmail() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.validEmail('testing', 'test@test.com', '');
@@ -348,13 +339,13 @@
 		/**
 		 * 
 		 */
-		public void function testValidURL_Invalid() {
+		public void function testValidURL_invalid_noProtocol() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			try{
-				validator.validURL('testing', 'www.test', '');
+				validator.validURL('testing', 'test.com', '');
 				
-				fail("Set should have thrown an error. [www.test is not a valid url]");
+				fail("Set should have thrown an error. [test.com is not a valid url without a protocol]");
 			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
@@ -365,7 +356,7 @@
 		/**
 		 * 
 		 */
-		public void function testValidURL_Valid() {
+		public void function testValidURL_valid_fullUrl() {
 			var validator = variables.i18n.getValidation('en_US');
 			
 			validator.validURL('testing', 'http://test.com', '');
