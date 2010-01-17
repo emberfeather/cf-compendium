@@ -185,7 +185,7 @@
 			</cfloop>
 		<cfelseif isJSON(arguments.input)>
 			<!--- Read in the object from json --->
-			<cfset result = this.deserialize(deserializeJSON(argumentCollection = arguments)) />
+			<cfset result = this.deserialize(deserializeJSON(arguments.input)) />
 		<cfelse>
 			<cfthrow message="Cannot read the object from given input" detail="At this time the format of the input is not able to be read into the object." />
 		</cfif>
