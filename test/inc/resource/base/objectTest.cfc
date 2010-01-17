@@ -147,7 +147,7 @@
 		/**
 		 * Test the properties functionality.
 		 */
-		public void function testProperties() {
+		public void function testProperties_simple() {
 			var theObject = createObject('component', 'implementation.inc.resource.base.object1').init();
 			
 			assertEquals('value', theObject.getTest());
@@ -157,7 +157,7 @@
 		/**
 		 * Test the properties functionality with nested complex elements.
 		 */
-		public void function testProperties() {
+		public void function testProperties_complex() {
 			var theObject = createObject('component', 'implementation.inc.resource.base.object1').init();
 			
 			assertEquals('gum', theObject.getBubble()[1]);
