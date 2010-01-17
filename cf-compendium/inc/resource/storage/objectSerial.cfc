@@ -37,7 +37,7 @@
 		<cfset var value = '' />
 		
 		<!--- Figure out the type --->
-		<cfif isStruct(arguments.input) and not isXML(arguments.input)>
+		<cfif not isSimpleValue(arguments.input) and isStruct(arguments.input) and not isXML(arguments.input)>
 			<!--- Try to create the object from the structure information --->
 			<cfset result = (structKeyExists(arguments, 'object') and isObject(arguments.object) ? arguments.object : getObject(arguments.input)) />
 			
