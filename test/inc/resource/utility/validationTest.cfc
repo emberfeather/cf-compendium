@@ -17,7 +17,7 @@
 				validator.ID('testing', "val", '');
 				
 				fail("Set should have thrown an error. ['val' is not numeric]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -34,7 +34,7 @@
 				validator.ID('testing', -15, '');
 				
 				fail("Negatives are not allowed");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -121,7 +121,7 @@
 				validator.isNumber('testing', "val", '');
 				
 				fail("Set should have thrown an error. ['val' is not numeric]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -147,7 +147,7 @@
 				validator.maxLength('testing', "val", 2);
 				
 				fail("Set should have thrown an error. [the length of 'val' is greater than 2]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -173,7 +173,7 @@
 				validator.minLength('testing', "val", 4);
 				
 				fail("Set should have thrown an error. [the length of 'val' is less than 4]");		
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -199,7 +199,7 @@
 				validator.notEmpty('testing', '', '');
 				
 				fail("Set should have thrown an error. ['' is empty]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -225,7 +225,7 @@
 				validator.notFuture('testing', Now() + 1, '');
 				
 				fail("Set should have thrown an error. [Now()+1 is in the future]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -251,7 +251,7 @@
 				validator.notGreaterThan('testing', 3, 2);
 				
 				fail("Set should have thrown an error. [3 is greater than 2]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -277,7 +277,7 @@
 				validator.notLessThan('testing', 2, 3);
 				
 				fail("Set should have thrown an error. [2 is less than 3]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -303,7 +303,7 @@
 				validator.notPast('testing', Now() - 1, '');
 				
 				fail("Set should have thrown an error. [Now()-1 is in the past]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -329,7 +329,7 @@
 				validator.validEmail('testing', 'test@test', '');
 				
 				fail("Set should have thrown an error. [test@test is not a valid email]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
@@ -355,7 +355,7 @@
 				validator.validURL('testing', 'www.test', '');
 				
 				fail("Set should have thrown an error. [www.test is not a valid url]");
-			} catch(mxunit.exception.AssertionFailedError) {
+			} catch(mxunit.exception.AssertionFailedError exception) {
 				rethrow();
 			} catch(any exception) {
 				// expect to get here
