@@ -155,6 +155,16 @@
 		}
 		
 		/**
+		 * Test the properties functionality with nested complex elements.
+		 */
+		public void function testProperties() {
+			var theObject = createObject('component', 'implementation.inc.resource.base.object1').init();
+			
+			assertEquals('gum', theObject.getBubble()[1]);
+			assertEquals('raboof', theObject.getFoobar().barfoo);
+		}
+		
+		/**
 		 * Test the set functionality.
 		 */
 		public void function testSet() {

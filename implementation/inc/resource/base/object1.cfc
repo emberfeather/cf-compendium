@@ -3,7 +3,10 @@
 		<cfset var defaults = {
 				test = 'value',
 				foo = 'bar',
-				bubble = [ 'gum' ]
+				bubble = [ 'gum' ],
+				foobar = {
+					barfoo = 'raboof'
+				}
 			} />
 		
 		<cfset super.init() />

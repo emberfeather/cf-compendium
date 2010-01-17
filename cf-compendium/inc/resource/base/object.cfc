@@ -109,7 +109,7 @@
 						<cfset result = getMetaData(this) />
 						
 						<!--- If it's just the __, return the meta information --->
-						<cfif len(attribute) EQ 2>
+						<cfif attribute EQ '__'>
 							<cfreturn result />
 						</cfif>
 						
