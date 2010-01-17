@@ -34,9 +34,9 @@
 	</cffunction>
 	
 	<cfscript>
-		<!---
-			Tests whether the descriptor url can be found if the content attribute is first
-		--->
+		/**
+		 * Tests whether the descriptor url can be found if the content attribute is first
+		 */
 		public void function testFindMetaDescriptorContentFirst() {
 			var metaTag = '';
 			var yadis = createObject('component', 'cf-compendium.inc.resource.communication.yadis').init();
@@ -48,9 +48,9 @@
 			assertEquals('http://example.com/yadis.xml', yadis.findMetaDescriptor(metaTag));
 		}
 		
-		<!---
-			Tests whether the descriptor url can be found if the http-equiv attribute is first
-		--->
+		/**
+		 * Tests whether the descriptor url can be found if the http-equiv attribute is first
+		 */
 		public void function testFindMetaDescriptorHttpEquivFirst() {
 			var metaTag = '';
 			var yadis = createObject('component', 'cf-compendium.inc.resource.communication.yadis').init();
@@ -62,25 +62,25 @@
 			assertEquals('http://example.com/yadis.xml', yadis.findMetaDescriptor(metaTag));
 		}
 		
-		<!---
-			Tests if the get services and sorting of uri elements based upon priority works
-		--->
+		/**
+		 * Tests if the get services and sorting of uri elements based upon priority works
+		 */
 		public void function testGetServices() {
 			var services = '';
 			var yadis = createObject('component', 'cf-compendium.inc.resource.communication.yadis').init();
 			
 			services = yadis.getServices( variables.xrds );
 			
-			<!--- TODO this ordering is incorrect, needs to have the correct URI ordering --->
+			// TODO this ordering is incorrect, needs to have the correct URI ordering
 			assertEquals('http://openid.net/signon/1.0', services[1].xmlChildren[1].xmlText);
 			assertEquals('http://resolve.example.com', services[1].URI[2].xmlText);
 			assertEquals('http://resolve2.example.com', services[1].URI[1].xmlText);
 			assertEquals('https://resolve.example.com', services[1].URI[3].xmlText);
 		}
 		
-		<!---
-			Tests if the sorting of xml elements based upon priority works
-		--->
+		/**
+		 * Tests if the sorting of xml elements based upon priority works
+		 */
 		public void function testSort() {
 			var sorted = '';
 			var yadis = createObject('component', 'cf-compendium.inc.resource.communication.yadis').init();

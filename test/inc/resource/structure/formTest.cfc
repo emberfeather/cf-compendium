@@ -7,10 +7,10 @@
 		/**
 		 * Tests to ensure that the form throws an error if requested without an action.
 		 */
-		public void function testShowFormSansAction() {
+		public void function testShowForm_SansAction() {
 			var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n);
 			
-			<!--- Hidden --->
+			// Hidden form field
 			theForm.addElement('hidden', {
 					name = "testHidden",
 					label = "Hidden",
@@ -31,7 +31,7 @@
 		/**
 		 * Tests to ensure that the form throws an error if requested without any elements added.
 		 */
-		public void function testShowFormSansElement() {
+		public void function testShowForm_SansElement() {
 			var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n);
 			
 			try {

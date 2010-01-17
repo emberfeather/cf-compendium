@@ -22,9 +22,9 @@
 			}
 		}
 		
-		<!---
-			Tests what happens when you stop a ticker that was never started
-		--->
+		/**
+		 * Tests what happens when you stop a ticker that was never started
+		 */
 		public void function testStopSansStart() {
 			var profiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true);
 			
@@ -39,9 +39,9 @@
 			}
 		}
 		
-		<!---
-			Tests what happens when you stop a ticker that has already stopped
-		--->
+		/**
+		 * Tests what happens when you stop a ticker that has already stopped
+		 */
 		public void function testStopExisting() {
 			var profiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true);
 			
