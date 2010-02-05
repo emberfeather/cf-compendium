@@ -200,7 +200,7 @@
 		<cfset arguments.missingMethodName = lCase(arguments.missingMethodName) />
 		
 		<!--- Find the parts of the function name we are interested in --->
-		<cfset findParts = reFind('^(anchor|clean|clone|extend|get|has|override|remove|reset|searchid|searchboolean|search|set)(.*)', arguments.missingMethodName, 1, true) />
+		<cfset findParts = reFind('^(anchor|clean|clone|extend|get|has|override|redirect|remove|reset|searchid|searchboolean|search|set)(.*)', arguments.missingMethodName, 1, true) />
 		
 		<!--- Check if not one that we are equiped to handle --->
 		<cfif not findParts.pos[1]>
@@ -275,6 +275,16 @@
 				</cfif>
 				
 				<cfreturn override(extra, arguments.missingMethodArguments[1]) />
+			</cfcase>
+			
+			<cfcase value="redirect">
+				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
+					<cfset redirect(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				<cfelseif arrayLen(arguments.missingMethodArguments) eq 1>
+					<cfset redirect(extra, arguments.missingMethodArguments[1]) />
+				</cfif>
+				
+				<cfset redirect(extra) />
 			</cfcase>
 			
 			<cfcase value="remove">
@@ -390,6 +400,16 @@
 		<cfargument name="locationName" type="string" default="" />
 		
 		<cfreturn structKeyList( findLocation( arguments.locationName ) ) />
+	</cffunction>
+	
+	<!---
+		Redirects to the given URL location.
+	--->
+	<cffunction name="redirect" access="private" returntype="void" output="false">
+		<cfargument name="locationName" type="string" required="true" />
+		<cfargument name="addToken" type="boolean" default="false" />
+		
+		<cflocation url="#get(arguments.locationName, false)#" addtoken="#arguments.addToken#" />
 	</cffunction>
 	
 	<!---
