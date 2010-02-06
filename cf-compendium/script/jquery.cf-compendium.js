@@ -32,7 +32,57 @@
 					title: 'Add multiple' // TODO use i18n
 				}))
 			);
+		
+		// Add the deletion functionality
+		$('.form .element .allowDeletion')
+			.after(
+				$('<a />', {
+					href: '#',
+					click: function() {
+						$(this)
+							.parent('.element')
+							.removeElement();
+						
+						return false;
+					},
+					className: 'delete'
+				}).append($('<img />', {
+					src: '/cf-compendium/img/icon/famfamfam/silk/delete.png',
+					title: 'Remove' // TODO use i18n
+				}))
+			);
 	});
+	
+	/**
+	 * Delete the given element with some extra checking.
+	 */
+	$.fn.removeElement = function() {
+		return this.each(function(){
+			current = $(this);
+			
+			// Check if it requires confirmation
+			if( $('.confirm', current).length ) {
+				// Make a confirmation message
+				// TODO use i18n
+				// TODO make this more specialize with information about the element
+				confirmMsg = 'Are you sure you want to remove this?';
+				
+				if( !confirm( confirmMsg ) )
+					return;
+			}
+			
+			// Check if this is a clone
+			if(current.hasClass('clone')) {
+				original = current.data('original');
+				
+				// Decrement the clone counter
+				original.data('cloneLength', (original.data('cloneLength') || 0) - 1);
+			}
+			
+			// Remove the element
+			current.remove();
+		});
+	}
 	
 	/**
 	 * Duplicate the given element and add it into the DOM directly after 
@@ -45,8 +95,12 @@
 			// Clone the elment
 			clone = $(this).clone(true).addClass('clone');
 			
-			// Increment the clone counter
+			// Increment the clone counters
+			original.data('cloneLength', (original.data('cloneLength') || 0) + 1);
 			original.data('cloneCount', (original.data('cloneCount') || 0) + 1);
+			
+			// Include reference back to original
+			clone.data('original', original);
 			
 			// Remove the duplication class
 			$('.allowDuplication', clone).removeClass('allowDuplication');
