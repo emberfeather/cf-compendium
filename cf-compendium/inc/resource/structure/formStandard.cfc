@@ -249,6 +249,9 @@
 			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
+		<!--- Value --->
+		<cfset formatted &= 'value="' & arguments.element.value & '" ' />
+		
 		<cfset formatted &= '/>' />
 		
 		<cfreturn formatted />
