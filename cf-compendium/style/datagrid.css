@@ -45,13 +45,13 @@
 	clear: both;
 }
 
-.datagrid tr.alt {
+.datagrid tr:nth-child(even) {
 	background: #f2f2f2;
 }
 
-.datagrid td.hover,
-.datagrid th.hover,
-.datagrid tr.hover {
+.datagrid td:hover,
+.datagrid th:hover,
+.datagrid tr:hover {
 	background: #d7eafe;
 }
 
@@ -63,8 +63,7 @@
 	visibility: hidden;
 }
 
-.datagrid.active .hover .phantom a,
-.datagrid.active .phantom.hover a {
+.datagrid.active tr:hover .phantom a {
 	visibility: visible;
 }
 

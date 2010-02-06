@@ -16,18 +16,8 @@
 			// Add classes for styling
 			$this.addClass(o.classDatagrid).addClass(o.classActive);
 			
-			// Add the alternating rows
-			$('tbody tr:even', $this).addClass(o.classAlt);
-			
 			// Add the delete confirmation
 			$('a.delete', $this).click(confirmDelete);
-			
-			// Add the row hovering
-			$('tbody tr', $this).hover(function() {
-				$(this).addClass(o.classHover);
-			}, function() {
-				$(this).removeClass(o.classHover);
-			});
 		});
 	};
 	
@@ -41,10 +31,7 @@
 	// Defaults
 	$.fn.datagrid.defaults = {
 		classActive: 'active',
-		classAlt: 'alt',
 		classDatagrid: 'datagrid',
-		classHover: 'hover',
-		classPhantom: 'phantom',
 		columnExp: /column-([0-9]+)/i
 	};
 	
