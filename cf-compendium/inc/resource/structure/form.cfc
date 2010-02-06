@@ -48,21 +48,22 @@
 		<cfargument name="elementType" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
-		<cfset var defaults = {} />
+		<cfset var defaults = {
+				class = '',
+				desc = '',
+				disabled = false,
+				id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
+				label = '',
+				link = '',
+				name = '',
+				postElement = '',
+				preElement = '',
+				required = false,
+				size = '',
+				tip = '',
+				title = ''
+			} />
 		<cfset var element = '' />
-		
-		<!--- Set defaults --->
-		<cfset defaults.id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1 />
-		<cfset defaults.title = '' />
-		<cfset defaults.label = '' />
-		<cfset defaults.name = '' />
-		<cfset defaults.class = '' />
-		<cfset defaults.required = false />
-		<cfset defaults.disabled = false />
-		<cfset defaults.size = '' />
-		<cfset defaults.tip = '' />
-		<cfset defaults.link = '' />
-		<cfset defaults.desc = '' />
 		
 		<!--- Extend the form options --->
 		<cfset element = variables.extender.extend(defaults, arguments.options) />
@@ -363,6 +364,9 @@
 				
 				<cfset formatted &= '>' & variables.label.get(arguments.element.label) & ':</label> ' />
 			</cfif>
+			
+			<!--- Add the pre element text --->
+			<cfset formatted &= arguments.element.preElement />
 		</cfif>
 		
 		<!--- Get the html for the element --->
@@ -370,6 +374,9 @@
 		
 		<!--- hidden elements should not be shown --->
 		<cfif arguments.element.elementType neq 'hidden'>
+			<!--- Add the post element text --->
+			<cfset formatted &= arguments.element.postElement />
+			
 			<!--- End the tag --->
 			<cfset formatted &= '</div>' />
 		</cfif>

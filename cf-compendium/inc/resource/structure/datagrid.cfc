@@ -127,12 +127,12 @@
 					<!--- Setup the base link values using the url override --->
 					<cfif isStruct(arguments.options.linkBase)>
 						<cfif structKeyExists(arguments.options.linkBase, arguments.column.key)>
-							<cfinvoke component="#arguments.options.theURL#" method="overrideDGCol#arguments.colNum#Link#i#">
+							<cfinvoke component="#arguments.options.theUrl#" method="overrideDGCol#arguments.colNum#Link#i#">
 								<cfinvokeargument name="value" value="#arguments.options.linkBase[arguments.column.key]#" />
 							</cfinvoke>
 						</cfif>
 					<cfelseif arguments.options.linkBase neq ''>
-						<cfinvoke component="#arguments.options.theURL#" method="overrideDGCol#arguments.colNum#Link#i#">
+						<cfinvoke component="#arguments.options.theUrl#" method="overrideDGCol#arguments.colNum#Link#i#">
 							<cfinvokeargument name="value" value="#arguments.options.linkBase#" />
 						</cfinvoke>
 					</cfif>
@@ -153,7 +153,7 @@
 							<cfset value = key />
 						</cfif>
 						
-						<cfinvoke component="#arguments.options.theURL#" method="setDGCol#arguments.colNum#Link#i#">
+						<cfinvoke component="#arguments.options.theUrl#" method="setDGCol#arguments.colNum#Link#i#">
 							<cfinvokeargument name="name" value="#j#" />
 							<cfinvokeargument name="value" value="#value#" />
 						</cfinvoke>
@@ -167,7 +167,7 @@
 					</cfif>
 					
 					<!--- Retrieve the URL --->
-					<cfinvoke component="#arguments.options.theURL#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
+					<cfinvoke component="#arguments.options.theUrl#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
 					
 					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#arguments.text#</a>
 				</cfloop>

@@ -30,7 +30,7 @@
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="filter" type="any" required="true" />
-		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="theUrl" type="component" required="true" />
 		<cfargument name="keys" type="string" default="" />
 		
 		<cfset var html = '' />
@@ -56,20 +56,20 @@
 					</cfif>
 					
 					<!--- Find the old value --->
-					<cfset currVal = arguments.theURL.search(key) />
+					<cfset currVal = arguments.theUrl.search(key) />
 					
 					<!--- Remove the key from the URL --->
-					<cfset arguments.theURL.removeFilterActive(key) />
+					<cfset arguments.theUrl.removeFilterActive(key) />
 					
 					<!--- If not blank add the item to the filter --->
 					<cfif value neq ''>
 						<li>
-							<cfoutput>#filterItem(key, value, arguments.theURL.getFilterActive())#</cfoutput>
+							<cfoutput>#filterItem(key, value, arguments.theUrl.getFilterActive())#</cfoutput>
 						</li>
 					</cfif>
 					
 					<!--- Replace the key in the URL --->
-					<cfset arguments.theURL.setFilterActive(key, currVal) />
+					<cfset arguments.theUrl.setFilterActive(key, currVal) />
 				</cfloop>
 			</ul>
 		</cfsavecontent>

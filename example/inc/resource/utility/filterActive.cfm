@@ -4,13 +4,13 @@
 	<code>
 		i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init( expandPath('/i18n/') )<br />
 		filterActive = createObject('component', 'cf-compendium.inc.resource.utility.filterActive').init(i18n)<br />
-		theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test1=here&test2=out')
+		theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test1=here&test2=out')
 	</code>
 </blockquote>
 
 <cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
 <cfset filterActive = createObject('component', 'cf-compendium.inc.resource.utility.filterActive').init(i18n) />
-<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test1=here&test2=out') />
+<cfset theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test1=here&test2=out') />
 
 <h2>addBundle(path, name)</h2>
 
@@ -26,7 +26,7 @@
 
 <cfset filterActive.addBundle('inc/resource/utility', 'filter') />
 
-<h2>toHTML( filter, theURL[, keys] )</h2>
+<h2>toHTML( filter, theUrl[, keys] )</h2>
 
 <p>
 	Uses the filter (URL object, or a struct) to craft the HTML for showing 
@@ -35,11 +35,11 @@
 
 <blockquote>
 	<code>
-		filterActive.toHTML(theURL, theURL, 'test1,test2,test3')
+		filterActive.toHTML(theUrl, theUrl, 'test1,test2,test3')
 	</code>
 </blockquote>
 
-<cfoutput>#filterActive.toHTML(theURL, theURL, 'test1,test2,test3')#</cfoutput>
+<cfoutput>#filterActive.toHTML(theUrl, theUrl, 'test1,test2,test3')#</cfoutput>
 
 <blockquote>
 	<code>
@@ -47,7 +47,7 @@
 			test1 = 'here',
 			test2 = 'out',
 			test3 = 'else'
-		}, theURL, 'test1,test2')
+		}, theUrl, 'test1,test2')
 	</code>
 </blockquote>
 
@@ -55,7 +55,7 @@
 		test1 = 'here',
 		test2 = 'out',
 		test3 = 'else'
-	}, theURL, 'test1,test2')#</cfoutput>
+	}, theUrl, 'test1,test2')#</cfoutput>
 
 <h2>The Object</h2>
 

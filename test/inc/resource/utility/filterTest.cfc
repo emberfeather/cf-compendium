@@ -70,12 +70,12 @@
 		 */
 		public void function testToHTML() {
 			var filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(variables.i18n);
-			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
 			
 			filter.addFilter('test1');
 			
 			// Should be able to generate HTML
-			filter.toHTML(theURL);
+			filter.toHTML(theUrl);
 		}
 		
 		/**
@@ -83,10 +83,10 @@
 		 */
 		public void function testToHTML_SansItems() {
 			var filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(variables.i18n);
-			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
 			
 			try {
-				filter.toHTML(theURL);
+				filter.toHTML(theUrl);
 				
 				fail('Should not be able to generate HTML if the filter has no items.');
 			} catch (mxunit.exception.AssertionFailedError exception) {

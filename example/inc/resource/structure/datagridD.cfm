@@ -1,18 +1,18 @@
 <cfhtmlhead text="<link rel=""stylesheet"" href=""#pathRoot#cf-compendium/style/datagrid.css"" />">
-<cfhtmlhead text="<script type=""text/javascript"" src=""https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js""></script>">
+<cfhtmlhead text="<script type=""text/javascript"" src=""https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js""></script>">
 <cfhtmlhead text="<script type=""text/javascript"" src=""#pathRoot#cf-compendium/script/jquery.datagrid.js""></script>">
 
 <h1>Datagrid Examples</h1>
 
 <blockquote>
 	<code>
-		theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('')<br />
+		theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('')<br />
 		i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init( expandPath('/i18n/') )<br />
 		datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n)
 	</code>
 </blockquote>
 
-<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+<cfset theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 <cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
 <cfset datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(i18n) />
 
@@ -191,7 +191,7 @@
 		
 		datagrid.toHTML(data, {
 				numPerPage = 2000,
-				theURL = theURL
+				theUrl = theUrl
 			})
 	</code>
 </blockquote>
@@ -216,7 +216,7 @@
 
 <cfoutput>#datagrid.toHTML(data, {
 		numPerPage = 2000,
-		theURL = theURL
+		theUrl = theUrl
 	})#</cfoutput>
 
 <h2>JavaScript</h2>

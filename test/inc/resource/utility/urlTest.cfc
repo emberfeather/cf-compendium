@@ -125,49 +125,49 @@
 		 * Test getting the getting location
 		 */
 		public void function testGet() {
-			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 			
-			theURL.setMylocation('ef', 'cool');
+			theUrl.setMylocation('ef', 'cool');
 			
-			assertEquals('?ef=cool', theURL.getMyLocation());
+			assertEquals('?ef=cool', theUrl.getMyLocation());
 		}
 		
 		/**
 		 * Want to test getting back the correct url given a url
 		 */
 		public void function testGetMaster() {
-			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
 			
-			assertEquals('?ef=cool', theURL.get());
+			assertEquals('?ef=cool', theUrl.get());
 		}
 		
 		/**
 		 * Test getLocation for existence of named location
 		 */
 		public void function testHasLocationTrue() {
-			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
 			
-			theURL.setMyLocation('test', 'true');
+			theUrl.setMyLocation('test', 'true');
 			
-			assertTrue(theURL.hasMylocation());
+			assertTrue(theUrl.hasMylocation());
 		}
 		
 		/**
 		 * Test getLocation for FALSE existence of named location
 		 */
 		public void function testHasLocationFalse() {
-			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
 			
-			assertFalse(theURL.hasMyLocation());
+			assertFalse(theUrl.hasMyLocation());
 		}
 		
 		/**
 		 * Test getLocation for existence of master location
 		 */
 		public void function testHasLocationMaster() {
-			var theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
 			
-			assertTrue(theURL.has());
+			assertTrue(theUrl.has());
 		}
 		
 		/**
@@ -242,12 +242,12 @@
 		public void function testQueryKeyList() {
 			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 			
-			theURL.set('test1', '1');
-			theURL.set('test2', '2');
-			theURL.set('test3', '3');
-			theURL.set('test4', '4');
+			theUrl.set('test1', '1');
+			theUrl.set('test2', '2');
+			theUrl.set('test3', '3');
+			theUrl.set('test4', '4');
 			
-			assertEquals('test1,test2,test3,test4', listSort( theURL.querystringKeyList(), 'text' ) );
+			assertEquals('test1,test2,test3,test4', listSort( theUrl.querystringKeyList(), 'text' ) );
 		}
 		
 		/**

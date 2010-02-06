@@ -120,7 +120,7 @@
 
 <h2>toHTML()</h2>
 
-<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
+<cfset theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init() />
 
 <blockquote>
 	<code>
@@ -128,7 +128,7 @@
 	</code>
 </blockquote>
 
-<cfoutput>#paginator.toHTML(theURL)#</cfoutput>
+<cfoutput>#paginator.toHTML(theUrl)#</cfoutput>
 
 <h2>The Object</h2>
 

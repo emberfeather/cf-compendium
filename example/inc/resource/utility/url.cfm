@@ -1,6 +1,6 @@
 <h1>URL Examples</h1>
 
-<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('foo=bar&stuff&user=1') />
+<cfset theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('foo=bar&stuff&user=1') />
 
 <h2>Clean</h2>
 
@@ -10,22 +10,22 @@
 
 <blockquote>
 	<code>
-		theURL.get()
+		theUrl.get()
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.get()#" label="Master URL" />
+<cfdump var="#theUrl.get()#" label="Master URL" />
 
 <blockquote>
 	<code>
-		theURL.cleanRedirect()<br />
-		theURL.getRedirect()
+		theUrl.cleanRedirect()<br />
+		theUrl.getRedirect()
 	</code>
 </blockquote>
 
-<cfset theURL.cleanRedirect() />
+<cfset theUrl.cleanRedirect() />
 
-<cfdump var="#theURL.getRedirect()#" label="Redirect URL" />
+<cfdump var="#theUrl.getRedirect()#" label="Redirect URL" />
 
 <h2>Extend</h2>
 
@@ -39,22 +39,22 @@
 
 <blockquote>
 	<code>
-		theURL.get()
+		theUrl.get()
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.get()#" label="Master URL" />
+<cfdump var="#theUrl.get()#" label="Master URL" />
 
 <blockquote>
 	<code>
-		theURL.extendExtended('foo=barred&spring=loaded')<br />
-		theURL.getExtended()
+		theUrl.extendExtended('foo=barred&spring=loaded')<br />
+		theUrl.getExtended()
 	</code>
 </blockquote>
 
-<cfset theURL.extendExtended('foo=barred&spring=loaded') />
+<cfset theUrl.extendExtended('foo=barred&spring=loaded') />
 
-<cfdump var="#theURL.getExtended()#" label="Extended URL" />
+<cfdump var="#theUrl.getExtended()#" label="Extended URL" />
 
 <h2>Has</h2>
 
@@ -64,19 +64,19 @@
 
 <blockquote>
 	<code>
-		theURL.hasExtended()
+		theUrl.hasExtended()
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.hasExtended()#" label="Has Extended URL" />
+<cfdump var="#theUrl.hasExtended()#" label="Has Extended URL" />
 
 <blockquote>
 	<code>
-		theURL.hasIcing()
+		theUrl.hasIcing()
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.hasIcing()#" label="Has Icing URL" />
+<cfdump var="#theUrl.hasIcing()#" label="Has Icing URL" />
 
 <h2>Override</h2>
 
@@ -90,22 +90,22 @@
 
 <blockquote>
 	<code>
-		theURL.get()
+		theUrl.get()
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.get()#" label="Master URL" />
+<cfdump var="#theUrl.get()#" label="Master URL" />
 
 <blockquote>
 	<code>
-		theURL.overrideExtended('foo=barred&spring=loaded')<br />
-		theURL.getExtended()
+		theUrl.overrideExtended('foo=barred&spring=loaded')<br />
+		theUrl.getExtended()
 	</code>
 </blockquote>
 
-<cfset theURL.extendExtended('foo=barred&spring=loaded') />
+<cfset theUrl.extendExtended('foo=barred&spring=loaded') />
 
-<cfdump var="#theURL.getExtended()#" label="Extended URL" />
+<cfdump var="#theUrl.getExtended()#" label="Extended URL" />
 
 <h2>Reset</h2>
 
@@ -115,21 +115,21 @@
 
 <blockquote>
 	<code>
-		theURL.get()
+		theUrl.get()
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.get()#" label="Master URL" />
+<cfdump var="#theUrl.get()#" label="Master URL" />
 
 <blockquote>
 	<code>
-		theURL.resetResetted('foo=barred&spring=loaded')
+		theUrl.resetResetted('foo=barred&spring=loaded')
 	</code>
 </blockquote>
 
-<cfset theURL.resetResetted('foo=barred&spring=loaded') />
+<cfset theUrl.resetResetted('foo=barred&spring=loaded') />
 
-<cfdump var="#theURL.getResetted()#" label="Reset URL" />
+<cfdump var="#theUrl.getResetted()#" label="Reset URL" />
 
 <h2>Search</h2>
 
@@ -143,27 +143,27 @@
 
 <blockquote>
 	<code>
-		theURL.search('spring')
+		theUrl.search('spring')
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.search('spring')#" label="Search for 'spring'" />
+<cfdump var="#theUrl.search('spring')#" label="Search for 'spring'" />
 
 <blockquote>
 	<code>
-		theURL.search('foo')
+		theUrl.search('foo')
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.search('foo')#" label="Search for 'foo'" />
+<cfdump var="#theUrl.search('foo')#" label="Search for 'foo'" />
 
 <blockquote>
 	<code>
-		theURL.search('user')
+		theUrl.search('user')
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.search('user')#" label="Search for 'user'" />
+<cfdump var="#theUrl.search('user')#" label="Search for 'user'" />
 
 <h2>SearchID</h2>
 
@@ -177,28 +177,28 @@
 
 <blockquote>
 	<code>
-		theURL.searchID('spring')
+		theUrl.searchID('spring')
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.searchID('spring')#" label="Search for 'spring' ID" />
+<cfdump var="#theUrl.searchID('spring')#" label="Search for 'spring' ID" />
 
 <blockquote>
 	<code>
-		theURL.searchID('foo')
+		theUrl.searchID('foo')
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.searchID('foo')#" label="Search for 'foo' ID" />
+<cfdump var="#theUrl.searchID('foo')#" label="Search for 'foo' ID" />
 
 <blockquote>
 	<code>
-		theURL.searchID('user')
+		theUrl.searchID('user')
 	</code>
 </blockquote>
 
-<cfdump var="#theURL.searchID('user')#" label="Search for 'user' ID" />
+<cfdump var="#theUrl.searchID('user')#" label="Search for 'user' ID" />
 
 <h2>The Object</h2>
 
-<cfdump var="#theURL#" />
+<cfdump var="#theUrl#" />

@@ -8,7 +8,7 @@
 	<cfparam name="filter" default="*.cfm" />
 	<cfparam name="isUnitTest" default="false" />
 	
-	<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init(URL) />
+	<cfset theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init(URL) />
 </cfsilent>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -49,8 +49,8 @@
 								
 								<ul class="menu vertical">
 									<cfoutput>
-										<cfset theURL.setMenu('file', shortDirectory & '/' & files.name) />
-										<li><a href="#theURL.getMenu()#">#files.name#</a></li>
+										<cfset theUrl.setMenu('file', shortDirectory & '/' & files.name) />
+										<li><a href="#theUrl.getMenu()#">#files.name#</a></li>
 									</cfoutput>
 								</ul>
 							</cfoutput>
@@ -58,7 +58,7 @@
 					</div>
 					
 					<div class="grid_9">
-						<cfset incFile = theURL.search('file') />
+						<cfset incFile = theUrl.search('file') />
 						
 						<cfif incFile neq ''>
 							<cfif not isUnitTest>

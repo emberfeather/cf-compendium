@@ -353,7 +353,7 @@
 		<cfargument name="server" type="string" required="true" />
 		<cfargument name="private" type="string" required="true" />
 		<cfargument name="prime" type="string" required="true" />
-		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="theUrl" type="component" required="true" />
 		<cfargument name="encMacKey" type="string" default="" />
 		<cfargument name="macKey" type="string" default="" />
 		
@@ -389,8 +389,8 @@
 			Convert list of signed parameters into key-value encoded list
 				http://openid.net/specs/openid-authentication-2_0.html#kvform
 		--->
-		<cfloop list="#arguments.theURL.search('openid.signed')#" index="token">
-			<cfset tokenContents &= lCase( token ) & ':' & arguments.theURL.search('openid.' & token) & chr(10) />
+		<cfloop list="#arguments.theUrl.search('openid.signed')#" index="token">
+			<cfset tokenContents &= lCase( token ) & ':' & arguments.theUrl.search('openid.' & token) & chr(10) />
 		</cfloop>
 		
 		<!---
@@ -401,7 +401,7 @@
 		<cfset signature64 = binaryEncode( signature, 'base64' ) />
 		
 		<!--- Verify calculated signature with signature returned by OP --->
-		<cfreturn signature64 eq arguments.theURL.search('openid.sig') />
+		<cfreturn signature64 eq arguments.theUrl.search('openid.sig') />
 	</cffunction>
 	
 	<!---
@@ -411,7 +411,7 @@
 	<cffunction name="isValidHandle" access="private" returntype="void" output="false">
 		<cfargument name="server" type="string" required="true" />
 		<cfargument name="assocHandle" type="string" required="true" />
-		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="theUrl" type="component" required="true" />
 		<cfargument name="namespace" type="string" default="" />
 		
 		<cfset var results = '' />
@@ -429,12 +429,12 @@
 			
 			<cfhttpparam type="formfield" name="openid.mode" value="check_authentication" encoded="false" />
 			<cfhttpparam type="formfield" name="openid.assoc_handle" value="#UrlEncodedFormat( arguments.assocHandle )#" encoded="false" />
-			<cfhttpparam type="formfield" name="openid.sig" value="#UrlEncodedFormat(arguments.theURL.search('openid.sig'))#" encoded="false" />
-			<cfhttpparam type="formfield" name="openid.signed" value="#UrlEncodedFormat(arguments.theURL.search('openid.signed'))#" encoded="false" />
+			<cfhttpparam type="formfield" name="openid.sig" value="#UrlEncodedFormat(arguments.theUrl.search('openid.sig'))#" encoded="false" />
+			<cfhttpparam type="formfield" name="openid.signed" value="#UrlEncodedFormat(arguments.theUrl.search('openid.signed'))#" encoded="false" />
 			
-			<cfloop list="#arguments.theURL.search('openid.signed')#" index="token">
+			<cfloop list="#arguments.theUrl.search('openid.signed')#" index="token">
 				<cfif token neq 'mode'>
-					<cfhttpparam type="formfield" name="openid.#LCase(token)#" value="#UrlEncodedFormat(arguments.theURL.search('openid.' & token))#" encoded="false" />
+					<cfhttpparam type="formfield" name="openid.#LCase(token)#" value="#UrlEncodedFormat(arguments.theUrl.search('openid.' & token))#" encoded="false" />
 				</cfif>
 			</cfloop>
 		</cfhttp>
@@ -575,7 +575,7 @@
 	--->
 	<cffunction name="verifyReturnURL" access="private" returntype="boolean" output="false">
 		<cfargument name="returnURL" type="string" required="true" />
-		<cfargument name="theURL" type="component" required="true" />
+		<cfargument name="theUrl" type="component" required="true" />
 		
 		<cfset var baseURL = '' />
 		<cfset var i = '' />
@@ -600,7 +600,7 @@
 		
 		<!--- Check the values --->
 		<cfloop list="#theReturnURL.querystringKeyList()#" index="i">
-			<cfif theReturnURL.search( i ) neq arguments.theURL.search( i )>
+			<cfif theReturnURL.search( i ) neq arguments.theUrl.search( i )>
 				<cfreturn false />
 			</cfif>
 		</cfloop>

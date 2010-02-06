@@ -4,13 +4,13 @@
 	<code>
 		i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init( expandPath('/i18n/') )<br />
 		filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(i18n)<br />
-		theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('')
+		theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('')
 	</code>
 </blockquote>
 
 <cfset i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/')) />
 <cfset filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(i18n) />
-<cfset theURL = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
+<cfset theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('') />
 
 <h2>addBundle(path, name)</h2>
 
@@ -36,7 +36,7 @@
 
 <cfset filter.addFilter('test1') />
 
-<cfoutput>#filter.toHTML(theURL)#</cfoutput>
+<cfoutput>#filter.toHTML(theUrl)#</cfoutput>
 
 <h2>addFilter() - One Option</h2>
 
@@ -57,7 +57,7 @@
 
 <cfset filter.addFilter('test1', options) />
 
-<cfoutput>#filter.toHTML(theURL)#</cfoutput>
+<cfoutput>#filter.toHTML(theUrl)#</cfoutput>
 
 <h2>addFilter() - Few Options</h2>
 
@@ -82,7 +82,7 @@
 
 <cfset filter.addFilter('test1', options) />
 
-<cfoutput>#filter.toHTML(theURL)#</cfoutput>
+<cfoutput>#filter.toHTML(theUrl)#</cfoutput>
 
 <h2>addFilter() - Many options</h2>
 
@@ -119,7 +119,7 @@
 
 <cfset filter.addFilter('test1', options) />
 
-<cfoutput>#filter.toHTML(theURL)#</cfoutput>
+<cfoutput>#filter.toHTML(theUrl)#</cfoutput>
 
 <h2>The Object</h2>
 
