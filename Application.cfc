@@ -9,7 +9,6 @@
 	<cfset this.mappings['/example'] = this.mappings['/root'] & 'example' />
 	<cfset this.mappings['/i18n'] = this.mappings['/root'] & 'i18n' />
 	<cfset this.mappings['/implementation'] = this.mappings['/root'] & 'implementation' />
-	<cfset this.mappings['/mxunit'] = this.mappings['/root'] & 'mxunit' />
 	<cfset this.mappings['/profile'] = this.mappings['/root'] & 'profile' />
 	<cfset this.mappings['/test'] = this.mappings['/root'] & 'test' />
 </cfcomponent>
