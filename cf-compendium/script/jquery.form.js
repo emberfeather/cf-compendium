@@ -14,6 +14,8 @@
 						$(this)
 							.parent('.element')
 							.duplicateElement();
+						
+						return false;
 					},
 					className: 'duplicate'
 				}).append($('<img />', {
