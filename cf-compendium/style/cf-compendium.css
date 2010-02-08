@@ -162,17 +162,17 @@ dt {
 }
 
 .form fieldset {
-	padding: 1em;
-	margin: 1em 0;
+	margin: .5em 0;
 }
 
 .form label {
 	display: block;
-	width: 20%;
-	min-width: 270px;
+	width: 15%;
+	min-width: 17em;
 	float: left;
 	clear: both;
 	text-transform: capitalize;
+	padding: 0 1em;
 }
 
 .form input[type=text],
@@ -182,12 +182,12 @@ dt {
 	min-width: 250px;
 }
 
-.form textarea {
-	width: 100%;
-}
-
 .form .element {
 	padding: .5em;
+}
+
+.form .element:nth-child(odd) {
+	background: #f2f2f2;
 }
 
 .form .element a {
@@ -199,12 +199,8 @@ dt {
 }
 
 .form .submit {
-	padding: 1em;
+	margin: .5em 0;
 	text-align: center;
-}
-
-.form .element:nth-child(odd) {
-	background: #f2f2f2;
 }
 .list {
 	line-height: 1.5em;

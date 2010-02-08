@@ -362,7 +362,7 @@
 					<cfset formatted &= ' for="' & arguments.element.id & '"' />
 				</cfif>
 				
-				<cfset formatted &= '>' & variables.label.get(arguments.element.label) & ':</label> ' />
+				<cfset formatted &= '>' & variables.label.get(arguments.element.label) & ':</label>' />
 			</cfif>
 			
 			<!--- Add the pre element text --->
