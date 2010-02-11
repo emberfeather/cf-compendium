@@ -195,8 +195,12 @@
 				<cfreturn arguments.column.format.toHTML(arguments.value) />
 			</cfcase>
 			
-			<cfdefaultcase>
+			<cfcase value="raw">
 				<cfreturn arguments.value />
+			</cfcase>
+			
+			<cfdefaultcase>
+				<cfreturn htmlEditFormat(arguments.value) />
 			</cfdefaultcase>
 		</cfswitch>
 	</cffunction>
