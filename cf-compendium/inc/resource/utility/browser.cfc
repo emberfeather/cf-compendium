@@ -7,6 +7,11 @@
 		return this;
 	}
 	
+	/**
+	 * Based off code from Detect Mobile Browser
+	 * <p>
+	 * @see http://detectmobilebrowser.com/
+	 */
 	public struct function getBrowserInfo( string userAgent ) {
 		var browser = {
 				isMobile = false,
