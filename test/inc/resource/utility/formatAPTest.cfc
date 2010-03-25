@@ -331,7 +331,7 @@
 		/**
 		 * When given a time with minutes but with seconds it should give the full time.
 		 */
-		public void function testTimeFormat_withSingleTime_withMinutes_sansSeconds() {
+		public void function testTimeFormat_withSingleTime_withMinutes_withSeconds() {
 			var time1 = createTime(4, 15, 10);
 			
 			assertEquals('4:15:10 a.m.', variables.apFormat.timeFormat(time1));
