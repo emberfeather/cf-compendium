@@ -181,6 +181,171 @@
 			assertEquals('May 31', variables.apFormat.dateFormat(date1));
 		}
 		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYear_differentMonth_differentDay_differentTT_differentHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 10, 10, 20, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 6, 20, 15, 30, 0);
+			
+			assertEquals('10:20 a.m. May 10, ' & year(now()) + 1 & '-3:30 p.m. June 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYear_differentMonth_differentDay_differentTT_differentHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 10, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 6, 20, 15, 30, 0);
+			
+			assertEquals('10:30 a.m. May 10, ' & year(now()) + 1 & '-3:30 p.m. June 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYear_differentMonth_differentDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 10, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 6, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 10, ' & year(now()) + 1 & '-10:30 a.m. June 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYear_differentMonth_sameDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 6, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 20, ' & year(now()) + 1 & '-10:30 a.m. June 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYear_sameMonth_sameDay_differentTT_differentHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 5, 20, 13, 40, 0);
+			
+			assertEquals('10:30 a.m.-1:40 p.m. May 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYear_sameMonth_sameDay_sameTT_differentHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 5, 20, 11, 40, 0);
+			
+			assertEquals('10:30-11:40 a.m. May 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYear_sameMonth_sameDay_sameTT_sameHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 5, 20, 10, 40, 0);
+			
+			assertEquals('10:30-10:40 a.m. May 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYear_sameMonth_sameDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 5, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYears_differentMonth_differentDay_differentTT_differentHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 10, 10, 20, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 6, 20, 15, 30, 0);
+			
+			assertEquals('10:20 a.m. May 10, ' & year(now()) & '-' & '3:30 p.m. June 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYears_differentMonth_differentDay_differentTT_differentHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 10, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 6, 20, 15, 30, 0);
+			
+			assertEquals('10:30 a.m. May 10, ' & year(now()) & '-' & '3:30 p.m. June 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYears_differentMonth_differentDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 10, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 6, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 10, ' & year(now()) & '-' & '10:30 a.m. June 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYears_differentMonth_sameDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 6, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 20, ' & year(now()) & '-' & '10:30 a.m. June 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_differentYears_sameMonth_sameDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()) + 1, 5, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 20, ' & year(now()) & '-' & '10:30 a.m. May 20, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_sameYear_differentMonth_differentDay_differentTT_differentHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 10, 10, 20, 0);
+			var datetime2 = createDateTime(year(now()), 6, 20, 15, 30, 0);
+			
+			assertEquals('10:20 a.m. May 10-3:30 p.m. June 20', variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_sameYear_differentMonth_differentDay_differentTT_differentHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 10, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()), 6, 20, 15, 30, 0);
+			
+			assertEquals('10:30 a.m. May 10-3:30 p.m. June 20', variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_sameYear_differentMonth_differentDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 10, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()), 6, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 10-10:30 a.m. June 20', variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_sameYear_differentMonth_sameDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()), 6, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 20-10:30 a.m. June 20', variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_sameYear_sameMonth_sameDay_differentTT_differentHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()), 5, 20, 13, 40, 0);
+			
+			assertEquals('10:30 a.m.-1:40 p.m. May 20', variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_sameYear_sameMonth_sameDay_sameTT_differentHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()), 5, 20, 11, 40, 0);
+			
+			assertEquals('10:30-11:40 a.m. May 20', variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_sameYear_sameMonth_sameDay_sameTT_sameHour_differentMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()), 5, 20, 10, 40, 0);
+			
+			assertEquals('10:30-10:40 a.m. May 20', variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		public void function testDatetimeFormat_withDoubleDatetimes_sameYear_sameMonth_sameDay_sameTT_sameHour_sameMinute() {
+			var datetime1 = createDateTime(year(now()), 5, 20, 10, 30, 0);
+			var datetime2 = createDateTime(year(now()), 5, 20, 10, 30, 0);
+			
+			assertEquals('10:30 a.m. May 20', variables.apFormat.datetimeFormat(datetime1, datetime2));
+		}
+		
+		/**
+		 * When given a single datetime in a different year it should output the time, month, day, and year.
+		 */
+		public void function testDatetimeFormat_withSingleDatetime_differentYear() {
+			var datetime1 = createDateTime(year(now()) + 1, 5, 31, 10, 20, 0);
+			
+			assertEquals('10:20 a.m. May 31, ' & year(now()) + 1, variables.apFormat.datetimeFormat(datetime1));
+		}
+		
+		/**
+		 * When given a single datetime in the current year it should just output the time, month, and day.
+		 */
+		public void function testDatetimeFormat_withSingleDatetime_sameYear() {
+			var datetime1 = createDateTime(year(now()), 5, 31, 10, 20, 0);
+			
+			assertEquals('10:20 a.m. May 31', variables.apFormat.datetimeFormat(datetime1));
+		}
+		
 		public void function testTimeFormat_withDoubleTime_differentTimeMarker_differentHour_differentMinute_differentSecond() {
 			var time1 = createTime(10, 30, 5);
 			var time2 = createTime(21, 35, 10);
