@@ -124,9 +124,6 @@
 				<cfelse>
 					<!--- Search --->
 					
-					<!--- Find the attribute --->
-					<cfset attribute = mid(attribute, result.pos[2], result.len[2]) />
-					
 					<!--- Find the child attribute --->
 					<cfif result.len[3]>
 						<cfset childAttribute = mid(attribute, result.pos[3], result.len[3]) />
@@ -134,6 +131,9 @@
 						<!--- If we didn't provide anything to search on just do a simple get --->
 						<cfreturn variables.instance[attribute & 'By'] />
 					</cfif>
+					
+					<!--- Find the attribute after the child attribute --->
+					<cfset attribute = mid(attribute, result.pos[2], result.len[2]) />
 					
 					<!--- Get the attibute set to search --->
 					<cfinvoke component="#this#" method="get#attribute#" returnvariable="attributeSet" />
