@@ -35,7 +35,7 @@
 	<cffunction name="has__key" access="public" returntype="boolean" output="false">
 		<cfargument name="keyName" type="string" required="true" />
 		
-		<cfreturn structKeyExists(variables.instance, arguments.attributeName) />
+		<cfreturn structKeyExists(variables.instance, arguments.keyName) />
 	</cffunction>
 	
 	<!---
