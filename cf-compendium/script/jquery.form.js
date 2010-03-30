@@ -7,57 +7,54 @@
 	$(function() {
 		var elements = $('.form .element');
 		
-		// Create the duplication link
-		var duplicateLink = $('<a />', {
-				href: '#',
-				click: function() {
-					$(this)
-						.parent('.element')
-						.duplicateElement();
-					
-					return false;
-				},
-				className: 'duplicate'
-			});
-		
-		// Add an image to the duplication link
-		duplicateLink.append(
-				$('<img />', {
-					src: '/cf-compendium/img/icon/famfamfam/silk/add.png',
-					title: 'Add multiple' // TODO use i18n
-				})
-			);
-		
 		// Create the deletion link
-		var deleteLink = $('<a />', {
-				href: '#',
+		var deleteBtn = $('<button />', {
+				text: 'Remove', // TODO use i18n
 				click: function() {
 					$(this)
-						.parent('.element')
+						.parents('.element')
 						.removeElement();
 					
 					return false;
 				},
 				className: 'delete'
+			}).button({
+				icons: {
+					primary: 'ui-icon-circle-minus'
+				},
+				text: false
 			});
-		
-		// Add an image to the delete link 
-		deleteLink.append(
-				$('<img />', {
-					src: '/cf-compendium/img/icon/famfamfam/silk/delete.png',
-					title: 'Remove' // TODO use i18n
-				})
-			);
-		
-		// Add the duplicate functionality
-		$('.allowDuplication', elements).each( function() {
-			$(this).after( duplicateLink.clone(true) );
-		});
 		
 		// Add the deletion functionality
 		$('.allowDeletion', elements).each( function() {
-			$(this).after( deleteLink.clone(true) );
+			addOption( $(this), deleteBtn.clone(true) );
 		});
+		
+		// Create the duplication link
+		var duplicateBtn = $('<button />', {
+				text: 'Add multiple', // TODO use i18n
+				click: function() {
+					$(this)
+						.parents('.element')
+						.duplicateElement();
+					
+					return false;
+				},
+				className: 'duplicate'
+			}).button({
+				icons: {
+					primary: 'ui-icon-circle-plus'
+				},
+				text: false
+			});
+		
+		// Add the duplicate functionality
+		$('.allowDuplication', elements).each( function() {
+			addOption( $(this), duplicateBtn.clone(true) );
+		});
+		
+		// Make the options into button sets
+		$('.options', elements).buttonset();
 	});
 	
 	/**
@@ -90,7 +87,7 @@
 			// Make all the ids and names unique using the clone counter
 			makeUnique(clone, 'clone' + original.data('cloneCount'));
 			
-			// Add after the curent element
+			// Add after the current element
 			$(this).after(clone);
 			
 			// Set the focus on the input in the clone
@@ -127,6 +124,27 @@
 			// Remove the element
 			current.remove();
 		});
+	}
+	
+	/**
+	 * Adds the given option to the element inside an options span.
+	 */
+	function addOption (element, option) {
+		var elementRow = element.parent('.element');
+		var options = $('.options', elementRow);
+		
+		// If there isn't any options container add make a new one
+		if( !options.length ) {
+			options = $('<span />', {
+				className: 'options'
+			});
+			
+			// Add the options after the element
+			element.after(options);
+		}
+		
+		// Add the option
+		options.append(option);
 	}
 	
 	/**

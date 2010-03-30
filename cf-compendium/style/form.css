@@ -32,8 +32,8 @@
 	background: #f2f2f2;
 }
 
-.form .element a {
-	padding: 0 .5em;
+.form .element .options {
+	padding: 0 1em;
 }
 
 .form .required {
