@@ -129,7 +129,7 @@
 						<cfset childAttribute = mid(attribute, result.pos[3], result.len[3]) />
 					<cfelseif not arrayLen(arguments.missingMethodArguments)>
 						<!--- If we didn't provide anything to search on just do a simple get --->
-						<cfreturn variables.instance[attribute & 'By'] />
+						<cfreturn variables.instance[attribute] />
 					</cfif>
 					
 					<!--- Find the attribute after the child attribute --->

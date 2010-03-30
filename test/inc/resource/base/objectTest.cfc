@@ -61,7 +61,7 @@
 		/**
 		 * Test the get by attribute functionality.
 		 */
-		public void function testGetBy() {
+		public void function testGet_By() {
 			var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init();
 			
 			theObject.addTests('valve', 'pressure', 'release', 'control', 'flow');
@@ -70,9 +70,20 @@
 		}
 		
 		/**
+		 * Test the get by attribute functionality without an attribute.
+		 */
+		public void function testGet_By_sansAttribute() {
+			var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init();
+			
+			theObject.setOrderBy('valve');
+			
+			assertEquals('valve', theObject.getOrderBy());
+		}
+		
+		/**
 		 * Test the get object by attribute functionality.
 		 */
-		public void function testGetByAttribute() {
+		public void function testGet_ByAttribute() {
 			var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init();
 			var theObject1 = createObject('component', 'cf-compendium.inc.resource.base.object').init();
 			var theObject2 = createObject('component', 'cf-compendium.inc.resource.base.object').init();
