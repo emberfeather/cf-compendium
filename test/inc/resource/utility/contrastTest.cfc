@@ -129,18 +129,12 @@
 			var set1 = '';
 			var set2 = '';
 			
-			try {
-				set1 = queryNew('something,also,here');
-				set2 = 'cannot,be,done';
-				
-				variables.contrastor.contrast(set1, set2);
-				
-				fail('Should not be able to contrast the two given types');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be able to contrast the two given types');
+			
+			set1 = queryNew('something,also,here');
+			set2 = 'cannot,be,done';
+			
+			variables.contrastor.contrast(set1, set2);
 		}
 		
 		/**

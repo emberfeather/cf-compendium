@@ -75,14 +75,9 @@
 		public void function testPopFailOnEmpty() {
 			var theQueue = createObject('component', 'cf-compendium.inc.resource.utility.queue').init();
 			
-			try {
-				theQueue.pop();
-				fail('should not be able to pop off an empty queue');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be able to pop off an empty queue');
+			
+			theQueue.pop();
 		}
 		
 		/**

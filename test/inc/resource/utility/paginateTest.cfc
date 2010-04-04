@@ -39,15 +39,9 @@
 		public void function testInitFailWithNegativeTotal() {
 			var paginator = createObject('component', 'cf-compendium.inc.resource.utility.paginate');
 			
-			try {
-				paginator.init(-1, 25, 1);
-				
-				fail('Should not be a valid total argument');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be a valid total argument');
+			
+			paginator.init(-1, 25, 1);
 		}
 		
 		/**

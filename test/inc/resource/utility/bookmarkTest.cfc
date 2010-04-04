@@ -37,15 +37,9 @@
 		public void function testSet_Negative() {
 			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
 			
-			try {
-				theBookmark.set('testAction', -1);
-				
-				fail("Set should have thrown an error. [negative value]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [negative value]');
+			
+			theBookmark.set('testAction', -1);
 		}
 		
 		/**
@@ -54,15 +48,9 @@
 		public void function testSet_Large() {
 			var theBookmark = createObject('component', 'cf-compendium.inc.resource.utility.bookmark').init();
 			
-			try {
-				theBookmark.set('testAction', 100);
-				
-				fail("Set should have thrown an error. [value is too big]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [value is too big]');
+			
+			theBookmark.set('testAction', 100);
 		}
 		
 		/**

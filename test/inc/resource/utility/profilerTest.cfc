@@ -11,15 +11,9 @@
 		public void function testGetSansStart() {
 			var profiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true);
 			
-			try {
-				profiler.getTicker('someTicker');
-				
-				fail('Should not be able to get a ticker that has not stopped.');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be able to get a ticker that has not stopped.');
+			
+			profiler.getTicker('someTicker');
 		}
 		
 		/**
@@ -28,15 +22,9 @@
 		public void function testStopSansStart() {
 			var profiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true);
 			
-			try {
-				profiler.stop('someTicker');
-				
-				fail('Should not be able to stop a ticker you never started.');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be able to stop a ticker you never started.');
+			
+			profiler.stop('someTicker');
 		}
 		
 		/**
@@ -45,17 +33,11 @@
 		public void function testStopExisting() {
 			var profiler = createObject('component', 'cf-compendium.inc.resource.utility.profiler').init(true);
 			
-			try {
-				profiler.start('someTicker');
-				profiler.stop('someTicker');
-				profiler.stop('someTicker');
-				
-				fail('Should not be able to stop a ticker you already stopped.');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be able to stop a ticker you already stopped.');
+			
+			profiler.start('someTicker');
+			profiler.stop('someTicker');
+			profiler.stop('someTicker');
 		}
 	</cfscript>
 </cfcomponent>

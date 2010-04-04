@@ -32,15 +32,9 @@
 		public void function testAddFilter_SansKey() {
 			var filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(variables.i18n);
 			
-			try {
-				filter.addFilter('');
-				
-				fail('Should not be able to add a filter without a key.');
-			} catch (mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch (any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Should not be able to add a filter without a key.');
+			
+			filter.addFilter('');
 		}
 		
 		/**
@@ -85,15 +79,9 @@
 			var filter = createObject('component', 'cf-compendium.inc.resource.utility.filter').init(variables.i18n);
 			var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
 			
-			try {
-				filter.toHTML(theUrl);
-				
-				fail('Should not be able to generate HTML if the filter has no items.');
-			} catch (mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch (any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Should not be able to generate HTML if the filter has no items.');
+			
+			filter.toHTML(theUrl);
 		}
 	</cfscript>
 </cfcomponent>

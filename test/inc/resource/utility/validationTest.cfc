@@ -13,15 +13,9 @@
 		public void function testID_invalid_nonNumeric() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try {
-				validator.ID('testing', "val", '');
-				
-				fail("Set should have thrown an error. ['val' is not numeric]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. ["val" is not numeric]');
+			
+			validator.ID('testing', "val", '');
 		}
 		
 		/**
@@ -30,15 +24,9 @@
 		public void function testID_invalid_negative() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try {
-				validator.ID('testing', -15, '');
-				
-				fail("Negatives are not allowed");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Negatives are not allowed');
+			
+			validator.ID('testing', -15, '');
 		}
 		
 		/**
@@ -65,15 +53,9 @@
 		public void function testIn_invalid_notInList() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try {
-				validator.in('testing', 'val', 'is,it,in,here');
-				
-				fail("Set should have thrown an error. ['val' is not in 'is,it,in,here']");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. ["val" is not in "is,it,in,here"]');
+			
+			validator.in('testing', 'val', 'is,it,in,here');
 		}
 		
 		/**
@@ -82,15 +64,9 @@
 		public void function testNotIn_invalid_inList() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try {
-				validator.notIn('testing', 'val', 'val,is,in,here');
-				
-				fail("Set should have thrown an error. ['val' is in 'val,is,in,here']");
-			} catch (mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch (any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. ["val" is in "val,is,in,here"');
+			
+			validator.notIn('testing', 'val', 'val,is,in,here');
 		}
 		
 		/**
@@ -108,15 +84,9 @@
 		public void function testIsNumber_invalid_string() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try {
-				validator.isNumber('testing', "val", '');
-				
-				fail("Set should have thrown an error. ['val' is not numeric]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [val is not numeric]');
+			
+			validator.isNumber('testing', "val", '');
 		}
 		
 		/**
@@ -134,15 +104,9 @@
 		public void function testMaxLength_invalid_overLength() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try {
-				validator.maxLength('testing', "val", 2);
-				
-				fail("Set should have thrown an error. [the length of 'val' is greater than 2]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [the length is greater than 2]');
+			
+			validator.maxLength('testing', "val", 2);
 		}
 		
 		/**
@@ -160,15 +124,9 @@
 		public void function testMinLength_invalid_underLength() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try{
-				validator.minLength('testing', "val", 4);
-				
-				fail("Set should have thrown an error. [the length of 'val' is less than 4]");		
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [the length of val is less than 4]');
+			
+			validator.minLength('testing', "val", 4);
 		}
 		
 		/**
@@ -186,15 +144,9 @@
 		public void function testNotEmpty_invalid_empty() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try{
-				validator.notEmpty('testing', '', '');
-				
-				fail("Set should have thrown an error. ['' is empty]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [is empty]');
+			
+			validator.notEmpty('testing', '', '');
 		}
 		
 		/**
@@ -212,15 +164,9 @@
 		public void function testNotFuture_invalid_future() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try{
-				validator.notFuture('testing', Now() + 1, '');
-				
-				fail("Set should have thrown an error. [Now()+1 is in the future]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [Now()+1 is in the future]');
+			
+			validator.notFuture('testing', Now() + 1, '');
 		}
 		
 		/**
@@ -238,15 +184,9 @@
 		public void function testNotGreaterThan_invalid_greaterThan() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try{
-				validator.notGreaterThan('testing', 3, 2);
-				
-				fail("Set should have thrown an error. [3 is greater than 2]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [3 is greater than 2]');
+			
+			validator.notGreaterThan('testing', 3, 2);
 		}
 		
 		/**
@@ -264,15 +204,9 @@
 		public void function testNotLessThan_invalid_lessThan() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try{
-				validator.notLessThan('testing', 2, 3);
-				
-				fail("Set should have thrown an error. [2 is less than 3]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [2 is less than 3]');
+			
+			validator.notLessThan('testing', 2, 3);
 		}
 		
 		/**
@@ -290,15 +224,9 @@
 		public void function testNotPast_invalid_past() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try{
-				validator.notPast('testing', Now() - 1, '');
-				
-				fail("Set should have thrown an error. [Now()-1 is in the past]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [Now()-1 is in the past]');
+			
+			validator.notPast('testing', Now() - 1, '');
 		}
 		
 		/**
@@ -316,15 +244,9 @@
 		public void function testValidEmail_invalid_noDomain() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try{
-				validator.validEmail('testing', 'test@test', '');
-				
-				fail("Set should have thrown an error. [test@test is not a valid email]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [test@test is not a valid email]');
+			
+			validator.validEmail('testing', 'test@test', '');
 		}
 		
 		/**
@@ -342,15 +264,9 @@
 		public void function testValidURL_invalid_noProtocol() {
 			var validator = variables.i18n.getValidation('en_US');
 			
-			try{
-				validator.validURL('testing', 'test.com', '');
-				
-				fail("Set should have thrown an error. [test.com is not a valid url without a protocol]");
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// expect to get here
-			}
+			expectException('any', 'Set should have thrown an error. [test.com is not a valid url without a protocol]');
+			
+			validator.validURL('testing', 'test.com', '');
 		}
 		
 		/**

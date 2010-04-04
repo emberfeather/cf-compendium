@@ -6,11 +6,7 @@
 		public void function testInitSansTimeOffset() {
 			var theSitemap = '';
 			
-			try {
-				theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
-			} catch(any exception) {
-				fail('Creating a sitemap object without a time zone designator should work.');
-			}
+			theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
 		}
 		
 		/**
@@ -46,15 +42,9 @@
 		public void function testInitWithInvalidTimeOffset1() {
 			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap');
 			
-			try {
-				theSitemap.init('+1:00');
-				
-				fail('Should not be a valid time offset');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be a valid time offset');
+			
+			theSitemap.init('+1:00');
 		}
 		
 		/**
@@ -63,15 +53,9 @@
 		public void function testInitWithInvalidTimeOffset2() {
 			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap');
 			
-			try {
-				theSitemap.init('-21:00');
-				
-				fail('Should not be a valid time offset');
-			} catch (mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch (any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be a valid time offset');
+			
+			theSitemap.init('-21:00');
 		}
 		
 		/**
@@ -81,17 +65,11 @@
 			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
 			var options = {};
 			
-			try {
-				options.lastMod = 'Yo';
-				
-				theSitemap.addUrl('http://google.com', options);
-				
-				fail('Should not be a valid last modification date');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be a valid last modification date');
+			
+			options.lastMod = 'Yo';
+			
+			theSitemap.addUrl('http://google.com', options);
 		}
 		
 		/**
@@ -101,17 +79,11 @@
 			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
 			var options = {};
 			
-			try {
-				options.changeFreq = 'whenever';
-				
-				theSitemap.addUrl('http://google.com', options);
-				
-				fail('Should not be a valid change frequency');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be a valid change frequency');
+			
+			options.changeFreq = 'whenever';
+			
+			theSitemap.addUrl('http://google.com', options);
 		}
 		
 		/**
@@ -121,17 +93,11 @@
 			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
 			var options = {};
 			
-			try {
-				options.priority = -1;
-				
-				theSitemap.addUrl('http://google.com', options);
-				
-				fail('Should not be a valid priority');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow;
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be a valid priority');
+			
+			options.priority = -1;
+			
+			theSitemap.addUrl('http://google.com', options);
 		}
 		
 		/**
@@ -141,17 +107,11 @@
 			var theSitemap = createObject('component', 'cf-compendium.inc.resource.utility.sitemap').init();
 			var options = {};
 			
-			try {
-				options.priority = 2;
-				
-				theSitemap.addUrl('http://google.com', options);
-				
-				fail('Should not be a valid priority');
-			} catch(mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch(any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be a valid priority');
+			
+			options.priority = 2;
+			
+			theSitemap.addUrl('http://google.com', options);
 		}
 	</cfscript>
 </cfcomponent>

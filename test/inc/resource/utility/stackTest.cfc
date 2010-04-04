@@ -75,14 +75,9 @@
 		public void function testPopFailOnEmpty() {
 			var theStack = createObject('component', 'cf-compendium.inc.resource.utility.stack').init();
 			
-			try {
-				theStack.pop();
-				fail('should not be able to pop off an empty stack');
-			} catch (mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch (any exception) {
-				// Expect to get here
-			}
+			expectException('any', 'Should not be able to pop off an empty stack');
+			
+			theStack.pop();
 		}
 		
 		/**

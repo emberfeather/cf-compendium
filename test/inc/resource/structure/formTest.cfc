@@ -17,15 +17,9 @@
 					value = "true"
 				});
 			
-			try {
-				theForm.toHTML();
-				
-				fail("toHTML should have thrown an error. [no action given]");
-			} catch (mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch (any exception) {
-				// expect to get here
-			}
+			expectException('any', 'toHTML should have thrown an error. [no action given]');
+			
+			theForm.toHTML();
 		}
 		
 		/**
@@ -34,15 +28,9 @@
 		public void function testShowForm_SansElement() {
 			var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n);
 			
-			try {
-				theForm.toHTML('/');
-				
-				fail('toHTML should have thrown an error. [no elements to show]');
-			} catch (mxunit.exception.AssertionFailedError exception) {
-				rethrow();
-			} catch (any exception) {
-				// expect to get here
-			}
+			expectException('any', 'toHTML should have thrown an error. [no elements to show]');
+			
+			theForm.toHTML('/');
 		}
 	</cfscript>
 </cfcomponent>
