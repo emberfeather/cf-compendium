@@ -23,4 +23,14 @@
 		
 		<cfreturn variables.extender.extend( argumentCollection = arguments ) />
 	</cffunction>
+	
+	<cffunction name="throw" access="public" returntype="void" output="false">
+		<cfargument name="message" type="string" required="true" />
+		<cfargument name="type" type="string" default="Application" />
+		<cfargument name="detail" type="string" default="" />
+		<cfargument name="errorCode" type="string" default="" />
+		<cfargument name="extendedInfo" type="string" default="" />
+		
+		<cfthrow message="#arguments.message#" detail="#arguments.detail#" type="#arguments.type#" errorcode="#arguments.errorCode#" extendedinfo="#arguments.extendedInfo#" />
+	</cffunction>
 </cfcomponent>
