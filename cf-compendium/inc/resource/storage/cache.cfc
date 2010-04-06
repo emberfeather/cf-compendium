@@ -26,8 +26,8 @@
 	/**
 	 * Delete a cached value from the cache
 	 */
-	public any function delete( string key ) {
-		return cacheDelete(id = arguments.key, cacheName = variables.cacheName);
+	public void function delete( string key ) {
+		cacheDelete(id = arguments.key, throwOnError = false, cacheName = variables.cacheName);
 	}
 	
 	/**
