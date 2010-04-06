@@ -27,6 +27,7 @@
 	 * Delete a cached value from the cache
 	 */
 	public void function delete( string key ) {
+		// TODO remove extra arguments after RAILO-671 is closed
 		cacheDelete(id = arguments.key, throwOnError = false, cacheName = variables.cacheName);
 	}
 	
@@ -41,14 +42,14 @@
 	/**
 	 * Get all cached values from the cache
 	 */
-	public struct function getAll( string filter ) {
+	public struct function getAll( string filter = '' ) {
 		return cacheGetAll(filter = arguments.filter, cacheName = variables.cacheName);
 	}
 	
 	/**
 	 * Get all cached keys from the cache
 	 */
-	public array function getAllIds( string filter ) {
+	public array function getAllIds( string filter = '' ) {
 		return cacheGetAllIds(filter = arguments.filter, cacheName = variables.cacheName);
 	}
 	
