@@ -13,7 +13,8 @@
 	 * Clear all cached values
 	 */
 	public void function clear() {
-		cacheClear(cacheName = variables.cacheName);
+		// TODO remove extra arguments after RAILO-671 is closed
+		cacheClear(filter = '', cacheName = variables.cacheName);
 	}
 	
 	/**
@@ -75,4 +76,11 @@
 		cacheRemove(ids = arguments.key, cacheName = variables.cacheName);
 	}
 </cfscript>
+	<cffunction name="death" access="public" returntype="void" output="false">
+		<cfargument name="value" type="any" required="true" />
+		
+		<!--- TODO Remove --->
+		<cfdump var="#arguments.value#" />
+		<cfabort />
+	</cffunction>
 </cfcomponent>
