@@ -149,6 +149,8 @@
 							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#key#" returnvariable="value" />
 						<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], key)>
 							<cfset value = arguments.data[arguments.rowNum][key] />
+						<cfelseif isArray(arguments.data) and key eq '__value'>
+							<cfset value = arguments.data[arguments.rowNum] />
 						<cfelse>
 							<cfset value = key />
 						</cfif>
@@ -440,14 +442,16 @@
 											</td>
 										</cfloop>
 									<cfelseif isSimpleValue(item)>
-										<td class="#col.key# #col.class# column-#counter++#">
-											<!--- Check for a link --->
-											<cfif arrayLen(col.link)>
-												#createLink(item, col, data, rowNum, counter, arguments.options)#
-											<cfelse>
-												#item#
-											</cfif>
-										</td>
+										<cfloop array="#variables.columns#" index="col">
+											<td class="#col.key# #col.class# column-#counter++#">
+												<!--- Check for a link --->
+												<cfif arrayLen(col.link)>
+													#createLink(item, col, data, rowNum, counter, arguments.options)#
+												<cfelse>
+													#item#
+												</cfif>
+											</td>
+										</cfloop>
 									<cfelse>
 										<cfthrow message="The data type passed in is not suported." detail="The type of the data in the array is not of type struct, object or simpleValue.">
 									</cfif>
