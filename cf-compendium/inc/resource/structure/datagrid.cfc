@@ -227,6 +227,7 @@
 		<cfset var htmlColumns = '' />
 		<cfset var htmlAggregates = '' />
 		<cfset var hasAggregate = false />
+		<cfset var i = '' />
 		<cfset var item = '' />
 		<cfset var result = '' />
 		<cfset var rowNum = '' />
@@ -392,7 +393,8 @@
 					<cfif isArray(arguments.data) and arrayLen(arguments.data)>
 						<cfset rowNum = 0 />
 						
-						<cfloop array="#arguments.data#" index="item">
+						<cfloop from="#arguments.options.startRow#" to="#min(arrayLen(arguments.data), arguments.options.startRow + arguments.options.numPerPage)#" index="i">
+							<cfset item = arguments.data[i] />
 							<cfset rowNum++ />
 							
 							<cfoutput>
