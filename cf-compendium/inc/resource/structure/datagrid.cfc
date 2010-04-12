@@ -112,11 +112,15 @@
 		<cfset var class = '' />
 		<cfset var href = '' />
 		<cfset var html = '' />
-		<cfset var key = '' />
 		<cfset var i = '' />
 		<cfset var j = '' />
+		<cfset var key = '' />
 		<cfset var link = '' />
+		<cfset var theUrl = '' />
 		<cfset var value = '' />
+		
+		<!--- Determine if using a column or datagrid based url --->
+		<cfset theUrl = (structKeyExists(arguments.column, 'theUrl') ? arguments.column.theUrl : arguments.options.theUrl) />
 		
 		<!--- Adjust for the startRow --->
 		<cfset arguments.rowNum += arguments.options.startRow - 1 />
@@ -127,12 +131,12 @@
 					<!--- Setup the base link values using the url override --->
 					<cfif isStruct(arguments.options.linkBase)>
 						<cfif structKeyExists(arguments.options.linkBase, arguments.column.key)>
-							<cfinvoke component="#arguments.options.theUrl#" method="overrideDGCol#arguments.colNum#Link#i#">
+							<cfinvoke component="#theUrl#" method="overrideDGCol#arguments.colNum#Link#i#">
 								<cfinvokeargument name="value" value="#arguments.options.linkBase[arguments.column.key]#" />
 							</cfinvoke>
 						</cfif>
 					<cfelseif arguments.options.linkBase neq ''>
-						<cfinvoke component="#arguments.options.theUrl#" method="overrideDGCol#arguments.colNum#Link#i#">
+						<cfinvoke component="#theUrl#" method="overrideDGCol#arguments.colNum#Link#i#">
 							<cfinvokeargument name="value" value="#arguments.options.linkBase#" />
 						</cfinvoke>
 					</cfif>
@@ -155,7 +159,7 @@
 							<cfset value = key />
 						</cfif>
 						
-						<cfinvoke component="#arguments.options.theUrl#" method="setDGCol#arguments.colNum#Link#i#">
+						<cfinvoke component="#theUrl#" method="setDGCol#arguments.colNum#Link#i#">
 							<cfinvokeargument name="name" value="#j#" />
 							<cfinvokeargument name="value" value="#value#" />
 						</cfinvoke>
@@ -169,7 +173,7 @@
 					</cfif>
 					
 					<!--- Retrieve the URL --->
-					<cfinvoke component="#arguments.options.theUrl#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
+					<cfinvoke component="#theUrl#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
 					
 					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#arguments.text#</a>
 				</cfloop>
