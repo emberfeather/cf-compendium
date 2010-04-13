@@ -76,11 +76,4 @@
 		cacheRemove(ids = arguments.key, cacheName = variables.cacheName);
 	}
 </cfscript>
-	<cffunction name="death" access="public" returntype="void" output="false">
-		<cfargument name="value" type="any" required="true" />
-		
-		<!--- TODO Remove --->
-		<cfdump var="#arguments.value#" />
-		<cfabort />
-	</cffunction>
 </cfcomponent>
