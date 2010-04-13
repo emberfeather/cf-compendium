@@ -10,7 +10,7 @@
 		
 		super.init();
 		
-		language = createObject('java', 'org.eclipse.mylyn.wikitext.textile.core.TextileLanguage').init();
+		language = createObject('java', 'org.eclipse.mylyn.wikitext.mediawiki.core.MediaWikiLanguage').init();
 		
 		variables.parser = createObject('java', 'org.eclipse.mylyn.wikitext.core.parser.MarkupParser').init(language);
 		
