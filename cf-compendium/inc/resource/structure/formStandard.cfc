@@ -129,9 +129,11 @@
 		
 		<cfset var formatted = '' />
 		<cfset var defaults = {} />
+		<cfset var group = '' />
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
+		<cfset var option = '' />
 		<cfset var originalValue = '' />
 		
 		<!--- Set defaults --->
@@ -451,9 +453,11 @@
 		
 		<cfset var formatted = '' />
 		<cfset var defaults = {} />
+		<cfset var group = '' />
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
+		<cfset var option = '' />
 		<cfset var originalValue = '' />
 		
 		<!--- Set defaults --->
