@@ -202,45 +202,4 @@
 		
 		<cfreturn formatted />
 	</cffunction>
-	
-	<!--- 
-		Creates the text area form element.
-	--->
-	<cffunction name="elementTextarea" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfset var formatted = '' />
-		
-		<cfset formatted = '<textarea ' />
-		
-		<!--- Rows --->
-		<cfset formatted &= 'rows="' & arguments.element.rows & '" ' />
-		
-		<!--- Cols --->
-		<cfset formatted &= 'cols="' & arguments.element.cols & '" ' />
-		
-		<!--- Add additional attributes --->
-		<!--- Name --->
-		<cfif arguments.element.name neq ''>
-			<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled eq true>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Read Only --->
-		<cfif arguments.element.readOnly eq true>
-			<cfset formatted &= 'readonly="readonly" ' />
-		</cfif>
-		
-		<cfset formatted &= '>' />
-		
-		<cfset formatted &= '</textarea>' />
-		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
-		
-		<cfreturn formatted />
-	</cffunction>
 </cfcomponent>
