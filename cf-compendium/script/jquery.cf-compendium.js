@@ -22,8 +22,8 @@
 		// Add the duplicate functionality
 		attachDuplication(elements);
 		
-		// Make the options into button sets
-		$('.options', elements).buttonset();
+		// Make the modifiers into button sets
+		$('.modifiers', elements).buttonset();
 	});
 	
 	/**
@@ -96,24 +96,24 @@
 	}
 	
 	/**
-	 * Adds the given option to the element inside an options span.
+	 * Adds the given option to the element inside an modifiers span.
 	 */
 	function addOption (element, option) {
 		var elementRow = element.parent('.element');
-		var options = $('.options', elementRow);
+		var modifiers = $('.modifiers', elementRow);
 		
-		// If there isn't any options container add make a new one
-		if( !options.length ) {
-			options = $('<span />', {
-				className: 'options'
+		// If there isn't any modifiers container add make a new one
+		if( !modifiers.length ) {
+			modifiers = $('<span />', {
+				className: 'modifiers'
 			});
 			
-			// Add the options after the element
-			element.after(options);
+			// Add the modifiers after the element
+			element.after(modifiers);
 		}
 		
 		// Add the option
-		options.append(option);
+		modifiers.append(option);
 	}
 	
 	/**

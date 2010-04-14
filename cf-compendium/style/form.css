@@ -36,6 +36,18 @@
 	padding: 0 1em;
 }
 
+.form .element .options {
+	overflow: hidden;
+}
+
+.form .element .options label {
+	clear: none;
+	display: inline;
+	min-width: auto;
+	width: auto;
+	min-width: 0;
+}
+
 .form .required {
 	color: #E3170D;
 }

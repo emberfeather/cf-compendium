@@ -10,12 +10,12 @@
 		<cfargument name="elementType" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
+		<cfset super.addElement(argumentCollection=arguments) />
+		
 		<!--- Check for a file form type --->
 		<cfif arguments.elementType eq 'file'>
 			<cfset variables.isMultipart = true />
 		</cfif>
-		
-		<cfset super.addElement(argumentCollection=arguments) />
 	</cffunction>
 	
 	<!--- 
@@ -136,6 +136,53 @@
 		
 		<!--- Extend the form options --->
 		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		
+		<!--- Check if we are showing a single element or many options --->
+		<cfif structKeyExists(arguments.element, 'options')>
+			<cfset formatted = '<div class="options">' />
+			
+			<!--- Get the option groups --->
+			<cfset optGroups = arguments.element.options.get() />
+			
+			<!--- Output the options --->
+			<cfloop from="1" to="#arrayLen(optGroups)#" index="i">
+				<cfset group = optGroups[i] />
+				
+				<cfif group.label neq ''>
+					<cfset formatted &= '<div><div>' & variables.label.get(group.label) & '</div>' />
+				</cfif>
+				
+				<cfloop from="1" to="#arrayLen(group.options)#" index="j">
+					<cfset option = group.options[j] />
+					
+					<cfset arguments.element.value = option.value />
+					
+					<cfset formatted &= '<label>' & elementCheckboxSingle(arguments.element, '_' & i & '_' & j) & ' ' & option.title & '</label>' />
+				</cfloop>
+				
+				<cfif group.label neq ''>
+					<cfset formatted &= '</div>' />
+				</cfif>
+			</cfloop>
+			
+			<cfset formatted &= '<div class="clear"><!-- clear --></div>' />
+			
+			<cfset formatted &= '</div>' />
+		<cfelse>
+			<!--- Just do a single element if no options found --->
+			<cfset formatted = elementCheckboxSingle(arguments.element) />
+		</cfif>
+		
+		<cfreturn formatted />
+	</cffunction>
+	
+	<!--- 
+		Creates the checkbox form element.
+	--->
+	<cffunction name="elementCheckboxSingle" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset var formatted = '' />
 		
 		<cfset formatted = '<input type="checkbox" ' />
 		
@@ -394,6 +441,10 @@
 		
 		<cfset var formatted = '' />
 		<cfset var defaults = {} />
+		<cfset var i = '' />
+		<cfset var j = '' />
+		<cfset var optGroups = '' />
+		<cfset var prefix = '' />
 		
 		<!--- Set defaults --->
 		<cfset defaults.checked = false />
@@ -402,10 +453,58 @@
 		<!--- Extend the form options --->
 		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
 		
+		<!--- Check if we are showing a single element or many options --->
+		<cfif structKeyExists(arguments.element, 'options')>
+			<cfset formatted = '<div class="options">' />
+			
+			<!--- Get the option groups --->
+			<cfset optGroups = arguments.element.options.get() />
+			
+			<!--- Output the options --->
+			<cfloop from="1" to="#arrayLen(optGroups)#" index="i">
+				<cfset group = optGroups[i] />
+				
+				<cfif group.label neq ''>
+					<cfset formatted &= '<div><div>' & variables.label.get(group.label) & '</div>' />
+				</cfif>
+				
+				<cfloop from="1" to="#arrayLen(group.options)#" index="j">
+					<cfset option = group.options[j] />
+					
+					<cfset arguments.element.value = option.value />
+					
+					<cfset formatted &= '<label>' & elementRadioSingle(arguments.element, '_' & i & '_' & j) & ' ' & option.title & '</label>' />
+				</cfloop>
+				
+				<cfif group.label neq ''>
+					<cfset formatted &= '</div>' />
+				</cfif>
+			</cfloop>
+			
+			<cfset formatted &= '<div class="clear"><!-- clear --></div>' />
+			
+			<cfset formatted &= '</div>' />
+		<cfelse>
+			<!--- Just do a single element if no options found --->
+			<cfset formatted = elementRadioSingle(arguments.element) />
+		</cfif>
+		
+		<cfreturn formatted />
+	</cffunction>
+	
+	<!--- 
+		Creates the radio form element.
+	--->
+	<cffunction name="elementRadioSingle" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		<cfargument name="postfix" type="string" default="" />
+		
+		<cfset var formatted = '' />
+		
 		<cfset formatted = '<input type="radio" ' />
 		
 		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
+		<cfset formatted &= 'id="' & arguments.element.id & arguments.postfix & '" ' />
 		
 		<!--- Name --->
 		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
@@ -426,11 +525,6 @@
 		<!--- Disabled --->
 		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Size --->
-		<cfif isNumeric(arguments.element.size) and arguments.element.size gt 0>
-			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
 		</cfif>
 		
 		<!--- Class --->
@@ -485,11 +579,6 @@
 		<!--- Multiple --->
 		<cfif arguments.element.multiple eq true>
 			<cfset formatted &= 'multiple="multiple" ' />
-		</cfif>
-		
-		<!--- Size --->
-		<cfif arguments.element.size neq ''>
-			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
 		</cfif>
 		
 		<!--- Disabled --->
