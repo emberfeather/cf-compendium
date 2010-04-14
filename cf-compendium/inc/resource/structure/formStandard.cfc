@@ -129,6 +129,9 @@
 		
 		<cfset var formatted = '' />
 		<cfset var defaults = {} />
+		<cfset var i = '' />
+		<cfset var j = '' />
+		<cfset var optGroups = '' />
 		
 		<!--- Set defaults --->
 		<cfset defaults.checked = false />
@@ -157,7 +160,11 @@
 					
 					<cfset arguments.element.value = option.value />
 					
-					<cfset formatted &= '<label>' & elementCheckboxSingle(arguments.element, '_' & i & '_' & j) & ' ' & option.title & '</label>' />
+					<cfset formatted &= '<label>' />
+					
+					<cfset formatted &= elementCheckboxSingle(arguments.element, '_' & i & '_' & j) />
+					
+					<cfset formatted &= ' ' & option.title & '</label>' />
 				</cfloop>
 				
 				<cfif group.label neq ''>
@@ -444,7 +451,6 @@
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
-		<cfset var prefix = '' />
 		
 		<!--- Set defaults --->
 		<cfset defaults.checked = false />
@@ -473,7 +479,11 @@
 					
 					<cfset arguments.element.value = option.value />
 					
-					<cfset formatted &= '<label>' & elementRadioSingle(arguments.element, '_' & i & '_' & j) & ' ' & option.title & '</label>' />
+					<cfset formatted &= '<label>' />
+					
+					<cfset formatted &= elementRadioSingle(arguments.element, '_' & i & '_' & j) />
+					
+					<cfset formatted &= ' ' & option.title & '</label>' />
 				</cfloop>
 				
 				<cfif group.label neq ''>
