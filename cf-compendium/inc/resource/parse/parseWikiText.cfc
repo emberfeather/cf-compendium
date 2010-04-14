@@ -1,7 +1,9 @@
 <!---
-	Uses the markdownj library to convert markdown into html.
+	Uses the Mylyn standalone WikiText library to convert various markup into html.
 	
-	To use the markdownj library needs to be in your classpath.
+	To use the Mylyn WikiText Standalone library needs to be in your classpath.
+	
+	@see http://www.eclipse.org/mylyn/downloads/
 --->
 <cfcomponent extends="cf-compendium.inc.resource.parse.parse" output="false">
 <cfscript>

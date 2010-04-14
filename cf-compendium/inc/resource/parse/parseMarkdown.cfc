@@ -2,6 +2,8 @@
 	Uses the markdownj library to convert markdown into html.
 	
 	To use the markdownj library needs to be in your classpath.
+	
+	@see http://markdownj.org/
 --->
 <cfcomponent extends="cf-compendium.inc.resource.parse.parse" output="false">
 <cfscript>
