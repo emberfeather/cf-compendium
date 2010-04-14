@@ -132,6 +132,7 @@
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
+		<cfset var originalValue = '' />
 		
 		<!--- Set defaults --->
 		<cfset defaults.checked = false />
@@ -142,6 +143,9 @@
 		
 		<!--- Check if we are showing a single element or many options --->
 		<cfif structKeyExists(arguments.element, 'options')>
+			<!--- Keep a hold on the original value --->
+			<cfset originalValue = arguments.element.value />
+			
 			<cfset formatted = '<div class="options">' />
 			
 			<!--- Get the option groups --->
@@ -159,11 +163,10 @@
 					<cfset option = group.options[j] />
 					
 					<cfset arguments.element.value = option.value />
+					<cfset arguments.element.checked = originalValue eq option.value />
 					
 					<cfset formatted &= '<label>' />
-					
 					<cfset formatted &= elementCheckboxSingle(arguments.element, '_' & i & '_' & j) />
-					
 					<cfset formatted &= ' ' & option.title & '</label>' />
 				</cfloop>
 				
@@ -451,6 +454,7 @@
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
+		<cfset var originalValue = '' />
 		
 		<!--- Set defaults --->
 		<cfset defaults.checked = false />
@@ -461,6 +465,9 @@
 		
 		<!--- Check if we are showing a single element or many options --->
 		<cfif structKeyExists(arguments.element, 'options')>
+			<!--- Keep a hold on the original value --->
+			<cfset originalValue = arguments.element.value />
+			
 			<cfset formatted = '<div class="options">' />
 			
 			<!--- Get the option groups --->
@@ -478,6 +485,7 @@
 					<cfset option = group.options[j] />
 					
 					<cfset arguments.element.value = option.value />
+					<cfset arguments.element.checked = originalValue eq option.value />
 					
 					<cfset formatted &= '<label>' />
 					
