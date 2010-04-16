@@ -25,6 +25,11 @@
 		<cfargument name="value" type="string" required="true" />
 		<cfargument name="href" type="string" required="true" />
 		
+		<!--- Check for short UUID display --->
+		<cfif right(arguments.key, 2) EQ 'ID' and len(arguments.value) eq 36>
+			<cfset arguments.value = left(arguments.value, 8) />
+		</cfif>
+		
 		<cfreturn '<span class="capitalize">' & variables.label.get(arguments.key) & '</span>: <strong>' & arguments.value & '</strong> <sup>(<a href="' & arguments.href & '">x</a>)</sup>' />
 	</cffunction>
 	
