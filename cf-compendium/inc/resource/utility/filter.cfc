@@ -55,35 +55,37 @@
 	</cffunction>
 	
 	<cffunction name="filterItem" access="private" returntype="string" output="false">
-		<cfargument name="theUrl" type="component" required="true" />
+		<cfargument name="values" type="struct" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
+		
+		
 		
 		<!--- Check if it is a text filter --->
 		<cfif not isObject(arguments.filter.options)>
-			<cfreturn filterText(arguments.theUrl, arguments.filter) />
+			<cfreturn filterText(arguments.values, arguments.filter) />
 		<cfelse>
 			<!--- Check the number of filters --->
 			<cfif length() eq 1>
 				<!--- 'Smartly' determine what type of output would be best --->
 				<cfswitch expression="#arguments.filter.options.length()#">
 					<cfcase value="1">
-						<cfreturn filterCheckbox(arguments.theUrl, arguments.filter) />
+						<cfreturn filterCheckbox(arguments.values, arguments.filter) />
 					</cfcase>
 					<cfcase value="2,3,4">
-						<cfreturn filterRadio(arguments.theUrl, arguments.filter) />
+						<cfreturn filterRadio(arguments.values, arguments.filter) />
 					</cfcase>
 					<cfdefaultcase>
-						<cfreturn filterSelect(arguments.theUrl, arguments.filter) />
+						<cfreturn filterSelect(arguments.values, arguments.filter) />
 					</cfdefaultcase>
 				</cfswitch>
 			<cfelse>
 				<!--- 'Smartly' determine what type of output would be best --->
 				<cfswitch expression="#arguments.filter.options.length()#">
 					<cfcase value="1">
-						<cfreturn filterCheckbox(arguments.theUrl, arguments.filter) />
+						<cfreturn filterCheckbox(arguments.values, arguments.filter) />
 					</cfcase>
 					<cfdefaultcase>
-						<cfreturn filterSelect(arguments.theUrl, arguments.filter) />
+						<cfreturn filterSelect(arguments.values, arguments.filter) />
 					</cfdefaultcase>
 				</cfswitch>
 			</cfif>
@@ -91,14 +93,14 @@
 	</cffunction>
 	
 	<cffunction name="filterCheckbox" access="private" returntype="string" output="false">
-		<cfargument name="theUrl" type="component" required="true" />
+		<cfargument name="values" type="struct" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<cfset var group = '' />
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = arguments.theUrl.search(arguments.filter.key) />
+		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
 		<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
 		
@@ -118,14 +120,14 @@
 	</cffunction>
 	
 	<cffunction name="filterRadio" access="private" returntype="string" output="false">
-		<cfargument name="theUrl" type="component" required="true" />
+		<cfargument name="values" type="struct" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<cfset var group = '' />
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = arguments.theUrl.search(arguments.filter.key) />
+		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
 		<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
 		
@@ -145,14 +147,14 @@
 	</cffunction>
 	
 	<cffunction name="filterSelect" access="private" returntype="string" output="false">
-		<cfargument name="theUrl" type="component" required="true" />
+		<cfargument name="values" type="struct" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<cfset var group = '' />
 		<cfset var html = '' />
 		<cfset var optGroups = arguments.filter.options.get() />
 		<cfset var option = '' />
-		<cfset var value = arguments.theUrl.search(arguments.filter.key) />
+		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
 		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
 		
@@ -182,12 +184,13 @@
 	</cffunction>
 	
 	<cffunction name="filterText" access="private" returntype="string" output="false">
-		<cfargument name="theUrl" type="component" required="true" />
+		<cfargument name="values" type="struct" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
 		<cfset var html = '' />
+		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
-		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & arguments.theUrl.search(arguments.filter.key) & '" /></label>' />
+		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & value & '" /></label>' />
 		
 		<cfreturn html />
 	</cffunction>
@@ -198,6 +201,7 @@
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="theUrl" type="component" required="true" />
+		<cfargument name="values" type="struct" default="#{}#" />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var html = '' />
@@ -217,7 +221,7 @@
 		<cfloop array="#variables.filters#" index="filter">
 			<!--- Check for a filter or a break --->
 			<cfif isStruct(filter)>
-				<cfset html &= filterItem(arguments.theUrl, filter) />
+				<cfset html &= filterItem(arguments.values, filter) />
 			<cfelse>
 				<!--- Found a break --->
 				<cfset html &= '<br />' />
