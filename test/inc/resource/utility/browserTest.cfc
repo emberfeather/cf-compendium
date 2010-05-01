@@ -1,10 +1,9 @@
-<!---
+/**
 	Testing against a list of mobile browser user agents listed on Wikipedia.
 	
 	@see http://en.wikipedia.org/wiki/List_of_user_agents_for_mobile_phones
---->
-<cfcomponent extends="mxunit.framework.TestCase" output="false">
-<cfscript>
+*/
+component extends="mxunit.framework.TestCase" {
 	public void function setup() {
 		variables.browser = createObject('component', 'cf-compendium.inc.resource.utility.browser').init();
 	}
@@ -530,8 +529,8 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; InfoPath.2; .NET CLR 3.5.21022; .NET CLR 3.0.30729; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; SLCC1; .NET CLR 1.1.4322; InfoPath.2; MS-RTC LM 8; .NET CLR 3.5.30729; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; SLCC1; .NET CLR 1.1.4322; InfoPath.2; MS-RTC LM 8; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618; InfoPath.2'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618; InfoPath.2'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; GTB6; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.2; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618; .NET CLR 1.1.4322; MS-RTC LM 8'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; GTB6; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; Media Center PC 5.0; InfoPath.2; .NET CLR 3.5.21022; .NET CLR 1.1.4322; MS-RTC LM 8'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; WOW64; GTB5; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; Media Center PC 5.1; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
@@ -635,15 +634,15 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.5.21022; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.5.21022; .NET CLR 3.0.04506'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Seekmo 10.0.406.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; Zango 10.3.75.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 1.1.4322; Zango 10.3.65.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 1.1.4322; .NET CLR 3.5.21022'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.1.4322; InfoPath.1'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Seekmo 10.0.406.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; Zango 10.3.75.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 1.1.4322; Zango 10.3.65.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 1.1.4322; .NET CLR 3.5.21022'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.1.4322; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; MathPlayer 2.10d; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; MathPlayer 2.10d; GTB5; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.30618; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; MathPlayer 2.10d; GTB5; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.2'));
@@ -659,7 +658,7 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB6; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.1.4322; InfoPath.1; Zune 3.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB6; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.1.4322; InfoPath.1; Zune 2.5'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB6; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.1.4322; InfoPath.1'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB6.4; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.30618; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB6.4; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.30618; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB6.3; FBSMTWB; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618; OfficeLiveConnector.1.3; OfficeLivePatch.0.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; SLCC1; .NET CLR 2.0.50727; Seekmo 10.0.406.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
@@ -684,15 +683,15 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; InfoPath.1; FDM'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.1.4322; MS-RTC LM 8; InfoPath.2; OfficeLiveConnector.1.2; Zune 3.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.5.21022; .NET CLR 3.0.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30618; InfoPath.1'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; InfoPath.2'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30618; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; InfoPath.2'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; MathPlayer 2.10d; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; FunWebProducts; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; FunWebProducts; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; (R1 1.5); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; GTB5; (R1 1.5); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 3.5.21022'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
@@ -701,8 +700,8 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.2; Seekmo 10.0.406.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 1.1.4322; InfoPath.2; Zango 10.3.74.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; .NET CLR 1.1.4322; AskTB5.3'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Seekmo 10.0.406.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Seekmo 10.0.406.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; GTB6; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; GTB5; SLCC1; .NET CLR 2.0.50727; Zango 10.3.75.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; FunWebProducts; GTB5; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
@@ -727,8 +726,8 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0 SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.5'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; WOW64; Seekmo 10.0.431.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; WOW64; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; FDM; InfoPath.2'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; WOW64; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 1.1.4322; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; WOW64; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); FDM; InfoPath.2'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; WOW64; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 1.1.4322; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; WOW64; InfoPath.2; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; WOW64; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.04506.30'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.2; WOW64; InfoPath.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30'));
@@ -798,10 +797,10 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Zango 10.3.75.0; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Zango 10.0.370.0; .NET CLR 2.0.50727; InfoPath.2'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; yplus 5.3.04b'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; SV1; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; SV1; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; Media Center PC 3.0; .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; GTB5; .NET CLR 2.0.50727; yplus 5.3.04b'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; GTB5; .NET CLR 1.1.4322; yplus 5.3.04b'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; YPC 3.2.0; GTB5; .NET CLR 1.1.4322; InfoPath.2'));
@@ -861,15 +860,15 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; Wanadoo 6.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; Tablet PC 1.7; .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; Stardock Blog Navigator 1.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; FDM'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; FDM'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; FDM'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; FDM'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; iOpus-I-M; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; iOpus-I-M; .NET CLR 1.1.4322'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; InfoPath.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; HbTools 4.8.4'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; InfoPath.1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; GTB5; InfoPath.1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; FunWebProducts; Zango 10.0.341.0; .NET CLR 2.0.50727'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; FunWebProducts; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; FunWebProducts; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; FunWebProducts; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; FunWebProducts; .NET CLR 1.1.4322'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1; FDM'));
@@ -927,30 +926,30 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; MS-RTC LM 8; .NET CLR 2.0.50727; InfoPath.2'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; MRA 5.2 (build 02405); GTB6.3; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; MRA 4.2 (build 01102); GTB6.3; .NET CLR 1.1.4322'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1) ; .NET CLR 3.0.04506.648; MEGAUPLOAD 2.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; Zango 10.3.37.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; Zango 10.1.181.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; Zango 10.0.314.0; .NET CLR 1.1.4322'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; chromeframe; InfoPath.1; .NET CLR 2.0.50727'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; Zango 10.3.36.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; Seekmo 10.0.431.0; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; InfoPath.1; .NET CLR 1.1.4322'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; Zango 10.3.36.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; InfoPath.1'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 1.1.4322; .NET CLR 3.0.04506.648; InfoPath.1'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 1.1.4322; Seekmo 10.0.427.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; InfoPath.1; .NET CLR 2.0.50727; Zango 10.1.181.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; Zango 10.3.74.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; Zango 10.3.37.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; Zango 10.1.181.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; InfoPath.2; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; Media Center PC 4.0; InfoPath.2; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; MEGAUPLOAD 2.0; Seekmo 10.0.341.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; InfoPath.1; .NET CLR 2.0.50727; Zango 10.3.37.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727; Media Center PC 4.0; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; (R1 1.6); .NET CLR 2.0.50727'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; SV1); .NET CLR 3.0.04506.648; MEGAUPLOAD 2.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); Zango 10.3.37.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); Zango 10.1.181.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); Zango 10.0.314.0; .NET CLR 1.1.4322'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); chromeframe; InfoPath.1; .NET CLR 2.0.50727'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; Zango 10.3.36.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; Seekmo 10.0.431.0; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; InfoPath.1; .NET CLR 1.1.4322'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; Zango 10.3.36.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 1.1.4322; .NET CLR 3.0.04506.648; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 1.1.4322; Seekmo 10.0.427.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; InfoPath.1; .NET CLR 2.0.50727; Zango 10.1.181.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; Zango 10.3.74.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; Zango 10.3.37.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; Zango 10.1.181.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; InfoPath.2; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; Media Center PC 4.0; InfoPath.2; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; MEGAUPLOAD 2.0; Seekmo 10.0.341.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; InfoPath.1; .NET CLR 2.0.50727; Zango 10.3.37.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727; Media Center PC 4.0; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); (R1 1.6); .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; MEGAUPLOAD 2.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Media Center PC 3.0; .NET CLR 1.0.3705; FDM; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Media Center PC 3.0; .NET CLR 1.0.3705; .NET CLR 2.0.50727; InfoPath.2'));
@@ -1055,16 +1054,16 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB6'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Zango 10.3.75.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Zango 10.3.36.0; InfoPath.2'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 1.1.4322'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; AskTB5.5'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; InfoPath.2; .NET CLR 3.0.04506.648; .NET CLR 1.1.4322'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; Zango 10.0.314.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; InfoPath.2; Zango 10.3.75.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; InfoPath.1'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; Zango 10.3.75.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; Seekmo 10.0.341.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727; Media Center PC 4.0; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; InfoPath.2; .NET CLR 1.1.4322'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; AskTB5.5'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; InfoPath.2; .NET CLR 3.0.04506.648; .NET CLR 1.1.4322'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; Zango 10.0.314.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; InfoPath.2; Zango 10.3.75.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; Zango 10.3.75.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0; Seekmo 10.0.341.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.0.3705; .NET CLR 1.1.4322; .NET CLR 2.0.50727; Media Center PC 4.0; InfoPath.1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; InfoPath.2; MS-RTC LM 8; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; InfoPath.2; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; GTB5; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; FDM'));
@@ -1157,15 +1156,15 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; Zango 10.3.65.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; Zango 10.0.314.0; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; SV1; .NET CLR 1.1.4322'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; Seekmo 10.0.345.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB6; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; Seekmo 10.0.345.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB6; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB6; .NET CLR 1.1.4322; InfoPath.1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB6; .NET CLR 1.1.4322; .NET CLR 2.0.50727; InfoPath.1; .NET CLR 3.0.04506.30; MS-RTC LM 8'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB6; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB6; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB6.3; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; MEGAUPLOAD 2.0; Zango 10.3.65.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); MEGAUPLOAD 2.0; Zango 10.3.65.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; InfoPath.1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB5; InfoPath.1; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB5; .NET CLR 1.1.4322; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; FunWebProducts; GTB5; .NET CLR 1.1.4322; .NET CLR 2.0.50727; InfoPath.2'));
@@ -1227,7 +1226,7 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Alexa Toolbar'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Advanced Searchbar; .NET CLR 2.0.50727; .NET CLR 1.1.4322'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Advanced Searchbar'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Advanced Searchbar 3.36; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; Advanced Searchbar 3.36; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; ; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 3.0.04506.648; InfoPath.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
@@ -1670,9 +1669,9 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET CLR 1.1.4322; .NET CLR 3.5.21022; SLCC1; Zune 4.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.3029; Media Center PC 6.0; Tablet PC 2.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; SLCC2'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC2; .NET CLR 2.0.50727; Media Center PC 6.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.1.4322'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; Tablet PC 2.0'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; FDM; InfoPath.2; Tablet PC 2.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC2; .NET CLR 2.0.50727; Media Center PC 6.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.1.4322'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; Tablet PC 2.0'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; FDM; InfoPath.2; Tablet PC 2.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB6; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; OfficeLiveConnector.1.4; OfficeLivePatch.1.3'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB6; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0; GTB6; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; .NET CLR 3.0.04506; SLCC1'));
@@ -1704,8 +1703,8 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.5.30729; .NET CLR 3.0.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; SLCC1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.30729; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; SLCC1; .NET CLR 1.1.4322; InfoPath.2; MS-RTC LM 8'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; GTB6; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.2; .NET CLR 3.5.21022; .NET CLR 1.1.4322; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; GTB6; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618; MSSDMC2.4.2011.2'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; WOW64; Trident/4.0; GTB6; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 1.1.4322; OfficeLiveConnector.1.3; OfficeLivePatch.0.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618; yie8'));
@@ -1785,12 +1784,12 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; SLCC1'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Q312461; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; MS-RTC LM 8'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.2; .NET CLR 1.1.4322; .NET CLR 3.5.30729; .NET CLR 3.0.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.21022; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; Tablet PC 2.0; InfoPath.2'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.2; .NET CLR 1.1.4322'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.2; .NET CLR 1.1.4322; .NET CLR 3.5.30729; .NET CLR 3.0.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.21022; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; Tablet PC 2.0; InfoPath.2'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.2; .NET CLR 1.1.4322'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) '));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; MathPlayer 2.10d; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.2; .NET CLR 3.5.21022'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; MathPlayer 2.10d; GTB6.4; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.1.4322; InfoPath.2; Tablet PC 2.0'));
@@ -1812,11 +1811,11 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; GTB5; SLCC1; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.5.21022; .NET CLR 3.5.30729; .NET CLR 3.0.30618; MS-RTC LM 8'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; GTB5; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; InfoPath.2; MS-RTC LM 8; .NET CLR 3.5.21022; Tablet PC 2.0'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; GTB5; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506; .NET CLR 1.1.4322; InfoPath.2; MS-RTC LM 8; .NET CLR 3.5.21022'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 1.1.4322; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; GTB0.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 1.1.4322; .NET CLR 3.5.30729; .NET CLR 3.0.30729; InfoPath.1; A'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 1.1.4322; InfoPath.2; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; GTB0.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 1.1.4322; .NET CLR 3.5.30729; .NET CLR 3.0.30729; InfoPath.1; A'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; FunWebProducts; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506; InfoPath.1'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; FunWebProducts; GTB6; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; SLCC1; .NET CLR 2.0.50727; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; FunWebProducts; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; FunWebProducts; GTB6; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); SLCC1; .NET CLR 2.0.50727; InfoPath.1; .NET CLR 3.5.30729; .NET CLR 3.0.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; FunWebProducts; GTB6.3; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.5.30729; OfficeLiveConnector.1.4; OfficeLivePatch.0.0; .NET CLR 3.0.30729; InfoPath.2; MS-RTC LM 8; .NE'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; FunWebProducts; GTB5; SLCC1; .NET CLR 2.0.50727; .NET CLR 3.0.04506'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; FDM'));
@@ -1845,18 +1844,18 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; MS-RTC LM 8; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; MS-RTC LM 8; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; MRA 4.3 (build 01218); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; chromeframe; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; chromeframe'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; MS-RTC LM 8; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; FDM'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; FDM'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; OfficeLiveConnector.1.4; OfficeLivePatch.1.3'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.04506.30'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; InfoPath.2'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; InfoPath.1'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); chromeframe; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); chromeframe'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; MS-RTC LM 8; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; FDM'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; FDM'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 3.0.04506.30'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; OfficeLiveConnector.1.4; OfficeLivePatch.1.3'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.04506.30'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; InfoPath.2'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; InfoPath.1'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; MathPlayer 2.10d; FDM; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET CLR 1.1.4322'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; MathPlayer 2.10d; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 1.1.4322'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; MathPlayer 2.10b'));
@@ -1871,7 +1870,7 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; yie8'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; InfoPath.1; .NET CLR 2.0.50727; .NET CLR 1.1.4322; .NET CLR 3.0.04506.30'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; InfoPath.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB6; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB6; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB6; InfoPath.2; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB6; InfoPath.2; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 1.1.4322; OfficeLiveConnector.1.4; OfficeLivePatch.1.3'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB6; InfoPath.1; .NET CLR 3.0.04506.648; InfoPath.2; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
@@ -1896,9 +1895,9 @@
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB6.3; .NET CLR 2.0.50727; InfoPath.1; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET CLR 1.1.4322'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB6.3; .NET CLR 1.1.4322; InfoPath.1; .NET CLR 2.0.50727'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB6.3; (R1 1.6); .NET CLR 1.1.4322; .NET CLR 2.0.50727'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; InfoPath.2'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
-		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1) ; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; .NET CLR 3.0.4506.2152; .NET CLR 3.5'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); InfoPath.2'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
+		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1); .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; .NET CLR 3.0.4506.2152; .NET CLR 3.5'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; InfoPath.2; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; InfoPath.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729'));
 		assertFalse(variables.browser.isMobile('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; GTB5; InfoPath.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.04506.648'));
@@ -2211,5 +2210,4 @@
 		// SonyEricsson C901
 		assertTrue(variables.browser.isMobile('SonyEricssonC901/R1EA Browser/NetFront/3.4 Profile/MIDP-2.1 Configuration/CLDC-1.1 JavaPlatform/JP-8.4.2'));
 	}
-</cfscript>
-</cfcomponent>
+}
