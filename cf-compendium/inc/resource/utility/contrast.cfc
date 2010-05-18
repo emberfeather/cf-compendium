@@ -196,5 +196,4 @@
 		
 		<cfreturn invertedResult />
 	</cffunction>
-	
 </cfcomponent>
