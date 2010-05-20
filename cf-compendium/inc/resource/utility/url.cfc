@@ -15,10 +15,11 @@
 				ampChar = '&',
 				eqChar = '='
 			} />
-		<cfset var theExtender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
+		
+		<cfset variables.extend = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		
 		<!--- Extend the form options --->
-		<cfset variables.urlOptions = theExtender.extend(defaults, arguments.options) />
+		<cfset variables.urlOptions = variables.extend.extend(defaults, arguments.options) />
 		
 		<!--- Create the variable for named locations --->
 		<cfset variables.locations = {} />
@@ -104,9 +105,7 @@
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="defaultQueryString" type="string" required="true" />
 		
-		<cfset var theExtender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
-		
-		<cfset variables.locations[arguments.locationName] = theExtender.extend(parseQueryString(arguments.defaultQueryString), findLocation(arguments.locationName)) />
+		<cfset variables.locations[arguments.locationName] = variables.extend.extend(parseQueryString(arguments.defaultQueryString), findLocation(arguments.locationName)) />
 	</cffunction>
 	
 	<!---
@@ -135,32 +134,40 @@
 	<cffunction name="get" access="private" returntype="string" output="false">
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="useEncoded" type="boolean" default="true" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var formatted = '' />
 		<cfset var current = '' />
 		<cfset var ampChar = '' />
 		<cfset var eqChar = '' />
-		<cfset var location = findLocation(arguments.locationName)>
+		<cfset var keys = '' />
+		<cfset var location = findLocation(arguments.locationName) />
+		<cfset var getOptions = '' />
+		
+		<!--- Extend the options --->
+		<cfset getOptions = variables.extend.extend(variables.urlOptions, arguments.options) />
 		
 		<!--- Check if using the encoded versions --->
 		<cfif arguments.useEncoded>
-			<cfset ampChar = variables.urlOptions.ampEncodeChar />
-			<cfset eqChar = variables.urlOptions.eqEncodeChar />
+			<cfset ampChar = getOptions.ampEncodeChar />
+			<cfset eqChar = getOptions.eqEncodeChar />
 		<cfelse>
-			<cfset ampChar = variables.urlOptions.ampChar />
-			<cfset eqChar = variables.urlOptions.eqChar />
+			<cfset ampChar = getOptions.ampChar />
+			<cfset eqChar = getOptions.eqChar />
 		</cfif>
 		
 		<!--- Start out with the start string --->
-		<cfset formatted = variables.urlOptions.start />
+		<cfset formatted = getOptions.start />
+		
+		<cfset keys = structKeyList(location) />
 		
 		<!--- Add each variable --->
-		<cfloop list="#structKeyList(location)#" index="current">
+		<cfloop list="#keys#" index="current">
 			<cfset formatted &= current & eqChar & location[current] & ampChar />
 		</cfloop>
 		
 		<!--- Remove the extra amp character --->
-		<cfif len(formatted) gt len(ampChar)>
+		<cfif listLen(keys)>
 			<cfset formatted = Left(formatted, len(formatted) - len(ampChar)) />
 		</cfif>
 		
@@ -248,17 +255,15 @@
 					<cfreturn extend(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
-				<cfreturn extend(extra, arguments.missingMethodArguments[1]) />
+				<cfreturn this.extend(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="get">
-				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
-					<cfreturn get(extra, arguments.missingMethodArguments[1]) />
-				<cfelseif arrayLen(arguments.missingMethodArguments) eq 2>
-					<cfreturn get(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				<cfif len(extra)>
+					<cfset arrayPrepend(arguments.missingMethodArguments, extra) />
 				</cfif>
 				
-				<cfreturn get(extra) />
+				<cfreturn get(argumentCollection = arguments.missingMethodArguments) />
 			</cfcase>
 			
 			<cfcase value="has">
@@ -319,7 +324,7 @@
 				<cfreturn searchBoolean(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
-			<cfcase value="searchid">
+			<cfcase value="searchID">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
 					<cfreturn searchID(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
@@ -354,9 +359,9 @@
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="defaultQueryString" type="string" required="true" />
 		
-		<cfset var theExtender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
+		<cfset var extend = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		
-		<cfset variables.locations[arguments.locationName] = theExtender.extend(findLocation(arguments.locationName), parseQueryString(arguments.defaultQueryString)) />
+		<cfset variables.locations[arguments.locationName] = extend.extend(findLocation(arguments.locationName), parseQueryString(arguments.defaultQueryString)) />
 		
 		<cfreturn variables.locations[arguments.locationName] />
 	</cffunction>
