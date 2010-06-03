@@ -1,13 +1,13 @@
 component extends="mxunit.framework.TestCase" {
 	public void function setup() {
-		variables.theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+		variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/'));
 	}
 	
 	/**
 	 * 
 	 */
 	public void function testAddColumn_WithOptions() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		
 		datagrid.addColumn({
 				label = "First Name"
@@ -18,7 +18,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the calculate derived with simple array for the currentRow
 	 */
 	public void function testCalculateDerived_WithArray_CurrentRow() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var data = '';
 		
 		makePublic(datagrid, 'calculateDerived');
@@ -32,7 +32,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the calculate derived with simple array for a running sum
 	 */
 	public void function testCalculateDerived_WithArray_RunningSum() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var data = '';
 		
 		makePublic(datagrid, 'calculateDerived');
@@ -46,7 +46,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the calculate derived with array of structs for the currentRow
 	 */
 	public void function testCalculateDerived_WithArrayObjects_CurrentRow() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var data = '';
 		var obj = '';
 		
@@ -81,7 +81,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the calculate derived with array of structs for a running sum
 	 */
 	public void function testCalculateDerived_WithArrayObjects_RunningSum() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var data = '';
 		
 		makePublic(datagrid, 'calculateDerived');
@@ -115,7 +115,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the calculate derived with array of structs for the currentRow
 	 */
 	public void function testCalculateDerived_WithArrayStructs_CurrentRow() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var data = '';
 		
 		makePublic(datagrid, 'calculateDerived');
@@ -145,7 +145,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the calculate derived with array of structs for a running sum
 	 */
 	public void function testCalculateDerived_WithArrayStructs_RunningSum() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var data = '';
 		
 		makePublic(datagrid, 'calculateDerived');
@@ -175,7 +175,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the calculate derived with query for the currentRow
 	 */
 	public void function testCalculateDerived_WithQuery_CurrentRow() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var data = '';
 		
 		makePublic(datagrid, 'calculateDerived');
@@ -201,7 +201,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the calculate derived with query for a running sum
 	 */
 	public void function testCalculateDerived_WithQuery_RunningSum() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var data = '';
 		
 		makePublic(datagrid, 'calculateDerived');
@@ -227,7 +227,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the formatValue with a date format
 	 */
 	public void function testFormatValue_WithDate() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var value = '';
 		
 		makePublic(datagrid, 'formatValue');
@@ -241,7 +241,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Test the formatValue with a time format
 	 */
 	public void function testFormatValue_WithTime() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.theUrl);
+		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		var value = '';
 		
 		makePublic(datagrid, 'formatValue');
