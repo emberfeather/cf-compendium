@@ -33,4 +33,14 @@
 		
 		<cfthrow message="#arguments.message#" detail="#arguments.detail#" type="#arguments.type#" errorcode="#arguments.errorCode#" extendedinfo="#arguments.extendedInfo#" />
 	</cffunction>
+	
+	<cffunction name="dump" access="public" returntype="void" output="false">
+		<cfargument name="value" type="any" required="true" />
+		
+		<cfdump var="#arguments.value#" />
+	</cffunction>
+	
+	<cffunction name="abort" access="public" returntype="void" output="false">
+		<cfabort />
+	</cffunction>
 </cfcomponent>
