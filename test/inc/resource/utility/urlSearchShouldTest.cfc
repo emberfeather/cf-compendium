@@ -15,6 +15,12 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals('bar', theUrl.search('foo'));
 	}
 	
+	public void function testReturnValueWithDottedValue() {
+		variables.theUrl.init('foo.u=bar');
+		
+		assertEquals('bar', theUrl.search('foo.u'));
+	}
+	
 	public void function testWithLocationReturnsValue() {
 		variables.theURL.init('ef=cool');
 		
