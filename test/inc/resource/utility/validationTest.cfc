@@ -1,14 +1,8 @@
 component extends="mxunit.framework.TestCase" {
-	/**
-	 * 
-	 */
 	public void function setup() {
 		variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/'));
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testID_invalid_nonNumeric() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -17,9 +11,6 @@ component extends="mxunit.framework.TestCase" {
 		validator.ID('testing', "val", '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testID_invalid_negative() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -28,27 +19,18 @@ component extends="mxunit.framework.TestCase" {
 		validator.ID('testing', -15, '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testID_valid_numeric() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.ID('testing', 10, '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testIn_valid_inList() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.in('testing', 'is', 'is,it,in,here');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testIn_invalid_notInList() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -57,9 +39,6 @@ component extends="mxunit.framework.TestCase" {
 		validator.in('testing', 'val', 'is,it,in,here');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotIn_invalid_inList() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -68,18 +47,32 @@ component extends="mxunit.framework.TestCase" {
 		validator.notIn('testing', 'val', 'val,is,in,here');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotIn_valid_notInList() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.notIn('testing', 'waldo', 'val,is,in,here');
 	}
 	
-	/**
-	 * 
-	 */
+	public void function testIsBoolean_invalid_string() {
+		var validator = variables.i18n.getValidation('en_US');
+		
+		expectException('any', 'Set should have thrown an error. [val is not boolean]');
+		
+		validator.isBoolean('testing', "val", '');
+	}
+	
+	public void function testIsBoolean_valid_false() {
+		var validator = variables.i18n.getValidation('en_US');
+		
+		validator.isBoolean('testing', false, '');
+	}
+	
+	public void function testIsBoolean_valid_true() {
+		var validator = variables.i18n.getValidation('en_US');
+		
+		validator.isBoolean('testing', true, '');
+	}
+	
 	public void function testIsNumber_invalid_string() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -88,18 +81,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.isNumber('testing', "val", '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testIsNumber_valid_number() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.isNumber('testing', 5, '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testMaxLength_invalid_overLength() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -108,18 +95,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.maxLength('testing', "val", 2);
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testMaxLength_valid_underLength() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.maxLength('testing', "val", 5);
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testMinLength_invalid_underLength() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -128,18 +109,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.minLength('testing', "val", 4);
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testMinLength_valid_overLength() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.minLength('testing', "val", 2);
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotEmpty_invalid_empty() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -148,18 +123,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.notEmpty('testing', '', '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotEmpty_valid_notEmpty() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.notEmpty('testing', 'val', '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotFuture_invalid_future() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -168,18 +137,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.notFuture('testing', Now() + 1, '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotFuture_valid_now() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.notEmpty('testing', Now(), '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotGreaterThan_invalid_greaterThan() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -188,18 +151,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.notGreaterThan('testing', 3, 2);
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotGreaterThan_valid_lessThan() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.notGreaterThan('testing', 2, 3);
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotLessThan_invalid_lessThan() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -208,18 +165,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.notLessThan('testing', 2, 3);
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotLessThan_valid_greaterThan() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.notLessThan('testing', 3, 2);
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotPast_invalid_past() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -228,18 +179,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.notPast('testing', Now() - 1, '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testNotPast_valid_future() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.notPast('testing', Now() + 1, '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testValidEmail_invalid_noDomain() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -248,18 +193,12 @@ component extends="mxunit.framework.TestCase" {
 		validator.validEmail('testing', 'test@test', '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testValidEmail_valid_fullEmail() {
 		var validator = variables.i18n.getValidation('en_US');
 		
 		validator.validEmail('testing', 'test@test.com', '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testValidURL_invalid_noProtocol() {
 		var validator = variables.i18n.getValidation('en_US');
 		
@@ -268,9 +207,6 @@ component extends="mxunit.framework.TestCase" {
 		validator.validURL('testing', 'test.com', '');
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testValidURL_valid_fullUrl() {
 		var validator = variables.i18n.getValidation('en_US');
 		
