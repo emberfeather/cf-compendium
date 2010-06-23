@@ -18,11 +18,11 @@
 		
 		// Do some extra work to stop the parser from doing the entire html document.
 		writer = createObject('java', 'java.io.StringWriter').init();
-		builder = createObject('java', 'org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder').init(writer);
+		builder = createObject('java', 'org.eclipse.mylyn.wikitext.core.parser.builder.HtmlDocumentBuilder', '/cf-compendium/inc/lib/org.eclipse.mylyn.wikitext.core.jar').init(writer);
 		builder.setEmitAsDocument(false);
 		
 		// Create the parser and parse the raw string
-		parser = createObject('java', 'org.eclipse.mylyn.wikitext.core.parser.MarkupParser').init(language);
+		parser = createObject('java', 'org.eclipse.mylyn.wikitext.core.parser.MarkupParser', '/cf-compendium/inc/lib/org.eclipse.mylyn.wikitext.core.jar').init(language);
 		parser.setBuilder(builder);
 		parser.parse(arguments.raw);
 		
