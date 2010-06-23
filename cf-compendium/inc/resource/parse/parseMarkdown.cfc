@@ -10,7 +10,7 @@
 	public component function init() {
 		super.init();
 		
-		variables.parser = createObject('java', 'com.petebevin.markdown.MarkdownProcessor').init();
+		variables.parser = createObject('java', 'com.petebevin.markdown.MarkdownProcessor', '/cf-compendium/inc/lib/markdownj.jar').init();
 		
 		return this;
 	}
