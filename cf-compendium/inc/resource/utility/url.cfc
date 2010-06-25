@@ -492,14 +492,7 @@
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="variableName" type="string" required="true" />
 		
-		<cfset var value = search(argumentCollection=arguments) />
-		
-		<!--- If not a number return a zero --->
-		<cfif not isNumeric(value) or value eq ''>
-			<cfreturn 0 />
-		</cfif>
-		
-		<cfreturn value />
+		<cfreturn val(search(argumentCollection=arguments)) />
 	</cffunction>
 	
 	<!---

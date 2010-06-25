@@ -12,7 +12,7 @@ component extends="mxunit.framework.TestCase" {
 	public void function testReturnZeroWithNonNumeric() {
 		variables.theUrl.init('foo=bar');
 		
-		assertEquals('bar', theUrl.search('foo'));
+		assertEquals('bar', theUrl.searchID('foo'));
 	}
 	
 	public void function testReturnZeroWithoutValue() {
