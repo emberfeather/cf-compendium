@@ -3,7 +3,7 @@
 	public component function init() {
 		super.init();
 		
-		variables.language = createObject('java', 'org.eclipse.mylyn.wikitext.mediawiki.core.MediaWikiLanguage', '/cf-compendium/inc/lib/org.eclipse.mylyn.wikitext.mediawiki.core.jar').init();
+		variables.language = createObject('java', 'org.eclipse.mylyn.wikitext.mediawiki.core.MediaWikiLanguage', '/cf-compendium/inc/lib/org.eclipse.mylyn.wikitext.core.jar,/cf-compendium/inc/lib/org.eclipse.mylyn.wikitext.mediawiki.core.jar').init();
 		
 		return this;
 	}
