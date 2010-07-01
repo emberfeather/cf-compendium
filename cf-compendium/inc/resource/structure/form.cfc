@@ -399,9 +399,9 @@
 					} />
 			</cfif>
 			
-			<cfset extendedOptions.submit.type = 'submit' />
+			<cfset extendedOptions.submit.elementType = 'submit' />
 			
-			<cfset formatted &= elementInput(extendedOptions.submit) />
+			<cfset formatted &= elementToHTML(extendedOptions.submit) />
 		</cfif>
 		
 		<!--- Reset --->
@@ -412,9 +412,9 @@
 					} />
 			</cfif>
 			
-			<cfset extendedOptions.submit.type = 'reset' />
+			<cfset extendedOptions.submit.elementType = 'reset' />
 			
-			<cfset formatted &= elementInput(extendedOptions.reset) />
+			<cfset formatted &= elementToHTML(extendedOptions.reset) />
 		</cfif>
 		
 		<!--- Close --->

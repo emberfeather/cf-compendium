@@ -65,7 +65,7 @@
 		
 		@see http://www.w3.org/TR/html5/the-button-element.html#the-meter-element
 	--->
-	<cffunction name="commonAttributesInput" access="private" returntype="string" output="false">
+	<cffunction name="commonAttributesMeter" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfreturn commonAttributes(arguments.element, [
