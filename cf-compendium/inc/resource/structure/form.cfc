@@ -49,17 +49,26 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
+				accessKey = '',
 				class = '',
+				contentEditable = '',
+				contextMenu = '',
 				desc = '',
+				dir = '',
 				disabled = false,
+				draggable = '',
+				hidden = '',
 				id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
 				label = '',
+				lang = '',
 				link = '',
 				name = '',
 				postElement = '',
 				preElement = '',
 				required = false,
 				size = '',
+				spellcheck = '',
+				tabIndex = '',
 				tip = '',
 				title = ''
 			} />
@@ -170,6 +179,92 @@
 		</cfif>
 	</cffunction>
 	
+	<cffunction name="commonAttributes" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		<cfargument name="valueAttributes" type="array" default="#[]#" />
+		<cfargument name="booleanAttributes" type="array" default="#[]#" />
+		
+		<cfset var formatted = '' />
+		<cfset var i = '' />
+		
+		<cfloop from="1" to="#arrayLen(arguments.valueAttributes)#" index="i">
+			<cfif structKeyExists(arguments.element, arguments.valueAttributes[i]) and arguments.element[arguments.valueAttributes[i]] neq ''>
+				<cfset formatted &= arguments.valueAttributes[i] & '="' & arguments.element[arguments.valueAttributes[i]] & '" ' />
+			</cfif>
+		</cfloop>
+		
+		<cfloop from="1" to="#arrayLen(arguments.booleanAttributes)#" index="i">
+			<cfif structKeyExists(arguments.element, arguments.booleanAttributes[i]) and arguments.element[arguments.booleanAttributes[i]] eq true>
+				<cfset formatted &= arguments.booleanAttributes[i] />
+			</cfif>
+		</cfloop>
+		
+		<cfreturn formatted />
+	</cffunction>
+	
+	<!---
+		Common Attributes for the fieldset element
+		
+		@see http://www.w3.org/TR/html5/forms.html#the-fieldset-element
+	--->
+	<cffunction name="commonAttributesFieldset" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'form',
+				'name'
+			], [
+				'disabled'
+			]) />
+	</cffunction>s
+	
+	<!---
+		Common Attributes for the form element
+		
+		@see http://www.w3.org/TR/html5/forms.html#the-form-element
+	--->
+	<cffunction name="commonAttributesForm" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'accept-charset',
+				'action',
+				'autocomplete',
+				'enctype',
+				'method',
+				'name',
+				'target'
+			], [
+				'novalidate'
+			]) />
+	</cffunction>
+	
+	<!---
+		Common Attributes in HTML
+		
+		@see http://www.w3.org/TR/html5/elements.html#global-attributes
+	--->
+	<cffunction name="commonAttributesHtml" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'accesskey',
+				'class',
+				'contenteditable',
+				'contextmenu',
+				'dir',
+				'draggable',
+				'id',
+				'lang',
+				'spellcheck',
+				'style',
+				'tabindex',
+				'title'
+			], [
+				'hidden'
+			]) />
+	</cffunction>
+	
 	<!--- 
 		Used to format the actual HTML element.
 		<p>
@@ -210,68 +305,40 @@
 		
 		<!--- Set defaults for form --->
 		<cfset defaults = {
-				method = 'POST',
-				isMultipart = false,
-				accept = '',
-				acceptCharset = '',
-				target = '',
-				title = '',
-				class = ''
+				'accept-charset' = '',
+				'action' = arguments.action,
+				'autocomplete' = false,
+				'class' = '',
+				'enctype' = '',
+				'method' = 'POST',
+				'name' = '',
+				'novalidate' = '',
+				'target' = ''
 			} />
 		
 		<!--- Extend the form options --->
 		<cfset extendedOptions = variables.extender.extend(defaults, arguments.options) />
+		
+		<!--- Set enctype --->
+		<cfif variables.isMultipart eq true>
+			<cfset extendedOptions.enctype = 'multipart/form-data' />
+		</cfif>
 		
 		<!--- Check for valid action --->
 		<cfif trim(arguments.action) eq ''>
 			<cfthrow message="Invalid form action" detail="A form action is required." />
 		</cfif>
 		
+		<cfset extendedOptions.class &= 'form ' />
+		
 		<!--- Open Tag --->
-		<cfset formatted &= '<form class="form"' />
+		<cfset formatted &= '<form ' />
 		
-		<!--- Output id --->
-		<cfset formatted &= ' id="' & variables.id & '"' />
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(extendedOptions) />
 		
-		<!--- Output action --->
-		<cfset formatted &= ' action="' & arguments.action & '"' />
-		
-		<!--- Output enctype --->
-		<cfif variables.isMultipart>
-			<cfset formatted &= ' enctype="multipart/form-data"' />
-		</cfif>
-		
-		<!--- Title --->
-		<cfif extendedOptions.title neq ''>
-			<cfset formatted &= ' title="' & extendedOptions.title & '"' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif extendedOptions.class neq ''>
-			<cfset formatted &= ' class="' & extendedOptions.class & '"' />
-		</cfif>
-		
-		<!--- Output accepts --->
-		<cfif extendedOptions.accept neq ''>
-			<cfset formatted &= ' accept="' & extendedOptions.accept & '"' />
-		</cfif>
-		
-		<!--- Output acceptCharset --->
-		<cfif extendedOptions.acceptCharset neq ''>
-			<cfset formatted &= ' accept-charset="' & extendedOptions.acceptCharset & '"' />
-		</cfif>
-		
-		<!--- Output target --->
-		<cfif extendedOptions.target neq ''>
-			<cfset formatted &= ' target="' & extendedOptions.target & '"' />
-		</cfif>
-		
-		<!--- Check for multipart form --->
-		<cfif extendedOptions.method eq 'POST'>
-			<cfset formatted &= ' method="POST"' />
-		<cfelse>
-			<cfset formatted &= ' method="GET"' />
-		</cfif>
+		<!--- Common Element Attributes --->
+		<cfset formatted &= commonAttributesForm(extendedOptions) />
 		
 		<!--- Close Tag --->
 		<cfset formatted &= '>' />
@@ -334,7 +401,7 @@
 	</cffunction>
 	
 	<!--- 
-		Formats the given fieldset into html output.
+		Formats the given element into html output.
 	--->
 	<cffunction name="showElement" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
@@ -399,19 +466,11 @@
 		<!--- Start the tag --->
 		<cfset formatted = '<fieldset' />
 		
-		<cfif arguments.fieldset.id neq ''>
-			<cfset formatted &= ' id="' & arguments.fieldset.id & '"' />
-		</cfif>
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.fieldset) />
 		
-		<!--- Title --->
-		<cfif arguments.fieldset.title neq ''>
-			<cfset formatted &= ' title="' & arguments.fieldset.title & '"' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.fieldset.class neq ''>
-			<cfset formatted &= ' class="' & arguments.fieldset.class & '"' />
-		</cfif>
+		<!--- Common Element Attributes --->
+		<cfset formatted &= commonAttributesFieldset(arguments.fieldset) />
 		
 		<!--- End the start tag --->
 		<cfset formatted &= '>' />
@@ -588,6 +647,13 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfreturn showForm( argumentCollection = arguments ) />
+	</cffunction>
+	
+	<!---
+		Public facing function to get the html for a form.
+	--->
+	<cffunction name="_toString" access="public" returntype="string" output="false">
+		<cfreturn toHtml() />
 	</cffunction>
 	
 	<!--- 

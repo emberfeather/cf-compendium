@@ -18,6 +18,91 @@
 		</cfif>
 	</cffunction>
 	
+	<!---
+		Common Attributes for the button element
+		
+		@see http://www.w3.org/TR/html5/the-button-element.html#the-button-element
+	--->
+	<cffunction name="commonAttributesButton" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'form',
+				'formaction',
+				'formenctype',
+				'formmethod',
+				'formnovalidate',
+				'formtarget',
+				'name',
+				'type',
+				'value'
+			], [
+				'autofocus',
+				'disabled'
+			]) />
+	</cffunction>
+	
+	<!---
+		Common Attributes for the input element
+		
+		@see http://www.w3.org/TR/html5/the-input-element.html#the-input-element
+	--->
+	<cffunction name="commonAttributesInput" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'accept',
+				'alt',
+				'autocomplete',
+				'form',
+				'formaction',
+				'formenctype',
+				'formmethod',
+				'formnovalidate',
+				'formtarget',
+				'height',
+				'list',
+				'max',
+				'maxlength',
+				'min',
+				'name',
+				'pattern',
+				'placeholder',
+				'size',
+				'src',
+				'step',
+				'type',
+				'value',
+				'width'
+			], [
+				'autofocus',
+				'checked',
+				'disabled',
+				'multiple',
+				'readonly',
+				'required'
+			]) />
+	</cffunction>
+	
+	<!---
+		Common Attributes for the select element
+		
+		@see http://www.w3.org/TR/html5/the-button-element.html#the-select-element
+	--->
+	<cffunction name="commonAttributesSelect" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'form',
+				'name',
+				'size'
+			], [
+				'autofocus',
+				'disabled',
+				'multiple',
+			]) />
+	</cffunction>
+	
 	<!--- 
 		Used to format the actual HTML element.
 		<p>
@@ -80,36 +165,18 @@
 		
 		<!--- Set defaults --->
 		<cfset defaults.type = 'button' />
-		<cfset defaults.value = 'changeMe' />
+		<cfset defaults.value = 'Change Me' />
 		
 		<!--- Extend the form options --->
 		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
 		
 		<cfset formatted = '<button ' />
 		
-		<!--- Type --->
-		<cfset formatted &= 'type="' & arguments.element.type & '" ' />
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.element) />
 		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
-		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
+		<!--- Common Element Attributes --->
+		<cfset formatted &= commonAttributesButton(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -194,42 +261,9 @@
 	<cffunction name="elementCheckboxSingle" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfset var formatted = '' />
+		<cfset arguments.element.type = 'checkbox' />
 		
-		<cfset formatted = '<input type="checkbox" ' />
-		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
-		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Value --->
-		<cfset formatted &= 'value="' & arguments.element.value & '" ' />
-		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Checked --->
-		<cfif arguments.element.checked eq true>
-			<cfset formatted &= 'checked="checked" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled eq true>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
-		
-		<cfset formatted &= '/>' />
-		
-		<cfreturn formatted />
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
@@ -238,46 +272,9 @@
 	<cffunction name="elementFile" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfset var formatted = '' />
-		<cfset var defaults = {} />
+		<cfset arguments.element.type = 'file' />
 		
-		<!--- Set defaults --->
-		<cfset defaults.accept = '' />
-		
-		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
-		
-		<cfset formatted = '<input type="file" ' />
-		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
-		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Accept --->
-		<cfif arguments.element.accept neq ''>
-			<cfset formatted &= 'accept="' & arguments.element.accept & '" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled eq true>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
-		
-		<cfset formatted &= '/>' />
-		
-		<cfreturn formatted />
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
@@ -286,34 +283,9 @@
 	<cffunction name="elementHidden" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfset var formatted = '' />
-		<cfset var defaults = {} />
+		<cfset arguments.element.type = 'hidden' />
 		
-		<!--- Set defaults --->
-		<cfset defaults.value = '' />
-		
-		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
-		
-		<cfset formatted = '<input type="hidden" ' />
-		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
-		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
-		
-		<!--- Value --->
-		<cfset formatted &= 'value="' & arguments.element.value & '" ' />
-		
-		<cfset formatted &= '/>' />
-		
-		<cfreturn formatted />
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
@@ -322,58 +294,26 @@
 	<cffunction name="elementImage" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
+		<cfset arguments.element.type = 'image' />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<!--- 
+		Creates the image form element.
+	--->
+	<cffunction name="elementInput" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
 		<cfset var formatted = '' />
-		<cfset var defaults = {} />
 		
-		<!--- Set defaults --->
-		<cfset defaults.alt = '' />
-		<cfset defaults.src = '' />
+		<cfset formatted = '<input ' />
 		
-		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.element) />
 		
-		<cfset formatted = '<input type="image" ' />
-		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
-		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled eq true>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Size --->
-		<cfif isNumeric(arguments.element.size) and arguments.element.size gt 0>
-			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
-		</cfif>
-		
-		<!--- Alt --->
-		<cfif arguments.element.alt neq ''>
-			<cfset formatted &= 'alt="' & arguments.element.alt & '" ' />
-		</cfif>
-		
-		<!--- Src --->
-		<cfif arguments.element.src neq ''>
-			<cfset formatted &= 'src="' & arguments.element.src & '" ' />
-		</cfif>
-		
-		<!--- Value --->
-		<cfif arguments.element.value neq ''>
-			<cfset formatted &= 'value="' & arguments.element.value & '" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
+		<!--- Common Input Attributes --->
+		<cfset formatted &= commonAttributesInput(arguments.element) />
 		
 		<cfset formatted &= '/>' />
 		
@@ -386,63 +326,9 @@
 	<cffunction name="elementPassword" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfset var formatted = '' />
-		<cfset var defaults = {} />
+		<cfset arguments.element.type = 'password' />
 		
-		<!--- Set defaults --->
-		<cfset defaults.maxlength = '' />
-		<cfset defaults.readOnly = false />
-		<cfset defaults.value = '' />
-		
-		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
-		
-		<cfset formatted = '<input type="password" ' />
-		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
-		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Max Length --->
-		<cfif isNumeric(arguments.element.maxLength) and arguments.element.maxLength gt 0>
-			<cfset formatted &= 'maxLength="' & arguments.element.maxLength & '" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled eq true>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Read Only --->
-		<cfif arguments.element.readOnly eq true>
-			<cfset formatted &= 'readonly="readonly" ' />
-		</cfif>
-		
-		<!--- Size --->
-		<cfif isNumeric(arguments.element.size) and arguments.element.size gt 0>
-			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
-		</cfif>
-		
-		<!--- Value --->
-		<cfif arguments.element.value neq ''>
-			<cfset formatted &= 'value="' & arguments.element.value & '" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
-		
-		<cfset formatted &= '/>' />
-		
-		<cfreturn formatted />
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
@@ -519,44 +405,10 @@
 	--->
 	<cffunction name="elementRadioSingle" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
-		<cfargument name="postfix" type="string" default="" />
 		
-		<cfset var formatted = '' />
+		<cfset arguments.element.type = 'radio' />
 		
-		<cfset formatted = '<input type="radio" ' />
-		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & arguments.postfix & '" ' />
-		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Value --->
-		<cfset formatted &= 'value="' & arguments.element.value & '" ' />
-		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Checked --->
-		<cfif arguments.element.checked eq true>
-			<cfset formatted &= 'checked="checked" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled eq true>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
-		
-		<cfset formatted &= '/>' />
-		
-		<cfreturn formatted />
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
@@ -585,33 +437,11 @@
 		
 		<cfset formatted = '<select ' />
 		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.element) />
 		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Name --->
-		<cfif arguments.element.name neq ''>
-			<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		</cfif>
-		
-		<!--- Multiple --->
-		<cfif arguments.element.multiple eq true>
-			<cfset formatted &= 'multiple="multiple" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
+		<!--- Common Element Attributes --->
+		<cfset formatted &= commonAttributesSelect(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -666,38 +496,11 @@
 		
 		<cfset formatted = '<select ' />
 		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.element) />
 		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Name --->
-		<cfif arguments.element.name neq ''>
-			<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		</cfif>
-		
-		<!--- Multiple --->
-		<cfif arguments.element.multiple eq true>
-			<cfset formatted &= 'multiple="multiple" ' />
-		</cfif>
-		
-		<!--- Size --->
-		<cfif arguments.element.size neq ''>
-			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
+		<!--- Common Element Attributes --->
+		<cfset formatted &= commonAttributesSelect(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -725,63 +528,9 @@
 	<cffunction name="elementText" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfset var formatted = '' />
-		<cfset var defaults = {} />
+		<cfset arguments.element.type = 'text' />
 		
-		<!--- Set defaults --->
-		<cfset defaults.maxlength = '' />
-		<cfset defaults.readOnly = false />
-		<cfset defaults.value = '' />
-		
-		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
-		
-		<cfset formatted = '<input type="text" ' />
-		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
-		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
-		<!--- Max Length --->
-		<cfif isNumeric(arguments.element.maxLength) and arguments.element.maxLength gt 0>
-			<cfset formatted &= 'maxLength="' & arguments.element.maxLength & '" ' />
-		</cfif>
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled eq true>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Read Only --->
-		<cfif arguments.element.readOnly eq true>
-			<cfset formatted &= 'readonly="readonly" ' />
-		</cfif>
-		
-		<!--- Size --->
-		<cfif isNumeric(arguments.element.size) and arguments.element.size gt 0>
-			<cfset formatted &= 'size="' & arguments.element.size & '" ' />
-		</cfif>
-		
-		<!--- Value --->
-		<cfif arguments.element.value neq ''>
-			<cfset formatted &= 'value="' & arguments.element.value & '" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
-		</cfif>
-		
-		<cfset formatted &= '/>' />
-		
-		<cfreturn formatted />
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
@@ -804,8 +553,8 @@
 		
 		<cfset formatted = '<textarea ' />
 		
-		<!--- ID --->
-		<cfset formatted &= 'id="' & arguments.element.id & '" ' />
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.element) />
 		
 		<!--- Name --->
 		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
@@ -816,11 +565,6 @@
 		<!--- Cols --->
 		<cfset formatted &= 'cols="' & arguments.element.cols & '" ' />
 		
-		<!--- Title --->
-		<cfif arguments.element.title neq ''>
-			<cfset formatted &= 'title="' & arguments.element.title & '" ' />
-		</cfif>
-		
 		<!--- Disabled --->
 		<cfif arguments.element.disabled eq true>
 			<cfset formatted &= 'disabled="disabled" ' />
@@ -829,11 +573,6 @@
 		<!--- Read Only --->
 		<cfif arguments.element.readOnly eq true>
 			<cfset formatted &= 'readonly="readonly" ' />
-		</cfif>
-		
-		<!--- Class --->
-		<cfif arguments.element.class neq ''>
-			<cfset formatted &= 'class="' & arguments.element.class & '" ' />
 		</cfif>
 		
 		<cfset formatted &= '>' />
