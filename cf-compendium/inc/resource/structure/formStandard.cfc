@@ -61,6 +61,25 @@
 	</cffunction>
 	
 	<!---
+		Common Attributes for the meter element
+		
+		@see http://www.w3.org/TR/html5/the-button-element.html#the-meter-element
+	--->
+	<cffunction name="commonAttributesInput" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'form',
+				'high',
+				'low',
+				'max',
+				'min',
+				'optimum',
+				'value'
+			]) />
+	</cffunction>
+	
+	<!---
 		Common Attributes for the select element
 		
 		@see http://www.w3.org/TR/html5/the-button-element.html#the-select-element
@@ -122,6 +141,9 @@
 			</cfcase>
 			<cfcase value="checkbox">
 				<cfreturn elementCheckbox(arguments.element) />
+			</cfcase>
+			<cfcase value="meter">
+				<cfreturn elementMeter(arguments.element) />
 			</cfcase>
 			<cfcase value="radio">
 				<cfreturn elementRadio(arguments.element) />
@@ -220,7 +242,7 @@
 	</cffunction>
 	
 	<!--- 
-		Creates the image form element.
+		Creates the input form element.
 	--->
 	<cffunction name="elementInput" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
@@ -232,10 +254,37 @@
 		<!--- Common HTML Attributes --->
 		<cfset formatted &= commonAttributesHtml(arguments.element) />
 		
-		<!--- Common Input Attributes --->
+		<!--- Common Element Attributes --->
 		<cfset formatted &= commonAttributesInput(arguments.element) />
 		
 		<cfset formatted &= '/>' />
+		
+		<cfreturn formatted />
+	</cffunction>
+	
+	<!--- 
+		Creates the meter form element.
+	--->
+	<cffunction name="elementMeter" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset var formatted = '' />
+		
+		<cfset formatted = '<meter ' />
+		
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		
+		<!--- Common Element Attributes --->
+		<cfset formatted &= commonAttributesMeter(arguments.element) />
+		
+		<cfset formatted &= '>' />
+		
+		<cfif structKeyExists(arguments.element, 'text')>
+			<cfset formatted &= arguments.element.text />
+		</cfif>
+		
+		<cfset formatted &= '</meter>' />
 		
 		<cfreturn formatted />
 	</cffunction>
