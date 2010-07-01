@@ -379,12 +379,28 @@
 		
 		<!--- Submit --->
 		<cfif extendedOptions.submit neq ''>
-			<cfset formatted &= '<input type="submit" value="' & variables.label.get(extendedOptions.submit) & '" />' />
+			<cfif not isStruct(extendedOptions.submit)>
+				<cfset extendedOptions.submit = {
+						value = variables.label.get(extendedOptions.submit)
+					} />
+			</cfif>
+			
+			<cfset extendedOptions.submit.type = 'submit' />
+			
+			<cfset formatted &= elementInput(extendedOptions.submit) />
 		</cfif>
 		
 		<!--- Reset --->
 		<cfif extendedOptions.reset neq ''>
-			<cfset formatted &= '<input type="reset" value="' & variables.label.get(extendedOptions.reset) & '" />' />
+			<cfif not isStruct(extendedOptions.reset)>
+				<cfset extendedOptions.reset = {
+						value = variables.label.get(extendedOptions.reset)
+					} />
+			</cfif>
+			
+			<cfset extendedOptions.submit.type = 'reset' />
+			
+			<cfset formatted &= elementInput(extendedOptions.reset) />
 		</cfif>
 		
 		<!--- Close --->

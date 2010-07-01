@@ -115,23 +115,13 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfswitch expression="#arguments.element.elementType#">
-			<cfcase value="button">
-				<cfreturn elementButton(arguments.element) />
+			<cfcase value="button,color,date,datetime,datetime-local,email,file,hidden,image,month,number,password,range,reset,search,submit,tel,text,time,url,week">
+				<cfset arguments.element.type = arguments.element.elementType />
+				
+				<cfreturn elementInput(arguments.element) />
 			</cfcase>
 			<cfcase value="checkbox">
 				<cfreturn elementCheckbox(arguments.element) />
-			</cfcase>
-			<cfcase value="file">
-				<cfreturn elementFile(arguments.element) />
-			</cfcase>
-			<cfcase value="hidden">
-				<cfreturn elementHidden(arguments.element) />
-			</cfcase>
-			<cfcase value="image">
-				<cfreturn elementImage(arguments.element) />
-			</cfcase>
-			<cfcase value="password">
-				<cfreturn elementPassword(arguments.element) />
 			</cfcase>
 			<cfcase value="radio">
 				<cfreturn elementRadio(arguments.element) />
@@ -142,9 +132,6 @@
 			<cfcase value="selectRange">
 				<cfreturn elementSelectRange(arguments.element) />
 			</cfcase>
-			<cfcase value="text">
-				<cfreturn elementText(arguments.element) />
-			</cfcase>
 			<cfcase value="textarea">
 				<cfreturn elementTextarea(arguments.element) />
 			</cfcase>
@@ -152,40 +139,6 @@
 				<cfset super.element(arguments.element) />
 			</cfdefaultcase>
 		</cfswitch>
-	</cffunction>
-	
-	<!--- 
-		Creates the button form element.
-	--->
-	<cffunction name="elementButton" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfset var formatted = '' />
-		<cfset var defaults = {} />
-		
-		<!--- Set defaults --->
-		<cfset defaults.type = 'button' />
-		<cfset defaults.value = 'Change Me' />
-		
-		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
-		
-		<cfset formatted = '<button ' />
-		
-		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(arguments.element) />
-		
-		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesButton(arguments.element) />
-		
-		<cfset formatted &= '>' />
-		
-		<!--- Value --->
-		<cfset formatted &= arguments.element.value />
-		
-		<cfset formatted &= '</button>' />
-		
-		<cfreturn formatted />
 	</cffunction>
 	
 	<!--- 
@@ -267,39 +220,6 @@
 	</cffunction>
 	
 	<!--- 
-		Creates the file form element.
-	--->
-	<cffunction name="elementFile" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfset arguments.element.type = 'file' />
-		
-		<cfreturn elementInput(arguments.element) />
-	</cffunction>
-	
-	<!--- 
-		Creates the hidden range form element.
-	--->
-	<cffunction name="elementHidden" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfset arguments.element.type = 'hidden' />
-		
-		<cfreturn elementInput(arguments.element) />
-	</cffunction>
-	
-	<!--- 
-		Creates the image form element.
-	--->
-	<cffunction name="elementImage" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfset arguments.element.type = 'image' />
-		
-		<cfreturn elementInput(arguments.element) />
-	</cffunction>
-	
-	<!--- 
 		Creates the image form element.
 	--->
 	<cffunction name="elementInput" access="private" returntype="string" output="false">
@@ -318,17 +238,6 @@
 		<cfset formatted &= '/>' />
 		
 		<cfreturn formatted />
-	</cffunction>
-	
-	<!--- 
-		Creates the password form element.
-	--->
-	<cffunction name="elementPassword" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfset arguments.element.type = 'password' />
-		
-		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
@@ -523,17 +432,6 @@
 	</cffunction>
 	
 	<!--- 
-		Creates the text form element.
-	--->
-	<cffunction name="elementText" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfset arguments.element.type = 'text' />
-		
-		<cfreturn elementInput(arguments.element) />
-	</cffunction>
-	
-	<!--- 
 		Creates the text area form element.
 	--->
 	<cffunction name="elementTextarea" access="private" returntype="string" output="false">
@@ -582,6 +480,17 @@
 		<cfset formatted &= '</textarea>' />
 		
 		<cfreturn formatted />
+	</cffunction>
+	
+	<!--- 
+		Creates the time input form element.
+	--->
+	<cffunction name="elementTime" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = 'time' />
+		
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!---
