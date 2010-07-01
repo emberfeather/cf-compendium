@@ -19,30 +19,6 @@
 	</cffunction>
 	
 	<!---
-		Common Attributes for the button element
-		
-		@see http://www.w3.org/TR/html5/the-button-element.html#the-button-element
-	--->
-	<cffunction name="commonAttributesButton" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfreturn commonAttributes(arguments.element, [
-				'form',
-				'formaction',
-				'formenctype',
-				'formmethod',
-				'formnovalidate',
-				'formtarget',
-				'name',
-				'type',
-				'value'
-			], [
-				'autofocus',
-				'disabled'
-			]) />
-	</cffunction>
-	
-	<!---
 		Common Attributes for the input element
 		
 		@see http://www.w3.org/TR/html5/the-input-element.html#the-input-element
@@ -99,7 +75,27 @@
 			], [
 				'autofocus',
 				'disabled',
-				'multiple',
+				'multiple'
+			]) />
+	</cffunction>
+	
+	<!---
+		Common Attributes for the textarea element
+		
+		@see http://www.w3.org/TR/html5/the-textarea-element.html
+	--->
+	<cffunction name="commonAttributesTextarea" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'form',
+				'name',
+				'rows',
+				'cols'
+			], [
+				'autofocus',
+				'disabled',
+				'readonly'
 			]) />
 	</cffunction>
 	
@@ -454,24 +450,8 @@
 		<!--- Common HTML Attributes --->
 		<cfset formatted &= commonAttributesHtml(arguments.element) />
 		
-		<!--- Name --->
-		<cfset formatted &= 'name="' & arguments.element.name & '" ' />
-		
-		<!--- Rows --->
-		<cfset formatted &= 'rows="' & arguments.element.rows & '" ' />
-		
-		<!--- Cols --->
-		<cfset formatted &= 'cols="' & arguments.element.cols & '" ' />
-		
-		<!--- Disabled --->
-		<cfif arguments.element.disabled eq true>
-			<cfset formatted &= 'disabled="disabled" ' />
-		</cfif>
-		
-		<!--- Read Only --->
-		<cfif arguments.element.readOnly eq true>
-			<cfset formatted &= 'readonly="readonly" ' />
-		</cfif>
+		<!--- Common Element Attributes --->
+		<cfset formatted &= commonAttributesTextarea(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -480,17 +460,6 @@
 		<cfset formatted &= '</textarea>' />
 		
 		<cfreturn formatted />
-	</cffunction>
-	
-	<!--- 
-		Creates the time input form element.
-	--->
-	<cffunction name="elementTime" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfset arguments.element.type = 'time' />
-		
-		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!---

@@ -96,7 +96,7 @@
 		<!--- Set defaults --->
 		<cfset defaults.title = '' />
 		<cfset defaults.class = '' />
-		<cfset defaults.legend = '' />
+		<cfset defaults.legend = {} />
 		
 		<!--- Extend the form options --->
 		<cfset fieldset = variables.extender.extend(defaults, arguments.options) />
@@ -216,7 +216,7 @@
 			], [
 				'disabled'
 			]) />
-	</cffunction>s
+	</cffunction>
 	
 	<!---
 		Common Attributes for the form element
@@ -262,6 +262,20 @@
 				'title'
 			], [
 				'hidden'
+			]) />
+	</cffunction>
+	
+	<!---
+		Common Attributes for the label element
+		
+		@see http://www.w3.org/TR/html5/forms.html#the-label-element
+	--->
+	<cffunction name="commonAttributesLabel" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn commonAttributes(arguments.element, [
+				'for',
+				'form'
 			]) />
 	</cffunction>
 	
@@ -438,14 +452,26 @@
 			<cfset formatted &= '">' />
 			
 			<!--- Output the label --->
-			<cfif arguments.element.label neq ''>
-				<cfset formatted &= '<label' />
-				
+			<cfif not isStruct(arguments.element.label)>
+				<cfset arguments.element.label = {
+						value = arguments.element.label
+					} />
+			</cfif>
+			
+			<cfif structKeyExists(arguments.element.label, 'value') and arguments.element.label.value neq ''>
 				<cfif arguments.element.id neq ''>
-					<cfset formatted &= ' for="' & arguments.element.id & '"' />
+					<cfset arguments.element.label.for = arguments.element.id />
 				</cfif>
 				
-				<cfset formatted &= '>' & variables.label.get(arguments.element.label) & ':</label>' />
+				<cfset formatted &= '<label ' />
+				
+				<!--- Common HTML Attributes --->
+				<cfset formatted &= commonAttributesHtml(arguments.element.label) />
+				
+				<!--- Common element attributes --->
+				<cfset formatted &= commonAttributesLabel(arguments.element.label) />
+				
+				<cfset formatted &= '>' & variables.label.get(arguments.element.label.value) & ':</label>' />
 			</cfif>
 			
 			<!--- Add the pre element text --->
@@ -492,8 +518,18 @@
 		<cfset formatted &= '>' />
 		
 		<!--- Output legend --->
-		<cfif arguments.fieldset.legend neq ''>
-			<cfset formatted &= '<legend>' & arguments.fieldset.legend & '</legend>' />
+		<cfif not isStruct(arguments.fieldset.legend)>
+			<cfset arguments.fieldset.legend = {
+					value = arguments.fieldset.legend
+				} />
+		</cfif>
+		
+		<cfif structKeyExists(arguments.fieldset.legend, 'value') and arguments.fieldset.legend.value neq ''>
+			<cfset formatted &= '<legend ' & commonAttributes(arguments.fieldset.legend) & '>' />
+			
+			<cfset formatted &= variables.label.get(arguments.fieldset.legend.value) />
+			
+			<cfset formatted &= '</legend>' />
 		</cfif>
 		
 		<cfloop from="1" to="#arrayLen(arguments.fieldset.elements)#" index="i">
