@@ -175,7 +175,7 @@
 					<!--- Retrieve the URL --->
 					<cfinvoke component="#theUrl#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
 					
-					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#arguments.text#</a>
+					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#formatValue(arguments.column, arguments.text)#</a>
 				</cfloop>
 			</cfoutput>
 		</cfsavecontent>
@@ -203,6 +203,10 @@
 			
 			<cfcase value="raw">
 				<cfreturn arguments.value />
+			</cfcase>
+			
+			<cfcase value="uuid">
+				<cfreturn left(arguments.value, 8) />
 			</cfcase>
 			
 			<cfdefaultcase>
