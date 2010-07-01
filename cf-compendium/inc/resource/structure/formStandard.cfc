@@ -88,14 +88,18 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfreturn commonAttributes(arguments.element, [
+				'cols',
 				'form',
+				'maxlength',
 				'name',
+				'placeholder',
 				'rows',
-				'cols'
+				'wrap'
 			], [
 				'autofocus',
 				'disabled',
-				'readonly'
+				'readonly',
+				'required'
 			]) />
 	</cffunction>
 	
@@ -434,16 +438,6 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
-		<cfset var defaults = {} />
-		
-		<!--- Set defaults --->
-		<cfset defaults.cols = 100 />
-		<cfset defaults.rows = 10 />
-		<cfset defaults.readOnly = false />
-		<cfset defaults.value = '' />
-		
-		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
 		
 		<cfset formatted = '<textarea ' />
 		
