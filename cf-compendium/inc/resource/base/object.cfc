@@ -149,8 +149,14 @@
 					<!--- Loop through and find the matches --->
 					<cfloop array="#attributeSet#" index="i">
 						<!--- Does this require an additional get? --->
-						<cfif childAttribute neq '' and isObject(i)>
-							<cfinvoke component="#i#" method="get#childAttribute#" returnvariable="attributeValue" />
+						<cfif childAttribute neq ''>
+							<cfif isObject(i)>
+								<cfinvoke component="#i#" method="get#childAttribute#" returnvariable="attributeValue" />
+							<cfelseif isStruct(i)>
+								<cfset attributeValue = i[childAttribute] />
+							<cfelse>
+								<cfset attributeValue = i />
+							</cfif>
 						<cfelse>
 							<cfset attributeValue = i />
 						</cfif>
