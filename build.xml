@@ -115,19 +115,26 @@
 			/>
 		
 		<!-- Finish a release branch -->
+		<git command="commit" dir="${basedir}">
+			<args>
+				<arg value = "-a" />
+				<arg value = "-m 'Updated version files for release.'" />
+			</args>
+		</git>
+		
+		<!-- Finish a release branch -->
 		<git command="flow" dir="${basedir}">
 			<args>
 				<arg value = "release" />
-				<arg value = "start" />
+				<arg value = "finish" />
 				<arg value = "${project.version}" />
 			</args>
 		</git>
 		
-		<!-- Update the build version
+		<!-- Update the build version -->
 		<propertyfile file="${build.dist}/settings/version.properties" comment="Version properties">
 			<entry key="project.version.build" value="1" operation="+" type="int"/>
 		</propertyfile>
-		 -->
 		
 		<echo message="Finished: Release of version ${project.version}"/>
 	</target>
