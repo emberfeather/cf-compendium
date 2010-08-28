@@ -128,8 +128,7 @@
 				<arg value = "release" />
 				<arg value = "finish" />
 				<arg value = "${project.version}" />
-				<arg value = "-m" />
-				<arg value = "'Releasing version ${project.version}'" />
+				<arg value = "-m 'Releasing version ${project.version}'" />
 			</args>
 		</git>
 		
