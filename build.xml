@@ -128,7 +128,7 @@
 				<arg value="release" />
 				<arg value="finish" />
 				<arg value="${project.version}" />
-				<arg value="-m 'Releasing version ${project.version}'" />
+				<arg value="-m 'Tagging version ${project.version}'" />
 			</args>
 		</git>
 		
@@ -136,6 +136,14 @@
 		<propertyfile file="${build.dist}/settings/version.properties" comment="Version properties">
 			<entry key="project.version.build" value="1" operation="+" type="int"/>
 		</propertyfile>
+		
+		<!-- Commit the updated version properties file -->
+		<git command="commit" dir="${basedir}">
+			<args>
+				<arg value="-a" />
+				<arg value="-m 'Updated version properties for next release'" />
+			</args>
+		</git>
 		
 		<echo message="Finished: Release of version ${project.version}"/>
 	</target>
