@@ -207,7 +207,7 @@
 		<cfset arguments.missingMethodName = lCase(arguments.missingMethodName) />
 		
 		<!--- Find the parts of the function name we are interested in --->
-		<cfset findParts = reFind('^(anchor|clean|clone|extend|get|has|override|redirect|remove|reset|searchid|searchboolean|search|set)(.*)', arguments.missingMethodName, 1, true) />
+		<cfset findParts = reFind('^(anchor|clean|clone|extend|get|has|override|redirect|remove|reset|search(id|boolean)?|set)(.*)', arguments.missingMethodName, 1, true) />
 		
 		<!--- Check if not one that we are equiped to handle --->
 		<cfif not findParts.pos[1]>
@@ -218,8 +218,8 @@
 		<cfset name = left(arguments.missingMethodName, findParts.len[2]) />
 		
 		<!--- Set the extra information --->
-		<cfif findParts.len[3]>
-			<cfset extra = mid(arguments.missingMethodName, findParts.pos[3], findParts.len[3]) />
+		<cfif findParts.len[4]>
+			<cfset extra = mid(arguments.missingMethodName, findParts.pos[4], findParts.len[4]) />
 		</cfif>
 		
 		<!--- Determine what we are really doing --->
@@ -492,14 +492,7 @@
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="variableName" type="string" required="true" />
 		
-		<cfset var value = search(argumentCollection=arguments) />
-		
-		<!--- If not a number return a zero --->
-		<cfif not isNumeric(value)>
-			<cfreturn 0 />
-		</cfif>
-		
-		<cfreturn value />
+		<cfreturn val(search(argumentCollection=arguments)) />
 	</cffunction>
 	
 	<!---

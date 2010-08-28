@@ -82,7 +82,7 @@ component extends="mxunit.framework.TestCase" {
 	/**
 	 * Test the get object by attribute functionality.
 	 */
-	public void function testGet_ByAttribute() {
+	public void function testGet_ByAttribute_object() {
 		var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init();
 		var theObject1 = createObject('component', 'cf-compendium.inc.resource.base.object').init();
 		var theObject2 = createObject('component', 'cf-compendium.inc.resource.base.object').init();
@@ -97,6 +97,31 @@ component extends="mxunit.framework.TestCase" {
 		theObject5.setTest('flow');
 		
 		theObject.addTests(theObject1, theObject2, theObject3, theObject4, theObject5);
+		
+		assertEquals(3, arrayLen(theObject.getTestsByTest('e$')));
+	}
+	
+	/**
+	 * Test the get object by attribute functionality.
+	 */
+	public void function testGet_ByAttribute_structs() {
+		var theObject = createObject('component', 'cf-compendium.inc.resource.base.object').init();
+		
+		theObject.addTests({
+				'test' = 'valve'
+			},
+			{
+				'test' = 'pressure'
+			},
+			{
+				'test' = 'release'
+			},
+			{
+				'test' = 'control'
+			},
+			{
+				'test' = 'flow'
+			});
 		
 		assertEquals(3, arrayLen(theObject.getTestsByTest('e$')));
 	}

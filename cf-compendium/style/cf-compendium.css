@@ -182,6 +182,14 @@ dt {
 	min-width: 250px;
 }
 
+.form textarea {
+	height: 15em;
+	width: 100%;
+	min-width: 250px;
+	margin: 0;
+	padding: 0;
+}
+
 .form .element {
 	padding: .5em;
 }
