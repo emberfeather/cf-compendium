@@ -1,6 +1,6 @@
 {
-	"releaseNotes": "http://github.com/Zoramite/cf-compendium/wiki/ReleaseNotes",
-	"releaseURL": "http://github.com/Zoramite/cf-compendium/files/cf-compendium-0.1.2.zip",
-	"URL": "http://github.com/Zoramite/cf-compendium/files/cf-compendium-0.1.2.zip",
+	"releaseNotes": "http://github.com/emverfeather/cf-compendium/wiki/Release-Notes",
+	"archive": "http://github.com/emberfeather/cf-compendium/tarball/0.1.2",
+	"URL": "http://github.com/emberfeather/cf-compendium",
 	"version": "0.1.2"
 }
