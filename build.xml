@@ -96,16 +96,11 @@
 			</args>
 		</git>
 		
-		<!-- Update the version number -->
-		<replaceregexp byline="true">
-			<regexp pattern="&#34;version&#34;: &#34;[0-9\.]*&#34;"/>
-			<substitution expression="&#34;version&#34;: &#34;${project.version}&#34;"/>
-			
-			<fileset dir="${basedir}">
-				<include name="version.json"/>
-				<include name="${project.key}/config/${project.key}.json.cfm"/>
-			</fileset>
-		</replaceregexp>
+		<!-- Update the release version number -->
+		<replaceregexp file="${basedir}/version.json"
+			match="&#34;version&#34;: &#34;[0-9\.]*&#34;"
+			replace="&#34;version&#34;: &#34;${project.version}&#34;"
+			byline="true"/>
 		
 		<!-- Update the download version number -->
 		<replaceregexp file="${basedir}/version.json"
@@ -133,11 +128,13 @@
 		</git>
 		
 		<!-- Update the build version -->
-		<propertyfile file="${build.dist}/settings/version.properties" comment="Version properties">
+		<propertyfile file="${build}/settings/version.properties" comment="Version properties">
 			<entry key="project.version.build" value="1" operation="+" type="int"/>
 		</propertyfile>
 		
-		<!-- Commit the updated version properties file -->
+		<antcall target="releasePost" inheritall="false" inheritrefs="false"></antcall>
+		
+		<!-- Commit the updated version files -->
 		<git command="commit" dir="${basedir}">
 			<args>
 				<arg value="-a" />
@@ -146,6 +143,25 @@
 		</git>
 		
 		<echo message="Finished: Release of version ${project.version}"/>
+	</target>
+	
+	<!-- Done in separate call since it required reading in updated property files -->
+	<target name="releasePost">
+		<echo message="Starting: Release Post Operations" />
+		
+		<property file="${basedir}/build/settings/project.properties"/>
+		<property file="${basedir}/build/settings/version.properties"/>
+		
+		<!-- Combine the version parts into full version identifier -->
+		<property name="project.version" value="${project.version.major}.${project.version.minor}.${project.version.build}"/>
+		
+		<!-- Update the version number for future development -->
+		<replaceregexp file="${project.key}/config/${project.key}.json.cfm"
+			match="&#34;version&#34;: &#34;[0-9\.]*&#34;"
+			replace="&#34;version&#34;: &#34;${project.version}&#34;"
+			byline="true"/>
+		
+		<echo message="Finished: Release Post Operations"/>
 	</target>
 	
 	<target name="testMXUnit" depends="prepare" description="Runs the Unit Tests">
