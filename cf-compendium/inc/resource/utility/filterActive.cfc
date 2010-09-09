@@ -30,7 +30,7 @@
 			<cfset arguments.value = left(arguments.value, 8) />
 		</cfif>
 		
-		<cfreturn '<span class="capitalize">' & variables.label.get(arguments.key) & '</span>: <strong>' & arguments.value & '</strong> <sup>(<a href="' & arguments.href & '">x</a>)</sup>' />
+		<cfreturn '<span class="capitalize">' & variables.label.get(arguments.key) & '</span>: <strong>' & arguments.value & '</strong> <sup>(<a href="' & arguments.href & '">&##x2717;</a>)</sup>' />
 	</cffunction>
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
