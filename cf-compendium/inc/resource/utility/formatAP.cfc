@@ -7,8 +7,7 @@
 	/**
 	 * Takes one or two dates and formats them together in the AP date format
 	 */
-	/* required date1 */
-	public string function dateFormat( date date1, any date2 = '', boolean forceY = false ) {
+	public string function dateFormat( required date date1, any date2 = '', boolean forceY = false ) {
 		var hasBoth = len(arguments.date1) && len(arguments.date2);
 		var formatted = '';
 		var inCurrentYear = false;
@@ -40,8 +39,7 @@
 	/**
 	 * Determine the proper masking for the given date.
 	 */
-	/* required date1 */
-	private string function dateMask( date date1, boolean suppressY = false, boolean suppressM = false ) {
+	private string function dateMask( required date date1, boolean suppressY = false, boolean suppressM = false ) {
 		var maskY = ', yyyy';
 		var maskM = 'mmmm ';
 		
@@ -59,8 +57,7 @@
 	/**
 	 * Takes one or two datetimes and formats them together in an AP time and date format
 	 */
-	/* required datetime1 */
-	public string function datetimeFormat( date datetime1, any datetime2 = '' ) {
+	public string function datetimeFormat( required date datetime1, any datetime2 = '' ) {
 		var hasBoth = len(arguments.datetime1) && len(arguments.datetime2);
 		var inCurrentYear = false;
 		var inSameDay = false;
@@ -93,8 +90,7 @@
 	/**
 	 * Takes one or two times and formats them together in the AP time format
 	 */
-	/* required time1 */
-	public string function timeFormat( date time1, any time2 = '' ) {
+	public string function timeFormat( required date time1, any time2 = '' ) {
 		var hasBoth = len(arguments.time1) && len(arguments.time2);
 		var inSameTT = false;
 		
@@ -117,8 +113,7 @@
 	/**
 	 * Checks for the Noon and Midnight possibilities otherwise does a normal time format
 	 */
-	/* required time1 */
-	private string function timeFormatFull( date time1, boolean suppressT = false, boolean suppressS = false ) {
+	private string function timeFormatFull( required date time1, boolean suppressT = false, boolean suppressS = false ) {
 		// Check for noon or midnight
 		if( !minute(arguments.time1) && !second(arguments.time1) ) {
 			if( hour(arguments.time1) == 0 ) {
@@ -135,8 +130,7 @@
 	/**
 	 * Determine the proper masking for the given time.
 	 */
-	/* required time1 */
-	private string function timeMask( date time1, boolean suppressT = false, boolean suppressS = false ) {
+	private string function timeMask( required date time1, boolean suppressT = false, boolean suppressS = false ) {
 		var maskM = ':mm';
 		var maskT = ' tt';
 		var maskS = ':ss';
