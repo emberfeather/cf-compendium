@@ -177,7 +177,7 @@
 	</cffunction>
 <cfscript>
 	private string function formatValue(required struct column, required string value) {
-		switch (expression="#arguments.column.type#") {
+		switch (arguments.column.type) {
 			case 'date':
 				return dateFormat(arguments.value, arguments.column.format);
 			
