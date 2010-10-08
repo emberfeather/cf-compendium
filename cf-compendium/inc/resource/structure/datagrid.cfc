@@ -1,26 +1,22 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
-	<cffunction name="init" access="public" returnType="component" output="false">
-		<cfargument name="i18n" type="component" required="true" />
-		<cfargument name="locale" type="string" default="en_US" />
+<cfscript>
+	public component function init(required component i18n, string locale = 'en_US') {
+		super.init();
 		
-		<cfset super.init() />
+		variables.i18n = arguments.i18n;
+		variables.locale = arguments.locale;
+		variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale);
 		
-		<cfset variables.i18n = arguments.i18n />
-		<cfset variables.locale = arguments.locale />
-		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
+		variables.columns = [];
 		
-		<cfset variables.columns = [] />
+		// Set base bundle for translation
+		addBundle('/cf-compendium/i18n/inc/resource/structure', 'datagrid');
 		
-		<!--- Set base bundle for translation --->
-		<cfset addBundle('/cf-compendium/i18n/inc/resource/structure', 'datagrid') />
-		
-		<cfreturn this />
-	</cffunction>
+		return this;
+	}
 	
-	<cffunction name="addColumn" access="public" returntype="void" output="false">
-		<cfargument name="options" type="struct" default="#{}#" />
-		
-		<cfset var defaults = {
+	public void function addColumn(struct options = {}) {
+		var defaults = {
 				class = '',
 				format = '',
 				key = '',
@@ -29,27 +25,24 @@
 				linkClass = [],
 				type = 'text',
 				value = ''
-			} />
+			};
 		
-		<!--- Normalize the options --->
-		<cfif structKeyExists(arguments.options, 'link') and not isArray(arguments.options.link)>
-			<cfset arguments.options.link = [ arguments.options.link ] />
-		</cfif>
+		// Normalize the options
+		if (structKeyExists(arguments.options, 'link') && !isArray(arguments.options.link)) {
+			arguments.options.link = [ arguments.options.link ];
+		}
 		
-		<cfif structKeyExists(arguments.options, 'linkClass') and not isArray(arguments.options.linkClass)>
-			<cfset arguments.options.linkClass = [ arguments.options.linkClass ] />
-		</cfif>
+		if (structKeyExists(arguments.options, 'linkClass') && !isArray(arguments.options.linkClass)) {
+			arguments.options.linkClass = [ arguments.options.linkClass ];
+		}
 		
-		<cfset arrayAppend(variables.columns, extend(defaults, arguments.options)) />
-	</cffunction>
+		arrayAppend(variables.columns, extend(defaults, arguments.options));
+	}
 	
-	<cffunction name="addBundle" access="public" returntype="void" output="false">
-		<cfargument name="path" type="string" required="true" />
-		<cfargument name="name" type="string" required="true" />
-		
-		<cfset variables.label.addBundle(argumentCollection = arguments) />
-	</cffunction>
-	
+	public void function addBundle(required string path, required string name) {
+		variables.label.addBundle(argumentCollection = arguments);
+	}
+</cfscript>
 	<cffunction name="calculateDerived" access="private" returntype="string" output="false">
 		<cfargument name="derived" type="struct" required="true" />
 		<cfargument name="type" type="string" required="true" />
@@ -182,39 +175,30 @@
 		
 		<cfreturn html />
 	</cffunction>
-	
-	<cffunction name="formatValue" access="private" returntype="string" output="false">
-		<cfargument name="column" type="struct" required="true" />
-		<cfargument name="value" type="string" required="true" />
-		
-		<cfswitch expression="#arguments.column.type#">
-			<cfcase value="date">
-				<cfreturn dateFormat(arguments.value, arguments.column.format) />
-			</cfcase>
+<cfscript>
+	private string function formatValue(required struct column, required string value) {
+		switch (expression="#arguments.column.type#") {
+			case 'date':
+				return dateFormat(arguments.value, arguments.column.format);
 			
-			<cfcase value="time">
-				<cfreturn timeFormat(arguments.value, arguments.column.format) />
-			</cfcase>
+			case 'time':
+				return timeFormat(arguments.value, arguments.column.format);
 			
-			<!--- Use the format as a holder for a formatter --->
-			<cfcase value="custom">
-				<cfreturn arguments.column.format.toHTML(arguments.value) />
-			</cfcase>
+			// Use the format as a holder for a formatter
+			case 'custom':
+				return arguments.column.format.toHTML(arguments.value);
 			
-			<cfcase value="raw">
-				<cfreturn arguments.value />
-			</cfcase>
+			case 'raw':
+				return arguments.value;
 			
-			<cfcase value="uuid">
-				<cfreturn left(arguments.value, 8) />
-			</cfcase>
+			case 'uuid':
+				return left(arguments.value, 8);
 			
-			<cfdefaultcase>
-				<cfreturn htmlEditFormat(arguments.value) />
-			</cfdefaultcase>
-		</cfswitch>
-	</cffunction>
-	
+			default:
+				return htmlEditFormat(arguments.value);
+		}
+	}
+</cfscript>
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="data" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
