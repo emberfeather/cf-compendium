@@ -17,15 +17,15 @@
 	
 	public void function addColumn(struct options = {}) {
 		var defaults = {
-				class = '',
-				format = '',
-				key = '',
-				label = '',
-				link = [],
-				linkClass = [],
-				type = 'text',
-				value = ''
-			};
+			class = '',
+			format = '',
+			key = '',
+			label = '',
+			link = [],
+			linkClass = [],
+			type = 'text',
+			value = ''
+		};
 		
 		// Normalize the options
 		if (structKeyExists(arguments.options, 'link') && !isArray(arguments.options.link)) {
@@ -178,15 +178,18 @@
 <cfscript>
 	private string function formatValue(required struct column, required string value) {
 		switch (arguments.column.type) {
+			case 'checkbox':
+				return '<input type="checkbox" name="checkboxSelect[]" value="' & arguments.value & '" />';
+			
+			// Use the format as a holder for a formatter
+			case 'custom':
+				return arguments.column.format.toHTML(arguments.value);
+			
 			case 'date':
 				return dateFormat(arguments.value, arguments.column.format);
 			
 			case 'time':
 				return timeFormat(arguments.value, arguments.column.format);
-			
-			// Use the format as a holder for a formatter
-			case 'custom':
-				return arguments.column.format.toHTML(arguments.value);
 			
 			case 'raw':
 				return arguments.value;
@@ -208,12 +211,12 @@
 		<cfset var counter = '' />
 		<cfset var currentKey = '' />
 		<cfset var defaults = {
-				class = '',
-				linkBase = '',
-				minimumRows = 15,
-				numPerPage = 30,
-				startRow = 1
-			} />
+			class = '',
+			linkBase = '',
+			minimumRows = 15,
+			numPerPage = 30,
+			startRow = 1
+		} />
 		<cfset var derived = {} />
 		<cfset var html = '' />
 		<cfset var htmlColumns = '' />

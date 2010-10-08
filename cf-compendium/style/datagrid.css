@@ -67,6 +67,11 @@
 	visibility: visible;
 }
 
+.datagrid td.width-min {
+	width: 1px;
+	white-space: nowrap;
+}
+
 .datagrid a.delete {
 	color: #FF3333;
 	margin-right: 1em;
