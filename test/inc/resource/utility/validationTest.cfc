@@ -151,6 +151,10 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.validEmail('testing', 'test@test.com', '');
 	}
 	
+	public void function testValidEmail_valid_fullEmail_complex() {
+		variables.validator.validEmail('testing', 'test.everything+more@test.com', '');
+	}
+	
 	public void function testValidURL_invalid_noProtocol() {
 		expectException('any', 'Set should have thrown an error. [test.com is not a valid url without a protocol]');
 		
