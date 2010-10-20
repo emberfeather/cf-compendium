@@ -4,9 +4,7 @@
  * Used to unobtrusively enhance the user experience.
  */
 ;(function($) {
-	$(function() {
-		// Do nothing...yet
-	});
+	$.cfc = {};
 })(jQuery);/**
  * Form
  * 
@@ -122,21 +120,24 @@
 	function attachDeletion( elements ) {
 		// Create the deletion link
 		var deleteBtn = $('<button />', {
-				text: 'Remove', // TODO use i18n
-				click: function() {
-					$(this)
-						.parents('.element')
-						.removeElement();
-					
-					return false;
-				},
-				className: 'delete'
-			}).button({
-				icons: {
-					primary: 'ui-icon-circle-minus'
-				},
-				text: false
-			});
+			text: 'Remove', // TODO use i18n
+			click: function(event) {
+				$(this)
+					.parents('.element')
+					.removeElement();
+				
+				return false;
+			},
+			className: 'delete'
+		}).button({
+			icons: {
+				primary: 'ui-icon-circle-minus'
+			},
+			text: false
+		});
+		
+		// Since the .attr() will not work for setting the type
+		deleteBtn[0].setAttribute('type', 'button');
 		
 		// Add the deletion functionality
 		$('.allowDeletion', elements).each( function() {
@@ -150,21 +151,24 @@
 	function attachDuplication( elements ) {
 		// Create the duplication link
 		var duplicateBtn = $('<button />', {
-				text: 'Add multiple', // TODO use i18n
-				click: function() {
-					$(this)
-						.parents('.element')
-						.duplicateElement();
-					
-					return false;
-				},
-				className: 'duplicate'
-			}).button({
-				icons: {
-					primary: 'ui-icon-circle-plus'
-				},
-				text: false
-			});
+			text: 'Add multiple', // TODO use i18n
+			click: function() {
+				$(this)
+					.parents('.element')
+					.duplicateElement();
+				
+				return false;
+			},
+			className: 'duplicate'
+		}).button({
+			icons: {
+				primary: 'ui-icon-circle-plus'
+			},
+			text: false
+		});
+		
+		// Since the .attr() will not work for setting the type
+		duplicateBtn[0].setAttribute('type', 'button');
 		
 		// Add the duplicate functionality
 		$('.allowDuplication', elements).each( function() {
