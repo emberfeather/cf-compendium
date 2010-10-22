@@ -17,7 +17,7 @@
 		<li>numberRangeSlide - Number Range Slider
 		<li>numberSlide - Number Slider
 	--->
-	<cffunction name="element" access="private" returntype="string" output="false">
+	<cffunction name="elementToHTML" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfswitch expression="#arguments.element.type#">
@@ -46,7 +46,7 @@
 				<cfreturn elementNumberSlide(arguments.element) />
 			</cfcase>
 			<cfdefaultcase>
-				<cfreturn super.element(arguments.element) />
+				<cfreturn super.elementToHTML(arguments.element) />
 			</cfdefaultcase>
 		</cfswitch>
 	</cffunction>

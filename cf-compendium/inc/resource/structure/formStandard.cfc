@@ -158,7 +158,7 @@
 				<cfreturn elementTextarea(arguments.element) />
 			</cfcase>
 			<cfdefaultcase>
-				<cfset super.element(arguments.element) />
+				<cfset super.elementToHTML(arguments.element) />
 			</cfdefaultcase>
 		</cfswitch>
 	</cffunction>
