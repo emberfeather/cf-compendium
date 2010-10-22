@@ -20,13 +20,7 @@
 	<cffunction name="elementToHTML" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfswitch expression="#arguments.element.type#">
-			<cfcase value="date">
-				<cfreturn elementDate(arguments.element) />
-			</cfcase>
-			<cfcase value="datetime">
-				<cfreturn elementDatetime(arguments.element) />
-			</cfcase>
+		<cfswitch expression="#arguments.element.elementType#">
 			<cfcase value="dateRange">
 				<cfreturn elementDateRange(arguments.element) />
 			</cfcase>
@@ -65,7 +59,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -84,7 +78,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -103,7 +97,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -122,7 +116,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -141,7 +135,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -160,7 +154,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -179,7 +173,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -198,7 +192,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
