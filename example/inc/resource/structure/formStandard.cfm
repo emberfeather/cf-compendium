@@ -202,7 +202,10 @@
 <cfset theForm.addElement('text', {
 		name = "testText",
 		label = "text",
-		value = "true"
+		value = "true",
+		data = {
+			'example' = 'dataValue'
+		}
 	}) />
 
 <h2>Textarea</h2>
@@ -212,7 +215,10 @@
 		theForm.addElement('textarea', {
 				name = "testTextarea",
 				label = "textarea",
-				value = "true"
+				value = "true",
+				data = {
+					'example' = 'dataValue'
+				}
 			})
 	</code>
 </blockquote>

@@ -185,6 +185,7 @@
 		<cfargument name="booleanAttributes" type="array" default="#[]#" />
 		
 		<cfset var formatted = '' />
+		<cfset var keys = '' />
 		<cfset var i = '' />
 		
 		<cfloop from="1" to="#arrayLen(arguments.valueAttributes)#" index="i">
@@ -198,6 +199,13 @@
 				<cfset formatted &= arguments.booleanAttributes[i] />
 			</cfif>
 		</cfloop>
+		
+		<!--- data-* attributes --->
+		<cfif structKeyExists(arguments.element, 'data') and isStruct(arguments.element.data)>
+			<cfloop collection="#arguments.element.data#" item="i">
+				<cfset formatted &= 'data-' & i & '="' & arguments.element.data[i] & '" ' />
+			</cfloop>
+		</cfif>
 		
 		<cfreturn formatted />
 	</cffunction>
