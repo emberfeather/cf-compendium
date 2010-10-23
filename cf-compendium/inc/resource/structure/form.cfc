@@ -449,7 +449,7 @@
 		<!--- hidden elements should not be shown --->
 		<cfif arguments.element.elementType neq 'hidden'>
 			<!--- Start the tag --->
-			<cfset formatted = '<div class="element' />
+			<cfset formatted = '<div class="element ' & arguments.element.elementType />
 			
 			<!--- Check for a required element --->
 			<cfif arguments.element.required>
