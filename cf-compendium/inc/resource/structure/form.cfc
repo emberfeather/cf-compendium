@@ -296,7 +296,7 @@
 	<cffunction name="elementToHTML" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfthrow message="Unsupported Form Element" detail="The #arguments.element.type# type of element is currently unsupported." />
+		<cfthrow message="Unsupported Form Element" detail="The #arguments.element.elementType# type of element is currently unsupported." />
 	</cffunction>
 	
 	<!--- 
@@ -351,7 +351,7 @@
 			<cfthrow message="Invalid form action" detail="A form action is required." />
 		</cfif>
 		
-		<cfset extendedOptions.class &= 'form ' />
+		<cfset extendedOptions.class &= ' form' />
 		
 		<!--- Open Tag --->
 		<cfset formatted &= '<form ' />
