@@ -209,6 +209,8 @@
  * Used to unobtrusively enhance the datagrid experience for the user.
  */
 ;(function($) {
+	var confirmDialog;
+	
 	$.fn.datagrid = function(options) {
 		var opts = $.extend({}, $.fn.datagrid.defaults, options);
 		
@@ -244,11 +246,38 @@
 	 * Private
 	 */
 	
-	function confirmDelete() {
-		title = $(this).attr('title') || 'this item';
+	function confirmDelete(e) {
+		var current = $(this);
+		var targetUrl = current.attr('href');
+		var title = current.data('title') || 'this item';
 		
-		return confirm('Are you sure you want to remove ' + title + '?');
-	} // function
+		if(!confirmDialog) {
+			confirmDialog = $('<div />', {
+				title: 'Delete item?'
+			});
+			
+			confirmDialog.appendTo($('body'));
+		}
+		
+		e.preventDefault();
+		
+		confirmDialog.empty().append($('<p />', {
+			text: 'Are you sure you want to remove ' + title + '?'
+		}));
+		
+		confirmDialog.dialog({
+			resizable: false,
+			modal: true,
+			buttons: {
+				'Delete Item': function() {
+					window.location.href = targetUrl;
+				},
+				'Cancel': function() {
+					confirmDialog.dialog('close');
+				}
+			}
+		});
+	}
 })(jQuery);/*
  * timeago: a jQuery plugin, version: 0.8.2 (2010-02-16)
  * @requires jQuery v1.2.3 or later
