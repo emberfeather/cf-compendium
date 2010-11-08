@@ -155,14 +155,7 @@
 					<!--- Retrieve the URL --->
 					<cfinvoke component="#theUrl#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
 					
-					<!--- Add the title --->
-					<cfif arguments.column.title neq ''>
-						<cfset title = getValue(arguments.data, arguments.rowNum, arguments.column.title) />
-					<cfelse>
-						<cfset title = '' />
-					</cfif>
-					
-					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#" <cfif title != ''>data-title="#title#"</cfif>>#formatValue(arguments.column, arguments.text)#</a>
+					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#formatValue(arguments.column, arguments.text)#</a>
 				</cfloop>
 			</cfoutput>
 		</cfsavecontent>
@@ -244,6 +237,7 @@
 		<cfset var item = '' />
 		<cfset var result = '' />
 		<cfset var rowNum = '' />
+		<cfset var title = '' />
 		<cfset var value = '' />
 		
 		<cfset arguments.options = extend(defaults, arguments.options) />
@@ -416,7 +410,9 @@
 										<cfset counter = 0 />
 										
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine the value --->
 												<cfif col.key neq ''>
 													<cfinvoke component="#item#" method="get#col.key#" returnvariable="value" />
@@ -438,7 +434,9 @@
 										<cfset counter = 0 />
 										
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine Value --->
 												<cfif col.key neq ''>
 													<cfset value = item[col.key] />
@@ -458,7 +456,9 @@
 										</cfloop>
 									<cfelseif isSimpleValue(item)>
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(item, col, data, rowNum, counter, arguments.options)#
@@ -487,7 +487,9 @@
 								<cfset counter = 0 />
 								
 								<cfloop array="#variables.columns#" index="col">
-									<td class="#col.key# #col.class# column-#counter++#">
+									<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+									
+									<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 										<!--- Determine Value --->
 										<cfif col.key neq ''>
 											<cfset value = arguments.data[col.key] />

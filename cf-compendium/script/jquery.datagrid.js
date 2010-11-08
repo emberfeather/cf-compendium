@@ -44,7 +44,7 @@
 	function confirmDelete(e) {
 		var current = $(this);
 		var targetUrl = current.attr('href');
-		var title = current.data('title') || 'this item';
+		var title = current.parents('td').data('title') || 'this item';
 		
 		if(!confirmDialog) {
 			confirmDialog = $('<div />', {
