@@ -23,6 +23,7 @@
 			label = '',
 			link = [],
 			linkClass = [],
+			title = '',
 			type = 'text',
 			value = ''
 		};
@@ -110,6 +111,7 @@
 		<cfset var key = '' />
 		<cfset var link = '' />
 		<cfset var theUrl = '' />
+		<cfset var title = '' />
 		<cfset var value = '' />
 		
 		<!--- Determine if using a column or datagrid based url --->
@@ -135,22 +137,7 @@
 					</cfif>
 					
 					<cfloop list="#structKeyList(arguments.column.link[i])#" index="j">
-						<cfset key = arguments.column.link[i][j] />
-						
-						<!--- Get the link value --->
-						<cfif isNumeric(key)>
-							<cfset value = key />
-						<cfelseif isQuery(arguments.data) and structKeyExists(arguments.data, key)>
-							<cfset value = arguments.data[key][arguments.rowNum] />
-						<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].has__Key(key)>
-							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#key#" returnvariable="value" />
-						<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], key)>
-							<cfset value = arguments.data[arguments.rowNum][key] />
-						<cfelseif isArray(arguments.data) and key eq '__value'>
-							<cfset value = arguments.data[arguments.rowNum] />
-						<cfelse>
-							<cfset value = key />
-						</cfif>
+						<cfset value = getValue(arguments.data, arguments.rowNum, arguments.column.link[i][j]) />
 						
 						<cfinvoke component="#theUrl#" method="setDGCol#arguments.colNum#Link#i#">
 							<cfinvokeargument name="name" value="#j#" />
@@ -202,6 +189,30 @@
 		}
 	}
 </cfscript>
+	<cffunction name="getValue" access="private" returntype="any" output="false">
+		<cfargument name="data" type="any" required="true" />
+		<cfargument name="rowNum" type="numeric" required="true" />
+		<cfargument name="key" type="string" required="true" />
+		
+		<cfset var value = '' />
+		
+		<cfif isNumeric(arguments.key)>
+			<cfset value = arguments.key />
+		<cfelseif isQuery(arguments.data) and structKeyExists(arguments.data, arguments.key)>
+			<cfset value = arguments.data[arguments.key][arguments.rowNum] />
+		<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].has__Key(arguments.key)>
+			<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#arguments.key#" returnvariable="value" />
+		<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], arguments.key)>
+			<cfset value = arguments.data[arguments.rowNum][arguments.key] />
+		<cfelseif isArray(arguments.data) and arguments.key eq '__value'>
+			<cfset value = arguments.data[arguments.rowNum] />
+		<cfelse>
+			<cfset value = arguments.key />
+		</cfif>
+		
+		<cfreturn value />
+	</cffunction>
+	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="data" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
@@ -226,6 +237,7 @@
 		<cfset var item = '' />
 		<cfset var result = '' />
 		<cfset var rowNum = '' />
+		<cfset var title = '' />
 		<cfset var value = '' />
 		
 		<cfset arguments.options = extend(defaults, arguments.options) />
@@ -398,7 +410,9 @@
 										<cfset counter = 0 />
 										
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine the value --->
 												<cfif col.key neq ''>
 													<cfinvoke component="#item#" method="get#col.key#" returnvariable="value" />
@@ -420,7 +434,9 @@
 										<cfset counter = 0 />
 										
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine Value --->
 												<cfif col.key neq ''>
 													<cfset value = item[col.key] />
@@ -440,7 +456,9 @@
 										</cfloop>
 									<cfelseif isSimpleValue(item)>
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(item, col, data, rowNum, counter, arguments.options)#
@@ -469,7 +487,9 @@
 								<cfset counter = 0 />
 								
 								<cfloop array="#variables.columns#" index="col">
-									<td class="#col.key# #col.class# column-#counter++#">
+									<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+									
+									<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 										<!--- Determine Value --->
 										<cfif col.key neq ''>
 											<cfset value = arguments.data[col.key] />
