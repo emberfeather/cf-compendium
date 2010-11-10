@@ -3,7 +3,7 @@
  * 
  * Used to unobtrusively enhance the datagrid experience for the user.
  */
-;(function($) {
+(function($) {
 	var confirmDialog;
 	
 	$.fn.datagrid = function(options) {
@@ -73,4 +73,4 @@
 			}
 		});
 	}
-})(jQuery);
+}(jQuery));

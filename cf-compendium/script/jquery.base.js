@@ -3,6 +3,6 @@
  * 
  * Used to unobtrusively enhance the user experience.
  */
-;(function($) {
+(function($) {
 	$.cfc = {};
-})(jQuery);
+}(jQuery));

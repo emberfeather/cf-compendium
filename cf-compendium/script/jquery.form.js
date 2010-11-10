@@ -3,7 +3,7 @@
  * 
  * Used to unobtrusively enhance the form experience for the user.
  */
-;(function($) {
+(function($) {
 	$(function() {
 		var elements = $('.form .element');
 		
@@ -53,7 +53,7 @@
 			// Set the focus on the input in the clone
 			$('input', clone).focus();
 		});
-	}
+	};
 	
 	/**
 	 * Delete the given element with some extra checking.
@@ -69,8 +69,9 @@
 				// TODO make this more specialize with information about the element
 				confirmMsg = 'Are you sure you want to remove this?';
 				
-				if( !confirm( confirmMsg ) )
+				if( !confirm( confirmMsg ) ) {
 					return;
+				}
 			}
 			
 			// Check if this is a clone
@@ -84,7 +85,7 @@
 			// Remove the element
 			current.remove();
 		});
-	}
+	};
 	
 	/**
 	 * Adds the given option to the element inside an modifiers span.
@@ -175,10 +176,11 @@
 	function makeUnique(element, unique) {
 		// Function for adjusting the attribute value with the new unique value
 		adjust = function(index, attr){
-			if (attr == undefined)
+			if (attr === undefined) {
 				return;
+			}
 			
-			return (attr == '' ? '' : attr + '-' + unique);
+			return (attr === '' ? '' : attr + '-' + unique);
 		};
 		
 		// Change all sensitive attributes
@@ -187,4 +189,4 @@
 			.attr('name', adjust)
 			.attr('for', adjust);
 	}
-})(jQuery);
+}(jQuery));
