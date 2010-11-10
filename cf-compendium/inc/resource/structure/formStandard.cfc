@@ -190,7 +190,7 @@
 			<!--- Keep a hold on the original value --->
 			<cfset originalValue = arguments.element.value />
 			
-			<cfset formatted = '<div class="options">' />
+			<cfset formatted = '<div class="options respect-float">' />
 			
 			<!--- Get the option groups --->
 			<cfset optGroups = arguments.element.options.get() />
@@ -218,8 +218,6 @@
 					<cfset formatted &= '</div>' />
 				</cfif>
 			</cfloop>
-			
-			<cfset formatted &= '<div class="clear"><!-- clear --></div>' />
 			
 			<cfset formatted &= '</div>' />
 		<cfelse>
@@ -316,7 +314,7 @@
 			<!--- Keep a hold on the original value --->
 			<cfset originalValue = arguments.element.value />
 			
-			<cfset formatted = '<div class="options">' />
+			<cfset formatted = '<div class="options respect-float">' />
 			
 			<!--- Get the option groups --->
 			<cfset optGroups = arguments.element.options.get() />
@@ -346,8 +344,6 @@
 					<cfset formatted &= '</div>' />
 				</cfif>
 			</cfloop>
-			
-			<cfset formatted &= '<div class="clear"><!-- clear --></div>' />
 			
 			<cfset formatted &= '</div>' />
 		<cfelse>
