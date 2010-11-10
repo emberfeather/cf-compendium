@@ -156,3 +156,7 @@ dt {
 .hide, .hidden {
 	display: none;
 }
+
+.respect-float {
+	overflow: auto;
+}

@@ -156,6 +156,10 @@ dt {
 .hide, .hidden {
 	display: none;
 }
+
+.respect-float {
+	overflow: auto;
+}
 .form {
 	font-size: 1.1em;
 	line-height: 2.5em;
