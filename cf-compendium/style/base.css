@@ -158,5 +158,5 @@ dt {
 }
 
 .respect-float {
-	overflow: auto;
+	overflow: hidden;
 }

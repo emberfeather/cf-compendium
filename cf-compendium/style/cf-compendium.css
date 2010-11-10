@@ -158,7 +158,7 @@ dt {
 }
 
 .respect-float {
-	overflow: auto;
+	overflow: hidden;
 }
 .form {
 	font-size: 1.1em;
