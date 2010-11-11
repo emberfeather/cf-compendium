@@ -3,14 +3,14 @@
  * 
  * Used to unobtrusively enhance the user experience.
  */
-;(function($) {
+(function($) {
 	$.cfc = {};
-})(jQuery);/**
+}(jQuery));/**
  * Form
  * 
  * Used to unobtrusively enhance the form experience for the user.
  */
-;(function($) {
+(function($) {
 	$(function() {
 		var elements = $('.form .element');
 		
@@ -22,6 +22,9 @@
 		
 		// Make the modifiers into button sets
 		$('.modifiers', elements).buttonset();
+		
+		// Make the autocomplete elements into autocompletes
+		elements.find('.autocomplete').each(createAutocomplete).end();
 	});
 	
 	/**
@@ -60,7 +63,7 @@
 			// Set the focus on the input in the clone
 			$('input', clone).focus();
 		});
-	}
+	};
 	
 	/**
 	 * Delete the given element with some extra checking.
@@ -76,8 +79,9 @@
 				// TODO make this more specialize with information about the element
 				confirmMsg = 'Are you sure you want to remove this?';
 				
-				if( !confirm( confirmMsg ) )
+				if( !confirm( confirmMsg ) ) {
 					return;
+				}
 			}
 			
 			// Check if this is a clone
@@ -91,7 +95,7 @@
 			// Remove the element
 			current.remove();
 		});
-	}
+	};
 	
 	/**
 	 * Adds the given option to the element inside an modifiers span.
@@ -182,10 +186,11 @@
 	function makeUnique(element, unique) {
 		// Function for adjusting the attribute value with the new unique value
 		adjust = function(index, attr){
-			if (attr == undefined)
+			if (attr === undefined) {
 				return;
+			}
 			
-			return (attr == '' ? '' : attr + '-' + unique);
+			return (attr === '' ? '' : attr + '-' + unique);
 		};
 		
 		// Change all sensitive attributes
@@ -194,21 +199,32 @@
 			.attr('name', adjust)
 			.attr('for', adjust);
 	}
-})(jQuery);/**
+	
+	function createAutocomplete() {
+		var element = $(this);
+		
+		element.autocomplete({
+			source: element.data('options'),
+			minLength: element.data('minLength') || 0,
+			delay: element.data('delay') || 300
+		});
+	}
+}(jQuery));
+/**
  * List JavaScript
  * 
  * Used to unobtrusively enhance the list experience for the user.
  */
-;(function($) {
+(function($) {
 	$(function() {
 		$('.list li:even:not(.header)').addClass('alt');
 	});
-})(jQuery);/**
+}(jQuery));/**
  * Datagrid JavaScript
  * 
  * Used to unobtrusively enhance the datagrid experience for the user.
  */
-;(function($) {
+(function($) {
 	var confirmDialog;
 	
 	$.fn.datagrid = function(options) {
@@ -278,7 +294,7 @@
 			}
 		});
 	}
-})(jQuery);/*
+}(jQuery));/*
  * timeago: a jQuery plugin, version: 0.8.2 (2010-02-16)
  * @requires jQuery v1.2.3 or later
  *

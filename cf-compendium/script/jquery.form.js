@@ -200,6 +200,6 @@
 			source: element.data('options'),
 			minLength: element.data('minLength') || 0,
 			delay: element.data('delay') || 300
-		})
+		});
 	}
 }(jQuery));
