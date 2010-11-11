@@ -15,6 +15,9 @@
 		
 		// Make the modifiers into button sets
 		$('.modifiers', elements).buttonset();
+		
+		// Make the autocomplete elements into autocompletes
+		elements.find('.autocomplete').each(createAutocomplete).end();
 	});
 	
 	/**
@@ -188,5 +191,15 @@
 			.attr('id', adjust)
 			.attr('name', adjust)
 			.attr('for', adjust);
+	}
+	
+	function createAutocomplete() {
+		var element = $(this);
+		
+		element.autocomplete({
+			source: element.data('options'),
+			minLength: element.data('minLength') || 0,
+			delay: element.data('delay') || 300
+		})
 	}
 }(jQuery));
