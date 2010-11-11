@@ -176,6 +176,7 @@
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
 		<cfset var option = '' />
+		<cfset var originalID = '' />
 		<cfset var originalValue = '' />
 		
 		<!--- Set defaults --->
@@ -184,6 +185,9 @@
 		
 		<!--- Extend the form options --->
 		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		
+		<!--- Save the original ID --->
+		<cfset originalID = arguments.element.id />
 		
 		<!--- Check if we are showing a single element or many options --->
 		<cfif structKeyExists(arguments.element, 'options')>
@@ -208,9 +212,10 @@
 					
 					<cfset arguments.element.value = option.value />
 					<cfset arguments.element.checked = originalValue eq option.value />
+					<cfset arguments.element.id = originalID & '_' & j />
 					
 					<cfset formatted &= '<label>' />
-					<cfset formatted &= elementCheckboxSingle(arguments.element, '_' & i & '_' & j) />
+					<cfset formatted &= elementCheckboxSingle(arguments.element) />
 					<cfset formatted &= ' ' & option.title & '</label>' />
 				</cfloop>
 				
@@ -300,6 +305,7 @@
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
 		<cfset var option = '' />
+		<cfset var originalID = '' />
 		<cfset var originalValue = '' />
 		
 		<!--- Set defaults --->
@@ -308,6 +314,9 @@
 		
 		<!--- Extend the form options --->
 		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		
+		<!--- Save the original ID --->
+		<cfset originalID = arguments.element.id />
 		
 		<!--- Check if we are showing a single element or many options --->
 		<cfif structKeyExists(arguments.element, 'options')>
@@ -332,10 +341,11 @@
 					
 					<cfset arguments.element.value = option.value />
 					<cfset arguments.element.checked = originalValue eq option.value />
+					<cfset arguments.element.id = originalID & '_' & j />
 					
 					<cfset formatted &= '<label>' />
 					
-					<cfset formatted &= elementRadioSingle(arguments.element, '_' & i & '_' & j) />
+					<cfset formatted &= elementRadioSingle(arguments.element) />
 					
 					<cfset formatted &= ' ' & option.title & '</label>' />
 				</cfloop>
