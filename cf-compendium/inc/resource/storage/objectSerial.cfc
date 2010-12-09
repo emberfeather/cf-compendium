@@ -205,6 +205,8 @@
 		<!--- Figure out the type --->
 		<cfif (isStruct(arguments.input) or isQuery(arguments.input)) and structKeyExists(arguments.input, '__fullname')>
 			<cfreturn createObject('component', arguments.input['__fullname']).init() />
+		<cfelseif isXML(arguments.input) and structKeyExists(arguments.input.xmlRoot.xmlAttributes, '__fullname')>
+			<cfreturn createObject('component', arguments.input.xmlRoot.xmlAttributes['__fullname']).init() />
 		<cfelseif isXML(arguments.input) and structKeyExists(arguments.input.xmlAttributes, '__fullname')>
 			<cfreturn createObject('component', arguments.input.xmlAttributes['__fullname']).init() />
 		</cfif>
@@ -212,77 +214,81 @@
 		<!--- Default to a normal object --->
 		<cfreturn createObject('component', 'cf-compendium.inc.resource.base.object').init() />
 	</cffunction>
-	
-	<!---
-		Used to serialize the object into a given format type
-	--->
-	<cffunction name="serialize" access="public" returntype="any" output="false">
-		<cfargument name="object" type="component" default="struct" />
-		<cfargument name="format" type="string" default="struct" />
+<cfscript>
+	// Used to serialize the object into a given format type
+	public any function serialize( required component object, string format = 'struct' ) {
+		var i = '';
+		var instance = '';
+		var inner = '';
+		var j = '';
+		var key = '';
+		var keys = '';
+		var output = '';
 		
-		<cfset var output = '' />
-		<cfset var instance = '' />
-		<cfset var inner = '' />
-		<cfset var i = '' />
-		<cfset var j = '' />
+		instance = arguments.object.get__instance();
 		
-		<cfset instance = arguments.object.get__instance() />
-		
-		<cfswitch expression="#arguments.format#">
-			<cfcase value="struct">
-				<!--- Duplicate the instance variables into a struct --->
-				<cfset output = instance />
+		switch(arguments.format) {
+			case 'struct':
+				output = instance;
 				
-				<!--- Add some of the meta information --->
-				<cfset output['__fullname'] = arguments.object.get__fullname() />
-				<cfset output['__name'] = arguments.object.get__name() />
-			</cfcase>
-			<cfcase value="xml">
-				<!--- Generate the xml --->
-				<cfset output &= '<example' />
+				// Handle nested objects
+				for( key in output ) {
+					if(isObject(output[key])) {
+						output[key] = this.serialize(output[key]);
+					}
+				}
 				
-				<!--- Output the attributes --->
-				<cfloop list="#arguments.object.get__keyList()#" index="i">
-					<!--- Can handle a nested object? --->
-					<cfif isObject(instance[i])>
-						<cfset inner &= chr(10) & instance[i].serialize('xml') />
-					<cfelseif isArray(instance[i])>
-						<!--- Loop and show each element --->
-						<cfloop array="#instance[i]#" index="j">
-							<cfset inner &= chr(10) & '	<' & i & '>' />
+				// Add meta information
+				output['__fullname'] = arguments.object.get__fullname();
+				output['__name'] = arguments.object.get__name();
+				
+				break;
+			case 'xml':
+				output &= '<example';
+				
+				keys = arguments.object.get__keyList();
+				
+				for(i = 1; i <= listLen(keys); i++) {
+					key = listGetAt(keys, i);
+					
+					if(isObject(instance[key])) {
+						inner &= chr(10) & this.serialize(instance[key], 'xml');
+					} else if(isArray(instance[key])) {
+						for(j = 1; j <= arrayLen(instance[key]); j++) {
+							inner &= chr(10) & '	<' & key & '>';
 							
-							<cfif isObject(j)>
-								<!--- Handles other objects --->
-								<cfset inner &= chr(10) & j.serialize('xml') />
-							<cfelse>
-								<!--- Handles basic types --->
-								<cfset inner &= chr(10) & j />
-							</cfif>
+							if(isObject(instance[key][j])) {
+								inner &= chr(10) & this.serialize(instance[key][j], 'xml');
+							} else {
+								inner &= chr(10) & j;
+							}
 							
-							<cfset inner &= chr(10) & '</' & i & '>' />
-						</cfloop>
-					<cfelse>
-						<cfset output &= chr(10) & ' ' & i & '="' & instance[i] & '"' />
-					</cfif>
-				</cfloop>
+							inner &= chr(10) & '	</' & key & '>';
+						}
+					} else if(isStruct(instance[key])) {
+						// TODO Handle structs
+						output &= chr(10) & ' ' & key & '="{{struct}}"';
+					} else {
+						output &= chr(10) & ' ' & key & '="' & instance[key] & '"';
+					}
+				}
 				
-				<cfset output &= '>' />
+				output &= '>';
 				
-				<cfset output &= inner />
+				output &= inner;
 				
-				<cfset output &= '</example>' />
-			</cfcase>
-			
-			<cfcase value="json">
-				<!--- Serialize the struct output to a json format --->
-				<cfset output = serializeJSON(this.serialize(arguments.object, 'struct')) />
-			</cfcase>
-			
-			<cfdefaultcase>
-				<cfthrow message="Cannot output the object as a #arguments.format#" detail="At this time the #arguments.format# format is not available." />
-			</cfdefaultcase>
-		</cfswitch>
+				output &= '</example>';
+				
+				break;
+			case 'json':
+				output = serializeJSON(this.serialize(arguments.object, 'struct'))
+				
+				break;
+			default:
+				throw(message="Cannot output the object as a #arguments.format#", detail="At this time the #arguments.format# format is not available.");
+		}
 		
-		<cfreturn output />
-	</cffunction>
+		return output;
+	}
+</cfscript>
 </cfcomponent>
