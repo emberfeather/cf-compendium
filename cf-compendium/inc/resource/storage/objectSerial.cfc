@@ -216,79 +216,93 @@
 	</cffunction>
 <cfscript>
 	// Used to serialize the object into a given format type
-	public any function serialize( required component object, string format = 'struct' ) {
+	public any function serialize( required any source, string format = 'struct' ) {
 		var i = '';
-		var instance = '';
 		var inner = '';
+		var instance = '';
 		var j = '';
 		var key = '';
 		var keys = '';
-		var output = '';
+		var result = '';
 		
-		instance = arguments.object.get__instance();
+		result = arguments.source;
 		
 		switch(arguments.format) {
 			case 'struct':
-				output = instance;
-				
-				// Handle nested objects
-				for( key in output ) {
-					if(isObject(output[key])) {
-						output[key] = this.serialize(output[key]);
+				if(isObject(result) && structKeyExists(result, 'get__instance')) {
+					result = result.get__instance();
+					
+					// Handle nested objects
+					for( key in result ) {
+						result[key] = this.serialize(result[key], 'struct');
+					}
+					
+					// Add meta information
+					result['__fullname'] = arguments.source.get__fullname();
+					result['__name'] = arguments.source.get__name();
+				} else if(isArray(result)) {
+					for(i = 1; i <= arrayLen(result); i++) {
+						if(!isSimplevalue(result[i])) {
+							result[i] = this.serialize(result[i], 'struct');
+						}
+					}
+				} else if(isStruct(result)) {
+					for( key in result ) {
+						result[key] = this.serialize(result[key], 'struct');
 					}
 				}
-				
-				// Add meta information
-				output['__fullname'] = arguments.object.get__fullname();
-				output['__name'] = arguments.object.get__name();
 				
 				break;
 			case 'xml':
-				output &= '<example';
-				
-				keys = arguments.object.get__keyList();
-				
-				for(i = 1; i <= listLen(keys); i++) {
-					key = listGetAt(keys, i);
+				if(isObject(arguments.source) && structKeyExists(arguments.source, 'get__instance')) {
+					instance = arguments.source.get__instance();
 					
-					if(isObject(instance[key])) {
-						inner &= chr(10) & this.serialize(instance[key], 'xml');
-					} else if(isArray(instance[key])) {
-						for(j = 1; j <= arrayLen(instance[key]); j++) {
-							inner &= chr(10) & '	<' & key & '>';
-							
-							if(isObject(instance[key][j])) {
-								inner &= chr(10) & this.serialize(instance[key][j], 'xml');
-							} else {
-								inner &= chr(10) & j;
+					result = '<example';
+					
+					keys = arguments.source.get__keyList();
+					
+					for(i = 1; i <= listLen(keys); i++) {
+						key = listGetAt(keys, i);
+						
+						if(isObject(instance[key])) {
+							inner &= chr(10) & this.serialize(instance[key], 'xml');
+						} else if(isArray(instance[key])) {
+							for(j = 1; j <= arrayLen(instance[key]); j++) {
+								inner &= chr(10) & '	<' & key & '>';
+								
+								if(isObject(instance[key][j])) {
+									inner &= chr(10) & this.serialize(instance[key][j], 'xml');
+								} else {
+									inner &= chr(10) & j;
+								}
+								
+								inner &= chr(10) & '	</' & key & '>';
 							}
-							
-							inner &= chr(10) & '	</' & key & '>';
+						} else if(isStruct(instance[key])) {
+							// TODO Handle structs
+							result &= chr(10) & ' ' & key & '="{{struct}}"';
+						} else {
+							result &= chr(10) & ' ' & key & '="' & instance[key] & '"';
 						}
-					} else if(isStruct(instance[key])) {
-						// TODO Handle structs
-						output &= chr(10) & ' ' & key & '="{{struct}}"';
-					} else {
-						output &= chr(10) & ' ' & key & '="' & instance[key] & '"';
 					}
+					
+					result &= '>';
+					
+					result &= inner;
+					
+					result &= '</example>';
 				}
-				
-				output &= '>';
-				
-				output &= inner;
-				
-				output &= '</example>';
 				
 				break;
 			case 'json':
-				output = serializeJSON(this.serialize(arguments.object, 'struct'))
+				result = serializeJSON(this.serialize(arguments.source, 'struct'));
 				
 				break;
 			default:
-				throw(message="Cannot output the object as a #arguments.format#", detail="At this time the #arguments.format# format is not available.");
+				throw(message="Cannot result the object as a #arguments.format#", detail="At this time the #arguments.format# format is not available.");
 		}
 		
-		return output;
+		return result;
 	}
 </cfscript>
 </cfcomponent>
