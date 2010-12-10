@@ -26,6 +26,7 @@
 		<cfargument name="input" type="any" required="true" />
 		<cfargument name="object" type="component" required="false" />
 		<cfargument name="doComplete" type="boolean" default="false" />
+		<cfargument name="isTrusted" type="boolean" default="false" />
 		
 		<cfset var i = '' />
 		<cfset var j = '' />
@@ -121,68 +122,6 @@
 					</cfcatch>
 				</cftry>
 			</cfloop>
-		<cfelseif isXML(arguments.input)>
-			<!--- Check for the xml root --->
-			<cfif structKeyExists(arguments.input, 'xmlRoot')>
-				<cfset arguments.input = arguments.input.xmlRoot />
-			</cfif>
-			
-			<!--- Try to create the object from the structure information --->
-			<cfset result = (structKeyExists(arguments, 'object') and isObject(arguments.object) ? arguments.object : getObject(arguments.input)) />
-			
-			<cfset instance = result.get__instance() />
-			
-			<!--- Read in the object from xml --->
-			<cfloop list="#(arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList())#" index="i">
-				<!--- If the current value is an array it should be pulled in as an array --->
-				<cfif isArray(instance[i])>
-					<!--- Check if it exists as a child --->
-					<cfset exists = false />
-					
-					<cfloop array="#arguments.input.xmlChildren#" index="j">
-						<cfif j.xmlName eq i>
-							<cfset exists = true />
-							
-							<cfbreak />
-						</cfif>
-					</cfloop>
-					
-					<!--- Pull in the values --->
-					<cfif exists>
-						<!--- Reset the value --->
-						<cfinvoke component="#result#" method="reset#i#" />
-						
-						<cfloop array="#arguments.input.xmlChildren#" index="j">
-							<cftry>
-								<cfif j.xmlName eq i>
-									<cfinvoke component="#result#" method="add#i#">
-										<cfinvokeargument name="value" value="#trim(j.xmlText)#" />
-									</cfinvoke>
-								</cfif>
-								
-								<!--- Catch any validation errors --->
-								<cfcatch type="validation">
-									<cfset arrayAppend(messages, cfcatch.message) />
-								</cfcatch>
-							</cftry>
-						</cfloop>
-					</cfif>
-				<cfelse>
-					<!--- If it exists in the xml attributes pull it in --->
-					<cfif structKeyExists(arguments.input.xmlAttributes, i)>
-						<cftry>
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(arguments.input.xmlAttributes[i])#" />
-							</cfinvoke>
-							
-							<!--- Catch any validation errors --->
-							<cfcatch type="validation">
-								<cfset arrayAppend(messages, cfcatch.message) />
-							</cfcatch>
-						</cftry>
-					</cfif>
-				</cfif>
-			</cfloop>
 		<cfelseif isJSON(arguments.input)>
 			<!--- Read in the object from json --->
 			<cfset result = this.deserialize(deserializeJSON(arguments.input)) />
@@ -199,20 +138,16 @@
 	</cffunction>
 	
 	<!--- Create an object to deserialize input into --->
-	<cffunction name="getObject" access="private" returntype="component" output="false">
+	<cffunction name="getObject" access="private" returntype="any" output="false">
 		<cfargument name="input" type="any" required="true" />
 		
 		<!--- Figure out the type --->
 		<cfif (isStruct(arguments.input) or isQuery(arguments.input)) and structKeyExists(arguments.input, '__fullname')>
 			<cfreturn createObject('component', arguments.input['__fullname']).init() />
-		<cfelseif isXML(arguments.input) and structKeyExists(arguments.input.xmlRoot.xmlAttributes, '__fullname')>
-			<cfreturn createObject('component', arguments.input.xmlRoot.xmlAttributes['__fullname']).init() />
-		<cfelseif isXML(arguments.input) and structKeyExists(arguments.input.xmlAttributes, '__fullname')>
-			<cfreturn createObject('component', arguments.input.xmlAttributes['__fullname']).init() />
 		</cfif>
 		
-		<!--- Default to a normal object --->
-		<cfreturn createObject('component', 'cf-compendium.inc.resource.base.object').init() />
+		<!--- Default to a struct --->
+		<cfreturn {} />
 	</cffunction>
 <cfscript>
 	// Used to serialize the object into a given format type
@@ -250,47 +185,6 @@
 					for( key in result ) {
 						result[key] = this.serialize(result[key], 'struct');
 					}
-				}
-				
-				break;
-			case 'xml':
-				if(isObject(arguments.source) && structKeyExists(arguments.source, 'get__instance')) {
-					instance = arguments.source.get__instance();
-					
-					result = '<example';
-					
-					keys = arguments.source.get__keyList();
-					
-					for(i = 1; i <= listLen(keys); i++) {
-						key = listGetAt(keys, i);
-						
-						if(isObject(instance[key])) {
-							inner &= chr(10) & this.serialize(instance[key], 'xml');
-						} else if(isArray(instance[key])) {
-							for(j = 1; j <= arrayLen(instance[key]); j++) {
-								inner &= chr(10) & '	<' & key & '>';
-								
-								if(isObject(instance[key][j])) {
-									inner &= chr(10) & this.serialize(instance[key][j], 'xml');
-								} else {
-									inner &= chr(10) & j;
-								}
-								
-								inner &= chr(10) & '	</' & key & '>';
-							}
-						} else if(isStruct(instance[key])) {
-							// TODO Handle structs
-							result &= chr(10) & ' ' & key & '="{{struct}}"';
-						} else {
-							result &= chr(10) & ' ' & key & '="' & instance[key] & '"';
-						}
-					}
-					
-					result &= '>';
-					
-					result &= inner;
-					
-					result &= '</example>';
 				}
 				
 				break;

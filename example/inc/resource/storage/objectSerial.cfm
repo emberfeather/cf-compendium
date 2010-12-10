@@ -84,42 +84,6 @@
 <cfdump var="#objectSerial.serialize(object, 'query')#" />
 --->
 
-<h2>XML</h2>
-
-<h3>Deserialize</h3>
-
-<cfsavecontent variable="example">
-	<example __fullname="implementation.inc.resource.base.object1" test="xml" foo="walrus">
-		<bubble>go</bubble>
-		<bubble>pop</bubble>
-	</example>
-</cfsavecontent>
-
-<blockquote>
-	<code>
-		example = '<cfoutput>#htmlCodeFormat(example)#</cfoutput>'<br />
-		example = xmlParse(example)<br />
-		object = objectSerial.deserialize(example)
-	</code>
-</blockquote>
-
-<cfset example = xmlParse(example) />
-<cfset object = objectSerial.deserialize(example) />
-
-<cfdump var="#object#" expand="false" />
-
-<cfset object.print() />
-
-<h3>Serialize</h3>
-
-<blockquote>
-	<code>
-		objectSerial.serialize(object, 'xml')
-	</code>
-</blockquote>
-
-<cfdump var="#objectSerial.serialize(object, 'xml')#" />
-
 <h2>JSON</h2>
 
 <h3>Deserialize</h3>
