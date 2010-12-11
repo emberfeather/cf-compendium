@@ -22,58 +22,77 @@
 		Has the ability to read all keys from the input instead of just the keys
 		already defined in the object by using the doComplete flag.
 	--->
-	<cffunction name="deserialize" access="public" returntype="component" output="false">
+	<cffunction name="deserialize" access="public" returntype="any" output="false">
 		<cfargument name="input" type="any" required="true" />
 		<cfargument name="object" type="component" required="false" />
 		<cfargument name="doComplete" type="boolean" default="false" />
-		<cfargument name="isTrusted" type="boolean" default="false" />
+		<cfargument name="isTrustedSource" type="boolean" default="false" />
 		
 		<cfset var i = '' />
 		<cfset var j = '' />
 		<cfset var exists = '' />
 		<cfset var instance = '' />
-		<cfset var value = '' />
+		<cfset var keys = '' />
 		<cfset var messages = [] />
 		<cfset var result = '' />
 		<cfset var value = '' />
+		<cfset var useObject = '' />
 		
 		<!--- Figure out the type --->
-		<cfif isStruct(arguments.input)>
+		<cfif structKeyExists(arguments, 'object') and isObject(arguments.object)>
+			<cfset result = arguments.object />
+		<cfelseif arguments.isTrustedSource>
 			<!--- Try to create the object from the structure information --->
-			<cfset result = (structKeyExists(arguments, 'object') and isObject(arguments.object) ? arguments.object : getObject(arguments.input)) />
+			<cfset result = getObject(arguments.input) />
+		<cfelse>
+			<cfset result = {} />
+		</cfif>
+		
+		<cfset useObject = isObject(result) />
+		
+		<cfif isStruct(arguments.input)>
+			<!--- Get the keys to fill --->
+			<cfif useObject>
+				<cfset keys = arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList() />
+			<cfelse>
+				<cfset keys = structKeyList(arguments.input) />
+			</cfif>
 			
 			<!--- Read in the object from a struct --->
-			<cfloop list="#(arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList())#" index="i">
+			<cfloop list="#keys#" index="i">
 				<cftry>
 					<!--- If it exists in the struct pull it in --->
 					<cfif structKeyExists(arguments.input, i)>
 						<cfif isSimpleValue(arguments.input[i])>
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
-							</cfinvoke>
-						<cfelseif isStruct(arguments.input[i]) and structKeyExists(arguments.input[i], '__fullname')>
-							<!--- Check if there is a fullname of a component defined that needs to be instantiated --->
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#this.deserialize(arguments.input[i])#" />
-							</cfinvoke>
+							<cfif useObject>
+								<cfinvoke component="#result#" method="set#i#">
+									<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
+								</cfinvoke>
+							<cfelse>
+								<cfset result[i] = trim(arguments.input[i]) />
+							</cfif>
 						<cfelseif isArray(arguments.input[i])>
-							<!--- Check if there is a fullname of a component defined that needs to be instantiated --->
+							<cfif !useObject>
+								<cfset result[i] = [] />
+							</cfif>
+							
 							<cfloop from="1" to="#arrayLen(arguments.input[i])#" index="j">
-								<cfif isStruct(arguments.input[i]) and structKeyExists(arguments.input[i], '__fullname')>
-									<!--- Check if there is a fullname of a component defined that needs to be instantiated --->
-									<cfinvoke component="#result#" method="set#i#">
-										<cfinvokeargument name="value" value="#this.deserialize(arguments.input[i])#" />
+								<cfif useObject>
+									<cfinvoke component="#result#" method="add#i#">
+										<cfinvokeargument name="value" value="#this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)#" />
 									</cfinvoke>
+								<cfelse>
+									<cfset arrayAppend(result[i], this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)) />
 								</cfif>
 							</cfloop>
-							
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#arguments.input[i]#" />
-							</cfinvoke>
 						<cfelse>
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#arguments.input[i]#" />
-							</cfinvoke>
+							<cfif useObject>
+								<cfinvoke component="#result#" method="set#i#">
+									<cfinvokeargument name="value" value="#this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)#" />
+								</cfinvoke>
+							<cfelse>
+								<cfset result[i] = this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource) />
+							</cfif>
 						</cfif>
 					</cfif>
 					
@@ -84,49 +103,51 @@
 				</cftry>
 			</cfloop>
 		<cfelseif isQuery(arguments.input)>
-			<!--- Try to create the object from the structure information --->
-			<cfset result = (structKeyExists(arguments, 'object') and isObject(arguments.object) ? arguments.object : getObject(arguments.input)) />
-			
-			<cfset instance = result.get__instance() />
-			
-			<!--- Read in the object from a query --->
-			<cfloop list="#(arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList())#" index="i">
-				<cftry>
-					<!--- If it exists in the query pull it in --->
-					<cfif listFindNoCase(arguments.input.columnList, i)>
-						<!--- If the current value is an array it should be pulled in as an array --->
-						<cfif isArray(instance[i])>
-							<!--- Reset the value --->
-							<cfinvoke component="#result#" method="reset#i#" />
-							
-							<!--- Loop through and append --->
-							<cfloop query="arguments.input">
+			<cfif useObject>
+				<cfset instance = result.get__instance() />
+				
+				<!--- Read in the object from a query --->
+				<cfloop list="#(arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList())#" index="i">
+					<cftry>
+						<!--- If it exists in the query pull it in --->
+						<cfif listFindNoCase(arguments.input.columnList, i)>
+							<!--- If the current value is an array it should be pulled in as an array --->
+							<cfif isArray(instance[i])>
+								<!--- Reset the value --->
+								<cfinvoke component="#result#" method="reset#i#" />
+								
+								<!--- Loop through and append --->
+								<cfloop query="arguments.input">
+									<cfset value = arguments.input[i] />
+									
+									<cfinvoke component="#result#" method="add#i#">
+										<cfinvokeargument name="value" value="#trim(value)#" />
+									</cfinvoke>
+								</cfloop>
+							<cfelse>
 								<cfset value = arguments.input[i] />
 								
-								<cfinvoke component="#result#" method="add#i#">
+								<cfinvoke component="#result#" method="set#i#">
 									<cfinvokeargument name="value" value="#trim(value)#" />
 								</cfinvoke>
-							</cfloop>
-						<cfelse>
-							<cfset value = arguments.input[i] />
-							
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(value)#" />
-							</cfinvoke>
+							</cfif>
 						</cfif>
-					</cfif>
-					
-					<!--- Catch any validation errors --->
-					<cfcatch type="validation">
-						<cfset arrayAppend(messages, cfcatch.message) />
-					</cfcatch>
-				</cftry>
-			</cfloop>
+						
+						<!--- Catch any validation errors --->
+						<cfcatch type="validation">
+							<cfset arrayAppend(messages, cfcatch.message) />
+						</cfcatch>
+					</cftry>
+				</cfloop>
+			<cfelse>
+				<cfset result = arguments.input />
+			</cfif>
 		<cfelseif isJSON(arguments.input)>
 			<!--- Read in the object from json --->
-			<cfset result = this.deserialize(deserializeJSON(arguments.input)) />
+			<cfset result = this.deserialize(input = deserializeJSON(arguments.input), doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource) />
 		<cfelse>
-			<cfthrow message="Cannot read the object from given input" detail="At this time the format of the input is not able to be read into the object." />
+			<!--- Don't know anything special to do with it... --->
+			<cfset result = arguments.input />
 		</cfif>
 		
 		<!--- Check if there were any validation errors to rethrow --->
