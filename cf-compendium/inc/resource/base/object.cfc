@@ -18,7 +18,7 @@
 		Used to return a copy of the instance variables.
 	--->
 	<cffunction name="get__instance" access="public" returntype="struct" output="false">
-		<cfreturn duplicate(variables.instance) />
+		<cfreturn variables.instance />
 	</cffunction>
 	
 	<!---
