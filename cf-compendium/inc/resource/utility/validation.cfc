@@ -154,7 +154,7 @@
 	</cffunction>
 	
 	<!---
-		Tests if the value given is not less than a given amount
+		Tests if the value given is not greater than a given amount
 	--->
 	<cffunction name="notGreaterThan" access="public" returntype="void" output="false">
 		<cfargument name="label" type="string" required="true" />
@@ -175,7 +175,7 @@
 	</cffunction>
 	
 	<!---
-		Tests if the value given is not less than a given amount
+		Tests if the value given is not in a given list
 	--->
 	<cffunction name="notIn" access="public" returntype="void" output="false">
 		<cfargument name="label" type="string" required="true" />
@@ -239,9 +239,43 @@
 		<cfargument name="value" type="any" required="true" />
 		<cfargument name="extra" type="string" default="" />
 		
+		<cfset var compressed = '' />
 		<cfset var message = '' />
 		
-		<cfif not REFind("^[a-zA-Z][\.a-zA-Z0-9_-]*[a-zA-Z0-9]@[a-zA-Z0-9]+([a-zA-Z0-9-][a-zA-Z0-9]+)?\.([a-z]+(\.[a-z]+)?){2,5}$", arguments.value)>
+		<!--- Check the local part first character --->
+		<cfif not reFind("^[a-zA-Z]", arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('validEmail_localPart_firstCharacter') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
+		</cfif>
+		
+		<!--- Check the local part last character --->
+		<cfif not reFind("[a-zA-Z0-9]@", arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('validEmail_localPart_lastCharacter') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
+		</cfif>
+		
+		<!--- Check the entire local part --->
+		<cfif not reFind("^[a-zA-Z][\.a-zA-Z0-9_!##\$%&'\*+/=?\^`\{|\}~-]*[a-zA-Z0-9]@", arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('validEmail_localPart') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
+		</cfif>
+		
+		<!--- Check the domain --->
+		<cfif not reFind("@[a-zA-Z0-9]+([a-zA-Z0-9-][a-zA-Z0-9]+)?\.([a-z]+(\.[a-z]+)?){2,5}$", arguments.value)>
+			<!--- Get the message from the bundle --->
+			<cfset message = variables.resourceBundle.getValue('validEmail_domain') />
+			
+			<cfthrow type="validation" message="#variables.messageFormatter.format( message, arguments.label )#" />
+		</cfif>
+		
+		<!--- Final Test --->
+		<cfif not reFind("^[a-zA-Z][\.a-zA-Z0-9_!##\$%&'\*+/=?\^`\{|\}~-]*[a-zA-Z0-9]@[a-zA-Z0-9]+([a-zA-Z0-9-][a-zA-Z0-9]+)?\.([a-z]+(\.[a-z]+)?){2,5}$", arguments.value)>
 			<!--- Get the message from the bundle --->
 			<cfset message = variables.resourceBundle.getValue('validEmail') />
 			

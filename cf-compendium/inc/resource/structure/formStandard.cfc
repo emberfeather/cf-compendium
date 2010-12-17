@@ -158,7 +158,7 @@
 				<cfreturn elementTextarea(arguments.element) />
 			</cfcase>
 			<cfdefaultcase>
-				<cfset super.element(arguments.element) />
+				<cfset super.elementToHTML(arguments.element) />
 			</cfdefaultcase>
 		</cfswitch>
 	</cffunction>
@@ -176,6 +176,7 @@
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
 		<cfset var option = '' />
+		<cfset var originalID = '' />
 		<cfset var originalValue = '' />
 		
 		<!--- Set defaults --->
@@ -190,7 +191,10 @@
 			<!--- Keep a hold on the original value --->
 			<cfset originalValue = arguments.element.value />
 			
-			<cfset formatted = '<div class="options">' />
+			<!--- Save the original ID --->
+			<cfset originalID = arguments.element.id />
+			
+			<cfset formatted = '<div class="options respect-float">' />
 			
 			<!--- Get the option groups --->
 			<cfset optGroups = arguments.element.options.get() />
@@ -208,18 +212,17 @@
 					
 					<cfset arguments.element.value = option.value />
 					<cfset arguments.element.checked = originalValue eq option.value />
+					<cfset arguments.element.id = originalID & '_' & j />
 					
-					<cfset formatted &= '<label>' />
-					<cfset formatted &= elementCheckboxSingle(arguments.element, '_' & i & '_' & j) />
-					<cfset formatted &= ' ' & option.title & '</label>' />
+					<cfset formatted &= elementCheckboxSingle(arguments.element) />
+					
+					<cfset formatted &= ' <label for="' & arguments.element.id & '">' & option.title & '</label>' />
 				</cfloop>
 				
 				<cfif group.label neq ''>
 					<cfset formatted &= '</div>' />
 				</cfif>
 			</cfloop>
-			
-			<cfset formatted &= '<div class="clear"><!-- clear --></div>' />
 			
 			<cfset formatted &= '</div>' />
 		<cfelse>
@@ -302,6 +305,7 @@
 		<cfset var j = '' />
 		<cfset var optGroups = '' />
 		<cfset var option = '' />
+		<cfset var originalID = '' />
 		<cfset var originalValue = '' />
 		
 		<!--- Set defaults --->
@@ -316,7 +320,10 @@
 			<!--- Keep a hold on the original value --->
 			<cfset originalValue = arguments.element.value />
 			
-			<cfset formatted = '<div class="options">' />
+			<!--- Save the original ID --->
+			<cfset originalID = arguments.element.id />
+			
+			<cfset formatted = '<div class="options respect-float">' />
 			
 			<!--- Get the option groups --->
 			<cfset optGroups = arguments.element.options.get() />
@@ -334,20 +341,17 @@
 					
 					<cfset arguments.element.value = option.value />
 					<cfset arguments.element.checked = originalValue eq option.value />
+					<cfset arguments.element.id = originalID & '_' & j />
 					
-					<cfset formatted &= '<label>' />
+					<cfset formatted &= elementRadioSingle(arguments.element) />
 					
-					<cfset formatted &= elementRadioSingle(arguments.element, '_' & i & '_' & j) />
-					
-					<cfset formatted &= ' ' & option.title & '</label>' />
+					<cfset formatted &= ' <label for="' & arguments.element.id & '">' & option.title & '</label>' />
 				</cfloop>
 				
 				<cfif group.label neq ''>
 					<cfset formatted &= '</div>' />
 				</cfif>
 			</cfloop>
-			
-			<cfset formatted &= '<div class="clear"><!-- clear --></div>' />
 			
 			<cfset formatted &= '</div>' />
 		<cfelse>

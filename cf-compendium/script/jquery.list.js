@@ -3,8 +3,8 @@
  * 
  * Used to unobtrusively enhance the list experience for the user.
  */
-;(function($) {
+(function($) {
 	$(function() {
 		$('.list li:even:not(.header)').addClass('alt');
 	});
-})(jQuery);
+}(jQuery));

@@ -1,55 +1,49 @@
 <cfcomponent extends="cf-compendium.inc.resource.base.object" output="false">
-	<cffunction name="init" access="public" returnType="component" output="false">
-		<cfargument name="i18n" type="component" required="true" />
-		<cfargument name="locale" type="string" default="en_US" />
+<cfscript>
+	public component function init(required component i18n, string locale = 'en_US') {
+		super.init();
 		
-		<cfset super.init() />
+		variables.i18n = arguments.i18n;
+		variables.locale = arguments.locale;
+		variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale);
 		
-		<cfset variables.i18n = arguments.i18n />
-		<cfset variables.locale = arguments.locale />
-		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
+		variables.columns = [];
 		
-		<cfset variables.columns = [] />
+		// Set base bundle for translation
+		addBundle('/cf-compendium/i18n/inc/resource/structure', 'datagrid');
 		
-		<!--- Set base bundle for translation --->
-		<cfset addBundle('/cf-compendium/i18n/inc/resource/structure', 'datagrid') />
-		
-		<cfreturn this />
-	</cffunction>
+		return this;
+	}
 	
-	<cffunction name="addColumn" access="public" returntype="void" output="false">
-		<cfargument name="options" type="struct" default="#{}#" />
+	public void function addColumn(struct options = {}) {
+		var defaults = {
+			class = '',
+			format = '',
+			key = '',
+			label = '',
+			link = [],
+			linkClass = [],
+			title = '',
+			type = 'text',
+			value = ''
+		};
 		
-		<cfset var defaults = {
-				class = '',
-				format = '',
-				key = '',
-				label = '',
-				link = [],
-				linkClass = [],
-				type = 'text',
-				value = ''
-			} />
+		// Normalize the options
+		if (structKeyExists(arguments.options, 'link') && !isArray(arguments.options.link)) {
+			arguments.options.link = [ arguments.options.link ];
+		}
 		
-		<!--- Normalize the options --->
-		<cfif structKeyExists(arguments.options, 'link') and not isArray(arguments.options.link)>
-			<cfset arguments.options.link = [ arguments.options.link ] />
-		</cfif>
+		if (structKeyExists(arguments.options, 'linkClass') && !isArray(arguments.options.linkClass)) {
+			arguments.options.linkClass = [ arguments.options.linkClass ];
+		}
 		
-		<cfif structKeyExists(arguments.options, 'linkClass') and not isArray(arguments.options.linkClass)>
-			<cfset arguments.options.linkClass = [ arguments.options.linkClass ] />
-		</cfif>
-		
-		<cfset arrayAppend(variables.columns, extend(defaults, arguments.options)) />
-	</cffunction>
+		arrayAppend(variables.columns, extend(defaults, arguments.options));
+	}
 	
-	<cffunction name="addBundle" access="public" returntype="void" output="false">
-		<cfargument name="path" type="string" required="true" />
-		<cfargument name="name" type="string" required="true" />
-		
-		<cfset variables.label.addBundle(argumentCollection = arguments) />
-	</cffunction>
-	
+	public void function addBundle(required string path, required string name) {
+		variables.label.addBundle(argumentCollection = arguments);
+	}
+</cfscript>
 	<cffunction name="calculateDerived" access="private" returntype="string" output="false">
 		<cfargument name="derived" type="struct" required="true" />
 		<cfargument name="type" type="string" required="true" />
@@ -117,6 +111,7 @@
 		<cfset var key = '' />
 		<cfset var link = '' />
 		<cfset var theUrl = '' />
+		<cfset var title = '' />
 		<cfset var value = '' />
 		
 		<!--- Determine if using a column or datagrid based url --->
@@ -142,22 +137,7 @@
 					</cfif>
 					
 					<cfloop list="#structKeyList(arguments.column.link[i])#" index="j">
-						<cfset key = arguments.column.link[i][j] />
-						
-						<!--- Get the link value --->
-						<cfif isNumeric(key)>
-							<cfset value = key />
-						<cfelseif isQuery(arguments.data) and structKeyExists(arguments.data, key)>
-							<cfset value = arguments.data[key][arguments.rowNum] />
-						<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].has__Key(key)>
-							<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#key#" returnvariable="value" />
-						<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], key)>
-							<cfset value = arguments.data[arguments.rowNum][key] />
-						<cfelseif isArray(arguments.data) and key eq '__value'>
-							<cfset value = arguments.data[arguments.rowNum] />
-						<cfelse>
-							<cfset value = key />
-						</cfif>
+						<cfset value = getValue(arguments.data, arguments.rowNum, arguments.column.link[i][j]) />
 						
 						<cfinvoke component="#theUrl#" method="setDGCol#arguments.colNum#Link#i#">
 							<cfinvokeargument name="name" value="#j#" />
@@ -182,37 +162,55 @@
 		
 		<cfreturn html />
 	</cffunction>
-	
-	<cffunction name="formatValue" access="private" returntype="string" output="false">
-		<cfargument name="column" type="struct" required="true" />
-		<cfargument name="value" type="string" required="true" />
+<cfscript>
+	private string function formatValue(required struct column, required string value) {
+		switch (arguments.column.type) {
+			case 'checkbox':
+				return '<input type="checkbox" name="checkboxSelect[]" value="' & arguments.value & '" />';
+			
+			// Use the format as a holder for a formatter
+			case 'custom':
+				return arguments.column.format.toHTML(arguments.value);
+			
+			case 'date':
+				return dateFormat(arguments.value, arguments.column.format);
+			
+			case 'time':
+				return timeFormat(arguments.value, arguments.column.format);
+			
+			case 'raw':
+				return arguments.value;
+			
+			case 'uuid':
+				return left(arguments.value, 8);
+			
+			default:
+				return htmlEditFormat(arguments.value);
+		}
+	}
+</cfscript>
+	<cffunction name="getValue" access="private" returntype="any" output="false">
+		<cfargument name="data" type="any" required="true" />
+		<cfargument name="rowNum" type="numeric" required="true" />
+		<cfargument name="key" type="string" required="true" />
 		
-		<cfswitch expression="#arguments.column.type#">
-			<cfcase value="date">
-				<cfreturn dateFormat(arguments.value, arguments.column.format) />
-			</cfcase>
-			
-			<cfcase value="time">
-				<cfreturn timeFormat(arguments.value, arguments.column.format) />
-			</cfcase>
-			
-			<!--- Use the format as a holder for a formatter --->
-			<cfcase value="custom">
-				<cfreturn arguments.column.format.toHTML(arguments.value) />
-			</cfcase>
-			
-			<cfcase value="raw">
-				<cfreturn arguments.value />
-			</cfcase>
-			
-			<cfcase value="uuid">
-				<cfreturn left(arguments.value, 8) />
-			</cfcase>
-			
-			<cfdefaultcase>
-				<cfreturn htmlEditFormat(arguments.value) />
-			</cfdefaultcase>
-		</cfswitch>
+		<cfset var value = '' />
+		
+		<cfif isNumeric(arguments.key)>
+			<cfset value = arguments.key />
+		<cfelseif isQuery(arguments.data) and structKeyExists(arguments.data, arguments.key)>
+			<cfset value = arguments.data[arguments.key][arguments.rowNum] />
+		<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].has__Key(arguments.key)>
+			<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#arguments.key#" returnvariable="value" />
+		<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], arguments.key)>
+			<cfset value = arguments.data[arguments.rowNum][arguments.key] />
+		<cfelseif isArray(arguments.data) and arguments.key eq '__value'>
+			<cfset value = arguments.data[arguments.rowNum] />
+		<cfelse>
+			<cfset value = arguments.key />
+		</cfif>
+		
+		<cfreturn value />
 	</cffunction>
 	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
@@ -224,12 +222,12 @@
 		<cfset var counter = '' />
 		<cfset var currentKey = '' />
 		<cfset var defaults = {
-				class = '',
-				linkBase = '',
-				minimumRows = 15,
-				numPerPage = 30,
-				startRow = 1
-			} />
+			class = '',
+			linkBase = '',
+			minimumRows = 15,
+			numPerPage = 30,
+			startRow = 1
+		} />
 		<cfset var derived = {} />
 		<cfset var html = '' />
 		<cfset var htmlColumns = '' />
@@ -239,6 +237,7 @@
 		<cfset var item = '' />
 		<cfset var result = '' />
 		<cfset var rowNum = '' />
+		<cfset var title = '' />
 		<cfset var value = '' />
 		
 		<cfset arguments.options = extend(defaults, arguments.options) />
@@ -411,7 +410,9 @@
 										<cfset counter = 0 />
 										
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine the value --->
 												<cfif col.key neq ''>
 													<cfinvoke component="#item#" method="get#col.key#" returnvariable="value" />
@@ -433,7 +434,9 @@
 										<cfset counter = 0 />
 										
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine Value --->
 												<cfif col.key neq ''>
 													<cfset value = item[col.key] />
@@ -453,7 +456,9 @@
 										</cfloop>
 									<cfelseif isSimpleValue(item)>
 										<cfloop array="#variables.columns#" index="col">
-											<td class="#col.key# #col.class# column-#counter++#">
+											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+											
+											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(item, col, data, rowNum, counter, arguments.options)#
@@ -482,7 +487,9 @@
 								<cfset counter = 0 />
 								
 								<cfloop array="#variables.columns#" index="col">
-									<td class="#col.key# #col.class# column-#counter++#">
+									<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+									
+									<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 										<!--- Determine Value --->
 										<cfif col.key neq ''>
 											<cfset value = arguments.data[col.key] />

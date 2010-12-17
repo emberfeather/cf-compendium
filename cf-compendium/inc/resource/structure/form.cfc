@@ -185,6 +185,7 @@
 		<cfargument name="booleanAttributes" type="array" default="#[]#" />
 		
 		<cfset var formatted = '' />
+		<cfset var keys = '' />
 		<cfset var i = '' />
 		
 		<cfloop from="1" to="#arrayLen(arguments.valueAttributes)#" index="i">
@@ -198,6 +199,13 @@
 				<cfset formatted &= arguments.booleanAttributes[i] />
 			</cfif>
 		</cfloop>
+		
+		<!--- data-* attributes --->
+		<cfif structKeyExists(arguments.element, 'data') and isStruct(arguments.element.data)>
+			<cfloop collection="#arguments.element.data#" item="i">
+				<cfset formatted &= 'data-' & i & '="' & arguments.element.data[i] & '" ' />
+			</cfloop>
+		</cfif>
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -288,7 +296,7 @@
 	<cffunction name="elementToHTML" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfthrow message="Unsupported Form Element" detail="The #arguments.element.type# type of element is currently unsupported." />
+		<cfthrow message="Unsupported Form Element" detail="The #arguments.element.elementType# type of element is currently unsupported." />
 	</cffunction>
 	
 	<!--- 
@@ -343,7 +351,7 @@
 			<cfthrow message="Invalid form action" detail="A form action is required." />
 		</cfif>
 		
-		<cfset extendedOptions.class &= 'form ' />
+		<cfset extendedOptions.class &= ' form' />
 		
 		<!--- Open Tag --->
 		<cfset formatted &= '<form ' />
@@ -441,7 +449,7 @@
 		<!--- hidden elements should not be shown --->
 		<cfif arguments.element.elementType neq 'hidden'>
 			<!--- Start the tag --->
-			<cfset formatted = '<div class="element' />
+			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType />
 			
 			<!--- Check for a required element --->
 			<cfif arguments.element.required>

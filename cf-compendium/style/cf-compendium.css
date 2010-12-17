@@ -156,6 +156,10 @@ dt {
 .hide, .hidden {
 	display: none;
 }
+
+.respect-float {
+	overflow: hidden;
+}
 .form {
 	font-size: 1.1em;
 	line-height: 2.5em;
@@ -176,6 +180,8 @@ dt {
 }
 
 .form input[type=text],
+.form input[type=email],
+.form input[type=url],
 .form input[type=password],
 .form input[type=file] {
 	width: 40%;
@@ -324,10 +330,16 @@ dt {
 	visibility: visible;
 }
 
+.datagrid td.width-min {
+	width: 1px;
+	white-space: nowrap;
+}
+
 .datagrid a.delete {
 	color: #FF3333;
 	margin-right: 1em;
-}/*
+}
+/*
 	These are for the CODE snippet styling
 */
 

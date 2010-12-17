@@ -17,15 +17,12 @@
 		<li>numberRangeSlide - Number Range Slider
 		<li>numberSlide - Number Slider
 	--->
-	<cffunction name="element" access="private" returntype="string" output="false">
+	<cffunction name="elementToHTML" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfswitch expression="#arguments.element.type#">
-			<cfcase value="date">
-				<cfreturn elementDate(arguments.element) />
-			</cfcase>
-			<cfcase value="datetime">
-				<cfreturn elementDatetime(arguments.element) />
+		<cfswitch expression="#arguments.element.elementType#">
+			<cfcase value="autocomplete">
+				<cfreturn elementAutocomplete(arguments.element) />
 			</cfcase>
 			<cfcase value="dateRange">
 				<cfreturn elementDateRange(arguments.element) />
@@ -46,9 +43,55 @@
 				<cfreturn elementNumberSlide(arguments.element) />
 			</cfcase>
 			<cfdefaultcase>
-				<cfreturn super.element(arguments.element) />
+				<cfreturn super.elementToHTML(arguments.element) />
 			</cfdefaultcase>
 		</cfswitch>
+	</cffunction>
+	
+	<!--- 
+		Creates the date form element.
+	--->
+	<cffunction name="elementAutocomplete" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset var autoOptions = [] />
+		<cfset var formatted = '' />
+		<cfset var defaults = {
+			'data' = {}
+		} />
+		<cfset var group = '' />
+		<cfset var option = '' />
+		<cfset var optGroups = '' />
+		
+		<!--- Extend the form options --->
+		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		
+		<cfset arguments.element.class &= ' autocomplete' />
+		
+		<!--- check for options --->
+		<cfif not structKeyExists( arguments.element, 'options' )>
+			<cfthrow message="Need options for autocomplete element" detail="Need to pass options to the autocomplete type of element" />
+		</cfif>
+		
+		<!--- Get the option groups --->
+		<cfset optGroups = arguments.element.options.get() />
+		
+		<!--- Output the options --->
+		<cfloop array="#optGroups#" index="group">
+			<cfloop array="#group.options#" index="option">
+				<cfset arrayAppend(autoOptions, {
+					'category' = ( group.label neq '' ? variables.label.get(group.label) : '' ),
+					'label' = option.title,
+					'value' = option.value
+				}) />
+			</cfloop>
+		</cfloop>
+		
+		<cfset arguments.element.data.options = replace(serializeJson(autoOptions), '"', '&quot;', 'all') />
+		
+		<cfset arguments.element.type = 'text' />
+		
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
@@ -65,7 +108,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -84,7 +127,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -103,7 +146,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -122,7 +165,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -141,7 +184,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -160,7 +203,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -179,7 +222,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>
@@ -198,7 +241,7 @@
 		
 		<cfset formatted &= ' />' />
 		
-		<cfset formatted = 'The #arguments.element.type# element has not been programmed yet.' />
+		<cfset formatted = 'The #arguments.element.elementType# element has not been programmed yet.' />
 		
 		<cfreturn formatted />
 	</cffunction>

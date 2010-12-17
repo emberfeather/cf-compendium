@@ -1,1 +1,1 @@
-(function(a){a(function(){})})(jQuery);
+(function(a){a.cfc={}})(jQuery);

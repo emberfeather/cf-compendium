@@ -3,9 +3,6 @@ component extends="mxunit.framework.TestCase" {
 		variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/i18n/'));
 	}
 	
-	/**
-	 * 
-	 */
 	public void function testAddColumn_WithOptions() {
 		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
 		

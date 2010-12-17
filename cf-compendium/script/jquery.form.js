@@ -3,7 +3,7 @@
  * 
  * Used to unobtrusively enhance the form experience for the user.
  */
-;(function($) {
+(function($) {
 	$(function() {
 		var elements = $('.form .element');
 		
@@ -15,6 +15,9 @@
 		
 		// Make the modifiers into button sets
 		$('.modifiers', elements).buttonset();
+		
+		// Make the autocomplete elements into autocompletes
+		elements.find('.autocomplete').each(createAutocomplete).end();
 	});
 	
 	/**
@@ -53,7 +56,7 @@
 			// Set the focus on the input in the clone
 			$('input', clone).focus();
 		});
-	}
+	};
 	
 	/**
 	 * Delete the given element with some extra checking.
@@ -69,8 +72,9 @@
 				// TODO make this more specialize with information about the element
 				confirmMsg = 'Are you sure you want to remove this?';
 				
-				if( !confirm( confirmMsg ) )
+				if( !confirm( confirmMsg ) ) {
 					return;
+				}
 			}
 			
 			// Check if this is a clone
@@ -84,7 +88,7 @@
 			// Remove the element
 			current.remove();
 		});
-	}
+	};
 	
 	/**
 	 * Adds the given option to the element inside an modifiers span.
@@ -113,21 +117,24 @@
 	function attachDeletion( elements ) {
 		// Create the deletion link
 		var deleteBtn = $('<button />', {
-				text: 'Remove', // TODO use i18n
-				click: function() {
-					$(this)
-						.parents('.element')
-						.removeElement();
-					
-					return false;
-				},
-				className: 'delete'
-			}).button({
-				icons: {
-					primary: 'ui-icon-circle-minus'
-				},
-				text: false
-			});
+			text: 'Remove', // TODO use i18n
+			click: function(event) {
+				$(this)
+					.parents('.element')
+					.removeElement();
+				
+				return false;
+			},
+			className: 'delete'
+		}).button({
+			icons: {
+				primary: 'ui-icon-circle-minus'
+			},
+			text: false
+		});
+		
+		// Since the .attr() will not work for setting the type
+		deleteBtn[0].setAttribute('type', 'button');
 		
 		// Add the deletion functionality
 		$('.allowDeletion', elements).each( function() {
@@ -141,21 +148,24 @@
 	function attachDuplication( elements ) {
 		// Create the duplication link
 		var duplicateBtn = $('<button />', {
-				text: 'Add multiple', // TODO use i18n
-				click: function() {
-					$(this)
-						.parents('.element')
-						.duplicateElement();
-					
-					return false;
-				},
-				className: 'duplicate'
-			}).button({
-				icons: {
-					primary: 'ui-icon-circle-plus'
-				},
-				text: false
-			});
+			text: 'Add multiple', // TODO use i18n
+			click: function() {
+				$(this)
+					.parents('.element')
+					.duplicateElement();
+				
+				return false;
+			},
+			className: 'duplicate'
+		}).button({
+			icons: {
+				primary: 'ui-icon-circle-plus'
+			},
+			text: false
+		});
+		
+		// Since the .attr() will not work for setting the type
+		duplicateBtn[0].setAttribute('type', 'button');
 		
 		// Add the duplicate functionality
 		$('.allowDuplication', elements).each( function() {
@@ -169,10 +179,11 @@
 	function makeUnique(element, unique) {
 		// Function for adjusting the attribute value with the new unique value
 		adjust = function(index, attr){
-			if (attr == undefined)
+			if (attr === undefined) {
 				return;
+			}
 			
-			return (attr == '' ? '' : attr + '-' + unique);
+			return (attr === '' ? '' : attr + '-' + unique);
 		};
 		
 		// Change all sensitive attributes
@@ -181,4 +192,14 @@
 			.attr('name', adjust)
 			.attr('for', adjust);
 	}
-})(jQuery);
+	
+	function createAutocomplete() {
+		var element = $(this);
+		
+		element.autocomplete({
+			source: element.data('options'),
+			minLength: element.data('minLength') || 0,
+			delay: element.data('delay') || 300
+		});
+	}
+}(jQuery));
