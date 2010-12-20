@@ -1,6 +1,6 @@
 component extends="mxunit.framework.TestCase" {
 	public void function setup() {
-		variables.variables.theStack = createObject('component', 'cf-compendium.inc.resource.utility.stack').init();
+		variables.theStack = createObject('component', 'cf-compendium.inc.resource.utility.stack').init();
 	}
 	
 	/**
