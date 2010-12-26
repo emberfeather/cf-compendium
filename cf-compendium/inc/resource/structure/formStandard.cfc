@@ -253,7 +253,23 @@
 	<cffunction name="elementCustom" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfreturn arguments.element.value />
+		<cfset var formatted = '' />
+		
+		<cfset formatted = '<div ' />
+		
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		
+		<!--- Common Element Attributes --->
+		<cfset formatted &= commonAttributesInput(arguments.element) />
+		
+		<cfset formatted &= '>' />
+		
+		<cfset formatted &= arguments.element.value />
+		
+		<cfset formatted &= '</div>' />
+		
+		<cfreturn formatted />
 	</cffunction>
 	
 	<!--- 
