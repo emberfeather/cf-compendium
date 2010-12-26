@@ -157,6 +157,9 @@
 			<cfcase value="textarea">
 				<cfreturn elementTextarea(arguments.element) />
 			</cfcase>
+			<cfcase value="custom">
+				<cfreturn elementCustom(arguments.element) />
+			</cfcase>
 			<cfdefaultcase>
 				<cfset super.elementToHTML(arguments.element) />
 			</cfdefaultcase>
@@ -242,6 +245,15 @@
 		<cfset arguments.element.type = 'checkbox' />
 		
 		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<!--- 
+		Creates the custom form element.
+	--->
+	<cffunction name="elementCustom" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfreturn arguments.element.value />
 	</cffunction>
 	
 	<!--- 
