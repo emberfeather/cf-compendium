@@ -329,7 +329,7 @@
 		<cfset defaults = {
 				'accept-charset' = '',
 				'action' = arguments.action,
-				'autocomplete' = false,
+				'autocomplete' = true,
 				'class' = '',
 				'enctype' = '',
 				'method' = 'POST',
@@ -514,7 +514,7 @@
 		<cfset variables.altRow = 0 />
 		
 		<!--- Start the tag --->
-		<cfset formatted = '<fieldset' />
+		<cfset formatted = '<fieldset ' />
 		
 		<!--- Common HTML Attributes --->
 		<cfset formatted &= commonAttributesHtml(arguments.fieldset) />
