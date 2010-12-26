@@ -389,7 +389,7 @@
 		</cfif>
 		
 		<cfsavecontent variable="html">
-			<table class="datagrid #arguments.options.class#">
+			<table class="datagrid <cfoutput>#arguments.options.class#</cfoutput>">
 				<cfoutput>
 					<thead>
 						#htmlColumns#
