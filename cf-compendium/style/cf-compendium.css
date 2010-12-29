@@ -188,6 +188,12 @@ dt {
 	min-width: 250px;
 }
 
+.form input[type=submit],
+.form input[type=reset],
+.form button {
+	text-transform: capitalize;
+}
+
 .form textarea {
 	height: 15em;
 	width: 100%;
