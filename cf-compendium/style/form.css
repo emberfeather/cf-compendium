@@ -26,6 +26,10 @@
 	min-width: 250px;
 }
 
+.form input[type=submit] {
+    text-transform: capitalize;
+}
+
 .form textarea {
 	height: 15em;
 	width: 100%;
