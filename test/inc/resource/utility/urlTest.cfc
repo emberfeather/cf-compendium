@@ -1,121 +1,114 @@
 component extends="mxunit.framework.TestCase" {
+	public void function setup() {
+		variables.theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
+	}
+	
 	/**
 	 * Test adding an anchor by setting it to a value.
 	 */
 	public void function testAnchorUrl() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
-		
 		// set an anchor
-		theUrl.anchorRedirect('top');
+		variables.theUrl.anchorRedirect('top');
 		
-		assertEquals('?##top', theUrl.getRedirect());
+		assertEquals('?##top', variables.theUrl.getRedirect());
 	}
 	
 	/**
 	 * Test removing an anchor by setting it to a blank string.
 	 */
 	public void function testAnchorUrl_RemoveAnchor_Blank() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
-		
 		// set an anchor value to remove
-		theUrl.anchorRedirect('top');
+		variables.theUrl.anchorRedirect('top');
 		
 		// test removing an anchor on an instance
-		theUrl.anchorRedirect('');
+		variables.theUrl.anchorRedirect('');
 		
-		assertEquals('?', theUrl.getRedirect());
+		assertEquals('?', variables.theUrl.getRedirect());
 	}
 	
 	/**
 	 * Test removing an anchor by not passing a new value.
 	 */
 	public void function testAnchorUrl_RemoveAnchor_sansArgument() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
-		
 		// set an anchor value to remove
-		theUrl.anchorRedirect('top');
+		variables.theUrl.anchorRedirect('top');
 		
 		// test removing an anchor on an instance
-		theUrl.anchorRedirect();
+		variables.theUrl.anchorRedirect();
 		
-		assertEquals('?', theUrl.getRedirect());
+		assertEquals('?', variables.theUrl.getRedirect());
 	}
 	
 	/**
 	 * Test removing an anchor that was never set.
 	 */
 	public void function testAnchorUrl_RemoveAnchor_sansAnchor() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
-		
 		// test removing an anchor on an instance
-		theUrl.anchorRedirect();
+		variables.theUrl.anchorRedirect();
 		
-		assertEquals('?', theUrl.getRedirect());
+		assertEquals('?', variables.theUrl.getRedirect());
 	}
 	
 	/**
 	 * Test returning a cleaned (empty) url given a full one
 	 */
 	public void function testCleanUrl() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('randy=dabomb');
+		variables.theUrl.init('randy=dabomb');
 		
 		// test cleaning an instance
-		theUrl.cleanRedirect();
+		variables.theUrl.cleanRedirect();
 		
-		assertEquals('?', theUrl.getRedirect());
+		assertEquals('?', variables.theUrl.getRedirect());
 	}
 	
 	/**
 	 * Test returning a cleaned (empty) url given a full one
 	 */
 	public void function testCleanUrl_Master() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('randy=dabomb');
+		variables.theUrl.init('randy=dabomb');
 		
 		// test cleaning the master
-		theUrl.clean();
+		variables.theUrl.clean();
 		
-		assertEquals('?', theUrl.get());
+		assertEquals('?', variables.theUrl.get());
 	}
 	
 	/**
 	 * Test cloning an existing URL
 	 */
 	public void function testCloneUrl_shouldMatch() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('');
-		
-		theUrl.setTesting('test', 'something');
+		variables.theUrl.setTesting('test', 'something');
 		
 		// test cleaning an instance
-		theUrl.cloneRedirect('testing');
+		variables.theUrl.cloneRedirect('testing');
 		
-		assertEquals('?test=something', theUrl.getRedirect());
+		assertEquals('?test=something', variables.theUrl.getRedirect());
 	}
 	
 	/**
 	 * Test cloning the master
 	 */
 	public void function testCloneUrl_withMaster_shouldMatch() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('test=something');
+		variables.theUrl.init('test=something');
 		
 		// test cleaning an instance
-		theUrl.cloneRedirect();
+		variables.theUrl.cloneRedirect();
 		
-		assertEquals('?test=something', theUrl.getRedirect());
+		assertEquals('?test=something', variables.theUrl.getRedirect());
 	}
 	
 	/**
 	 * Test extending a url
 	 */
 	public void function testExtend() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		var theContrast = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init();
 		var newUrl = '';
 		
-		theUrl.setBrandNewLocation('sarah', 'awesome');
+		variables.theUrl.setBrandNewLocation('sarah', 'awesome');
 		
-		theUrl.extendBrandNewLocation('sarah=new&tj=awesome');
+		variables.theUrl.extendBrandNewLocation('sarah=new&tj=awesome');
 		
-		newUrl = replace(theUrl.getBrandNewLocation(false),'?','&', 'ALL');
+		newUrl = replace(variables.theUrl.getBrandNewLocation(false),'?','&', 'ALL');
 		
 		assertTrue(theContrast.areEqual('sarah=awesome&tj=awesome', newUrl, '&'));
 	}
@@ -124,49 +117,48 @@ component extends="mxunit.framework.TestCase" {
 	 * Test getting the getting location
 	 */
 	public void function testGet() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		
-		theUrl.setMylocation('ef', 'cool');
+		variables.theUrl.setMylocation('ef', 'cool');
 		
-		assertEquals('?ef=cool', theUrl.getMyLocation());
+		assertEquals('?ef=cool', variables.theUrl.getMyLocation());
 	}
 	
 	/**
 	 * Want to test getting back the correct url given a url
 	 */
 	public void function testGetMaster() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+		variables.theUrl.init('ef=cool');
 		
-		assertEquals('?ef=cool', theUrl.get());
+		assertEquals('?ef=cool', variables.theUrl.get());
 	}
 	
 	/**
 	 * Test getLocation for existence of named location
 	 */
 	public void function testHasLocationTrue() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+		variables.theUrl.init('ef=cool');
 		
-		theUrl.setMyLocation('test', 'true');
+		variables.theUrl.setMyLocation('test', 'true');
 		
-		assertTrue(theUrl.hasMylocation());
+		assertTrue(variables.theUrl.hasMylocation());
 	}
 	
 	/**
 	 * Test getLocation for FALSE existence of named location
 	 */
 	public void function testHasLocationFalse() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+		variables.theUrl.init('ef=cool');
 		
-		assertFalse(theUrl.hasMyLocation());
+		assertFalse(variables.theUrl.hasMyLocation());
 	}
 	
 	/**
 	 * Test getLocation for existence of master location
 	 */
 	public void function testHasLocationMaster() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init('ef=cool');
+		variables.theUrl.init('ef=cool');
 		
-		assertTrue(theUrl.has());
+		assertTrue(variables.theUrl.has());
 	}
 	
 	/**
@@ -183,15 +175,14 @@ component extends="mxunit.framework.TestCase" {
 	 *   XXXOOOO  
 	 */
 	public void function testOverride() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		var theContrast = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init();
 		var newUrl = '';
 		
-		theUrl.setBrandNewLocation('sarah', 'awesome');
+		variables.theUrl.setBrandNewLocation('sarah', 'awesome');
 		
-		theUrl.overrideBrandNewLocation('sarah=new&tj=awesome');
+		variables.theUrl.overrideBrandNewLocation('sarah=new&tj=awesome');
 		
-		newUrl = replace(theUrl.getBrandNewLocation(false),'?','&', 'ALL');
+		newUrl = replace(variables.theUrl.getBrandNewLocation(false),'?','&', 'ALL');
 		
 		assertTrue(theContrast.areEqual('sarah=new&tj=awesome', newUrl, '&'));
 	}
@@ -200,9 +191,8 @@ component extends="mxunit.framework.TestCase" {
 	 * Test parseQueryString. Should return a struct given a correctly formatted query string
 	 */
 	public void function testParseQueryString() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		var theQueryString = "happy=sad&fun=boring&awesome=lame";
-		var result = theUrl.parseQueryString(theQueryString);
+		var result = variables.theUrl.parseQueryString(theQueryString);
 		
 		assertTrue(structKeyExists(result, "happy"));
 		assertTrue(result["happy"] eq "sad");
@@ -218,9 +208,8 @@ component extends="mxunit.framework.TestCase" {
 	 * Test parseQueryString. Should return a struct given a correctly formatted query string
 	 */
 	public void function testParseQueryStringWithQuestion() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		var theQueryString = "?happy=sad";
-		var result = theUrl.parseQueryString(theQueryString);
+		var result = variables.theUrl.parseQueryString(theQueryString);
 		
 		assertFalse(structKeyExists(result, "?happy"));
 	}
@@ -229,70 +218,64 @@ component extends="mxunit.framework.TestCase" {
 	 * Test parseQueryStringWithBlank. Should return a struct given a correctly formatted query string
 	 */
 	public void function testParseQueryStringWithBlank() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		var theQueryString =  "";
 		
-		assertTrue(structIsEmpty(theUrl.parseQueryString(theQueryString)));
+		assertTrue(structIsEmpty(variables.theUrl.parseQueryString(theQueryString)));
 	}
 	
 	/**
 	 * Test queryKeyList returns the correct list of tokens
 	 */
 	public void function testQueryKeyList() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		
-		theUrl.set('test1', '1');
-		theUrl.set('test2', '2');
-		theUrl.set('test3', '3');
-		theUrl.set('test4', '4');
+		variables.theUrl.set('test1', '1');
+		variables.theUrl.set('test2', '2');
+		variables.theUrl.set('test3', '3');
+		variables.theUrl.set('test4', '4');
 		
-		assertEquals('test1,test2,test3,test4', listSort( theUrl.querystringKeyList(), 'text' ) );
+		assertEquals('test1,test2,test3,test4', listSort( variables.theUrl.querystringKeyList(), 'text' ) );
 	}
 	
 	/**
 	 * Test the setLocation function with a blank location string and a blank query string
 	 */
 	public void function testResetMasterBlankQuery() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		
-		theUrl.reset('');
+		variables.theUrl.reset('');
 		
-		assertEquals("?", theUrl.get());
+		assertEquals("?", variables.theUrl.get());
 	}
 	
 	/**
 	 * Test the setLocation function with a blank location string and a query string
 	 */
 	public void function testResetMasterWithQuery() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		var strQueryString =  "randy=cool";
 		
-		theUrl.reset(strQueryString);
+		variables.theUrl.reset(strQueryString);
 		
-		assertEquals("?" & strQueryString, theUrl.get());
+		assertEquals("?" & strQueryString, variables.theUrl.get());
 	}
 	
 	/**
 	 * Test the setLocation function with a location string and a blank query string
 	 */
 	public void function testResetLocationBlankQuery() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		var strQueryString =  "";
 		
-		theUrl.resetMyLocation(strQueryString);
+		variables.theUrl.resetMyLocation(strQueryString);
 		
-		assertEquals("?" & strQueryString, theUrl.getMyLocation());
+		assertEquals("?" & strQueryString, variables.theUrl.getMyLocation());
 	}
 	
 	/**
 	 * Test the setLocation function with a location string and a query string
 	 */
 	public void function testResetLocationWithLocationWithQuery() {
-		var theUrl = createObject('component', 'cf-compendium.inc.resource.utility.url').init();
 		var strQueryString =  "randy=cool";
 		
-		theUrl.resetMyLocation(strQueryString);
+		variables.theUrl.resetMyLocation(strQueryString);
 		
-		assertEquals("?" & strQueryString, theUrl.getMyLocation());
+		assertEquals("?" & strQueryString, variables.theUrl.getMyLocation());
 	}
 }
