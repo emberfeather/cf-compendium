@@ -7,7 +7,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Make sure the the option for the url start works
 	 */
 	public void function testReturnDifferentStart() {
-		assertEquals('/myStart/?', theUrl.getTest(true, { start = '/myStart/?' }));
+		assertEquals('/myStart/?', theUrl.getTest(true, { start = '/myStart/' }));
 	}
 	
 	/**
