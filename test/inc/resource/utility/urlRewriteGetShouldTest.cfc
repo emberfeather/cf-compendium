@@ -10,6 +10,12 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals('/total/coolness?chicken=awesome', variables.theUrl.getALocation());
 	}
 	
+	public void function testWithBaseOnly() {
+		variables.theUrl.setALocation('_base', '/total/coolness');
+		
+		assertEquals('/total/coolness?', variables.theUrl.getALocation());
+	}
+	
 	public void function testWithBaseTrailingSlash() {
 		variables.theUrl.setALocation('chicken', 'awesome');
 		variables.theUrl.setALocation('_base', '/total/coolness/');

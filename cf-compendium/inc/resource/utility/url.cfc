@@ -159,7 +159,7 @@
 		<!--- Start out with the start string --->
 		<cfset formatted = getOptions.start & getOptions.startChar />
 		
-		<cfif not structKeyExists(getOptions, 'keys') || getOptions.keys eq ''>
+		<cfif not structKeyExists(getOptions, 'keys')>
 			<cfset getOptions.keys = structKeyList(location) />
 		</cfif>
 		
