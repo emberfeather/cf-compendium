@@ -9,7 +9,8 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
-				start = '?',
+				start = '',
+				startChar = '?',
 				ampEncodeChar = '&amp;',
 				eqEncodeChar = '=',
 				ampChar = '&',
@@ -140,7 +141,6 @@
 		<cfset var current = '' />
 		<cfset var ampChar = '' />
 		<cfset var eqChar = '' />
-		<cfset var keys = '' />
 		<cfset var location = findLocation(arguments.locationName) />
 		<cfset var getOptions = '' />
 		
@@ -157,17 +157,19 @@
 		</cfif>
 		
 		<!--- Start out with the start string --->
-		<cfset formatted = getOptions.start />
+		<cfset formatted = getOptions.start & getOptions.startChar />
 		
-		<cfset keys = structKeyList(location) />
+		<cfif not structKeyExists(getOptions, 'keys')>
+			<cfset getOptions.keys = structKeyList(location) />
+		</cfif>
 		
 		<!--- Add each variable --->
-		<cfloop list="#keys#" index="current">
+		<cfloop list="#getOptions.keys#" index="current">
 			<cfset formatted &= current & eqChar & location[current] & ampChar />
 		</cfloop>
 		
 		<!--- Remove the extra amp character --->
-		<cfif listLen(keys)>
+		<cfif listLen(getOptions.keys)>
 			<cfset formatted = Left(formatted, len(formatted) - len(ampChar)) />
 		</cfif>
 		

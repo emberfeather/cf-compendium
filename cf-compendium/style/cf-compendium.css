@@ -221,6 +221,7 @@ dt {
 .form .element .options label {
 	clear: none;
 	display: inline;
+	float: none;
 	min-width: auto;
 	width: auto;
 	min-width: 0;
