@@ -10,6 +10,13 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals('/total/coolness?chicken=awesome', variables.theUrl.getALocation());
 	}
 	
+	public void function testWithBaseTrailingSlash() {
+		variables.theUrl.setALocation('chicken', 'awesome');
+		variables.theUrl.setALocation('_base', '/total/coolness/');
+		
+		assertEquals('/total/coolness/?chicken=awesome', variables.theUrl.getALocation());
+	}
+	
 	/**
 	 * Test a custom base variable
 	 */
@@ -32,5 +39,12 @@ component extends="mxunit.framework.TestCase" {
 		variables.theUrl.setALocation('_base', '/total/coolness');
 		
 		assertEquals('/admin/total/coolness?chicken=awesome', variables.theUrl.getALocation(false, { start = '/admin' }));
+	}
+	
+	public void function testWithStartTrailingSlash() {
+		variables.theUrl.setALocation('chicken', 'awesome');
+		variables.theUrl.setALocation('_base', '/total/coolness');
+		
+		assertEquals('/admin/total/coolness?chicken=awesome', variables.theUrl.getALocation(false, { start = '/admin/' }));
 	}
 }
