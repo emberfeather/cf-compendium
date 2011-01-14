@@ -12,9 +12,8 @@
 	/**
 	 * Clear all cached values
 	 */
-	public void function clear() {
-		// TODO remove extra arguments after RAILO-671 is closed
-		cacheClear(filter = '', cacheName = variables.cacheName);
+	public void function clear(string filter = '') {
+		cacheClear(arguments.filter, variables.cacheName);
 	}
 	
 	/**
