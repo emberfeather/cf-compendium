@@ -431,6 +431,12 @@
 		<cfreturn formatted />
 	</cffunction>
 	
+	<cffunction name="getLabel" access="public" returntype="string" output="false">
+		<cfargument name="key" type="string" required="true" />
+		
+		<cfreturn variables.label.get(arguments.key) />
+	</cffunction>
+	
 	<cffunction name="getNumSections" access="public" returntype="numeric" output="false">
 		<!--- Close out any open sections --->
 		<cfset addSection() />
