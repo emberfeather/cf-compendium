@@ -93,12 +93,12 @@
 			s = s.replace(/\.\d\d\d+/, ""); // remove milliseconds
 			s = s.replace(/-/, "/").replace(/-/, "/");
 			s = s.replace(/T/, " ").replace(/Z/, " UTC");
-			s = s.replace(/([\+-]\d\d)\:?(\d\d)/, " $1$2"); // -04:00 -> -0400
+			s = s.replace(/([\+\-]\d\d)\:?(\d\d)/, " $1$2"); // -04:00 -> -0400
 			return new Date(s);
 		},
 		datetime : function(elem) {
 			// jQuery's `is()` doesn't play well with HTML5 in IE
-			var isTime = $(elem).get(0).tagName.toLowerCase() == "time"; // $(elem).is("time");
+			var isTime = $(elem).get(0).tagName.toLowerCase() === "time"; // $(elem).is("time");
 			var iso8601 = isTime ? $(elem).attr("datetime") : $(elem).attr(
 					"title");
 			return $t.parse(iso8601);
@@ -133,8 +133,9 @@
 				datetime : $t.datetime(element)
 			});
 			var text = $.trim(element.text());
-			if (text.length > 0)
+			if (text.length > 0) {
 				element.attr("title", text);
+			}
 		}
 		return element.data("timeago");
 	}
@@ -150,4 +151,4 @@
 	// fix for IE6 suckage
 	document.createElement("abbr");
 	document.createElement("time");
-})(jQuery);
+}(jQuery));
