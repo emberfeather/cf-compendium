@@ -41,14 +41,12 @@
 				'max',
 				'maxlength',
 				'min',
-				'name',
 				'pattern',
 				'placeholder',
 				'size',
 				'src',
 				'step',
 				'type',
-				'value',
 				'width'
 			], [
 				'autofocus',
@@ -57,6 +55,9 @@
 				'multiple',
 				'readonly',
 				'required'
+			], [
+				'name',
+				'value'
 			]) />
 	</cffunction>
 	

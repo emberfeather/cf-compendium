@@ -183,6 +183,7 @@
 		<cfargument name="element" type="struct" required="true" />
 		<cfargument name="valueAttributes" type="array" default="#[]#" />
 		<cfargument name="booleanAttributes" type="array" default="#[]#" />
+		<cfargument name="requiredValueAttributes" type="array" default="#[]#" />
 		
 		<cfset var formatted = '' />
 		<cfset var keys = '' />
@@ -196,7 +197,13 @@
 		
 		<cfloop from="1" to="#arrayLen(arguments.booleanAttributes)#" index="i">
 			<cfif structKeyExists(arguments.element, arguments.booleanAttributes[i]) and arguments.element[arguments.booleanAttributes[i]] eq true>
-				<cfset formatted &= arguments.booleanAttributes[i] />
+				<cfset formatted &= arguments.booleanAttributes[i] & ' ' />
+			</cfif>
+		</cfloop>
+		
+		<cfloop from="1" to="#arrayLen(arguments.requiredValueAttributes)#" index="i">
+			<cfif structKeyExists(arguments.element, arguments.requiredValueAttributes[i])>
+				<cfset formatted &= arguments.requiredValueAttributes[i] & '="' & arguments.element[arguments.requiredValueAttributes[i]] & '" ' />
 			</cfif>
 		</cfloop>
 		
