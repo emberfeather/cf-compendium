@@ -261,9 +261,6 @@
 		<!--- Common HTML Attributes --->
 		<cfset formatted &= commonAttributesHtml(arguments.element) />
 		
-		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesInput(arguments.element) />
-		
 		<cfset formatted &= '>' />
 		
 		<cfset formatted &= arguments.element.value />
