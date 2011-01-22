@@ -49,29 +49,30 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
-				accessKey = '',
-				class = '',
-				contentEditable = '',
-				contextMenu = '',
-				desc = '',
-				dir = '',
-				disabled = false,
-				draggable = '',
-				hidden = '',
-				id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
-				label = '',
-				lang = '',
-				link = '',
-				name = '',
-				postElement = '',
-				preElement = '',
-				required = false,
-				size = '',
-				spellcheck = '',
-				tabIndex = '',
-				tip = '',
-				title = ''
-			} />
+			accessKey = '',
+			class = '',
+			contentEditable = '',
+			contextMenu = '',
+			desc = '',
+			dir = '',
+			disabled = false,
+			draggable = '',
+			elementClass = '',
+			hidden = '',
+			id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
+			label = '',
+			lang = '',
+			link = '',
+			name = '',
+			postElement = '',
+			preElement = '',
+			required = false,
+			size = '',
+			spellcheck = '',
+			tabIndex = '',
+			tip = '',
+			title = ''
+		} />
 		<cfset var element = '' />
 		
 		<!--- Extend the form options --->
@@ -462,15 +463,7 @@
 		<!--- hidden elements should not be shown --->
 		<cfif arguments.element.elementType neq 'hidden'>
 			<!--- Start the tag --->
-			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType />
-			
-			<!--- Check for a required element --->
-			<cfif arguments.element.required>
-				<cfset formatted &= ' required' />
-			</cfif>
-			
-			<!--- Finish div --->
-			<cfset formatted &= '">' />
+			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType & ' ' & arguments.element.name & ' ' & arguments.element.elementClass & ' ' & (arguments.element.required ? 'required' : '') & '">' />
 			
 			<!--- Output the label --->
 			<cfif not isStruct(arguments.element.label)>
