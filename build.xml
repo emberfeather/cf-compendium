@@ -19,6 +19,7 @@
 			<fileset dir="${build.script}" includes="jquery.list.js" />
 			<fileset dir="${build.script}" includes="jquery.datagrid.js" />
 			<fileset dir="${build.script}" includes="jquery.timeago.js" />
+			<fileset dir="${build.script}" includes="jquery.cookie.js" />
 		</concat>
 		
 		<!-- Create a single, concatenated CSS file -->
