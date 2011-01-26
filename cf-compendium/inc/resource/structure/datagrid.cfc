@@ -453,7 +453,11 @@
 											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine Value --->
 												<cfif col.key neq ''>
-													<cfset value = item[col.key] />
+													<cfif structKeyExists(item, col.key)>
+														<cfset value = item[col.key] />
+													<cfelse>
+														<cfset value = '' />
+													</cfif>
 												<cfelseif structKeyExists(col, 'derived')>
 													<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
 												<cfelse>
