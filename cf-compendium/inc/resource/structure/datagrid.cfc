@@ -188,6 +188,25 @@
 				return htmlEditFormat(arguments.value);
 		}
 	}
+	
+	public string function getNestedValue( required struct data, required string key ) {
+		var currentKey = '';
+		var nextKey = '';
+		
+		if(structKeyExists(arguments.data, arguments.key)) {
+			return arguments.data[arguments.key];
+		}
+		
+		currentKey = listFirst(arguments.key, '.');
+		nextKey = listRest(arguments.key, '.');
+		
+		
+		if(structKeyExists(arguments.data, currentKey) && isStruct(arguments.data[currentKey])) {
+			return getNestedValue( arguments.data[currentKey], nextKey );
+		}
+		
+		return '';
+	}
 </cfscript>
 	<cffunction name="getValue" access="private" returntype="any" output="false">
 		<cfargument name="data" type="any" required="true" />
@@ -456,7 +475,7 @@
 													<cfif structKeyExists(item, col.key)>
 														<cfset value = item[col.key] />
 													<cfelse>
-														<cfset value = '' />
+														<cfset value = getNestedValue(item, col.key) />
 													</cfif>
 												<cfelseif structKeyExists(col, 'derived')>
 													<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
