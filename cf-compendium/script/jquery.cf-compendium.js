@@ -295,7 +295,7 @@
 		});
 	}
 }(jQuery));/*
- * timeago: a jQuery plugin, version: 0.8.2 (2010-02-16)
+ * timeago: a jQuery plugin, version: 0.9.2 (2010-09-14)
  * @requires jQuery v1.2.3 or later
  *
  * Timeago is a jQuery plugin that makes it easy to support automatically
@@ -311,9 +311,13 @@
  */
 (function($) {
   $.timeago = function(timestamp) {
-    if (timestamp instanceof Date) return inWords(timestamp);
-    else if (typeof timestamp == "string") return inWords($.timeago.parse(timestamp));
-    else return inWords($.timeago.datetime(timestamp));
+    if (timestamp instanceof Date) {
+      return inWords(timestamp);
+    } else if (typeof timestamp === "string") {
+      return inWords($.timeago.parse(timestamp));
+    } else {
+      return inWords($.timeago.datetime(timestamp));
+    }
   };
   var $t = $.timeago;
 
@@ -326,8 +330,6 @@
         prefixFromNow: null,
         suffixAgo: "ago",
         suffixFromNow: "from now",
-        ago: null, // DEPRECATED, use suffixAgo
-        fromNow: null, // DEPRECATED, use suffixFromNow
         seconds: "less than a minute",
         minute: "about a minute",
         minutes: "%d minutes",
@@ -338,17 +340,18 @@
         month: "about a month",
         months: "%d months",
         year: "about a year",
-        years: "%d years"
+        years: "%d years",
+        numbers: []
       }
     },
     inWords: function(distanceMillis) {
       var $l = this.settings.strings;
       var prefix = $l.prefixAgo;
-      var suffix = $l.suffixAgo || $l.ago;
+      var suffix = $l.suffixAgo;
       if (this.settings.allowFuture) {
         if (distanceMillis < 0) {
           prefix = $l.prefixFromNow;
-          suffix = $l.suffixFromNow || $l.fromNow;
+          suffix = $l.suffixFromNow;
         }
         distanceMillis = Math.abs(distanceMillis);
       }
@@ -358,6 +361,12 @@
       var hours = minutes / 60;
       var days = hours / 24;
       var years = days / 365;
+
+      function substitute(stringOrFunction, number) {
+        var string = $.isFunction(stringOrFunction) ? stringOrFunction(number, distanceMillis) : stringOrFunction;
+        var value = ($l.numbers && $l.numbers[number]) || number;
+        return string.replace(/%d/i, value);
+      }
 
       var words = seconds < 45 && substitute($l.seconds, Math.round(seconds)) ||
         seconds < 90 && substitute($l.minute, 1) ||
@@ -375,14 +384,15 @@
     },
     parse: function(iso8601) {
       var s = $.trim(iso8601);
+      s = s.replace(/\.\d\d\d+/,""); // remove milliseconds
       s = s.replace(/-/,"/").replace(/-/,"/");
       s = s.replace(/T/," ").replace(/Z/," UTC");
-      s = s.replace(/([\+-]\d\d)\:?(\d\d)/," $1$2"); // -04:00 -> -0400
+      s = s.replace(/([\+\-]\d\d)\:?(\d\d)/," $1$2"); // -04:00 -> -0400
       return new Date(s);
     },
     datetime: function(elem) {
       // jQuery's `is()` doesn't play well with HTML5 in IE
-      var isTime = $(elem).get(0).tagName.toLowerCase() == "time"; // $(elem).is("time");
+      var isTime = $(elem).get(0).tagName.toLowerCase() === "time"; // $(elem).is("time");
       var iso8601 = isTime ? $(elem).attr("datetime") : $(elem).attr("title");
       return $t.parse(iso8601);
     }
@@ -412,7 +422,9 @@
     if (!element.data("timeago")) {
       element.data("timeago", { datetime: $t.datetime(element) });
       var text = $.trim(element.text());
-      if (text.length > 0) element.attr("title", text);
+      if (text.length > 0) {
+        element.attr("title", text);
+      }
     }
     return element.data("timeago");
   }
@@ -425,12 +437,49 @@
     return (new Date().getTime() - date.getTime());
   }
 
-  function substitute(stringOrFunction, value) {
-    var string = $.isFunction(stringOrFunction) ? stringOrFunction(value) : stringOrFunction;
-    return string.replace(/%d/i, value);
-  }
-
   // fix for IE6 suckage
   document.createElement("abbr");
   document.createElement("time");
-})(jQuery);
+}(jQuery));
+/**
+ * jQuery Cookie plugin
+ * 
+ * Copyright (c) 2010 Klaus Hartl (stilbuero.de) Dual licensed under the MIT and
+ * GPL licenses: http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ * 
+ */
+jQuery.cookie = function(key, value, options) {
+	// key and value given, set cookie...
+	if (arguments.length > 1 && (value === null || typeof value !== "object")) {
+		options = jQuery.extend({}, options);
+
+		if (value === null) {
+			options.expires = -1;
+		}
+
+		if (typeof options.expires === 'number') {
+			var days = options.expires, t = options.expires = new Date();
+			t.setDate(t.getDate() + days);
+		}
+
+		return (document.cookie = [
+				encodeURIComponent(key),
+				'=',
+				options.raw ? String(value) : encodeURIComponent(String(value)),
+				options.expires ? '; expires=' + options.expires.toUTCString()
+						: '', // use expires attribute, max-age is not
+								// supported by IE
+				options.path ? '; path=' + options.path : '',
+				options.domain ? '; domain=' + options.domain : '',
+				options.secure ? '; secure' : '' ].join(''));
+	}
+
+	// key and possibly options given, get cookie...
+	options = value || {};
+	var result, decode = options.raw ? function(s) {
+		return s;
+	} : decodeURIComponent;
+	return (result = new RegExp('(?:^|; )' + encodeURIComponent(key)
+			+ '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
+};

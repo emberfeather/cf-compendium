@@ -8,13 +8,13 @@
 		
 		<cfset var html = '' />
 		
-		<cfset html = '<abbr class="timeago" title="' />
+		<cfset html = '<time class="timeago" datetime="' />
 		<cfset html &= dateFormat(arguments.datetime, 'yyyy-mm-dd') />
 		<cfset html &= 'T' />
 		<cfset html &= timeFormat(arguments.datetime, 'HH:mm:ss') />
 		<cfset html &= '">' />
 		<cfset html &= dateFormat(arguments.datetime, 'd mmm yyyy') />
-		<cfset html &= '</abbr>' />
+		<cfset html &= '</time>' />
 		
 		<cfreturn html />
 	</cffunction>

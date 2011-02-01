@@ -188,12 +188,33 @@
 				return htmlEditFormat(arguments.value);
 		}
 	}
+	
+	public string function getNestedValue( required struct data, required string key ) {
+		var currentKey = '';
+		var nextKey = '';
+		
+		if(structKeyExists(arguments.data, arguments.key)) {
+			return arguments.data[arguments.key];
+		}
+		
+		currentKey = listFirst(arguments.key, '.');
+		nextKey = listRest(arguments.key, '.');
+		
+		
+		if(structKeyExists(arguments.data, currentKey) && isStruct(arguments.data[currentKey])) {
+			return getNestedValue( arguments.data[currentKey], nextKey );
+		}
+		
+		return '';
+	}
 </cfscript>
 	<cffunction name="getValue" access="private" returntype="any" output="false">
 		<cfargument name="data" type="any" required="true" />
 		<cfargument name="rowNum" type="numeric" required="true" />
 		<cfargument name="key" type="string" required="true" />
 		
+		<cfset var i = '' />
+		<cfset var keys = '' />
 		<cfset var value = '' />
 		
 		<cfif isNumeric(arguments.key)>
@@ -206,6 +227,16 @@
 			<cfset value = arguments.data[arguments.rowNum][arguments.key] />
 		<cfelseif isArray(arguments.data) and arguments.key eq '__value'>
 			<cfset value = arguments.data[arguments.rowNum] />
+		<cfelseif isStruct(arguments.data)>
+			<cfset keys = listSort(structKeyList(arguments.data), 'textNoCase') />
+			
+			<cfset i = listGetAt(keys, arguments.rowNum) />
+			
+			<cfif structKeyExists(arguments.data[i], arguments.key)>
+				<cfset value = arguments.data[i][arguments.key] />
+			<cfelse>
+				<cfset value = arguments.key />
+			</cfif>
 		<cfelse>
 			<cfset value = arguments.key />
 		</cfif>
@@ -235,6 +266,8 @@
 		<cfset var hasAggregate = false />
 		<cfset var i = '' />
 		<cfset var item = '' />
+		<cfset var key = '' />
+		<cfset var keys = '' />
 		<cfset var result = '' />
 		<cfset var rowNum = '' />
 		<cfset var title = '' />
@@ -389,7 +422,7 @@
 		</cfif>
 		
 		<cfsavecontent variable="html">
-			<table class="datagrid #arguments.options.class#">
+			<table class="datagrid <cfoutput>#arguments.options.class#</cfoutput>">
 				<cfoutput>
 					<thead>
 						#htmlColumns#
@@ -439,7 +472,11 @@
 											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine Value --->
 												<cfif col.key neq ''>
-													<cfset value = item[col.key] />
+													<cfif structKeyExists(item, col.key)>
+														<cfset value = item[col.key] />
+													<cfelse>
+														<cfset value = getNestedValue(item, col.key) />
+													</cfif>
 												<cfelseif structKeyExists(col, 'derived')>
 													<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
 												<cfelse>
@@ -508,6 +545,43 @@
 									</td>
 								</cfloop>
 							</tr>
+						</cfoutput>
+					<cfelseif isStruct(arguments.data) and structCount(arguments.data) gt 0>
+						<cfset keys = listSort(structKeyList(arguments.data), 'textNoCase') />
+						
+						<cfset rowNum = 0 />
+						
+						<cfoutput>
+							<cfloop from="#arguments.options.startRow#" to="#min(listLen(keys), arguments.options.startRow + arguments.options.numPerPage)#" index="i">
+								<cfset key = listGetAt(keys, i) />
+								
+								<cfset rowNum++ />
+								<tr>
+									<cfset counter = 0 />
+									
+									<cfloop array="#variables.columns#" index="col">
+										<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
+										
+										<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+											<!--- Determine Value --->
+											<cfif col.key neq ''>
+												<cfset value = arguments.data[key][col.key] />
+											<cfelseif structKeyExists(col, 'derived')>
+												<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
+											<cfelse>
+												<cfset value = '&nbsp;' />
+											</cfif>
+											
+											<!--- Check for a link --->
+											<cfif arrayLen(col.link)>
+												#createLink(value, col, data, rowNum, counter, arguments.options)#
+											<cfelse>
+												#formatValue(col, value)#
+											</cfif>
+										</td>
+									</cfloop>
+								</tr>
+							</cfloop>
 						</cfoutput>
 					<cfelse>
 						<cfoutput>

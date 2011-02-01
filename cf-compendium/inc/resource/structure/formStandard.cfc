@@ -41,14 +41,12 @@
 				'max',
 				'maxlength',
 				'min',
-				'name',
 				'pattern',
 				'placeholder',
 				'size',
 				'src',
 				'step',
 				'type',
-				'value',
 				'width'
 			], [
 				'autofocus',
@@ -57,6 +55,9 @@
 				'multiple',
 				'readonly',
 				'required'
+			], [
+				'name',
+				'value'
 			]) />
 	</cffunction>
 	
@@ -157,6 +158,9 @@
 			<cfcase value="textarea">
 				<cfreturn elementTextarea(arguments.element) />
 			</cfcase>
+			<cfcase value="custom">
+				<cfreturn elementCustom(arguments.element) />
+			</cfcase>
 			<cfdefaultcase>
 				<cfset super.elementToHTML(arguments.element) />
 			</cfdefaultcase>
@@ -242,6 +246,28 @@
 		<cfset arguments.element.type = 'checkbox' />
 		
 		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<!--- 
+		Creates the custom form element.
+	--->
+	<cffunction name="elementCustom" access="private" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset var formatted = '' />
+		
+		<cfset formatted = '<div ' />
+		
+		<!--- Common HTML Attributes --->
+		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		
+		<cfset formatted &= '>' />
+		
+		<cfset formatted &= arguments.element.value />
+		
+		<cfset formatted &= '</div>' />
+		
+		<cfreturn formatted />
 	</cffunction>
 	
 	<!--- 
@@ -333,7 +359,9 @@
 				<cfset group = optGroups[i] />
 				
 				<cfif group.label neq ''>
-					<cfset formatted &= '<div><div>' & variables.label.get(group.label) & '</div>' />
+					<cfset formatted &= '<div>' />
+					
+					<cfset formatted &= '<div>' & variables.label.get(group.label) & '</div>' />
 				</cfif>
 				
 				<cfloop from="1" to="#arrayLen(group.options)#" index="j">

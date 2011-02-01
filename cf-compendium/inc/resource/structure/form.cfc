@@ -49,29 +49,30 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
-				accessKey = '',
-				class = '',
-				contentEditable = '',
-				contextMenu = '',
-				desc = '',
-				dir = '',
-				disabled = false,
-				draggable = '',
-				hidden = '',
-				id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
-				label = '',
-				lang = '',
-				link = '',
-				name = '',
-				postElement = '',
-				preElement = '',
-				required = false,
-				size = '',
-				spellcheck = '',
-				tabIndex = '',
-				tip = '',
-				title = ''
-			} />
+			accessKey = '',
+			class = '',
+			contentEditable = '',
+			contextMenu = '',
+			desc = '',
+			dir = '',
+			disabled = false,
+			draggable = '',
+			elementClass = '',
+			hidden = '',
+			id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
+			label = '',
+			lang = '',
+			link = '',
+			name = '',
+			postElement = '',
+			preElement = '',
+			required = false,
+			size = '',
+			spellcheck = '',
+			tabIndex = '',
+			tip = '',
+			title = ''
+		} />
 		<cfset var element = '' />
 		
 		<!--- Extend the form options --->
@@ -183,6 +184,7 @@
 		<cfargument name="element" type="struct" required="true" />
 		<cfargument name="valueAttributes" type="array" default="#[]#" />
 		<cfargument name="booleanAttributes" type="array" default="#[]#" />
+		<cfargument name="requiredValueAttributes" type="array" default="#[]#" />
 		
 		<cfset var formatted = '' />
 		<cfset var keys = '' />
@@ -196,7 +198,13 @@
 		
 		<cfloop from="1" to="#arrayLen(arguments.booleanAttributes)#" index="i">
 			<cfif structKeyExists(arguments.element, arguments.booleanAttributes[i]) and arguments.element[arguments.booleanAttributes[i]] eq true>
-				<cfset formatted &= arguments.booleanAttributes[i] />
+				<cfset formatted &= arguments.booleanAttributes[i] & ' ' />
+			</cfif>
+		</cfloop>
+		
+		<cfloop from="1" to="#arrayLen(arguments.requiredValueAttributes)#" index="i">
+			<cfif structKeyExists(arguments.element, arguments.requiredValueAttributes[i])>
+				<cfset formatted &= arguments.requiredValueAttributes[i] & '="' & arguments.element[arguments.requiredValueAttributes[i]] & '" ' />
 			</cfif>
 		</cfloop>
 		
@@ -329,7 +337,7 @@
 		<cfset defaults = {
 				'accept-charset' = '',
 				'action' = arguments.action,
-				'autocomplete' = false,
+				'autocomplete' = true,
 				'class' = '',
 				'enctype' = '',
 				'method' = 'POST',
@@ -431,6 +439,12 @@
 		<cfreturn formatted />
 	</cffunction>
 	
+	<cffunction name="getLabel" access="public" returntype="string" output="false">
+		<cfargument name="key" type="string" required="true" />
+		
+		<cfreturn variables.label.get(arguments.key) />
+	</cffunction>
+	
 	<cffunction name="getNumSections" access="public" returntype="numeric" output="false">
 		<!--- Close out any open sections --->
 		<cfset addSection() />
@@ -449,15 +463,7 @@
 		<!--- hidden elements should not be shown --->
 		<cfif arguments.element.elementType neq 'hidden'>
 			<!--- Start the tag --->
-			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType />
-			
-			<!--- Check for a required element --->
-			<cfif arguments.element.required>
-				<cfset formatted &= ' required' />
-			</cfif>
-			
-			<!--- Finish div --->
-			<cfset formatted &= '">' />
+			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType & ' ' & arguments.element.name & ' ' & arguments.element.elementClass & ' ' & (arguments.element.required ? 'required' : '') & '">' />
 			
 			<!--- Output the label --->
 			<cfif not isStruct(arguments.element.label)>
@@ -514,7 +520,7 @@
 		<cfset variables.altRow = 0 />
 		
 		<!--- Start the tag --->
-		<cfset formatted = '<fieldset' />
+		<cfset formatted = '<fieldset ' />
 		
 		<!--- Common HTML Attributes --->
 		<cfset formatted &= commonAttributesHtml(arguments.fieldset) />

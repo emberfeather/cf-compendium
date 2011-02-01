@@ -12,9 +12,8 @@
 	/**
 	 * Clear all cached values
 	 */
-	public void function clear() {
-		// TODO remove extra arguments after RAILO-671 is closed
-		cacheClear(filter = '', cacheName = variables.cacheName);
+	public void function clear(string filter = '') {
+		cacheClear(arguments.filter, variables.cacheName);
 	}
 	
 	/**
@@ -28,52 +27,49 @@
 	 * Delete a cached value from the cache
 	 */
 	public void function delete( string key ) {
-		// TODO remove extra arguments after RAILO-671 is closed
-		cacheDelete(id = arguments.key, throwOnError = false, cacheName = variables.cacheName);
+		cacheDelete(arguments.key, false, variables.cacheName);
 	}
 	
 	/**
 	 * Get a cached value from the cache
 	 */
 	public any function get( string key ) {
-		// TODO remove extra arguments after RAILO-671 is closed
-		return cacheGet(id = arguments.key, throwWhenNotExist = false, cacheName = variables.cacheName);
+		return cacheGet(arguments.key, false, variables.cacheName);
 	}
 	
 	/**
 	 * Get all cached values from the cache
 	 */
 	public struct function getAll( string filter = '' ) {
-		return cacheGetAll(filter = arguments.filter, cacheName = variables.cacheName);
+		return cacheGetAll(arguments.filter, variables.cacheName);
 	}
 	
 	/**
 	 * Get all cached keys from the cache
 	 */
 	public array function getAllIds( string filter = '' ) {
-		return cacheGetAllIds(filter = arguments.filter, cacheName = variables.cacheName);
+		return cacheGetAllIds(arguments.filter, variables.cacheName);
 	}
 	
 	/**
 	 * Check if the key exists in the cache
 	 */
 	public boolean function has( string key ) {
-		return cacheKeyExists(key = arguments.key, cacheName = variables.cacheName);
+		return cacheKeyExists(arguments.key, variables.cacheName);
 	}
 	
 	/**
 	 * Put a value into the cache
 	 */
 	public void function put( string key, any value ) {
-		// TODO remove extra arguments after RAILO-671 is closed
-		cachePut(id = arguments.key, value = arguments.value, timeSpan = createTimeSpan(0, 0, 0, 0), idleTime = createTimeSpan(0, 0, 0, 0), cacheName = variables.cacheName);
+		cachePut(arguments.key, arguments.value, createTimeSpan(0, 0, 0, 0), createTimeSpan(0, 0, 0, 0), variables.cacheName);
 	}
 	
 	/**
 	 * Remove values from the cache
 	 */
 	public void function remove( any ids ) {
-		cacheRemove(ids = arguments.key, cacheName = variables.cacheName);
+		cacheRemove(arguments.key, variables.cacheName);
 	}
 </cfscript>
 </cfcomponent>
