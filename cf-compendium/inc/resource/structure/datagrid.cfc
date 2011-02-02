@@ -126,23 +126,16 @@
 					<!--- Setup the base link values using the url override --->
 					<cfif isStruct(arguments.options.linkBase)>
 						<cfif structKeyExists(arguments.options.linkBase, arguments.column.key)>
-							<cfinvoke component="#theUrl#" method="overrideDGCol#arguments.colNum#Link#i#">
-								<cfinvokeargument name="value" value="#arguments.options.linkBase[arguments.column.key]#" />
-							</cfinvoke>
+							<cfset theUrl['overrideDGCol#arguments.colNum#Link#i#'](arguments.options.linkBase[arguments.column.key]) />
 						</cfif>
 					<cfelseif arguments.options.linkBase neq ''>
-						<cfinvoke component="#theUrl#" method="overrideDGCol#arguments.colNum#Link#i#">
-							<cfinvokeargument name="value" value="#arguments.options.linkBase#" />
-						</cfinvoke>
+						<cfset theUrl['overrideDGCol#arguments.colNum#Link#i#'](arguments.options.linkBase) />
 					</cfif>
 					
 					<cfloop list="#structKeyList(arguments.column.link[i])#" index="j">
 						<cfset value = getValue(arguments.data, arguments.rowNum, arguments.column.link[i][j]) />
 						
-						<cfinvoke component="#theUrl#" method="setDGCol#arguments.colNum#Link#i#">
-							<cfinvokeargument name="name" value="#j#" />
-							<cfinvokeargument name="value" value="#value#" />
-						</cfinvoke>
+						<cfset theUrl['setDGCol#arguments.colNum#Link#i#'](j, value) />
 					</cfloop>
 					
 					<!--- Check if the value of the link is provided --->
@@ -152,8 +145,7 @@
 						<cfset arguments.text = variables.label.get(arguments.column.value) />
 					</cfif>
 					
-					<!--- Retrieve the URL --->
-					<cfinvoke component="#theUrl#" method="getDGCol#arguments.colNum#Link#i#" returnvariable="href" />
+					<cfset href = theUrl['getDGCol#arguments.colNum#Link#i#']() />
 					
 					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#formatValue(arguments.column, arguments.text)#</a>
 				</cfloop>
@@ -220,7 +212,7 @@
 		<cfif isNumeric(arguments.key)>
 			<cfset value = arguments.key />
 		<cfelseif isQuery(arguments.data) and structKeyExists(arguments.data, arguments.key)>
-			<cfset value = arguments.data[arguments.key][arguments.rowNum] />
+			<cfset value = ( isObject(arguments.data[arguments.key][arguments.rowNum]) ? toString(arguments.data[arguments.key][arguments.rowNum]) : arguments.data[arguments.key][arguments.rowNum]) />
 		<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].has__Key(arguments.key)>
 			<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#arguments.key#" returnvariable="value" />
 		<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], arguments.key)>
