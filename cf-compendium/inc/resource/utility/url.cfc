@@ -28,7 +28,7 @@
 		<!--- Set the master URL location --->
 		<cfif isStruct(arguments.masterBase)>
 			<!--- Allow to pass in a struct as the master --->
-			<cfset variables.locations[''] = duplicate(arguments.masterBase) />
+			<cfset variables.locations[''] = variables.extend.extend({}, arguments.masterBase) />
 		<cfelse>
 			<!--- Parse the master from the queryString --->
 			<cfset variables.locations[''] = parseQueryString(arguments.masterBase) />
@@ -80,12 +80,12 @@
 		<cfargument name="destinationLocation" type="string" required="true" />
 		<cfargument name="sourceLocation" type="string" default="" />
 		
-		<cfset var location = duplicate(findLocation(arguments.sourceLocation)) />
+		<cfset var currentLocation = variables.extend.extend({}, findLocation(arguments.sourceLocation)) />
 		
 		<cfset arguments.destinationLocation = trim(arguments.destinationLocation) />
 		
 		<!--- check if a location or master --->
-		<cfset variables.locations[arguments.destinationLocation] = location />
+		<cfset variables.locations[arguments.destinationLocation] = currentLocation />
 	</cffunction>
 	
 	<!--- 
@@ -121,7 +121,7 @@
 		
 		<!--- Check for valid location --->
 		<cfif not has(arguments.locationName)>
-			<cfset variables.locations[arguments.locationName] = duplicate(variables.locations['']) />
+			<cfset variables.locations[arguments.locationName] = variables.extend.extend({}, variables.locations['']) />
 		</cfif>
 		
 		<cfreturn variables.locations[arguments.locationName] />
@@ -141,7 +141,7 @@
 		<cfset var current = '' />
 		<cfset var ampChar = '' />
 		<cfset var eqChar = '' />
-		<cfset var location = findLocation(arguments.locationName) />
+		<cfset var currentLocation = findLocation(arguments.locationName) />
 		<cfset var getOptions = '' />
 		
 		<!--- Extend the options --->
@@ -160,12 +160,12 @@
 		<cfset formatted = getOptions.start & getOptions.startChar />
 		
 		<cfif not structKeyExists(getOptions, 'keys')>
-			<cfset getOptions.keys = structKeyList(location) />
+			<cfset getOptions.keys = structKeyList(currentLocation) />
 		</cfif>
 		
 		<!--- Add each variable --->
 		<cfloop list="#getOptions.keys#" index="current">
-			<cfset formatted &= current & eqChar & location[current] & ampChar />
+			<cfset formatted &= current & eqChar & currentLocation[current] & ampChar />
 		</cfloop>
 		
 		<!--- Remove the extra amp character --->
@@ -426,14 +426,14 @@
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="varName" type="string" required="true" />
 		
-		<cfset var location = '' />
+		<cfset var currentLocation = '' />
 		
 		<!--- Get the location --->
-		<cfset location = findLocation(arguments.locationName) />
+		<cfset currentLocation = findLocation(arguments.locationName) />
 		
 		<!--- Remove the value --->
-		<cfif structKeyExists(location, arguments.varName)>
-			<cfset structDelete(location, arguments.varName) />
+		<cfif structKeyExists(currentLocation, arguments.varName)>
+			<cfset structDelete(currentLocation, arguments.varName) />
 		</cfif>
 	</cffunction>
 	
@@ -461,10 +461,10 @@
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="variableName" type="string" required="true" />
 		
-		<cfset var location = findLocation(arguments.locationName) />
+		<cfset var currentLocation = findLocation(arguments.locationName) />
 		
-		<cfif structKeyExists(location, arguments.variableName)>
-			<cfreturn location[arguments.variableName] />
+		<cfif structKeyExists(currentLocation, arguments.variableName)>
+			<cfreturn currentLocation[arguments.variableName] />
 		</cfif>
 		
 		<cfreturn '' />
@@ -505,12 +505,12 @@
 		<cfargument name="varName" type="string" required="true" />
 		<cfargument name="varValue" type="any" required="true" />
 		
-		<cfset var location = '' />
+		<cfset var currentLocation = '' />
 		
 		<!--- Get the location --->
-		<cfset location = findLocation(arguments.locationName) />
+		<cfset currentLocation = findLocation(arguments.locationName) />
 		
 		<!--- Set the value --->
-		<cfset location[arguments.varName] = arguments.varValue />
+		<cfset currentLocation[arguments.varName] = arguments.varValue />
 	</cffunction>
 </cfcomponent>
