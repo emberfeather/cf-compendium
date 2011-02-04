@@ -9,13 +9,13 @@
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset var defaults = {
-				start = '',
-				startChar = '?',
-				ampEncodeChar = '&amp;',
-				eqEncodeChar = '=',
-				ampChar = '&',
-				eqChar = '='
-			} />
+			start = '',
+			startChar = '?',
+			ampEncodeChar = '&amp;',
+			eqEncodeChar = '=',
+			ampChar = '&',
+			eqChar = '='
+		} />
 		
 		<cfset variables.extend = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		
@@ -43,7 +43,7 @@
 	<!---
 		Sets a variable for the URL location given.
 	--->
-	<cffunction name="anchor" access="private" returntype="void" output="false">
+	<cffunction name="__anchor" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="value" type="string" default="" />
 		
@@ -66,7 +66,7 @@
 		<p>
 		Will also clean out the master if requested with a blank string.
 	--->
-	<cffunction name="clean" access="private" returntype="void" output="false">
+	<cffunction name="__clean" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" default=""/>
 		
 		<cfset variables.locations[arguments.locationName] = {} />
@@ -76,11 +76,11 @@
 		Clone an existing location.
 		If the destination location is blank, clone the master
 	--->
-	<cffunction name="clone" access="private" returntype="void" output="false">
+	<cffunction name="__clone" access="private" returntype="void" output="false">
 		<cfargument name="destinationLocation" type="string" required="true" />
 		<cfargument name="sourceLocation" type="string" default="" />
 		
-		<cfset var currentLocation = variables.extend.extend({}, findLocation(arguments.sourceLocation)) />
+		<cfset var currentLocation = variables.extend.extend({}, __findLocation(arguments.sourceLocation)) />
 		
 		<cfset arguments.destinationLocation = trim(arguments.destinationLocation) />
 		
@@ -102,11 +102,11 @@
 		  XXXXXOO
 		
 	--->
-	<cffunction name="extend" access="private" returntype="void" output="false">
+	<cffunction name="__extend" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="defaultQueryString" type="string" required="true" />
 		
-		<cfset variables.locations[arguments.locationName] = variables.extend.extend(parseQueryString(arguments.defaultQueryString), findLocation(arguments.locationName)) />
+		<cfset variables.locations[arguments.locationName] = variables.extend.extend(parseQueryString(arguments.defaultQueryString), __findLocation(arguments.locationName)) />
 	</cffunction>
 	
 	<!---
@@ -114,13 +114,13 @@
 		<p>
 		If there the location doesn't exist it will create the location.
 	--->
-	<cffunction name="findLocation" access="private" returntype="struct" output="false">
+	<cffunction name="__findLocation" access="private" returntype="struct" output="false">
 		<cfargument name="locationName" type="string" required="true" />
 		
 		<cfset arguments.locationName = trim(arguments.locationName) />
 		
 		<!--- Check for valid location --->
-		<cfif not has(arguments.locationName)>
+		<cfif not __has(arguments.locationName)>
 			<cfset variables.locations[arguments.locationName] = variables.extend.extend({}, variables.locations['']) />
 		</cfif>
 		
@@ -132,7 +132,7 @@
 		<p>
 		Has the option to use the encoded characters as separators.
 	--->
-	<cffunction name="get" access="private" returntype="string" output="false">
+	<cffunction name="__get" access="private" returntype="string" output="false">
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="useEncoded" type="boolean" default="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
@@ -141,7 +141,7 @@
 		<cfset var current = '' />
 		<cfset var ampChar = '' />
 		<cfset var eqChar = '' />
-		<cfset var currentLocation = findLocation(arguments.locationName) />
+		<cfset var currentLocation = __findLocation(arguments.locationName) />
 		<cfset var getOptions = '' />
 		
 		<!--- Extend the options --->
@@ -164,9 +164,20 @@
 		</cfif>
 		
 		<!--- Add each variable --->
+		<cftry>
 		<cfloop list="#getOptions.keys#" index="current">
 			<cfset formatted &= current & eqChar & currentLocation[current] & ampChar />
 		</cfloop>
+			<cfcatch type="any">
+				<!--- TODO Remove --->
+				<cfdump var="#arguments.options#" label="Url arguments.options" />
+				<cfdump var="#querystringKeyList(arguments.locationName)#" label="Url currentLocation" />
+				<cfdump var="#currentLocation#" label="Url currentLocation" />
+				<cfdump var="#variables.locations#" label="Url variables.locations" />
+				
+				<cfrethrow />
+			</cfcatch>
+		</cftry>
 		
 		<!--- Remove the extra amp character --->
 		<cfif listLen(getOptions.keys)>
@@ -186,7 +197,7 @@
 		<p>
 		The master location always exists.
 	--->
-	<cffunction name="has" access="private" returntype="boolean" output="false">
+	<cffunction name="__has" access="private" returntype="boolean" output="false">
 		<cfargument name="locationName" type="string" default="" />
 		
 		<!--- Check if is master --->
@@ -228,36 +239,36 @@
 		<cfswitch expression="#name#">
 			<cfcase value="anchor">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
-					<cfreturn anchor(extra, arguments.missingMethodArguments[1]) />
+					<cfreturn __anchor(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
-				<cfreturn anchor(extra) />
+				<cfreturn __anchor(extra) />
 			</cfcase>
 			
 			<cfcase value="clean">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
-					<cfreturn clean(arguments.missingMethodArguments[1]) />
+					<cfreturn __clean(arguments.missingMethodArguments[1]) />
 				</cfif>
 				
-				<cfreturn clean(extra) />
+				<cfreturn __clean(extra) />
 			</cfcase>
 			
 			<cfcase value="clone">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
-					<cfreturn clone(extra, arguments.missingMethodArguments[1]) />
+					<cfreturn __clone(extra, arguments.missingMethodArguments[1]) />
 				<cfelseif arrayLen(arguments.missingMethodArguments) eq 2>
-					<cfreturn clone(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+					<cfreturn __clone(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
-				<cfreturn clone(extra) />
+				<cfreturn __clone(extra) />
 			</cfcase>
 			
 			<cfcase value="extend">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
-					<cfreturn extend(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+					<cfreturn __extend(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
-				<cfreturn this.extend(extra, arguments.missingMethodArguments[1]) />
+				<cfreturn __extend(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="get">
@@ -265,81 +276,81 @@
 					<cfset arrayPrepend(arguments.missingMethodArguments, extra) />
 				</cfif>
 				
-				<cfreturn get(argumentCollection = arguments.missingMethodArguments) />
+				<cfreturn __get(argumentCollection = arguments.missingMethodArguments) />
 			</cfcase>
 			
 			<cfcase value="has">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
-					<cfreturn has(arguments.missingMethodArguments[1]) />
+					<cfreturn __has(arguments.missingMethodArguments[1]) />
 				</cfif>
 				
-				<cfreturn has(extra) />
+				<cfreturn __has(extra) />
 			</cfcase>
 			
 			<cfcase value="override">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
-					<cfreturn override(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+					<cfreturn __override(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
-				<cfreturn override(extra, arguments.missingMethodArguments[1]) />
+				<cfreturn __override(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="redirect">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
-					<cfset redirect(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+					<cfset __redirect(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				<cfelseif arrayLen(arguments.missingMethodArguments) eq 1>
-					<cfset redirect(extra, arguments.missingMethodArguments[1]) />
+					<cfset __redirect(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
-				<cfset redirect(extra) />
+				<cfset __redirect(extra) />
 			</cfcase>
 			
 			<cfcase value="remove">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
-					<cfreturn remove(extra, arguments.missingMethodArguments[1]) />
+					<cfreturn __remove(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
-				<cfreturn remove(extra) />
+				<cfreturn __remove(extra) />
 			</cfcase>
 			
 			<cfcase value="reset">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 1>
-					<cfreturn reset(extra, arguments.missingMethodArguments[1]) />
+					<cfreturn __reset(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
-				<cfreturn reset(extra) />
+				<cfreturn __reset(extra) />
 			</cfcase>
 			
 			<cfcase value="search">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
-					<cfreturn search(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+					<cfreturn __search(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
-				<cfreturn search(extra, arguments.missingMethodArguments[1]) />
+				<cfreturn __search(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="searchBoolean">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
-					<cfreturn searchBoolean(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+					<cfreturn __searchBoolean(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
-				<cfreturn searchBoolean(extra, arguments.missingMethodArguments[1]) />
+				<cfreturn __searchBoolean(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="searchID">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 2>
-					<cfreturn searchID(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+					<cfreturn __searchID(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				</cfif>
 				
-				<cfreturn searchID(extra, arguments.missingMethodArguments[1]) />
+				<cfreturn __searchID(extra, arguments.missingMethodArguments[1]) />
 			</cfcase>
 			
 			<cfcase value="set">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 3>
-					<cfreturn set(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2], arguments.missingMethodArguments[3]) />
+					<cfreturn __set(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2], arguments.missingMethodArguments[3]) />
 				</cfif>
 				
-				<cfreturn set(extra, arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				<cfreturn __set(extra, arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 			</cfcase>
 		</cfswitch>
 		
@@ -357,13 +368,11 @@
 		 ----------
 		  XXXOOOO
 	--->
-	<cffunction name="override" access="private" returntype="struct" output="false">
+	<cffunction name="__override" access="private" returntype="struct" output="false">
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="defaultQueryString" type="string" required="true" />
 		
-		<cfset var extend = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
-		
-		<cfset variables.locations[arguments.locationName] = extend.extend(findLocation(arguments.locationName), parseQueryString(arguments.defaultQueryString)) />
+		<cfset variables.locations[arguments.locationName] = variables.extend.extend(__findLocation(arguments.locationName), parseQueryString(arguments.defaultQueryString)) />
 		
 		<cfreturn variables.locations[arguments.locationName] />
 	</cffunction>
@@ -406,30 +415,30 @@
 	<cffunction name="querystringKeyList" access="public" returntype="string" output="false">
 		<cfargument name="locationName" type="string" default="" />
 		
-		<cfreturn structKeyList( findLocation( arguments.locationName ) ) />
+		<cfreturn structKeyList( __findLocation( arguments.locationName ) ) />
 	</cffunction>
 	
 	<!---
 		Redirects to the given URL location.
 	--->
-	<cffunction name="redirect" access="private" returntype="void" output="false">
+	<cffunction name="__redirect" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="addToken" type="boolean" default="false" />
 		
-		<cflocation url="#get(arguments.locationName, false)#" addtoken="#arguments.addToken#" />
+		<cflocation url="#__get(arguments.locationName, false)#" addtoken="#arguments.addToken#" />
 	</cffunction>
 	
 	<!---
 		Removes a variable from the URL location given.
 	--->
-	<cffunction name="remove" access="private" returntype="void" output="false">
+	<cffunction name="__remove" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="varName" type="string" required="true" />
 		
 		<cfset var currentLocation = '' />
 		
 		<!--- Get the location --->
-		<cfset currentLocation = findLocation(arguments.locationName) />
+		<cfset currentLocation = __findLocation(arguments.locationName) />
 		
 		<!--- Remove the value --->
 		<cfif structKeyExists(currentLocation, arguments.varName)>
@@ -440,7 +449,7 @@
 	<!---
 		Reset a URL location off of a query string
 	--->
-	<cffunction name="reset" access="private" returntype="void" output="false">
+	<cffunction name="__reset" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="queryString" type="string" default="" />
 		
@@ -457,11 +466,11 @@
 	<!---
 		Searches a location or the master for a specific variable.
 	--->
-	<cffunction name="search" access="private" returntype="string" output="false">
+	<cffunction name="__search" access="private" returntype="string" output="false">
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="variableName" type="string" required="true" />
 		
-		<cfset var currentLocation = findLocation(arguments.locationName) />
+		<cfset var currentLocation = __findLocation(arguments.locationName) />
 		
 		<cfif structKeyExists(currentLocation, arguments.variableName)>
 			<cfreturn currentLocation[arguments.variableName] />
@@ -473,7 +482,7 @@
 	<!---
 		Searches an location or the master for an variable that is an Boolean.
 	--->
-	<cffunction name="searchBoolean" access="private" returntype="boolean" output="false">
+	<cffunction name="__searchBoolean" access="private" returntype="boolean" output="false">
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="variableName" type="string" required="true" />
 		
@@ -490,17 +499,17 @@
 	<!---
 		Searches an location or the master for an variable that is an id.
 	--->
-	<cffunction name="searchID" access="private" returntype="numeric" output="false">
+	<cffunction name="__searchID" access="private" returntype="numeric" output="false">
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="variableName" type="string" required="true" />
 		
-		<cfreturn val(search(argumentCollection=arguments)) />
+		<cfreturn val(__search(argumentCollection=arguments)) />
 	</cffunction>
 	
 	<!---
 		Sets a variable for the URL location given.
 	--->
-	<cffunction name="set" access="private" returntype="void" output="false">
+	<cffunction name="__set" access="private" returntype="void" output="false">
 		<cfargument name="locationName" type="string" required="true" />
 		<cfargument name="varName" type="string" required="true" />
 		<cfargument name="varValue" type="any" required="true" />
@@ -508,7 +517,7 @@
 		<cfset var currentLocation = '' />
 		
 		<!--- Get the location --->
-		<cfset currentLocation = findLocation(arguments.locationName) />
+		<cfset currentLocation = __findLocation(arguments.locationName) />
 		
 		<!--- Set the value --->
 		<cfset currentLocation[arguments.varName] = arguments.varValue />

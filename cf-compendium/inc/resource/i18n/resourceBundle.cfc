@@ -174,7 +174,7 @@
 		<cfif arguments.bundleLocale neq 'base'>
 			<cfset base = read(arguments.path, arguments.bundleName, '') />
 			
-			<cfset bundleResource.keys = duplicate(base.keys) />
+			<cfset bundleResource.keys = evaluate(serialize(base.keys)) />
 			<cfset bundleResource.bundle = variables.theExtender.extend(base.bundle, bundleResource.bundle) />
 		</cfif>
 		

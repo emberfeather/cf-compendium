@@ -188,7 +188,7 @@
 	<cffunction name="invert" access="private" returntype="struct" output="false">
 		<cfargument name="result" type="struct" required="true" />
 		
-		<cfset var invertedResult = duplicate(arguments.result) />
+		<cfset var invertedResult = evaluate(serialize(arguments.result)) />
 		
 		<!--- Invert the values --->
 		<cfset invertedResult.uniqueToFirst = arguments.result.uniqueToSecond />

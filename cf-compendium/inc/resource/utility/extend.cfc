@@ -19,7 +19,7 @@
 		<cfargument name="original" type="struct" default="#{}#" />
 		<cfargument name="depth" type="numeric" default="1" />
 		
-		<cfset var extended = duplicate(arguments.original) />
+		<cfset var extended = evaluate(serialize(arguments.original)) />
 		<cfset var i = '' />
 		
 		<!--- Loop through and test each value in the values struct and see if it has been set already --->

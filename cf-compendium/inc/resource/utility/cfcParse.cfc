@@ -413,7 +413,7 @@
 			<cfset tempFunction.comments = processComments(comments) />
 			
 			<!--- Parse out the information in the component --->
-			<cfset tempFunction.attributes = duplicate(tempFunction.comments.meta) />
+			<cfset tempFunction.attributes = evaluate(serialize(tempFunction.comments.meta)) />
 			
 			<cfset tempFunction.attributes['access'] = mid(arguments.contents, location.pos[2], location.len[2]) />
 			<cfset tempFunction.attributes['returnType'] = mid(arguments.contents, location.pos[3], location.len[3]) />
