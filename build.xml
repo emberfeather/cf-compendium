@@ -9,6 +9,20 @@
 	<!-- Include the master build file -->
 	<import file="${basedir}/build/master/master.xml"/>
 	
+	<target name="lessCSS" depends="prepare" if="options.lessCSS" description="Run the less compiler on less files">
+		<echo message="Starting: Less CSS Compilation"/>
+		
+		<!-- Compile the CSS files with lessc -->
+		<apply executable="${compile.less.path}lessc" parallel="false" dest="${basedir}${file.separator}${project.name}">
+			<fileset dir="${basedir}${file.separator}${project.name}" includes="**/*.less" />
+			<srcfile/>
+			<mapper type="glob" from="*.less" to="*.css"/>
+			<targetfile/>
+		</apply>
+		
+		<echo message="Finished: Less CSS Compilation"/>
+	</target>
+	
 	<target name="minify" depends="prepare" description="Minify the CSS and JS files">
 		<echo message="Starting: CSS and JS minification"/>
 		
