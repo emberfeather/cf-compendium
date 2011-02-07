@@ -9,20 +9,6 @@
 	<!-- Include the master build file -->
 	<import file="${basedir}/build/master/master.xml"/>
 	
-	<target name="lessCSS" depends="prepare" if="options.lessCSS" description="Run the less compiler on less files">
-		<echo message="Starting: Less CSS Compilation"/>
-		
-		<!-- Compile the CSS files with lessc -->
-		<apply executable="${compile.less.path}lessc" parallel="false" dest="${basedir}${file.separator}${project.name}">
-			<fileset dir="${basedir}${file.separator}${project.name}" includes="**/*.less" />
-			<srcfile/>
-			<mapper type="glob" from="*.less" to="*.css"/>
-			<targetfile/>
-		</apply>
-		
-		<echo message="Finished: Less CSS Compilation"/>
-	</target>
-	
 	<target name="minify" depends="prepare" description="Minify the CSS and JS files">
 		<echo message="Starting: CSS and JS minification"/>
 		
@@ -35,7 +21,7 @@
 			<fileset dir="${build.script}" includes="jquery.timeago.js" />
 			<fileset dir="${build.script}" includes="jquery.cookie.js" />
 		</concat>
-
+		
 		<!-- Create a single, concatenated CSS file -->
 		<concat destfile="${build.style}${project.name}.css">
 			<fileset dir="${build.style}" includes="base.css" />
@@ -45,29 +31,8 @@
 			<fileset dir="${build.style}" includes="code.css" />
 		</concat>
 		
-		<!-- Compress the JS files with Google Closure Compiler -->
-		<apply executable="java" parallel="false" dest="${basedir}/${project.name}">
-			<fileset dir="${basedir}${file.separator}${project.name}" includes="**/*.js" excludes="**/*-min.js" />
-			<arg line="-jar"/>
-			<arg path="${master.lib}${file.separator}${master.lib.jar.compiler}" />
-			<arg line="--js"/>
-			<srcfile/>
-			<arg line="--js_output_file"/>
-			<mapper type="glob" from="*.js" to="*-min.js"/>
-			<targetfile/>
-		</apply>
-		
-		<!-- Compress the CSS files with Yahoo UI Compressor -->
-		<apply executable="java" parallel="false" dest="${basedir}/${project.name}">
-			<fileset dir="${basedir}${file.separator}${project.name}" includes="**/*.css" excludes="**/*-min.css" />
-			<arg line="-jar"/>
-			<arg path="${master.lib}${file.separator}${master.lib.jar.compressor}" />
-			<arg line="-v"/>
-			<srcfile/>
-			<arg line="-o"/>
-			<mapper type="glob" from="*.css" to="*-min.css"/>
-			<targetfile/>
-		</apply>
+		<!-- Use the master minify -->
+		<antcall target="ef-ant.minify"/>
 		
 		<echo message="Finished: CSS and JS minification"/>
 	</target>
