@@ -15,11 +15,12 @@
 		<!-- Create a single, concatenated JS file -->
 		<concat destfile="${build.script}jquery.${project.name}.js">
 			<fileset dir="${build.script}" includes="jquery.base.js" />
+			<fileset dir="${build.script}" includes="jquery.wait-min.js" />
+			<fileset dir="${build.script}" includes="jquery.timeago.js" />
+			<fileset dir="${build.script}" includes="jquery.cookie.js" />
 			<fileset dir="${build.script}" includes="jquery.form.js" />
 			<fileset dir="${build.script}" includes="jquery.list.js" />
 			<fileset dir="${build.script}" includes="jquery.datagrid.js" />
-			<fileset dir="${build.script}" includes="jquery.timeago.js" />
-			<fileset dir="${build.script}" includes="jquery.cookie.js" />
 		</concat>
 		
 		<!-- Create a single, concatenated CSS file -->
