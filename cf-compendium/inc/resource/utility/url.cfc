@@ -348,6 +348,10 @@
 			<cfcase value="set">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 3>
 					<cfreturn __set(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2], arguments.missingMethodArguments[3]) />
+				<cfelseif arrayLen(arguments.missingMethodArguments) eq 2 && isStruct(arguments.missingMethodArguments[2])>
+					<cfreturn __setMultiple(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
+				<cfelseif isStruct(arguments.missingMethodArguments[1])>
+					<cfreturn __setMultiple(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
 				
 				<cfreturn __set(extra, arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
@@ -521,5 +525,19 @@
 		
 		<!--- Set the value --->
 		<cfset currentLocation[arguments.varName] = arguments.varValue />
+	</cffunction>
+	
+	<!---
+		Sets any variables for the URL location given.
+	--->
+	<cffunction name="__setMultiple" access="private" returntype="void" output="false">
+		<cfargument name="locationName" type="string" required="true" />
+		<cfargument name="values" type="struct" required="true" />
+		
+		<cfset local.currentLocation = __findLocation(arguments.locationName) />
+		
+		<cfloop collection="#arguments.values#" item="local.i">
+			<cfset local.currentLocation[local.i] = arguments.values[local.i] />
+		</cfloop>
 	</cffunction>
 </cfcomponent>
