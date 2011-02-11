@@ -18,6 +18,21 @@ component extends="mxunit.framework.TestCase" {
 		assertTrue(theContrast.areEqual('aaron=awesomer&tj=awesomerer&randy=awesome', newUrl, '&'));
 	}
 	
+	public void function testContainAllKeysWithoutExtra() {
+		var theContrast = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init();
+		var newUrl = '';
+		
+		variables.theUrl.set('test', {
+			'aaron': 'awesomer',
+			'randy': 'awesome',
+			'tj': 'awesomerer'
+		});
+		
+		newUrl = replace(variables.theUrl.getTest(false),'?','&', 'ALL');
+		
+		assertTrue(theContrast.areEqual('aaron=awesomer&tj=awesomerer&randy=awesome', newUrl, '&'));
+	}
+	
 	public void function testContainExistingKeys() {
 		var theContrast = createObject('component', 'cf-compendium.inc.resource.utility.contrast').init();
 		var newUrl = '';

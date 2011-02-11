@@ -348,6 +348,8 @@
 			<cfcase value="set">
 				<cfif arrayLen(arguments.missingMethodArguments) eq 3>
 					<cfreturn __set(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2], arguments.missingMethodArguments[3]) />
+				<cfelseif arrayLen(arguments.missingMethodArguments) eq 2 && isStruct(arguments.missingMethodArguments[2])>
+					<cfreturn __setMultiple(arguments.missingMethodArguments[1], arguments.missingMethodArguments[2]) />
 				<cfelseif isStruct(arguments.missingMethodArguments[1])>
 					<cfreturn __setMultiple(extra, arguments.missingMethodArguments[1]) />
 				</cfif>
