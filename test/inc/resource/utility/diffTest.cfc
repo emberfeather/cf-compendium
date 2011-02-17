@@ -6,6 +6,126 @@ component extends="mxunit.framework.TestCase" {
 	/**
 	 * With duplicate values there should be nothing in the diff
 	 **/
+	public void function testDiffWithNestedArraysWithEqualValues() {
+		local.original = ['true', ['test']];
+		local.current = ['true', ['test']];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertFalse(arrayLen(local.result.old));
+		assertFalse(arrayLen(local.result.new));
+	}
+	
+	/**
+	 * With modified values the old key will hold the original value
+	 * and new key will hold the new values
+	 **/
+	public void function testDiffWithNestedArraysWithModifiedValues() {
+		local.original = ['true', ['testOld']];
+		local.current = ['true', ['testNew']];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertEquals('testOld', local.result.old[2][1]);
+		assertEquals('testNew', local.result.new[2][1]);
+	}
+	
+	/**
+	 * With new values the new key will hold the new values
+	 **/
+	public void function testDiffWithNestedArraysWithNewValues() {
+		local.original = ['true', []];
+		local.current = ['true', ['testNew']];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertFalse(arrayLen(local.result.old[2]));
+		assertEquals('testNew', local.result.new[2][1]);
+	}
+	
+	/**
+	 * With removed values the old key will hold the original value
+	 **/
+	public void function testDiffWithNestedArraysWithRemovedValues() {
+		local.original = ['true', ['testOld']];
+		local.current = ['true', []];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertEquals('testOld', local.result.old[2][1]);
+		assertFalse(arrayLen(local.result.new[2]));
+	}
+	
+	/**
+	 * With duplicate values there should be nothing in the diff
+	 **/
+	public void function testDiffWithArraysWithEqualValues() {
+		local.original = ['true'];
+		local.current = ['true'];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertFalse(arrayLen(local.result.old));
+		assertFalse(arrayLen(local.result.new));
+	}
+	
+	/**
+	 * With modified values the old key will hold the original value
+	 * and new key will hold the new values
+	 **/
+	public void function testDiffWithArraysWithModifiedValues() {
+		local.original = ['testOld'];
+		local.current = ['testNew'];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertEquals('testOld', local.result.old[1]);
+		assertEquals('testNew', local.result.new[1]);
+	}
+	
+	/**
+	 * With new values the new key will hold the new values
+	 **/
+	public void function testDiffWithArraysWithNewValues() {
+		local.original = [];
+		local.current = ['testNew'];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertFalse(arrayLen(local.result.old));
+		assertEquals('testNew', local.result.new[1]);
+	}
+	
+	/**
+	 * With duplicate values there should be nothing in the diff
+	 **/
+	public void function testDiffWithArraysWithNoValues() {
+		local.original = [];
+		local.current = [];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		// With duplicate values there should be nothing in the diff
+		assertFalse(arrayLen(local.result.old));
+		assertFalse(arrayLen(local.result.new));
+	}
+	
+	/**
+	 * With removed values the old key will hold the original value
+	 **/
+	public void function testDiffWithArraysWithRemovedValues() {
+		local.original = ['testOld'];
+		local.current = [];
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertEquals('testOld', local.result.old[1]);
+		assertFalse(arrayLen(local.result.new));
+	}
+	
+	/**
+	 * With duplicate values there should be nothing in the diff
+	 **/
 	public void function testDiffWithNestedStructsWithEqualValues() {
 		local.original = { test1: 'true', test2: { test3: 'true' } };
 		local.current = { test1: 'true', test2: { test3: 'true' } };

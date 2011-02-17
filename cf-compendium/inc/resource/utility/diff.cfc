@@ -29,8 +29,8 @@ component {
 	
 	public struct function diff(required any original, required any current) {
 		local.result = {
-			'old': {},
-			'new': {}
+			'old': '',
+			'new': ''
 		};
 		
 		local.oldType = determineType(arguments.original);
@@ -42,6 +42,19 @@ component {
 			local.result.new = arguments.current;
 			
 			return local.result;
+		}
+		
+		switch(local.newType) {
+		case 'struct':
+			local.result.old = {};
+			local.result.new = {};
+			
+			break;
+		case 'array':
+			local.result.old = [];
+			local.result.new = [];
+			
+			break;
 		}
 		
 		// Try a complete equality test
@@ -66,6 +79,24 @@ component {
 					local.result.old[local.key] = arguments.original[local.key];
 				} else {
 					local.result.new[local.key] = arguments.current[local.key];
+				}
+			}
+			
+			break;
+		case 'array':
+			local.lenOriginal = arrayLen(arguments.original);
+			local.lenCurrent = arrayLen(arguments.current);
+			
+			for(local.i = 1; local.i <= max(local.lenOriginal, local.lenCurrent); local.i++) {
+				if(i <= local.lenOriginal && local.i <= local.lenCurrent) {
+					local.subResult = diff(arguments.original[i], arguments.current[i]);
+					
+					local.result.old[i] = local.subResult.old;
+					local.result.new[i] = local.subResult.new;
+				} else if(i <= local.lenOriginal) {
+					local.result.old[i] = arguments.original[i];
+				} else {
+					local.result.new[i] = arguments.current[i];
 				}
 			}
 			
