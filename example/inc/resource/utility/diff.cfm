@@ -65,6 +65,21 @@
 
 <cfdump var="#diff.diff(set1, set2)#" label="Diff Array and Struct" />
 
+<h2>toHtml(struct1, struct2)</h2>
+
+<blockquote>
+	<code>
+		set1 = { a = 1, b = 2, c = { aa = 3, cc = 5 } }<br />
+		set2 = { a = 0, b = 2, c = { aa = 1, bb = 3 } }<br />
+		diff.diff(set1, set2)
+	</code>
+</blockquote>
+
+<cfset set1 = { a = 1, b = 2, c = { aa = 3, cc = 5 } } />
+<cfset set2 = { a = 0, b = 2, c = { aa = 1, bb = 3 } } />
+
+<cfoutput>#diff.toHtml(set1, set2)#</cfoutput>
+
 <h2>The Object</h2>
 
 <cfdump var="#diff#" />

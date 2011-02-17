@@ -111,6 +111,58 @@ component {
 		return local.result;
 	}
 	
+	private string function generateHtml(required any original, required any current) {
+		local.html = '';
+		
+		local.oldType = determineType(arguments.original);
+		local.newType = determineType(arguments.current);
+		
+		// If they are not the same type then it has changed completely
+		if(local.oldType == local.newType) {
+			// Perform output based upon the variable type
+			switch(local.newType) {
+			case 'struct':
+				local.html &= toHtml(arguments.original, arguments.current);
+				
+				break;
+			default:
+				if(arguments.original == '' && arguments.current == '') {
+					return '';
+				}
+				
+				local.html &= '<dd class="original">' & generateHtmlItem(arguments.original) & '</dd>';
+				local.html &= '<dd class="current">' & generateHtmlItem(arguments.current) & '</dd>';
+			}
+		} else {
+			local.html &= '<dd class="original">' & generateHtmlItem(arguments.original) & '</dd>';
+			local.html &= '<dd class="current">' & generateHtmlItem(arguments.current) & '</dd>';
+		}
+		
+		return local.html;
+	}
+	
+	private string function generateHtmlItem(required any value) {
+		local.html = '';
+		
+		local.type = determineType(arguments.value);
+		
+		// Perform output based upon the variable type
+		switch(local.type) {
+		case 'struct':
+			if(structKeyExists(arguments.value, '__filler')) {
+				return '<em>None</em>';
+			}
+			
+			local.html &= 'struct...';
+			
+			break;
+		default:
+			local.html = arguments.value;
+		}
+		
+		return local.html;
+	}
+	
 	/**
 	 * Merges any struct keys from given structs into a single, unique list
 	 **/
@@ -130,5 +182,58 @@ component {
 		}
 		
 		return local.keys;
+	}
+	
+	public string function toHtml(required any original, required any current) {
+		local.html = '<dl class="diff">';
+		local.results = diff(argumentCollection = arguments);
+		
+		local.oldType = determineType(arguments.original);
+		local.newType = determineType(arguments.current);
+		
+		// If they are not the same type then it has changed completely
+		if(local.oldType != local.newType) {
+			// TODO determine what to do when the types are not the same
+		} else {
+			// Perform output based upon the variable type
+			switch(local.newType) {
+			case 'struct':
+				local.keys = mergeKeys(local.results.old, local.results.new);
+				
+				local.keys = listSort(local.keys, 'text')
+				
+				for(local.i = 1; local.i <= listLen(local.keys); local.i++) {
+					local.key = listGetAt(local.keys, local.i);
+					local.subHtml = '';
+					
+					local.html &= '<dt>' & local.key & '</dt>';
+					
+					if(structKeyExists(local.results.old, local.key) && structKeyExists(local.results.new, local.key)) {
+						local.subHtml &= generateHtml(local.results.old[local.key], local.results.new[local.key]);
+					} else if(structKeyExists(local.results.old, local.key)) {
+						local.subHtml &= generateHtml(local.results.old[local.key], { '__filler': true });
+					} else {
+						local.subHtml &= generateHtml({ '__filler': true }, local.results.new[local.key]);
+					}
+					
+					if(len(local.subHtml)) {
+						local.html &= local.subHtml;
+						local.hasSub = true;
+					} else {
+						local.html &= '<dd class="noChange"><em>No Changes</em></dd>';
+					}
+				}
+				
+				break;
+			default:
+				local.html &= generateHtml(arguments.original, arguments.current);
+				
+				break;
+			}
+		}
+		
+		local.html &= '</dl>';
+		
+		return local.html;
 	}
 }
