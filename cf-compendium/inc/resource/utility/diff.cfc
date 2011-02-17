@@ -59,6 +59,9 @@ component {
 		
 		// Try a complete equality test
 		if(arguments.original.equals(arguments.current)) {
+			local.result.old = '';
+			local.result.new = '';
+			
 			return local.result;
 		}
 		
@@ -73,8 +76,18 @@ component {
 				if(structKeyExists(arguments.original, local.key) && structKeyExists(arguments.current, local.key)) {
 					local.subResult = diff(arguments.original[local.key], arguments.current[local.key]);
 					
-					local.result.old[local.key] = local.subResult.old;
-					local.result.new[local.key] = local.subResult.new;
+					// Only store the key if the values are not the same
+					if(
+						!(
+							isSimpleValue(local.subResult.old)
+							&& !len(local.subResult.old)
+							&& isSimpleValue(local.subResult.new)
+							&& !len(local.subResult.new)
+						)
+					) {
+						local.result.old[local.key] = local.subResult.old;
+						local.result.new[local.key] = local.subResult.new;
+					}
 				} else if(structKeyExists(arguments.original, local.key)) {
 					local.result.old[local.key] = arguments.original[local.key];
 				} else {

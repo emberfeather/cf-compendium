@@ -12,8 +12,8 @@ component extends="mxunit.framework.TestCase" {
 		
 		local.result = variables.diff.diff(original, current);
 		
-		assertFalse(arrayLen(local.result.old));
-		assertFalse(arrayLen(local.result.new));
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
 	}
 	
 	/**
@@ -53,8 +53,8 @@ component extends="mxunit.framework.TestCase" {
 		local.result = variables.diff.diff(original, current);
 		
 		// With duplicate values there should be nothing in the diff
-		assertFalse(arrayLen(local.result.old));
-		assertFalse(arrayLen(local.result.new));
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
 	}
 	
 	/**
@@ -79,8 +79,8 @@ component extends="mxunit.framework.TestCase" {
 		
 		local.result = variables.diff.diff(original, current);
 		
-		assertFalse(arrayLen(local.result.old));
-		assertFalse(arrayLen(local.result.new));
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
 	}
 	
 	/**
@@ -132,8 +132,8 @@ component extends="mxunit.framework.TestCase" {
 		
 		local.result = variables.diff.diff(original, current);
 		
-		assertTrue(structIsEmpty(local.result.old));
-		assertTrue(structIsEmpty(local.result.new));
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
 	}
 	
 	/**
@@ -225,8 +225,8 @@ component extends="mxunit.framework.TestCase" {
 		
 		local.result = variables.diff.diff(original, current);
 		
-		assertTrue(structIsEmpty(local.result.old));
-		assertTrue(structIsEmpty(local.result.new));
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
 	}
 	
 	/**
@@ -266,8 +266,8 @@ component extends="mxunit.framework.TestCase" {
 		local.result = variables.diff.diff(original, current);
 		
 		// With duplicate values there should be nothing in the diff
-		assertTrue(structIsEmpty(local.result.old));
-		assertTrue(structIsEmpty(local.result.new));
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
 	}
 	
 	/**
