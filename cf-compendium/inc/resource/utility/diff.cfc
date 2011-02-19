@@ -170,7 +170,7 @@ component {
 			
 			break;
 		default:
-			local.html = arguments.value;
+			local.html = arguments.value.toString();
 		}
 		
 		return local.html;
