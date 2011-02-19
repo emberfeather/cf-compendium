@@ -87,11 +87,6 @@ component {
 							&& !len(local.subResult.old)
 							&& isSimpleValue(local.subResult.new)
 							&& !len(local.subResult.new)
-						) || !(
-							isStruct(local.subResult.old)
-							&& structIsEmpty(local.subResult.old)
-							&& isStruct(local.subResult.new)
-							&& structIsEmpty(local.subResult.new)
 						)
 					) {
 						local.result.old[local.key] = local.subResult.old;
@@ -171,7 +166,7 @@ component {
 				return '<em>None</em>';
 			}
 			
-			local.html &= 'struct...';
+			local.html = 'struct...';
 			
 			break;
 		default:
