@@ -151,6 +151,19 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	/**
+	 * With duplicate values there should be nothing in the diff
+	 **/
+	public void function testDiffWithNestedStructsWithMultipleEqualValues() {
+		local.original = { test1: 'watermelon', test2: { test3: 'tomato', test4: [ 'cucumber' ] } };
+		local.current = { test1: 'watermelon', test2: { test3: 'tomato', test4: [ 'cucumber' ] } };
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
+	}
+	
+	/**
 	 * With new values the new key will hold the new values
 	 **/
 	public void function testDiffWithNestedStructsWithNewValues() {
