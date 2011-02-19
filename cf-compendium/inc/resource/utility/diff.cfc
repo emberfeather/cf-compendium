@@ -170,7 +170,13 @@ component {
 			
 			break;
 		default:
-			local.html = arguments.value.toString();
+			local.text = arguments.value.toString()
+			
+			if(!len(local.text)) {
+				return '<em>None</em>';
+			}
+			
+			local.html = local.text;
 		}
 		
 		return local.html;
