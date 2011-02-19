@@ -20,6 +20,10 @@ component {
 			return 'numeric';
 		}
 		
+		if(isDate(arguments.value)) {
+			return 'date';
+		}
+		
 		if(isSimpleValue(arguments.value)) {
 			return 'string';
 		}
@@ -139,10 +143,6 @@ component {
 				
 				break;
 			default:
-				if(arguments.original == '' && arguments.current == '') {
-					return '';
-				}
-				
 				local.html &= '<dd class="original">' & generateHtmlItem(arguments.original) & '</dd>';
 				local.html &= '<dd class="current">' & generateHtmlItem(arguments.current) & '</dd>';
 			}
