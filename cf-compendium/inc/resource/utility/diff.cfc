@@ -197,12 +197,14 @@ component {
 		return local.keys;
 	}
 	
-	public string function toHtml(required any original, required any current) {
-		local.html = '<dl class="diff">';
-		local.results = diff(argumentCollection = arguments);
+	public string function toHtml() {
+		// Allow for the function to use a predetermined diff
+		local.results = (arrayLen(arguments) > 1 ? diff(argumentCollection = arguments) : arguments[1]);
 		
-		local.oldType = determineType(arguments.original);
-		local.newType = determineType(arguments.current);
+		local.oldType = determineType(local.results.old);
+		local.newType = determineType(local.results.new);
+		
+		local.html = '<dl class="diff">';
 		
 		// If they are not the same type then it has changed completely
 		if(local.oldType != local.newType) {
@@ -239,7 +241,7 @@ component {
 				
 				break;
 			default:
-				local.html &= generateHtml(arguments.original, arguments.current);
+				local.html &= generateHtml(local.results.old, local.results.new);
 				
 				break;
 			}
