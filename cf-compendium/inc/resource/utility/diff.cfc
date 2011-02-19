@@ -59,6 +59,11 @@ component {
 			local.result.new = [];
 			
 			break;
+		case 'date':
+			arguments.original = parseDateTime(arguments.original);
+			arguments.current = parseDateTime(arguments.current);
+			
+			break;
 		}
 		
 		// Try a complete equality test
@@ -80,13 +85,20 @@ component {
 				if(structKeyExists(arguments.original, local.key) && structKeyExists(arguments.current, local.key)) {
 					local.subResult = diff(arguments.original[local.key], arguments.current[local.key]);
 					
+					// If the results are both blank structs we do not want them
+					if(
+						isStruct(local.subResult.old) && structIsEmpty(local.subResult.old)
+						&& isStruct(local.subResult.new) && structIsEmpty(local.subResult.new)
+					) {
+						local.subResult.old = '';
+						local.subResult.new = '';
+					}
+					
 					// Only store the key if the values are not the same
 					if(
 						!(
-							isSimpleValue(local.subResult.old)
-							&& !len(local.subResult.old)
-							&& isSimpleValue(local.subResult.new)
-							&& !len(local.subResult.new)
+							isSimpleValue(local.subResult.old) && !len(local.subResult.old)
+							&& isSimpleValue(local.subResult.new) && !len(local.subResult.new)
 						)
 					) {
 						local.result.old[local.key] = local.subResult.old;
@@ -97,6 +109,15 @@ component {
 				} else {
 					local.result.new[local.key] = arguments.current[local.key];
 				}
+			}
+			
+			// If the results are both blank structs we do not want them
+			if(
+				isStruct(local.result.old) && structIsEmpty(local.result.old)
+				&& isStruct(local.result.new) && structIsEmpty(local.result.new)
+			) {
+				local.result.old = '';
+				local.result.new = '';
 			}
 			
 			break;

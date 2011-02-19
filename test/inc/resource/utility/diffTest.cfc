@@ -71,6 +71,20 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	/**
+	 * With removed values the old key will hold the original value
+	 **/
+	public void function testDiffWithDatesWithEqualValues() {
+		local.date = now();
+		local.original = local.date;
+		local.current = local.date;
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
+	}
+	
+	/**
 	 * With duplicate values there should be nothing in the diff
 	 **/
 	public void function testDiffWithNestedArraysWithEqualValues() {
@@ -129,6 +143,20 @@ component extends="mxunit.framework.TestCase" {
 	public void function testDiffWithNestedStructsWithEqualValues() {
 		local.original = { test1: 'true', test2: { test3: 'true' } };
 		local.current = { test1: 'true', test2: { test3: 'true' } };
+		
+		local.result = variables.diff.diff(original, current);
+		
+		assertFalse(len(local.result.old));
+		assertFalse(len(local.result.new));
+	}
+	
+	/**
+	 * With duplicate values there should be nothing in the diff
+	 **/
+	public void function testDiffWithNestedStructsWithEqualDateValues() {
+		local.date = now();
+		local.original = { test1: 'watermelon', test2: local.date };
+		local.current = { test1: 'watermelon', test2: local.date };
 		
 		local.result = variables.diff.diff(original, current);
 		
