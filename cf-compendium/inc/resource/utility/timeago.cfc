@@ -13,7 +13,7 @@
 		<cfset html &= 'T' />
 		<cfset html &= timeFormat(arguments.datetime, 'HH:mm:ss') />
 		<cfset html &= '">' />
-		<cfset html &= dateFormat(arguments.datetime, 'd mmm yyyy') />
+		<cfset html &= dateFormat(arguments.datetime, 'd mmm yyyy') & ' ' & timeFormat(arguments.dateTime, 'h:mm tt (zzz)') />
 		<cfset html &= '</time>' />
 		
 		<cfreturn html />

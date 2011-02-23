@@ -40,6 +40,14 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals('?chicken=awesome', variables.theUrl.getALocation());
 	}
 	
+	public void function testWithCleanStart() {
+		variables.theUrl.cleanALocation();
+		variables.theUrl.setALocation('beef', 'super');
+		variables.theUrl.setALocation('_base', '/total/coolness');
+		
+		assertEquals('/admin/total/coolness?beef=super', variables.theUrl.getALocation(false, { start = '/admin' }));
+	}
+	
 	public void function testWithStart() {
 		variables.theUrl.setALocation('chicken', 'awesome');
 		variables.theUrl.setALocation('_base', '/total/coolness');

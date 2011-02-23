@@ -49,7 +49,7 @@
 			<cfset addGroup() />
 		</cfif>
 		
-		<cfreturn duplicate(variables.groups) />
+		<cfreturn evaluate(serialize(variables.groups)) />
 	</cffunction>
 	
 	<cffunction name="length" access="public" returntype="numeric" output="false">

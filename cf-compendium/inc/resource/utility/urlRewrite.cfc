@@ -9,15 +9,15 @@ component extends="cf-compendium.inc.resource.utility.url" {
 		return this;
 	}
 	
-	private string function get( string locationName = '', boolean useEncoded = true, struct options = {} ) {
+	public string function __get( string locationName = '', boolean useEncoded = true, struct options = {} ) {
 		var keys = '';
 		var locate = '';
-		var location = findLocation(arguments.locationName);
+		var currentLocation = __findLocation(arguments.locationName);
 		
 		// Extend the options
 		arguments.options = variables.extend.extend(variables.urlOptions, arguments.options);
 		
-		arguments.options.keys = structKeyList(location);
+		arguments.options.keys = querystringKeyList(arguments.locationName);
 		
 		locate = listFindNoCase(arguments.options.keys, arguments.options.rewriteBase);
 		
@@ -27,15 +27,23 @@ component extends="cf-compendium.inc.resource.utility.url" {
 				arguments.options.start = reReplace(arguments.options.start, '[/]*$', '');
 			}
 			
-			if( left(location[arguments.options.rewriteBase], 1) != '/' ) {
-				location[arguments.options.rewriteBase] = '/' & location[arguments.options.rewriteBase];
+			if( left(currentLocation[arguments.options.rewriteBase], 1) != '/' ) {
+				currentLocation[arguments.options.rewriteBase] = '/' & currentLocation[arguments.options.rewriteBase];
 			}
 			
-			arguments.options.start &= location[arguments.options.rewriteBase];
+			arguments.options.start &= currentLocation[arguments.options.rewriteBase];
 			
 			arguments.options.keys = listDeleteAt(arguments.options.keys, locate);
 		}
 		
-		return super.get(argumentCollection = arguments);
+		try {
+			return super.__get(argumentCollection = arguments);
+		} catch(any e) {
+			writeDump(var = currentLocation, label = 'Rewrite currentlocation');
+			writeDump(var = arguments.options.keys, label = 'Rewrite arguments.options.keys');
+			writeDump(var = variables.locations, label = 'Rewrite variables.locations');
+			writeDump(e);
+			abort;
+		}
 	}
 }

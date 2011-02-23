@@ -163,9 +163,7 @@
 						
 						<!--- Do the comparison --->
 						<cfif reFind(arguments.missingMethodArguments[1], attributeValue)>
-							<!--- TODO can't duplicate objects? --->
-							<!--- <cfset arrayAppend( result, duplicate(i) ) /> --->
-							<cfset arrayAppend( result, i ) />
+							<cfset arrayAppend( result, evaluate(serialize(i)) ) />
 						</cfif>
 					</cfloop>
 					
