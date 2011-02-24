@@ -5,7 +5,31 @@
  */
 (function($) {
 	$.cfc = {};
-}(jQuery));(function(a){a.wait=function(c){var b=a.Deferred();setTimeout(function(){b.resolve()},c);return b}})(jQuery);
+}(jQuery));/**
+ * jQuery wait
+ * 
+ * Version: 0.1.0
+ * 
+ * Usage:
+ *     jQuery.wait(1000).then(function(){ alert('Done waiting!'); });
+ * 
+ * Based on:
+ *     http://intridea.com/2011/2/8/fun-with-jquery-deferred
+ *     
+ * Requires:
+ *     jQuery >= 1.5
+ */
+(function($){
+	$.wait = function(time) {
+		var dfd = $.Deferred();
+		
+		setTimeout(function() {
+			dfd.resolve();
+		}, time);
+		
+		return dfd;
+	};
+}(jQuery));
 /*
  * timeago: a jQuery plugin, version: 0.9.2 (2010-09-14)
  * @requires jQuery v1.2.3 or later
