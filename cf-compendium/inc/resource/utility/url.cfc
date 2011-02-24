@@ -490,7 +490,7 @@
 		<cfargument name="locationName" type="string" default="" />
 		<cfargument name="variableName" type="string" required="true" />
 		
-		<cfset var value = search(argumentCollection=arguments) />
+		<cfset var value = __search(argumentCollection=arguments) />
 		
 		<!--- If not a number return a zero --->
 		<cfif not isBoolean(value)>
