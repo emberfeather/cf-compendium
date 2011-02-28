@@ -135,7 +135,7 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfswitch expression="#arguments.element.elementType#">
-			<cfcase value="button,color,date,datetime,datetime-local,email,file,hidden,image,month,number,password,range,reset,search,submit,tel,text,time,url,week">
+			<cfcase value="button,color,email,file,hidden,image,number,password,range,reset,search,submit,tel,text,url">
 				<cfset arguments.element.type = arguments.element.elementType />
 				
 				<cfreturn elementInput(arguments.element) />
@@ -143,8 +143,44 @@
 			<cfcase value="checkbox">
 				<cfreturn elementCheckbox(arguments.element) />
 			</cfcase>
+			<cfcase value="date">
+				<cfset arguments.element.type = arguments.element.elementType />
+				
+				<cfif isDate(arguments.element.value)>
+					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') />
+				</cfif>
+				
+				<cfreturn elementInput(arguments.element) />
+			</cfcase>
+			<cfcase value="datetime">
+				<cfset arguments.element.type = arguments.element.elementType />
+				
+				<cfif isDate(arguments.element.value)>
+					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') & 'T' & timeFormat(arguments.element.value, 'HH:mm:ss') & 'Z' />
+				</cfif>
+				
+				<cfreturn elementInput(arguments.element) />
+			</cfcase>
+			<cfcase value="datetime-local">
+				<cfset arguments.element.type = arguments.element.elementType />
+				
+				<cfif isDate(arguments.element.value)>
+					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') & 'T' & timeFormat(arguments.element.value, 'HH:mm:ss') />
+				</cfif>
+				
+				<cfreturn elementInput(arguments.element) />
+			</cfcase>
 			<cfcase value="meter">
 				<cfreturn elementMeter(arguments.element) />
+			</cfcase>
+			<cfcase value="month">
+				<cfset arguments.element.type = arguments.element.elementType />
+				
+				<cfif isDate(arguments.element.value)>
+					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm') />
+				</cfif>
+				
+				<cfreturn elementInput(arguments.element) />
 			</cfcase>
 			<cfcase value="radio">
 				<cfreturn elementRadio(arguments.element) />
@@ -157,6 +193,24 @@
 			</cfcase>
 			<cfcase value="textarea">
 				<cfreturn elementTextarea(arguments.element) />
+			</cfcase>
+			<cfcase value="time">
+				<cfset arguments.element.type = arguments.element.elementType />
+				
+				<cfif isDate(arguments.element.value)>
+					<cfset arguments.element.value = timeFormat(arguments.element.value, 'HH:mm:ss.l') />
+				</cfif>
+				
+				<cfreturn elementInput(arguments.element) />
+			</cfcase>
+			<cfcase value="week">
+				<cfset arguments.element.type = arguments.element.elementType />
+				
+				<cfif isDate(arguments.element.value)>
+					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy') & '-W' & week(arguments.element.value) />
+				</cfif>
+				
+				<cfreturn elementInput(arguments.element) />
 			</cfcase>
 			<cfcase value="custom">
 				<cfreturn elementCustom(arguments.element) />
