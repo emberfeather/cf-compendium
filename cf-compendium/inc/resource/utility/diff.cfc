@@ -1,5 +1,7 @@
 component {
 	public component function init() {
+		variables.labelPrefix = '';
+		
 		return this;
 	}
 	
@@ -149,17 +151,23 @@ component {
 		return local.result;
 	}
 	
-	private string function generateHtml(required any original, required any current) {
+	private string function generateHtml(required any original, required any current, string key = '') {
 		local.html = '';
 		
 		local.oldType = determineType(arguments.original);
 		local.newType = determineType(arguments.current);
+		
+		local.labelPrefix = variables.labelPrefix;
 		
 		// If they are not the same type then it has changed completely
 		if(local.oldType == local.newType) {
 			// Perform output based upon the variable type
 			switch(local.newType) {
 			case 'struct':
+				if(arguments.key neq '') {
+					variables.labelPrefix &= arguments.key & '.';
+				}
+				
 				local.html &= toHtml(arguments.original, arguments.current);
 				
 				break;
@@ -171,6 +179,8 @@ component {
 			local.html &= '<dd class="original">' & generateHtmlItem(arguments.original) & '</dd>';
 			local.html &= '<dd class="current">' & generateHtmlItem(arguments.current) & '</dd>';
 		}
+		
+		variables.labelPrefix = local.labelPrefix;
 		
 		return local.html;
 	}
@@ -224,12 +234,18 @@ component {
 		return local.keys;
 	}
 	
+	public string function setLabel( required component label ) {
+		variables.label = arguments.label;
+	}
+	
 	public string function toHtml() {
 		// Allow for the function to use a predetermined diff
 		local.results = (arrayLen(arguments) > 1 ? diff(argumentCollection = arguments) : arguments[1]);
 		
 		local.oldType = determineType(local.results.old);
 		local.newType = determineType(local.results.new);
+		
+		local.hasLabel = structKeyExists(variables, 'label');
 		
 		local.html = '<dl class="diff">';
 		
@@ -248,14 +264,14 @@ component {
 					local.key = listGetAt(local.keys, local.i);
 					local.subHtml = '';
 					
-					local.html &= '<dt>' & local.key & '</dt>';
+					local.html &= '<dt>' & (local.hasLabel ? variables.label.get(variables.labelPrefix & local.key, local.key) : local.key) & '</dt>';
 					
 					if(structKeyExists(local.results.old, local.key) && structKeyExists(local.results.new, local.key)) {
-						local.subHtml &= generateHtml(local.results.old[local.key], local.results.new[local.key]);
+						local.subHtml &= generateHtml(local.results.old[local.key], local.results.new[local.key], local.key);
 					} else if(structKeyExists(local.results.old, local.key)) {
-						local.subHtml &= generateHtml(local.results.old[local.key], { '__filler': true });
+						local.subHtml &= generateHtml(local.results.old[local.key], { '__filler': true }, local.key);
 					} else {
-						local.subHtml &= generateHtml({ '__filler': true }, local.results.new[local.key]);
+						local.subHtml &= generateHtml({ '__filler': true }, local.results.new[local.key], local.key);
 					}
 					
 					if(len(local.subHtml)) {
