@@ -1,7 +1,5 @@
 component {
 	public component function init() {
-		variables.labelPrefix = '';
-		
 		return this;
 	}
 	
@@ -151,24 +149,18 @@ component {
 		return local.result;
 	}
 	
-	private string function generateHtml(required any original, required any current, string key = '') {
+	private string function generateHtml(required any original, required any current, struct options = {}) {
 		local.html = '';
 		
 		local.oldType = determineType(arguments.original);
 		local.newType = determineType(arguments.current);
-		
-		local.labelPrefix = variables.labelPrefix;
 		
 		// If they are not the same type then it has changed completely
 		if(local.oldType == local.newType) {
 			// Perform output based upon the variable type
 			switch(local.newType) {
 			case 'struct':
-				if(arguments.key neq '') {
-					variables.labelPrefix &= arguments.key & '.';
-				}
-				
-				local.html &= toHtml(arguments.original, arguments.current);
+				local.html &= toHtml(diff(arguments.original, arguments.current), arguments.options);
 				
 				break;
 			default:
@@ -179,8 +171,6 @@ component {
 			local.html &= '<dd class="original">' & generateHtmlItem(arguments.original) & '</dd>';
 			local.html &= '<dd class="current">' & generateHtmlItem(arguments.current) & '</dd>';
 		}
-		
-		variables.labelPrefix = local.labelPrefix;
 		
 		return local.html;
 	}
@@ -234,18 +224,11 @@ component {
 		return local.keys;
 	}
 	
-	public string function setLabel( required component label ) {
-		variables.label = arguments.label;
-	}
-	
-	public string function toHtml() {
-		// Allow for the function to use a predetermined diff
-		local.results = (arrayLen(arguments) > 1 ? diff(argumentCollection = arguments) : arguments[1]);
+	public string function toHtml( required struct results, struct options = {} ) {
+		local.oldType = determineType(arguments.results.old);
+		local.newType = determineType(arguments.results.new);
 		
-		local.oldType = determineType(local.results.old);
-		local.newType = determineType(local.results.new);
-		
-		local.hasLabel = structKeyExists(variables, 'label');
+		arguments.options.labelPrefix = structKeyExists(arguments.options, 'labelPrefix') ? arguments.options.labelPrefix : '';
 		
 		local.html = '<dl class="diff">';
 		
@@ -256,22 +239,31 @@ component {
 			// Perform output based upon the variable type
 			switch(local.newType) {
 			case 'struct':
-				local.keys = mergeKeys(local.results.old, local.results.new);
+				local.keys = mergeKeys(arguments.results.old, arguments.results.new);
 				
-				local.keys = listSort(local.keys, 'text')
+				local.keys = listSort(local.keys, 'text');
+				
+				local.labelPrefix = arguments.options.labelPrefix;
 				
 				for(local.i = 1; local.i <= listLen(local.keys); local.i++) {
 					local.key = listGetAt(local.keys, local.i);
 					local.subHtml = '';
 					
-					local.html &= '<dt>' & (local.hasLabel ? variables.label.get(variables.labelPrefix & local.key, local.key) : local.key) & '</dt>';
-					
-					if(structKeyExists(local.results.old, local.key) && structKeyExists(local.results.new, local.key)) {
-						local.subHtml &= generateHtml(local.results.old[local.key], local.results.new[local.key], local.key);
-					} else if(structKeyExists(local.results.old, local.key)) {
-						local.subHtml &= generateHtml(local.results.old[local.key], { '__filler': true }, local.key);
+					if(structKeyExists(arguments.options, 'label')) {
+						local.html &= '<dt>' & arguments.options.label.get(arguments.options.labelPrefix & local.key, local.key) & '</dt>';
+						
+						// Add to the prefix for any sub diff output
+						arguments.options.labelPrefix &= local.key & '.';
 					} else {
-						local.subHtml &= generateHtml({ '__filler': true }, local.results.new[local.key], local.key);
+						local.html &= '<dt>' & local.key & '</dt>';
+					}
+					
+					if(structKeyExists(arguments.results.old, local.key) && structKeyExists(arguments.results.new, local.key)) {
+						local.subHtml &= generateHtml(arguments.results.old[local.key], arguments.results.new[local.key], arguments.options);
+					} else if(structKeyExists(arguments.results.old, local.key)) {
+						local.subHtml &= generateHtml(arguments.results.old[local.key], { '__filler': true }, arguments.options);
+					} else {
+						local.subHtml &= generateHtml({ '__filler': true }, arguments.results.new[local.key], arguments.options);
 					}
 					
 					if(len(local.subHtml)) {
@@ -280,11 +272,13 @@ component {
 					} else {
 						local.html &= '<dd class="noChange"><em>No Changes</em></dd>';
 					}
+					
+					arguments.options.labelPrefix = local.labelPrefix;
 				}
 				
 				break;
 			default:
-				local.html &= generateHtml(local.results.old, local.results.new);
+				local.html &= generateHtml(arguments.results.old, arguments.results.new);
 				
 				break;
 			}
