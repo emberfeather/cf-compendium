@@ -35,6 +35,15 @@ component extends="mxunit.framework.TestCase" {
 		assertEquals('Nah', label.getKey('Nah'));
 	}
 	
+	public void function testGetLabel_WithMultipleBundles_AsArguments_ShouldWork() {
+		var label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(variables.i18n);
+		
+		label.addBundle('/i18n/inc/resource/i18n', 'label', 'resourceBundle');
+		
+		assertEquals('test', label.getSubmit());
+		assertEquals('Ok', label.getGo());
+	}
+	
 	public void function testGetLabel_WithMultipleBundles_ShouldInherit() {
 		var label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(variables.i18n);
 		

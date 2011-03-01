@@ -14,7 +14,9 @@
 		<cfargument name="path" type="string" required="true" />
 		<cfargument name="name" type="string" required="true" />
 		
-		<cfset arrayAppend(variables.bundles, variables.i18n.getResourceBundle(arguments.path, arguments.name, variables.locale)) />
+		<cfloop from="2" to="#arraylen(arguments)#" index="local.i">
+			<cfset arrayAppend(variables.bundles, variables.i18n.getResourceBundle(arguments.path, arguments[local.i], variables.locale)) />
+		</cfloop>
 	</cffunction>
 	
 	<cffunction name="get" access="public" returntype="string" output="false">
