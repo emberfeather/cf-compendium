@@ -229,7 +229,7 @@
 	<cffunction name="saveSitemap" access="public" returntype="void" output="false">
 		<cfargument name="sitemapDirectory" type="string" required="true" />
 		<cfargument name="sitemapFilename" type="string" default="sitemap.xml" />
-		<cfargument name="domainDirectory" type="string" default="" />
+		<cfargument name="domainUrl" type="string" default="" />
 		
 		<cfset var sitemap = '' />
 		<cfset var sitemapXml = '' />
@@ -244,12 +244,12 @@
 		<cffile action="write" file="#arguments.sitemapDirectory##arguments.sitemapFilename#" output="#sitemapXml#" />
 		
 		<!--- Add to the list of sitemaps for pinging --->
-		<cfif len(arguments.domainDirectory)>
+		<cfif len(arguments.domainUrl)>
 			<!--- Check for trailing slash --->
-			<cfset arguments.domainDirectory = normalize(arguments.domainDirectory) />
+			<cfset arguments.domainUrl = normalize(arguments.domainUrl) />
 			
 			<!--- Add to the array of sitemaps --->
-			<cfset sitemap = { loc = XMLFormat(arguments.domainDirectory & arguments.sitemapFilename), lastMod = variables.lastUpdate } />
+			<cfset sitemap = { loc = XMLFormat(arguments.domainUrl & arguments.sitemapFilename), lastMod = variables.lastUpdate } />
 			<cfset arrayAppend(variables.sitemaps, sitemap) />
 		</cfif>
 		
@@ -264,7 +264,7 @@
 	<cffunction name="saveSitemapIndex" access="public" returntype="void" output="false">
 		<cfargument name="sitemapDirectory" type="string" required="true" />
 		<cfargument name="sitemapFilename" type="string" default="sitemap_index.xml" />
-		<cfargument name="domainDirectory" type="string" default="" />
+		<cfargument name="domainUrl" type="string" default="" />
 		
 		<cfset var sitemapIndexXml = '' />
 		
@@ -278,12 +278,12 @@
 		<cffile action="write" file="#arguments.sitemapDirectory##arguments.sitemapFilename#" output="#sitemapIndexXml#" />
 		
 		<!--- Add to the list of sitemap indexes for pinging --->
-		<cfif len(arguments.domainDirectory)>
+		<cfif len(arguments.domainUrl)>
 			<!--- Check for trailing slash --->
-			<cfset arguments.domainDirectory = normalize(arguments.domainDirectory) />
+			<cfset arguments.domainUrl = normalize(arguments.domainUrl) />
 			
 			<!--- Add to the array of sitemaps --->
-			<cfset arrayAppend(variables.sitemapIndexes, XMLFormat(arguments.domainDirectory & arguments.sitemapFilename)) />
+			<cfset arrayAppend(variables.sitemapIndexes, XMLFormat(arguments.domainUrl & arguments.sitemapFilename)) />
 		</cfif>
 		
 		<!--- Clear out the sitemap variables --->
