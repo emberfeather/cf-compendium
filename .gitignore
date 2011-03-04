@@ -2,3 +2,5 @@
 build/logs/
 build/settings/user.properties
 dist/
+example/sitemap.xml
+example/sitemap_index.xml
