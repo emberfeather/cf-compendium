@@ -4,11 +4,7 @@ component extends="mxunit.framework.TestCase" {
 		var format = '';
 		
 		variables.i18n = createObject('component', 'cf-compendium.inc.resource.i18n.i18n').init(expandPath('/'));
-		
-		bundle = variables.i18n.getResourceBundle('/cf-compendium/i18n/inc/resource/utility', 'validation', 'en_US');
-		format = variables.i18n.getMessageFormat('en_US');
-		
-		variables.validator = createObject('component', 'cf-compendium.inc.resource.utility.validation').init(bundle, format);
+		variables.validator = createObject('component', 'cf-compendium.inc.resource.validation.validation').init(variables.i18n, 'en_US');
 	}
 	
 	public void function testID_invalid_nonNumeric() {
