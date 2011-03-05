@@ -60,47 +60,40 @@
 			
 			<!--- Read in the object from a struct --->
 			<cfloop list="#keys#" index="i">
-				<cftry>
-					<!--- If it exists in the struct pull it in --->
-					<cfif structKeyExists(arguments.input, i)>
-						<cfif isSimpleValue(arguments.input[i])>
-							<cfif useObject>
-								<cfinvoke component="#result#" method="set#i#">
-									<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
-								</cfinvoke>
-							<cfelse>
-								<cfset result[i] = trim(arguments.input[i]) />
-							</cfif>
-						<cfelseif isArray(arguments.input[i])>
-							<cfif !useObject>
-								<cfset result[i] = [] />
-							</cfif>
-							
-							<cfloop from="1" to="#arrayLen(arguments.input[i])#" index="j">
-								<cfif useObject>
-									<cfinvoke component="#result#" method="add#i#">
-										<cfinvokeargument name="value" value="#this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)#" />
-									</cfinvoke>
-								<cfelse>
-									<cfset arrayAppend(result[i], this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)) />
-								</cfif>
-							</cfloop>
+				<!--- If it exists in the struct pull it in --->
+				<cfif structKeyExists(arguments.input, i)>
+					<cfif isSimpleValue(arguments.input[i])>
+						<cfif useObject>
+							<cfinvoke component="#result#" method="set#i#">
+								<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
+							</cfinvoke>
 						<cfelse>
+							<cfset result[i] = trim(arguments.input[i]) />
+						</cfif>
+					<cfelseif isArray(arguments.input[i])>
+						<cfif !useObject>
+							<cfset result[i] = [] />
+						</cfif>
+						
+						<cfloop from="1" to="#arrayLen(arguments.input[i])#" index="j">
 							<cfif useObject>
-								<cfinvoke component="#result#" method="set#i#">
-									<cfinvokeargument name="value" value="#this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)#" />
+								<cfinvoke component="#result#" method="add#i#">
+									<cfinvokeargument name="value" value="#this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)#" />
 								</cfinvoke>
 							<cfelse>
-								<cfset result[i] = this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource) />
+								<cfset arrayAppend(result[i], this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)) />
 							</cfif>
+						</cfloop>
+					<cfelse>
+						<cfif useObject>
+							<cfinvoke component="#result#" method="set#i#">
+								<cfinvokeargument name="value" value="#this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)#" />
+							</cfinvoke>
+						<cfelse>
+							<cfset result[i] = this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource) />
 						</cfif>
 					</cfif>
-					
-					<!--- Catch any validation errors --->
-					<cfcatch type="validation">
-						<cfset arrayAppend(messages, cfcatch.message) />
-					</cfcatch>
-				</cftry>
+				</cfif>
 			</cfloop>
 		<cfelseif isQuery(arguments.input)>
 			<cfif useObject>
@@ -108,36 +101,29 @@
 				
 				<!--- Read in the object from a query --->
 				<cfloop list="#(arguments.doComplete ? structKeyList(arguments.input) : result.get__keyList())#" index="i">
-					<cftry>
-						<!--- If it exists in the query pull it in --->
-						<cfif listFindNoCase(arguments.input.columnList, i)>
-							<!--- If the current value is an array it should be pulled in as an array --->
-							<cfif isArray(instance[i])>
-								<!--- Reset the value --->
-								<cfinvoke component="#result#" method="reset#i#" />
-								
-								<!--- Loop through and append --->
-								<cfloop query="arguments.input">
-									<cfset value = arguments.input[i] />
-									
-									<cfinvoke component="#result#" method="add#i#">
-										<cfinvokeargument name="value" value="#trim(value)#" />
-									</cfinvoke>
-								</cfloop>
-							<cfelse>
+					<!--- If it exists in the query pull it in --->
+					<cfif listFindNoCase(arguments.input.columnList, i)>
+						<!--- If the current value is an array it should be pulled in as an array --->
+						<cfif isArray(instance[i])>
+							<!--- Reset the value --->
+							<cfinvoke component="#result#" method="reset#i#" />
+							
+							<!--- Loop through and append --->
+							<cfloop query="arguments.input">
 								<cfset value = arguments.input[i] />
 								
-								<cfinvoke component="#result#" method="set#i#">
+								<cfinvoke component="#result#" method="add#i#">
 									<cfinvokeargument name="value" value="#trim(value)#" />
 								</cfinvoke>
-							</cfif>
+							</cfloop>
+						<cfelse>
+							<cfset value = arguments.input[i] />
+							
+							<cfinvoke component="#result#" method="set#i#">
+								<cfinvokeargument name="value" value="#trim(value)#" />
+							</cfinvoke>
 						</cfif>
-						
-						<!--- Catch any validation errors --->
-						<cfcatch type="validation">
-							<cfset arrayAppend(messages, cfcatch.message) />
-						</cfcatch>
-					</cftry>
+					</cfif>
 				</cfloop>
 			<cfelse>
 				<cfset result = arguments.input />
