@@ -43,8 +43,6 @@ component {
 			}
 		}
 		
-		writeDump(variables.validators);
-		
 		throw (message="Unable to validate object", detail="Unable to find the proper validator for validating '#arguments.missingMethodName#'");
 	}
 }
