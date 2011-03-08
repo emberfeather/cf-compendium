@@ -19,12 +19,12 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.ID('testing', -15, '');
 	}
 	
-	public void function testID_valid_numeric() {
-		variables.validator.ID('testing', 10, '');
+	public void function testID_valid_blank() {
+		variables.validator.ID('testing', '', '');
 	}
 	
-	public void function testIn_valid_inList() {
-		variables.validator.in('testing', 'is', 'is,it,in,here');
+	public void function testID_valid_numeric() {
+		variables.validator.ID('testing', 10, '');
 	}
 	
 	public void function testIn_invalid_notInList() {
@@ -33,10 +33,22 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.in('testing', 'val', 'is,it,in,here');
 	}
 	
+	public void function testIn_valid_blank() {
+		variables.validator.in('testing', '', 'is,it,in,here');
+	}
+	
+	public void function testIn_valid_inList() {
+		variables.validator.in('testing', 'is', 'is,it,in,here');
+	}
+	
 	public void function testNotIn_invalid_inList() {
 		expectException('validation', 'Set should have thrown an error. ["val" is in "val,is,in,here"');
 		
 		variables.validator.notIn('testing', 'val', 'val,is,in,here');
+	}
+	
+	public void function testNotIn_valid_blank() {
+		variables.validator.notIn('testing', '', 'val,is,in,here');
 	}
 	
 	public void function testNotIn_valid_notInList() {
@@ -61,6 +73,10 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.isAlpha('testing', "vàlue", {});
 	}
 	
+	public void function testIsAlpha_valid_blank() {
+		variables.validator.isAlpha('testing', '', { allowSpaces: true });
+	}
+	
 	public void function testIsAlpha_valid_space() {
 		variables.validator.isAlpha('testing', "val ue", { allowSpaces: true });
 	}
@@ -81,6 +97,10 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.isAlphanumeric('testing', "vàlue", {});
 	}
 	
+	public void function testIsAlphanumeric_valid_blank() {
+		variables.validator.isAlphanumeric('testing', '', { allowSpaces: true });
+	}
+	
 	public void function testIsAlphanumeric_valid_space() {
 		variables.validator.isAlphanumeric('testing', "val 54ue", { allowSpaces: true });
 	}
@@ -93,6 +113,10 @@ component extends="mxunit.framework.TestCase" {
 		expectException('validation', 'Set should have thrown an error. [val is not boolean]');
 		
 		variables.validator.isBoolean('testing', "val", '');
+	}
+	
+	public void function testIsBoolean_valid_blank() {
+		variables.validator.isBoolean('testing', '', '');
 	}
 	
 	public void function testIsBoolean_valid_false() {
@@ -109,6 +133,10 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.isNumber('testing', "val", '');
 	}
 	
+	public void function testIsNumber_valid_blank() {
+		variables.validator.isNumber('testing', '', '');
+	}
+	
 	public void function testIsNumber_valid_number() {
 		variables.validator.isNumber('testing', 5, '');
 	}
@@ -119,6 +147,10 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.maxLength('testing', "val", 2);
 	}
 	
+	public void function testMaxLength_valid_blank() {
+		variables.validator.maxLength('testing', '', 5);
+	}
+	
 	public void function testMaxLength_valid_underLength() {
 		variables.validator.maxLength('testing', "val", 5);
 	}
@@ -127,6 +159,10 @@ component extends="mxunit.framework.TestCase" {
 		expectException('validation', 'Set should have thrown an error. [the length of val is less than 4]');
 		
 		variables.validator.minLength('testing', "val", 4);
+	}
+	
+	public void function testMinLength_valid_blank() {
+		variables.validator.minLength('testing', '', 2);
 	}
 	
 	public void function testMinLength_valid_overLength() {
@@ -149,14 +185,22 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.notFuture('testing', Now() + 1, '');
 	}
 	
+	public void function testNotFuture_valid_blank() {
+		variables.validator.notFuture('testing', '', '');
+	}
+	
 	public void function testNotFuture_valid_now() {
-		variables.validator.notEmpty('testing', Now(), '');
+		variables.validator.notFuture('testing', Now(), '');
 	}
 	
 	public void function testNotGreaterThan_invalid_greaterThan() {
 		expectException('validation', 'Set should have thrown an error. [3 is greater than 2]');
 		
 		variables.validator.notGreaterThan('testing', 3, 2);
+	}
+	
+	public void function testNotGreaterThan_valid_blank() {
+		variables.validator.notGreaterThan('testing', '', 3);
 	}
 	
 	public void function testNotGreaterThan_valid_lessThan() {
@@ -169,6 +213,10 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.notLessThan('testing', 2, 3);
 	}
 	
+	public void function testNotLessThan_valid_blank() {
+		variables.validator.notLessThan('testing', '', 2);
+	}
+	
 	public void function testNotLessThan_valid_greaterThan() {
 		variables.validator.notLessThan('testing', 3, 2);
 	}
@@ -179,6 +227,10 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.notPast('testing', Now() - 1, '');
 	}
 	
+	public void function testNotPast_valid_blank() {
+		variables.validator.notPast('testing', '', '');
+	}
+	
 	public void function testNotPast_valid_future() {
 		variables.validator.notPast('testing', Now() + 1, '');
 	}
@@ -187,6 +239,10 @@ component extends="mxunit.framework.TestCase" {
 		expectException('validation', 'Set should have thrown an error. [test@test is not a valid email]');
 		
 		variables.validator.validEmail('testing', 'test@test', '');
+	}
+	
+	public void function testValidEmail_valid_blank() {
+		variables.validator.validEmail('testing', '', '');
 	}
 	
 	public void function testValidEmail_valid_fullEmail() {
@@ -203,7 +259,15 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.validURL('testing', 'test.com', '');
 	}
 	
-	public void function testValidURL_valid_fullUrl() {
+	public void function testValidURL_valid_blank() {
+		variables.validator.validURL('testing', '', '');
+	}
+	
+	public void function testValidURL_valid_fullUrl_http() {
 		variables.validator.validURL('testing', 'http://test.com', '');
+	}
+	
+	public void function testValidURL_valid_fullUrl_https() {
+		variables.validator.validURL('testing', 'https://test.com', '');
 	}
 }
