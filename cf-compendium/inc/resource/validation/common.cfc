@@ -4,10 +4,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function ID(required string label, required any value, any extra) {
 		if (not isNumeric(arguments.value) or arguments.value lt 0) {
-			// Get the message from the bundle
-			local.message = variables.label.get('id');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('id', arguments.label);
 		}
 	}
 	
@@ -16,10 +13,61 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function in(required string label, required any value, any extra) {
 		if (not listFind(arguments.extra, arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('in');
+			__throwValidation('in', arguments.label, arguments.extra);
+		}
+	}
+	
+	/**
+	 * Tests if the value given is alpha characters
+	 */
+	public void function isAlpha(required string label, required any value, any extra) {
+		local.expr = '([^a-zA-Z';
+		
+		if(isStruct(arguments.extra)) {
+			// Allow for spaces to count
+			if(structKeyExists(arguments.extra, 'allowSpaces') && arguments.extra.allowSpaces == true) {
+				local.expr &= ' ';
+			}
 			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label, arguments.extra )#");
+			// Allow for specific special characters
+			if(structKeyExists(arguments.extra, 'specialChars')) {
+				local.expr &= arguments.extra.specialChars;
+			}
+		}
+		
+		local.expr &= '])';
+		
+		local.match = reMatch(local.expr, arguments.value);
+		
+		if (arrayLen(local.match)) {
+			__throwValidation('isAlpha', arguments.label, arrayToList(__uniqueArray(local.match), ' '));
+		}
+	}
+	
+	/**
+	 * Tests if the value given is alpha characters
+	 */
+	public void function isAlphanumeric(required string label, required any value, any extra) {
+		local.expr = '([^a-zA-Z0-9';
+		
+		if(isStruct(arguments.extra)) {
+			// Allow for spaces to count
+			if(structKeyExists(arguments.extra, 'allowSpaces') && arguments.extra.allowSpaces == true) {
+				local.expr &= ' ';
+			}
+			
+			// Allow for specific special characters
+			if(structKeyExists(arguments.extra, 'specialChars')) {
+				local.expr &= arguments.extra.specialChars;
+			}
+		}
+		
+		local.expr &= '])';
+		
+		local.match = reMatch(local.expr, arguments.value);
+		
+		if (arrayLen(local.match)) {
+			__throwValidation('isAlphanumeric', arguments.label, arrayToList(__uniqueArray(local.match), ' '));
 		}
 	}
 	
@@ -28,10 +76,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function isBoolean(required string label, required any value, any extra) {
 		if (not isBoolean(arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('isBoolean');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('isBoolean', arguments.label);
 		}
 	}
 	
@@ -40,10 +85,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function isNumber(required string label, required any value, any extra) {
 		if (not isNumeric(arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('isNumber');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('isNumber', arguments.label);
 		}
 	}
 	
@@ -52,10 +94,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function maxLength(required string label, required any value, any extra) {
 		if (len(arguments.value) gt arguments.extra) {
-			// Get the message from the bundle
-			local.message = variables.label.get('maxLength');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label, arguments.extra )#");
+			__throwValidation('maxLength', arguments.label, arguments.extra);
 		}
 	}
 	
@@ -64,10 +103,16 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function minLength(required string label, required any value, any extra) {
 		if (len(arguments.value) lt arguments.extra) {
-			// Get the message from the bundle
-			local.message = variables.label.get('minLength');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label, arguments.extra )#");
+			__throwValidation('minLength', arguments.label, arguments.extra);
+		}
+	}
+	
+	/**
+	 * Tests if the value given does not contain whitespace
+	 */
+	public void function noWhitespace(required string label, required any value) {
+		if (reFind('\s', arguments.value)) {
+			__throwValidation('noWhitespace', arguments.label);
 		}
 	}
 	
@@ -76,10 +121,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function notEmpty(required string label, required any value, any extra) {
 		if (trim(arguments.value) eq '') {
-			// Get the message from the bundle
-			local.message = variables.label.get('notEmpty');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('notEmpty', arguments.label);
 		}
 	}
 	
@@ -88,10 +130,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function notFuture(required string label, required any value, any extra) {
 		if (arguments.value gt now()) {
-			// Get the message from the bundle
-			local.message = variables.label.get('notFuture');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('notFuture', arguments.label);
 		}
 	}
 	
@@ -103,10 +142,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 		arguments.value = reReplace(arguments.value, '[^0-9.]', '', 'all');
 		
 		if (arguments.value gt arguments.extra) {
-			// Get the message from the bundle
-			local.message = variables.label.get('notGreaterThan');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label, arguments.extra )#");
+			__throwValidation('notGreaterThan', arguments.label, arguments.extra);
 		}
 	}
 	
@@ -114,11 +150,10 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 * Tests if the value given is not in a given list
 	 */
 	public void function notIn(required string label, required any value, any extra) {
-		if (listFind(arguments.extra, arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('notIn');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label, arguments.extra )#");
+		local.position = listFindNoCase(arguments.extra, arguments.value);
+		
+		if (local.position) {
+			__throwValidation('notIn', arguments.label, arguments.value);
 		}
 	}
 	
@@ -130,10 +165,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 		arguments.value = reReplace(arguments.value, '[^0-9.]', '', 'all');
 		
 		if (arguments.value lt arguments.extra) {
-			// Get the message from the bundle
-			local.message = variables.label.get('notLessThan');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label, arguments.extra )#");
+			__throwValidation('notLessThan', arguments.label, arguments.extra);
 		}
 	}
 	
@@ -142,10 +174,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function notPast(required string label, required any value, any extra) {
 		if (arguments.value lt now()) {
-			// Get the message from the bundle
-			local.message = variables.label.get('notPast');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('notPast', arguments.label);
 		}
 	}
 	
@@ -155,42 +184,32 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	public void function validEmail(required string label, required any value, any extra) {
 		// Check the local part first character
 		if (not reFind("^[a-zA-Z]", arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('validEmail_localPart_firstCharacter');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('validEmail_localPart_firstCharacter', arguments.label);
 		}
 		
-		// Check the local part last character
-		if (not reFind("[a-zA-Z0-9]@", arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('validEmail_localPart_lastCharacter');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+		// Check the at sign
+		if (not find("@", arguments.value)) {
+			__throwValidation('validEmail_at', arguments.label);
 		}
 		
 		// Check the entire local part
 		if (not reFind("^[a-zA-Z][\.a-zA-Z0-9_!##\$%&'\*+/=?\^`\{|\}~-]*[a-zA-Z0-9]@", arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('validEmail_localPart');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('validEmail_localPart', arguments.label);
+		}
+		
+		// Check the local part last character
+		if (not reFind("[a-zA-Z0-9]@", arguments.value)) {
+			__throwValidation('validEmail_localPart_lastCharacter', arguments.label);
 		}
 		
 		// Check the domain
 		if (not reFind("@[a-zA-Z0-9]+([a-zA-Z0-9-][a-zA-Z0-9]+)?\.([a-z]+(\.[a-z]+)?){2,5}$", arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('validEmail_domain');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('validEmail_domain', arguments.label);
 		}
 		
 		// Final Test
 		if (not reFind("^[a-zA-Z][\.a-zA-Z0-9_!##\$%&'\*+/=?\^`\{|\}~-]*[a-zA-Z0-9]@[a-zA-Z0-9]+([a-zA-Z0-9-][a-zA-Z0-9]+)?\.([a-z]+(\.[a-z]+)?){2,5}$", arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('validEmail');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('validEmail', arguments.label);
 		}
 	}
 	
@@ -199,10 +218,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 	 */
 	public void function validURL(required string label, required any value, any extra) {
 		if (not REFind("^http[s]?://", arguments.value)) {
-			// Get the message from the bundle
-			local.message = variables.label.get('validURL');
-			
-			throw(type="validation", message="#variables.format.format( local.message, arguments.label )#");
+			__throwValidation('validURL', arguments.label);
 		}
 	}
 }

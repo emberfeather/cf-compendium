@@ -8,13 +8,13 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testID_invalid_nonNumeric() {
-		expectException('any', 'Set should have thrown an error. ["val" is not numeric]');
+		expectException('validation', 'Set should have thrown an error. ["val" is not numeric]');
 		
 		variables.validator.ID('testing', "val", '');
 	}
 	
 	public void function testID_invalid_negative() {
-		expectException('any', 'Negatives are not allowed');
+		expectException('validation', 'Negatives are not allowed');
 		
 		variables.validator.ID('testing', -15, '');
 	}
@@ -28,13 +28,13 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIn_invalid_notInList() {
-		expectException('any', 'Set should have thrown an error. ["val" is not in "is,it,in,here"]');
+		expectException('validation', 'Set should have thrown an error. ["val" is not in "is,it,in,here"]');
 		
 		variables.validator.in('testing', 'val', 'is,it,in,here');
 	}
 	
 	public void function testNotIn_invalid_inList() {
-		expectException('any', 'Set should have thrown an error. ["val" is in "val,is,in,here"');
+		expectException('validation', 'Set should have thrown an error. ["val" is in "val,is,in,here"');
 		
 		variables.validator.notIn('testing', 'val', 'val,is,in,here');
 	}
@@ -43,8 +43,54 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.notIn('testing', 'waldo', 'val,is,in,here');
 	}
 	
+	public void function testIsAlpha_invalid_number() {
+		expectException('validation', 'Set should have thrown an error. [contains number]');
+		
+		variables.validator.isAlpha('testing', "val18", {});
+	}
+	
+	public void function testIsAlpha_invalid_space() {
+		expectException('validation', 'Set should have thrown an error. [contains space]');
+		
+		variables.validator.isAlpha('testing', "val ue", {});
+	}
+	
+	public void function testIsAlpha_invalid_unicode() {
+		expectException('validation', 'Set should have thrown an error. [contains unicode]');
+		
+		variables.validator.isAlpha('testing', "vàlue", {});
+	}
+	
+	public void function testIsAlpha_valid_space() {
+		variables.validator.isAlpha('testing', "val ue", { allowSpaces: true });
+	}
+	
+	public void function testIsAlpha_valid_special_character() {
+		variables.validator.isAlpha('testing', "vàlue", { specialChars: 'à' });
+	}
+	
+	public void function testIsAlphanumeric_invalid_space() {
+		expectException('validation', 'Set should have thrown an error. [contains space]');
+		
+		variables.validator.isAlphanumeric('testing', "val ue63", {});
+	}
+	
+	public void function testIsAlphanumeric_invalid_unicode() {
+		expectException('validation', 'Set should have thrown an error. [contains unicode]');
+		
+		variables.validator.isAlphanumeric('testing', "vàlue", {});
+	}
+	
+	public void function testIsAlphanumeric_valid_space() {
+		variables.validator.isAlphanumeric('testing', "val 54ue", { allowSpaces: true });
+	}
+	
+	public void function testIsAlphanumeric_valid_special_character() {
+		variables.validator.isAlphanumeric('testing', "vàlue84", { specialChars: 'à' });
+	}
+	
 	public void function testIsBoolean_invalid_string() {
-		expectException('any', 'Set should have thrown an error. [val is not boolean]');
+		expectException('validation', 'Set should have thrown an error. [val is not boolean]');
 		
 		variables.validator.isBoolean('testing', "val", '');
 	}
@@ -58,7 +104,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIsNumber_invalid_string() {
-		expectException('any', 'Set should have thrown an error. [val is not numeric]');
+		expectException('validation', 'Set should have thrown an error. [val is not numeric]');
 		
 		variables.validator.isNumber('testing', "val", '');
 	}
@@ -68,7 +114,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testMaxLength_invalid_overLength() {
-		expectException('any', 'Set should have thrown an error. [the length is greater than 2]');
+		expectException('validation', 'Set should have thrown an error. [the length is greater than 2]');
 		
 		variables.validator.maxLength('testing', "val", 2);
 	}
@@ -78,7 +124,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testMinLength_invalid_underLength() {
-		expectException('any', 'Set should have thrown an error. [the length of val is less than 4]');
+		expectException('validation', 'Set should have thrown an error. [the length of val is less than 4]');
 		
 		variables.validator.minLength('testing', "val", 4);
 	}
@@ -88,7 +134,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotEmpty_invalid_empty() {
-		expectException('any', 'Set should have thrown an error. [is empty]');
+		expectException('validation', 'Set should have thrown an error. [is empty]');
 		
 		variables.validator.notEmpty('testing', '', '');
 	}
@@ -98,7 +144,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotFuture_invalid_future() {
-		expectException('any', 'Set should have thrown an error. [Now()+1 is in the future]');
+		expectException('validation', 'Set should have thrown an error. [Now()+1 is in the future]');
 		
 		variables.validator.notFuture('testing', Now() + 1, '');
 	}
@@ -108,7 +154,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotGreaterThan_invalid_greaterThan() {
-		expectException('any', 'Set should have thrown an error. [3 is greater than 2]');
+		expectException('validation', 'Set should have thrown an error. [3 is greater than 2]');
 		
 		variables.validator.notGreaterThan('testing', 3, 2);
 	}
@@ -118,7 +164,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotLessThan_invalid_lessThan() {
-		expectException('any', 'Set should have thrown an error. [2 is less than 3]');
+		expectException('validation', 'Set should have thrown an error. [2 is less than 3]');
 		
 		variables.validator.notLessThan('testing', 2, 3);
 	}
@@ -128,7 +174,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotPast_invalid_past() {
-		expectException('any', 'Set should have thrown an error. [Now()-1 is in the past]');
+		expectException('validation', 'Set should have thrown an error. [Now()-1 is in the past]');
 		
 		variables.validator.notPast('testing', Now() - 1, '');
 	}
@@ -138,7 +184,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testValidEmail_invalid_noDomain() {
-		expectException('any', 'Set should have thrown an error. [test@test is not a valid email]');
+		expectException('validation', 'Set should have thrown an error. [test@test is not a valid email]');
 		
 		variables.validator.validEmail('testing', 'test@test', '');
 	}
@@ -152,7 +198,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testValidURL_invalid_noProtocol() {
-		expectException('any', 'Set should have thrown an error. [test.com is not a valid url without a protocol]');
+		expectException('validation', 'Set should have thrown an error. [test.com is not a valid url without a protocol]');
 		
 		variables.validator.validURL('testing', 'test.com', '');
 	}
