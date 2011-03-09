@@ -308,7 +308,7 @@
 										<cfloop array="#arguments.data#" index="item">
 											<cfif isObject(item)>
 												<cfif col.key neq ''>
-													<cfinvoke component="#item#" method="get#col.key#" returnvariable="value" />
+													<cfset value = item['get' & col.key]() />
 												</cfif>
 											<cfelseif isStruct(item)>
 												<cfset value = item[col.key] />
@@ -440,7 +440,7 @@
 											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine the value --->
 												<cfif col.key neq ''>
-													<cfinvoke component="#item#" method="get#col.key#" returnvariable="value" />
+													<cfset value = item['get' & col.key]() />
 												<cfelseif structKeyExists(col, 'derived')>
 													<cfset value = calculateDerived( derived, col.derived, col.key, data, rowNum, arguments.options ) />
 												<cfelse>
@@ -537,6 +537,41 @@
 									</td>
 								</cfloop>
 							</tr>
+						</cfoutput>
+					<cfelseif isObject(arguments.data) and structKeyExists(arguments.data, 'hasNext') and structKeyExists(arguments.data, 'next')>
+						<cfset rowNum = 0 />
+						
+						<cfoutput>
+							<cfloop condition="arguments.data.hasNext()">
+								<cfset local.current = arguments.data.next() />
+								
+								<cfset rowNum++ />
+								<tr>
+									<cfset counter = 0 />
+									
+									<cfloop array="#variables.columns#" index="col">
+										<!--- Mocking the data as an array of structs and hardcoding the row --->
+										<cfset title = col.title neq '' ? getValue([ local.current ], 1, col.title) : '' />
+										
+										<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+											<!--- Determine Value --->
+											<cfif col.key neq ''>
+												<cfset value = local.current[col.key] />
+											<cfelse>
+												<cfset value = '&nbsp;' />
+											</cfif>
+											
+											<!--- Check for a link --->
+											<cfif arrayLen(col.link)>
+												<!--- Mocking the data as an array of structs and hardcoding the row --->
+												#createLink(value, col, [ local.current ], 1, counter, arguments.options)#
+											<cfelse>
+												#formatValue(col, value)#
+											</cfif>
+										</td>
+									</cfloop>
+								</tr>
+							</cfloop>
 						</cfoutput>
 					<cfelseif isStruct(arguments.data) and structCount(arguments.data) gt 0>
 						<cfset keys = listSort(structKeyList(arguments.data), 'textNoCase') />
