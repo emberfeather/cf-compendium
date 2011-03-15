@@ -538,7 +538,7 @@
 								</cfloop>
 							</tr>
 						</cfoutput>
-					<cfelseif isObject(arguments.data) and structKeyExists(arguments.data, 'hasNext') and structKeyExists(arguments.data, 'next')>
+					<cfelseif isObject(arguments.data) and structKeyExists(arguments.data, 'hasNext') and structKeyExists(arguments.data, 'next') and structKeyExists(arguments.data, 'count') and arguments.data.count() gt 0>
 						<cfset rowNum = 0 />
 						
 						<cfoutput>
@@ -573,7 +573,7 @@
 								</tr>
 							</cfloop>
 						</cfoutput>
-					<cfelseif isStruct(arguments.data) and structCount(arguments.data) gt 0>
+					<cfelseif isStruct(arguments.data) and structCount(arguments.data) gt 0 and not (isObject(arguments.data) and structKeyExists(arguments.data, 'hasNext') and structKeyExists(arguments.data, 'next') and structKeyExists(arguments.data, 'count'))>
 						<cfset keys = listSort(structKeyList(arguments.data), 'textNoCase') />
 						
 						<cfset rowNum = 0 />
