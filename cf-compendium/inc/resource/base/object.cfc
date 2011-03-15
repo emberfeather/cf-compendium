@@ -209,25 +209,42 @@
 		<cfset variables.instance = extend(arguments.defaults, arguments.values) />
 	</cffunction>
 	
-	<!---
-		Dumps out the instance struct for the object
-	--->
-	<cffunction name="print" access="public" returntype="void" output="true">
-		<cfdump var="#variables.instance#" />
-	</cffunction>
-	
-	<!---
-		Dumps out the instance struct for the object
-	--->
-	<cffunction name="printSet" access="public" returntype="void" output="true">
-		<cfset var i = '' />
+<cfscript>
+	/**
+	 * Dumps out the instance struct for the object
+	 */
+	public any function print( any source ) {
+		var result = structKeyExists(arguments, 'source') ? arguments.source : evaluate(serialize(variables.instance));
 		
-		<cfloop array="#variables.instance#" index="i">
-			<cfif isObject(i)>
-				<cfset i.print() />
-			<cfelse>
-				<cfdump var="#variables.instance#" />
-			</cfif>
-		</cfloop>
-	</cffunction>
+		if(isObject(result) && structKeyExists(result, 'get__instance')) {
+			result = evaluate(serialize(result.get__instance()));
+			
+			// Handle nested objects
+			for( key in result ) {
+				result[key] = this.print(result[key]);
+			}
+			
+			// Add meta information
+			result['__fullname'] = arguments.source.get__fullname();
+			result['__name'] = arguments.source.get__name();
+		} else if(isArray(result)) {
+			for(i = 1; i <= arrayLen(result); i++) {
+				if(!isSimplevalue(result[i])) {
+					result[i] = this.print(result[i]);
+				}
+			}
+		} else if(isStruct(result)) {
+			for( key in result ) {
+				result[key] = this.print(result[key]);
+			}
+		}
+		
+		if(!structKeyExists(arguments, 'source')) {
+			writeDump(result);
+			
+			return;
+		}
+		return result;
+	}
+</cfscript>
 </cfcomponent>

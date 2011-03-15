@@ -23,25 +23,25 @@
 <cfset options = { priority = '0.5' } />
 <cfset sitemap.addUrl('http://google.com', options) />
 
-<h2>saveSitemap('domainDirectory', 'sitemapDirectory', 'sitemapFilename')</h2>
+<h2>saveSitemap('sitemapDirectory', ['sitemapFilename', ['domainDirectory']])</h2>
 
 <blockquote>
 	<code>
-		sitemap.saveSitemap('http://domain.com', expandPath('./'))
+		sitemap.saveSitemap(expandPath('./'), 'sitemap.xml', 'http://domain.com')
 	</code>
 </blockquote>
 
-<cfset sitemap.saveSitemap('http://domain.com', expandPath('./')) />
+<cfset sitemap.saveSitemap(expandPath('./'), 'sitemap.xml', 'http://domain.com') />
 
-<h2>saveSitemapIndex('domainDirectory', 'sitemapDirectory', 'sitemapFilename')</h2>
+<h2>saveSitemapIndex('sitemapDirectory', ['sitemapFilename', ['domainDirectory']])</h2>
 
 <blockquote>
 	<code>
-		sitemap.saveSitemapIndex('http://domain.com', expandPath('./'))
+		sitemap.saveSitemapIndex(expandPath('./'), 'sitemap.xml', 'http://domain.com')
 	</code>
 </blockquote>
 
-<cfset sitemap.saveSitemapIndex('http://domain.com', expandPath('./')) />
+<cfset sitemap.saveSitemapIndex(expandPath('./'), 'sitemap_index.xml', 'http://domain.com') />
 
 <h2>Example Files</h2>
 

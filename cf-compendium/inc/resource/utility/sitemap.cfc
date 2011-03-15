@@ -21,7 +21,7 @@
 		
 		<cfset variables.keys = {} />
 		
-		<cfset variables.latestUrl = '' />
+		<cfset variables.lastUpdate = '' />
 		
 		<!--- Create an extender --->
 		<cfset variables.extender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
@@ -69,8 +69,8 @@
 			</cfif>
 			
 			<!--- Check if this is the latest url --->
-			<cfif variables.latestUrl eq '' or urlElement.lastMod gt variables.lastestUpdate>
-				<cfset variables.latestUrl = urlElement.lastMod />
+			<cfif variables.lastUpdate eq '' or urlElement.lastMod gt variables.lastUpdate>
+				<cfset variables.lastUpdate = urlElement.lastMod />
 			</cfif>
 		</cfif>
 		
@@ -91,7 +91,7 @@
 	<!---
 		Created the xml markup for the sitemap
 	--->
-	<cffunction name="createSitemap" access="private" returntype="string" output="false">
+	<cffunction name="createSitemap" access="public" returntype="string" output="false">
 		<cfset var sitemap = '' />
 		<cfset var i = '' />
 		
@@ -134,7 +134,7 @@
 		<cfset sitemapIndex = '<?xml version="1.0" encoding="UTF-8"?>' />
 		<cfset sitemapIndex &= chr(10) & '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' />
 		
-		<cfloop array="#variables.urls#" index="i">
+		<cfloop array="#variables.sitemaps#" index="i">
 			<cfset sitemapIndex &= chr(10) & '	<sitemap>' />
 			
 			<cfset sitemapIndex &= chr(10) & '		<loc>' & i.loc & '</loc>' />
@@ -227,9 +227,9 @@
 		Generates and saves the sitemap to a file. Also flags to be pinged.
 	--->
 	<cffunction name="saveSitemap" access="public" returntype="void" output="false">
-		<cfargument name="domainDirectory" type="string" required="true" />
 		<cfargument name="sitemapDirectory" type="string" required="true" />
 		<cfargument name="sitemapFilename" type="string" default="sitemap.xml" />
+		<cfargument name="domainUrl" type="string" default="" />
 		
 		<cfset var sitemap = '' />
 		<cfset var sitemapXml = '' />
@@ -243,25 +243,28 @@
 		<!--- Create the sitemap file --->
 		<cffile action="write" file="#arguments.sitemapDirectory##arguments.sitemapFilename#" output="#sitemapXml#" />
 		
-		<!--- Check for trailing slash --->
-		<cfset arguments.domainDirectory = normalize(arguments.domainDirectory) />
-		
-		<!--- Add to the array of sitemaps --->
-		<cfset sitemap = { loc = XMLFormat(arguments.domainDirectory & arguments.sitemapFilename), lastMod = variables.latestUrl } />
-		<cfset arrayAppend(variables.sitemaps, sitemap) />
+		<!--- Add to the list of sitemaps for pinging --->
+		<cfif len(arguments.domainUrl)>
+			<!--- Check for trailing slash --->
+			<cfset arguments.domainUrl = normalize(arguments.domainUrl) />
+			
+			<!--- Add to the array of sitemaps --->
+			<cfset sitemap = { loc = XMLFormat(arguments.domainUrl & arguments.sitemapFilename), lastMod = variables.lastUpdate } />
+			<cfset arrayAppend(variables.sitemaps, sitemap) />
+		</cfif>
 		
 		<!--- Clear out the sitemap variables --->
 		<cfset variables.urls = [] />
-		<cfset variables.latestUrl = '' />
+		<cfset variables.lastUpdate = '' />
 	</cffunction>
 	
 	<!---
 		Generates and saves the sitemap index to a file. Also flags to be pinged.
 	--->
 	<cffunction name="saveSitemapIndex" access="public" returntype="void" output="false">
-		<cfargument name="domainDirectory" type="string" required="true" />
 		<cfargument name="sitemapDirectory" type="string" required="true" />
 		<cfargument name="sitemapFilename" type="string" default="sitemap_index.xml" />
+		<cfargument name="domainUrl" type="string" default="" />
 		
 		<cfset var sitemapIndexXml = '' />
 		
@@ -274,11 +277,14 @@
 		<!--- Create the sitemap file --->
 		<cffile action="write" file="#arguments.sitemapDirectory##arguments.sitemapFilename#" output="#sitemapIndexXml#" />
 		
-		<!--- Check for trailing slash --->
-		<cfset arguments.domainDirectory = normalize(arguments.domainDirectory) />
-		
-		<!--- Add to the array of sitemaps --->
-		<cfset arrayAppend(variables.sitemapIndexes, XMLFormat(arguments.domainDirectory & arguments.sitemapFilename)) />
+		<!--- Add to the list of sitemap indexes for pinging --->
+		<cfif len(arguments.domainUrl)>
+			<!--- Check for trailing slash --->
+			<cfset arguments.domainUrl = normalize(arguments.domainUrl) />
+			
+			<!--- Add to the array of sitemaps --->
+			<cfset arrayAppend(variables.sitemapIndexes, XMLFormat(arguments.domainUrl & arguments.sitemapFilename)) />
+		</cfif>
 		
 		<!--- Clear out the sitemap variables --->
 		<cfset variables.sitemaps = [] />

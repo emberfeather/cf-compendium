@@ -15,7 +15,7 @@
 		<!-- Create a single, concatenated JS file -->
 		<concat destfile="${build.script}jquery.${project.name}.js">
 			<fileset dir="${build.script}" includes="jquery.base.js" />
-			<fileset dir="${build.script}" includes="jquery.wait-min.js" />
+			<fileset dir="${build.script}" includes="jquery.wait.js" />
 			<fileset dir="${build.script}" includes="jquery.timeago.js" />
 			<fileset dir="${build.script}" includes="jquery.cookie.js" />
 			<fileset dir="${build.script}" includes="jquery.form.js" />
