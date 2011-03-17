@@ -22,17 +22,18 @@ component extends="cf-compendium.inc.resource.base.object" {
 	public string function display( required string key, struct options = {} ) {
 		arguments.options = extend(variables.options, arguments.options);
 		
-		local.value = get(arguments.key);
-		
-		return local.value;
+		return getLabel(arguments.key) & get(arguments.key);
 	}
 	
 	public string function get( required string key ) {
 		return getValue(variables.source, arguments.key);
 	}
 	
+	public string function getLabel( required string key ) {
+		return variables.label.get(arguments.key);
+	}
+	
 	private string function getValue( required struct data, required string key ) {
-		/**
 		if(structKeyExists(arguments.data, arguments.key)) {
 			return arguments.data[arguments.key];
 		}
@@ -41,14 +42,9 @@ component extends="cf-compendium.inc.resource.base.object" {
 		local.nextKey = listRest(arguments.key, '.');
 		
 		if(structKeyExists(arguments.data, local.currentKey) && isStruct(arguments.data[local.currentKey])) {
-			return get( arguments.data[local.currentKey], local.nextKey );
+			return getValue( arguments.data[local.currentKey], local.nextKey );
 		}
-		**/
 		
 		return '';
-	}
-	
-	public string function getLabel( required string key ) {
-		return variables.label.get(arguments.key);
 	}
 }
