@@ -64,9 +64,7 @@
 				<cfif structKeyExists(arguments.input, i)>
 					<cfif isSimpleValue(arguments.input[i])>
 						<cfif useObject>
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(arguments.input[i])#" />
-							</cfinvoke>
+							<cfset result['set' & i](trim(arguments.input[i])) />
 						<cfelse>
 							<cfset result[i] = trim(arguments.input[i]) />
 						</cfif>
@@ -77,18 +75,14 @@
 						
 						<cfloop from="1" to="#arrayLen(arguments.input[i])#" index="j">
 							<cfif useObject>
-								<cfinvoke component="#result#" method="add#i#">
-									<cfinvokeargument name="value" value="#this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)#" />
-								</cfinvoke>
+								<cfset result['add' & i](this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)) />
 							<cfelse>
 								<cfset arrayAppend(result[i], this.deserialize(input = arguments.input[i][j], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)) />
 							</cfif>
 						</cfloop>
 					<cfelse>
 						<cfif useObject>
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)#" />
-							</cfinvoke>
+							<cfset result['set' & i](this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource)) />
 						<cfelse>
 							<cfset result[i] = this.deserialize(input = arguments.input[i], doComplete = arguments.doComplete, isTrustedSource = arguments.isTrustedSource) />
 						</cfif>
@@ -106,22 +100,18 @@
 						<!--- If the current value is an array it should be pulled in as an array --->
 						<cfif isArray(instance[i])>
 							<!--- Reset the value --->
-							<cfinvoke component="#result#" method="reset#i#" />
+							<cfset result['reset' & i]() />
 							
 							<!--- Loop through and append --->
 							<cfloop query="arguments.input">
 								<cfset value = arguments.input[i] />
 								
-								<cfinvoke component="#result#" method="add#i#">
-									<cfinvokeargument name="value" value="#trim(value)#" />
-								</cfinvoke>
+								<cfset result['add' & i](trim(value)) />
 							</cfloop>
 						<cfelse>
 							<cfset value = arguments.input[i] />
 							
-							<cfinvoke component="#result#" method="set#i#">
-								<cfinvokeargument name="value" value="#trim(value)#" />
-							</cfinvoke>
+							<cfset result['set' & i](trim(value)) />
 						</cfif>
 					</cfif>
 				</cfloop>
