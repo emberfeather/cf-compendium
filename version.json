@@ -1,8 +1,8 @@
 {
-	"archive": "http://github.com/emberfeather/cf-compendium/tarball/0.1.7",
+	"archive": "http://github.com/emberfeather/cf-compendium/tarball/0.1.8",
 	"key": "cf-compendium",
 	"title": "cf-compendium",
 	"releaseNotes": "http://github.com/emberfeather/cf-compendium/wiki/Release-Notes",
 	"URL": "http://github.com/emberfeather/cf-compendium",
-	"version": "0.1.7"
+	"version": "0.1.8"
 }
