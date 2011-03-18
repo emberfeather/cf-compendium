@@ -17,7 +17,8 @@ component extends="cf-compendium.inc.resource.base.object" {
 			},
 			value: {
 				keys: [],
-				labels: []
+				labels: [],
+				isConditional: false
 			}
 		}, arguments.options, -1);
 		
@@ -43,7 +44,26 @@ component extends="cf-compendium.inc.resource.base.object" {
 		for(local.i = 1; local.i <= arrayLen(arguments.keys); local.i++) {
 			local.result &= wrapTag(getLabel(arguments.keys[local.i]), arguments.options.wrap.label);
 			
-			if(arrayLen(arguments.options.value.keys)) {
+			local.value = get(arguments.keys[local.i]);
+			
+			// Allow for having the value be a label key to show a message
+			local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
+			
+			// Allow for empty override
+			if( local.value == '' && arguments.options.emptyDefault != '' ) {
+				local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, arguments.options.emptyDefault);
+			}
+			
+			if(local.value != '') {
+				local.result &= wrapTag(local.value, arguments.options.wrap.value);
+			}
+			
+			if(arrayLen(arguments.options.value.keys)
+				&& (
+					!arguments.options.value.isConditional
+					|| (isBoolean(local.value) && local.value == true)
+				)
+			) {
 				local.sub = '';
 				
 				// Look for multiple pieces of information to show
@@ -60,22 +80,15 @@ component extends="cf-compendium.inc.resource.base.object" {
 					
 					local.value = get(arguments.keys[local.i] & '.' & arguments.options.value.keys[local.j]);
 					
+					// Get a fully qualified value without appending
+					if(local.value == '') {
+						local.value = get(arguments.options.value.keys[local.j]);
+					}
+					
 					local.sub &= wrapTag(local.value, arguments.options.wrap.value);
 				}
 				
 				local.result &= wrapTag(local.sub, arguments.options.wrap.innerContainer);
-			} else {
-				local.value = get(arguments.keys[local.i]);
-				
-				// Allow for having the value be a label key to show a message
-				local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
-				
-				// Allow for empty override
-				if( local.value == '' && arguments.options.emptyDefault != '' ) {
-					local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, arguments.options.emptyDefault);
-				}
-				
-				local.result &= wrapTag(local.value, arguments.options.wrap.value);
 			}
 		}
 		
@@ -112,9 +125,6 @@ component extends="cf-compendium.inc.resource.base.object" {
 			) {
 			return getValue( arguments.data['get' & local.currentKey](), local.nextKey );
 		}
-		
-		writeDump(arguments);
-		abort;
 		
 		return '';
 	}
