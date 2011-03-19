@@ -180,6 +180,8 @@ component extends="cf-compendium.inc.resource.base.object" {
 			local.result &= wrapTag(arguments.value[local.j], arguments.options.wrap.value);
 		}
 		
+		local.result = wrapTag(local.result, arguments.options.wrap.innerContainer);
+		
 		return local.result;
 	}
 	
@@ -208,6 +210,8 @@ component extends="cf-compendium.inc.resource.base.object" {
 				
 				// Also remove the period separator
 				arguments.key = right(arguments.key, local.keyLength - local.mappingLength - 1);
+				
+				break;
 			}
 		}
 		
