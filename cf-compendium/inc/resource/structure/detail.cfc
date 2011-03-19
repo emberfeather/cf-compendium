@@ -44,21 +44,29 @@ component extends="cf-compendium.inc.resource.base.object" {
 		local.result = '';
 		
 		for(local.i = 1; local.i <= arrayLen(arguments.keys); local.i++) {
-			local.result &= wrapTag(getLabel(arguments.keys[local.i]), arguments.options.wrap.label);
+			local.result &= wrapTag(variables.label.get(arguments.keys[local.i]), arguments.options.wrap.label);
+			
+			local.areSubValues = arrayLen(arguments.options.value.keys);
 			
 			local.value = get(arguments.keys[local.i]);
 			
-			// Allow for having the value be a label key to show a message
-			local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
+			if(isArray(local.value) && !local.areSubValues) {
+				local.result &= displayArray(arguments.keys[local.i], local.value, arguments.options);
+			} else if(isStruct(local.value) && !local.areSubValues) {
+				local.result &= displayStruct(arguments.keys[local.i], local.value, arguments.options);
+			} else if(isSimpleValue(local.value)) {
+				// Allow for having the value be a label key to show a message
+				local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
+			}
 			
 			// Determine if we are showing sub values
-			local.areSubValues = arrayLen(arguments.options.value.keys)
+			local.areSubValues = local.areSubValues
 				&& (
 					!arguments.options.value.isConditional
 					|| (isBoolean(local.value) && local.value == true)
 				);
 			
-			if(!local.areSubValues || local.value != '') {
+			if(!isArray(local.value) && !isStruct(local.value) && (!local.areSubValues || local.value != '')) {
 				if( local.value == '' && arguments.options.emptyDefault != '' ) {
 					// Allow for empty override
 					local.value = variables.label.get(arguments.options.emptyDefault, arguments.options.emptyDefault);
@@ -76,9 +84,9 @@ component extends="cf-compendium.inc.resource.base.object" {
 				for(local.j = 1; local.j <= arrayLen(arguments.options.value.keys); local.j++) {
 					if(arrayLen(arguments.options.value.labels) >= local.j) {
 						if(variables.label.has(arguments.options.value.labels[local.j])) {
-							local.label = getLabel(arguments.options.value.labels[local.j]);
+							local.label = variables.label.get(arguments.options.value.labels[local.j]);
 						} else {
-							local.label = getLabel(arguments.keys[local.i] & '.' & arguments.options.value.labels[local.j]);
+							local.label = variables.label.get(arguments.keys[local.i] & '.' & arguments.options.value.labels[local.j]);
 						}
 						
 						local.sub &= wrapTag(local.label, arguments.options.wrap.label);
@@ -86,21 +94,26 @@ component extends="cf-compendium.inc.resource.base.object" {
 					
 					local.value = get(arguments.keys[local.i] & '.' & arguments.options.value.keys[local.j]);
 					
-					
 					// Get a fully qualified value without appending
-					if(local.value == '') {
+					if(isSimpleValue(local.value) && local.value == '') {
 						local.value = get(arguments.options.value.keys[local.j]);
 					}
 					
-					if( local.value != '') {
-						// Allow for having the value be a label key to show a message
-						local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
-					} else if( local.value == '' && arguments.options.emptyDefault != '' ) {
-						// Allow for empty override
-						local.value = variables.label.get(arguments.options.emptyDefault, arguments.options.emptyDefault);
+					if(isSimpleValue(local.value)) {
+						if( local.value != '') {
+							// Allow for having the value be a label key to show a message
+							local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
+						} else if( local.value == '' && arguments.options.emptyDefault != '' ) {
+							// Allow for empty override
+							local.value = variables.label.get(arguments.options.emptyDefault, arguments.options.emptyDefault);
+						}
+						
+						local.sub &= wrapTag(local.value, arguments.options.wrap.value);
+					} else if(isArray(local.value)) {
+						local.sub &= displayArray(arguments.keys[local.i], local.value, arguments.options);
+					} else if(isStruct(local.value)) {
+						local.sub &= displayStruct(arguments.keys[local.i], local.value, arguments.options);
 					}
-					
-					local.sub &= wrapTag(local.value, arguments.options.wrap.value);
 				}
 				
 				local.result &= wrapTag(local.sub, arguments.options.wrap.innerContainer);
@@ -110,7 +123,45 @@ component extends="cf-compendium.inc.resource.base.object" {
 		return wrapTag(local.result, arguments.options.wrap.outerContainer);
 	}
 	
-	public string function get( required string key ) {
+	public string function displayStruct( required string key, required struct value, struct options = {} ) {
+		local.result = '';
+		local.keys = listToArray(listSort(structKeyList(arguments.value), 'text'));
+		
+		for(local.i = 1; local.i <= arrayLen(local.keys); local.i++) {
+			if(variables.label.has(local.keys[local.i])) {
+				local.label = variables.label.get(local.keys[local.i]);
+			} else {
+				local.label = variables.label.get(arguments.key & '.' & local.keys[local.i], local.keys[local.i]);
+			}
+			
+			local.result &= wrapTag(local.label, arguments.options.wrap.label);
+			
+			local.result &= wrapTag(arguments.value[local.keys[local.i]], arguments.options.wrap.value);
+		}
+		
+		local.result = wrapTag(local.result, arguments.options.wrap.innerContainer);
+		
+		return local.result;
+	}
+	
+	public string function displayArray( required string key, required array value, struct options = {} ) {
+		local.result = '';
+		
+		for(local.j = 1; local.j <= arrayLen(arguments.value); local.j++) {
+			// Allow for having the value be a label key to show a message
+			if(variables.label.has(arguments.value[local.j])) {
+				arguments.value[local.j] = variables.label.get(arguments.value[local.j]);
+			} else if(variables.label.has(arguments.key & '.' & arguments.value[local.j])) {
+				arguments.value[local.j] = variables.label.get(arguments.key & '.' & arguments.value[local.j]);
+			}
+			
+			local.result &= wrapTag(arguments.value[local.j], arguments.options.wrap.value);
+		}
+		
+		return local.result;
+	}
+	
+	public any function get( required string key ) {
 		local.source = variables.source;
 		local.keys = listToArray(structKeyList(variables.mappings));
 		local.keyLength = len(arguments.key);
@@ -135,11 +186,24 @@ component extends="cf-compendium.inc.resource.base.object" {
 	}
 	
 	private any function getValue( required struct data, required string key ) {
-		if(structKeyExists(arguments.data, arguments.key) && isSimpleValue(arguments.data[arguments.key])) {
+		if(arguments.key == '') {
+			return arguments.data;
+		}
+		
+		if( structKeyExists(arguments.data, arguments.key) 
+			&& (
+				isSimpleValue(arguments.data[arguments.key])
+				|| isArray(arguments.data[arguments.key])
+			) ) {
 			return arguments.data[arguments.key];
 		}
 		
-		if(isObject(arguments.data) && arguments.data['has' & arguments.key]() && isSimpleValue(arguments.data['get' & arguments.key]())) {
+		if( isObject(arguments.data)
+			&& arguments.data['has' & arguments.key]()
+			&& (
+				isSimpleValue(arguments.data['get' & arguments.key]())
+				|| isArray(arguments.data['get' & arguments.key]())
+			) ) {
 			return arguments.data['get' & arguments.key]();
 		}
 		
