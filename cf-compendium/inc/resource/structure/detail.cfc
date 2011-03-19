@@ -22,6 +22,8 @@ component extends="cf-compendium.inc.resource.base.object" {
 			}
 		}, arguments.options, -1);
 		
+		variables.mappings = {};
+		
 		// Set base bundle for translation
 		addBundle('/cf-compendium/i18n/inc/resource/structure', 'detail');
 		
@@ -84,6 +86,7 @@ component extends="cf-compendium.inc.resource.base.object" {
 					
 					local.value = get(arguments.keys[local.i] & '.' & arguments.options.value.keys[local.j]);
 					
+					
 					// Get a fully qualified value without appending
 					if(local.value == '') {
 						local.value = get(arguments.options.value.keys[local.j]);
@@ -108,14 +111,30 @@ component extends="cf-compendium.inc.resource.base.object" {
 	}
 	
 	public string function get( required string key ) {
-		return getValue(variables.source, arguments.key);
+		local.source = variables.source;
+		local.keys = listToArray(structKeyList(variables.mappings));
+		local.keyLength = len(arguments.key);
+		
+		for(local.i = 1; local.i <= arrayLen(local.keys); local.i++) {
+			local.mappingLength = len(local.keys[local.i]);
+			
+			// If we found a mapping than use it at the base to get the value from
+			if(local.keyLength > local.mappingLength + 1 && left(arguments.key, local.mappingLength) == local.keys[i]) {
+				local.source = variables.mappings[local.keys[local.i]];
+				
+				// Also remove the period separator
+				arguments.key = right(arguments.key, local.keyLength - local.mappingLength - 1);
+			}
+		}
+		
+		return getValue(local.source, arguments.key);
 	}
 	
 	public string function getLabel( required string key ) {
 		return variables.label.get(arguments.key);
 	}
 	
-	private string function getValue( required struct data, required string key ) {
+	private any function getValue( required struct data, required string key ) {
 		if(structKeyExists(arguments.data, arguments.key) && isSimpleValue(arguments.data[arguments.key])) {
 			return arguments.data[arguments.key];
 		}
@@ -139,6 +158,10 @@ component extends="cf-compendium.inc.resource.base.object" {
 		}
 		
 		return '';
+	}
+	
+	public void function map(required string path, required struct value) {
+		variables.mappings[arguments.path] = arguments.value;
 	}
 	
 	private string function wrapTag( required string value, string tag = '' ) {
