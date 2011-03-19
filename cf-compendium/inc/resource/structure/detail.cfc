@@ -5,6 +5,7 @@ component extends="cf-compendium.inc.resource.base.object" {
 		variables.i18n = arguments.i18n;
 		variables.locale = arguments.locale;
 		variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale);
+		variables.format = createObject('component', 'cf-compendium.inc.resource.format.format').init(arguments.i18n, arguments.locale);
 		
 		variables.source = arguments.source;
 		variables.options = extend({
@@ -32,6 +33,11 @@ component extends="cf-compendium.inc.resource.base.object" {
 	
 	public void function addBundle(required string path, required string name) {
 		variables.label.addBundle(argumentCollection = arguments);
+		variables.format.add__bundle(argumentCollection = arguments);
+	}
+	
+	public void function addFormatter(required component formatter) {
+		variables.format.add__formatter(arguments.formatter);
 	}
 	
 	public string function display( required any keys, struct options = {} ) {
@@ -73,6 +79,10 @@ component extends="cf-compendium.inc.resource.base.object" {
 				}
 				
 				if(local.value != '') {
+					if(structKeyExists(arguments.options, 'format')) {
+						local.value = this.format(local.value, arguments.options.format);
+					}
+					
 					local.result &= wrapTag(local.value, arguments.options.wrap.value);
 				}
 			}
@@ -108,6 +118,10 @@ component extends="cf-compendium.inc.resource.base.object" {
 							local.value = variables.label.get(arguments.options.emptyDefault, arguments.options.emptyDefault);
 						}
 						
+						if(structKeyExists(arguments.options, 'format')) {
+							local.value = this.format(local.value, arguments.options.format);
+						}
+						
 						local.sub &= wrapTag(local.value, arguments.options.wrap.value);
 					} else if(isArray(local.value)) {
 						local.sub &= displayArray(arguments.keys[local.i], local.value, arguments.options);
@@ -136,6 +150,10 @@ component extends="cf-compendium.inc.resource.base.object" {
 			
 			local.result &= wrapTag(local.label, arguments.options.wrap.label);
 			
+			if(structKeyExists(arguments.options, 'format')) {
+				local.value[local.keys[local.i]] = this.format(local.value[local.keys[local.i]], arguments.options.format);
+			}
+			
 			local.result &= wrapTag(arguments.value[local.keys[local.i]], arguments.options.wrap.value);
 		}
 		
@@ -155,10 +173,25 @@ component extends="cf-compendium.inc.resource.base.object" {
 				arguments.value[local.j] = variables.label.get(arguments.key & '.' & arguments.value[local.j]);
 			}
 			
+			if(structKeyExists(arguments.options, 'format')) {
+				local.value[local.j] = this.format(local.value[local.j], arguments.options.format);
+			}
+			
 			local.result &= wrapTag(arguments.value[local.j], arguments.options.wrap.value);
 		}
 		
 		return local.result;
+	}
+	
+	private string function format( required string value, struct format = {} ) {
+		local.result = '';
+		local.keys = listToArray(structKeyList(arguments.format));
+		
+		for(local.i = 1; local.i <= arrayLen(local.keys); local.i++) {
+			arguments.value = variables.format[local.keys[local.i]](arguments.value, arguments.format[local.keys[local.i]]);
+		}
+		
+		return arguments.value;
 	}
 	
 	public any function get( required string key ) {
