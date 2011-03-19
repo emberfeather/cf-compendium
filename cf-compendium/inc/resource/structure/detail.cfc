@@ -57,9 +57,9 @@ component extends="cf-compendium.inc.resource.base.object" {
 				);
 			
 			if(!local.areSubValues || local.value != '') {
-				// Allow for empty override
 				if( local.value == '' && arguments.options.emptyDefault != '' ) {
-					local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, arguments.options.emptyDefault);
+					// Allow for empty override
+					local.value = variables.label.get(arguments.options.emptyDefault, arguments.options.emptyDefault);
 				}
 				
 				if(local.value != '') {
@@ -87,6 +87,14 @@ component extends="cf-compendium.inc.resource.base.object" {
 					// Get a fully qualified value without appending
 					if(local.value == '') {
 						local.value = get(arguments.options.value.keys[local.j]);
+					}
+					
+					if( local.value != '') {
+						// Allow for having the value be a label key to show a message
+						local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
+					} else if( local.value == '' && arguments.options.emptyDefault != '' ) {
+						// Allow for empty override
+						local.value = variables.label.get(arguments.options.emptyDefault, arguments.options.emptyDefault);
 					}
 					
 					local.sub &= wrapTag(local.value, arguments.options.wrap.value);
