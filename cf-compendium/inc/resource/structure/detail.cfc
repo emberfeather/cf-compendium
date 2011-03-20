@@ -56,6 +56,13 @@ component extends="cf-compendium.inc.resource.base.object" {
 			
 			local.value = get(arguments.keys[local.i]);
 			
+			// Determine if we are showing sub values
+			local.areSubValues = local.areSubValues
+				&& (
+					!arguments.options.value.isConditional
+					|| (isBoolean(local.value) && local.value == true)
+				);
+			
 			if(isArray(local.value) && !local.areSubValues) {
 				local.result &= displayArray(arguments.keys[local.i], local.value, arguments.options);
 			} else if(isStruct(local.value) && !local.areSubValues) {
@@ -64,13 +71,6 @@ component extends="cf-compendium.inc.resource.base.object" {
 				// Allow for having the value be a label key to show a message
 				local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
 			}
-			
-			// Determine if we are showing sub values
-			local.areSubValues = local.areSubValues
-				&& (
-					!arguments.options.value.isConditional
-					|| (isBoolean(local.value) && local.value == true)
-				);
 			
 			if(!isArray(local.value) && !isStruct(local.value) && (!local.areSubValues || local.value != '')) {
 				if( local.value == '' && arguments.options.emptyDefault != '' ) {
@@ -137,6 +137,34 @@ component extends="cf-compendium.inc.resource.base.object" {
 		return wrapTag(local.result, arguments.options.wrap.outerContainer);
 	}
 	
+	public string function displayArray( required string key, required array value, struct options = {} ) {
+		local.result = '';
+		
+		for(local.j = 1; local.j <= arrayLen(arguments.value); local.j++) {
+			// Allow for having the value be a label key to show a message
+			if(variables.label.has(arguments.value[local.j])) {
+				arguments.value[local.j] = variables.label.get(arguments.value[local.j]);
+			} else if(variables.label.has(arguments.key & '.' & arguments.value[local.j])) {
+				arguments.value[local.j] = variables.label.get(arguments.key & '.' & arguments.value[local.j]);
+			}
+			
+			// Allow for having the value be a label key to show a message
+			if( arguments.value[local.j] != '') {
+				arguments.value[local.j] = variables.label.get(arguments.key & '.' & arguments.value[local.j], arguments.value[local.j]);
+			}
+			
+			if(structKeyExists(arguments.options, 'format')) {
+				local.value[local.j] = this.format(arguments.value[local.j], arguments.options.format);
+			}
+			
+			local.result &= wrapTag(arguments.value[local.j], arguments.options.wrap.value);
+		}
+		
+		local.result = wrapTag(local.result, arguments.options.wrap.innerContainer);
+		
+		return local.result;
+	}
+	
 	public string function displayStruct( required string key, required struct value, struct options = {} ) {
 		local.result = '';
 		local.keys = listToArray(listSort(structKeyList(arguments.value), 'text'));
@@ -150,34 +178,16 @@ component extends="cf-compendium.inc.resource.base.object" {
 			
 			local.result &= wrapTag(local.label, arguments.options.wrap.label);
 			
+			// Allow for having the value be a label key to show a message
+			if( arguments.value[local.keys[local.i]] != '') {
+				arguments.value[local.keys[local.i]] = variables.label.get(arguments.key & '.' & local.keys[local.i] & '.' & arguments.value[local.keys[local.i]], arguments.value[local.keys[local.i]]);
+			}
+			
 			if(structKeyExists(arguments.options, 'format')) {
-				local.value[local.keys[local.i]] = this.format(local.value[local.keys[local.i]], arguments.options.format);
+				arguments.value[local.keys[local.i]] = this.format(local.value[local.keys[local.i]], arguments.options.format);
 			}
 			
 			local.result &= wrapTag(arguments.value[local.keys[local.i]], arguments.options.wrap.value);
-		}
-		
-		local.result = wrapTag(local.result, arguments.options.wrap.innerContainer);
-		
-		return local.result;
-	}
-	
-	public string function displayArray( required string key, required array value, struct options = {} ) {
-		local.result = '';
-		
-		for(local.j = 1; local.j <= arrayLen(arguments.value); local.j++) {
-			// Allow for having the value be a label key to show a message
-			if(variables.label.has(arguments.value[local.j])) {
-				arguments.value[local.j] = variables.label.get(arguments.value[local.j]);
-			} else if(variables.label.has(arguments.key & '.' & arguments.value[local.j])) {
-				arguments.value[local.j] = variables.label.get(arguments.key & '.' & arguments.value[local.j]);
-			}
-			
-			if(structKeyExists(arguments.options, 'format')) {
-				local.value[local.j] = this.format(local.value[local.j], arguments.options.format);
-			}
-			
-			local.result &= wrapTag(arguments.value[local.j], arguments.options.wrap.value);
 		}
 		
 		local.result = wrapTag(local.result, arguments.options.wrap.innerContainer);
