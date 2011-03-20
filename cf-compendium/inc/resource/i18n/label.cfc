@@ -40,6 +40,21 @@
 		<cfreturn arguments.default />
 	</cffunction>
 	
+	<cffunction name="has" access="public" returntype="boolean" output="false">
+		<cfargument name="key" type="string" required="true" />
+		
+		<cfset var i = '' />
+		
+		<!--- Find the first (LIFO) value for the label --->
+		<cfloop from="#arrayLen(variables.bundles)#" to="1" index="i" step="-1">
+			<cfif variables.bundles[i].hasKey(arguments.key)>
+				<cfreturn true />
+			</cfif>
+		</cfloop>
+		
+		<cfreturn false />
+	</cffunction>
+	
 	<!---
 		Used to handle dynamic getters
 	--->
