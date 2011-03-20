@@ -1,5 +1,5 @@
 component extends="cf-compendium.inc.resource.base.formatter" {
-	public string function date(required date value, any options) {
+	public string function date(required any value, any options) {
 		if(!isDate(arguments.value)) {
 			return arguments.value;
 		}
@@ -7,7 +7,7 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		return dateFormat(arguments.value, arguments.options.mask);
 	}
 	
-	public string function datetime(required date value, any options) {
+	public string function datetime(required any value, any options) {
 		if(!isDate(arguments.value)) {
 			return arguments.value;
 		}
@@ -19,7 +19,7 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		return htmlEditFormat(arguments.value);
 	}
 	
-	public string function time(required date value, any options) {
+	public string function time(required any value, any options) {
 		if(!isDate(arguments.value)) {
 			return arguments.value;
 		}
@@ -27,7 +27,7 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		return timeFormat(arguments.value, arguments.options.mask);
 	}
 	
-	public string function uuid(required string value, any options) {
+	public string function uuid(required any value, any options) {
 		if(!isDate(arguments.value)) {
 			return arguments.value;
 		}
