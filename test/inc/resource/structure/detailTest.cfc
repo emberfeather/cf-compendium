@@ -56,61 +56,61 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testDetail_object_blankOnMissing_withComplex() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, variables.objects.complex);
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.objects.complex, variables.i18n);
 		
 		assertEquals('', local.detail.get('test.test'));
 	}
 	
 	public void function testDetail_object_blankOnMissing_withEmpty() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, {});
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init({}, variables.i18n);
 		
 		assertEquals('', local.detail.get('test'));
 	}
 	
 	public void function testDetail_object_blankOnMissing_withSimple() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, variables.objects.simple);
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.objects.simple, variables.i18n);
 		
 		assertEquals('', local.detail.get('test'));
 	}
 	
 	public void function testDetail_object_value_withComplex() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, variables.objects.complex);
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.objects.complex, variables.i18n);
 		
 		assertEquals(true, local.detail.get('foo.bar'));
 	}
 	
 	public void function testDetail_object_value_withSimple() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, variables.objects.simple);
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.objects.simple, variables.i18n);
 		
 		assertEquals('bread', local.detail.get('banana'));
 	}
 	
 	public void function testDetail_struct_blankOnMissing_withComplex() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, variables.structs.complex);
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.structs.complex, variables.i18n);
 		
 		assertEquals('', local.detail.get('test.test'));
 	}
 	
 	public void function testDetail_struct_blankOnMissing_withEmpty() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, {});
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init({}, variables.i18n);
 		
 		assertEquals('', local.detail.get('test'));
 	}
 	
 	public void function testDetail_struct_blankOnMissing_withSimple() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, variables.structs.simple);
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.structs.simple, variables.i18n);
 		
 		assertEquals('', local.detail.get('test'));
 	}
 	
 	public void function testDetail_struct_value_withComplex() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, variables.structs.complex);
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.structs.complex, variables.i18n);
 		
 		assertEquals(true, local.detail.get('foo.bar'));
 	}
 	
 	public void function testDetail_struct_value_withSimple() {
-		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.i18n, variables.structs.simple);
+		local.detail = createObject('component', 'cf-compendium.inc.resource.structure.detail').init(variables.structs.simple, variables.i18n);
 		
 		assertEquals('bread', local.detail.get('banana'));
 	}
