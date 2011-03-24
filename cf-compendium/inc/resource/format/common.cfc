@@ -19,6 +19,14 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		return htmlEditFormat(arguments.value);
 	}
 	
+	public string function number(required string value, any options) {
+		if(!isNumeric(arguments.value)) {
+			return arguments.value;
+		}
+		
+		return numberFormat(arguments.value, arguments.options.mask);
+	}
+	
 	public string function time(required any value, any options) {
 		if(!isDate(arguments.value)) {
 			return arguments.value;
