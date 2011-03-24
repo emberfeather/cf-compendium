@@ -15,6 +15,14 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		return dateFormat(arguments.value, arguments.options.mask.date) & ' ' & timeFormat(arguments.value, arguments.options.mask.time);
 	}
 	
+	public string function dollar(required any value, any options) {
+		if(!isNumeric(arguments.value)) {
+			return arguments.value;
+		}
+		
+		return dollarFormat(arguments.value);
+	}
+	
 	public string function htmlEdit(required string value, any options) {
 		return htmlEditFormat(arguments.value);
 	}
