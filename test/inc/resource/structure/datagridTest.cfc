@@ -219,32 +219,4 @@ component extends="mxunit.framework.TestCase" {
 		
 		assertEquals(10, datagrid.calculateDerived({'sum-value' = 6}, 'sum', 'value', data, 4, { startRow = 1 }));
 	}
-	
-	/**
-	 * Test the formatValue with a date format
-	 */
-	public void function testFormatValue_WithDate() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
-		var value = '';
-		
-		makePublic(datagrid, 'formatValue');
-		
-		value = createDate(2009, 11, 13);
-		
-		assertEquals('13 Nov 2009', datagrid.formatValue({ type = 'date', format = 'd mmm yyyy' }, value));
-	}
-	
-	/**
-	 * Test the formatValue with a time format
-	 */
-	public void function testFormatValue_WithTime() {
-		var datagrid = createObject('component', 'cf-compendium.inc.resource.structure.datagrid').init(variables.i18n);
-		var value = '';
-		
-		makePublic(datagrid, 'formatValue');
-		
-		value = createTime(14, 34, 12);
-		
-		assertEquals('02:34:12 PM', datagrid.formatValue({ type = 'time', format = 'hh:mm:ss tt' }, value));
-	}
 }
