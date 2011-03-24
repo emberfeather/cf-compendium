@@ -28,7 +28,7 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 	}
 	
 	public string function uuid(required any value, any options) {
-		if(!isDate(arguments.value)) {
+		if(len(arguments.value) <= 8) {
 			return arguments.value;
 		}
 		

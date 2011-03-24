@@ -6,11 +6,15 @@
 		variables.i18n = arguments.i18n;
 		variables.locale = arguments.locale;
 		variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale);
+		variables.format = createObject('component', 'cf-compendium.inc.resource.format.format').init(arguments.i18n, arguments.locale);
 		
 		variables.columns = [];
 		
 		// Set base bundle for translation
 		addBundle('/cf-compendium/i18n/inc/resource/structure', 'datagrid');
+		
+		// Add the custom formatters for datagrids
+		variables.format.add__formatter(createObject('component', 'cf-compendium.inc.resource.format.datagrid').init());
 		
 		return this;
 	}
@@ -18,13 +22,12 @@
 	public void function addColumn(struct options = {}) {
 		var defaults = {
 			class = '',
-			format = '',
+			format = {},
 			key = '',
 			label = '',
 			link = [],
 			linkClass = [],
 			title = '',
-			type = 'text',
 			value = ''
 		};
 		
@@ -42,6 +45,11 @@
 	
 	public void function addBundle(required string path, required string name) {
 		variables.label.addBundle(argumentCollection = arguments);
+		variables.format.add__bundle(argumentCollection = arguments);
+	}
+	
+	public void function addFormatter(required component formatter) {
+		variables.format.add__formatter(arguments.formatter);
 	}
 </cfscript>
 	<cffunction name="calculateDerived" access="private" returntype="string" output="false">
@@ -147,7 +155,7 @@
 					
 					<cfset href = theUrl['getDGCol#arguments.colNum#Link#i#']() />
 					
-					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#formatValue(arguments.column, arguments.text)#</a>
+					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#this.format(arguments.text, arguments.column.format)#</a>
 				</cfloop>
 			</cfoutput>
 		</cfsavecontent>
@@ -155,30 +163,15 @@
 		<cfreturn html />
 	</cffunction>
 <cfscript>
-	private string function formatValue(required struct column, required string value) {
-		switch (arguments.column.type) {
-			case 'checkbox':
-				return '<input type="checkbox" name="checkboxSelect[]" value="' & arguments.value & '" />';
-			
-			// Use the format as a holder for a formatter
-			case 'custom':
-				return arguments.column.format.toHTML(arguments.value);
-			
-			case 'date':
-				return dateFormat(arguments.value, arguments.column.format);
-			
-			case 'time':
-				return timeFormat(arguments.value, arguments.column.format);
-			
-			case 'raw':
-				return arguments.value;
-			
-			case 'uuid':
-				return left(arguments.value, 8);
-			
-			default:
-				return htmlEditFormat(arguments.value);
+	private string function format( required string value, struct format = {} ) {
+		local.result = '';
+		local.keys = listToArray(structKeyList(arguments.format));
+		
+		for(local.i = 1; local.i <= arrayLen(local.keys); local.i++) {
+			arguments.value = variables.format[local.keys[local.i]](arguments.value, arguments.format[local.keys[local.i]]);
 		}
+		
+		return arguments.value;
 	}
 	
 	public string function getNestedValue( required struct data, required string key ) {
@@ -451,7 +444,7 @@
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
 												<cfelse>
-													#formatValue(col, value)#
+													#this.format(value, col.format)#
 												</cfif>
 											</td>
 										</cfloop>
@@ -479,7 +472,7 @@
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
 												<cfelse>
-													#formatValue(col, value)#
+													#this.format(value, col.format)#
 												</cfif>
 											</td>
 										</cfloop>
@@ -532,7 +525,7 @@
 										<cfif arrayLen(col.link)>
 											#createLink(value, col, data, rowNum, counter, arguments.options)#
 										<cfelse>
-											#formatValue(col, value)#
+											#this.format(value, col.format)#
 										</cfif>
 									</td>
 								</cfloop>
@@ -566,7 +559,7 @@
 												<!--- Mocking the data as an array of structs and hardcoding the row --->
 												#createLink(value, col, [ local.current ], 1, counter, arguments.options)#
 											<cfelse>
-												#formatValue(col, value)#
+												#this.format(value, col.format)#
 											</cfif>
 										</td>
 									</cfloop>
@@ -603,7 +596,7 @@
 											<cfif arrayLen(col.link)>
 												#createLink(value, col, data, rowNum, counter, arguments.options)#
 											<cfelse>
-												#formatValue(col, value)#
+												#this.format(value, col.format)#
 											</cfif>
 										</td>
 									</cfloop>
