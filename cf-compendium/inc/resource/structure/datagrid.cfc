@@ -13,9 +13,6 @@
 		// Set base bundle for translation
 		addBundle('/cf-compendium/i18n/inc/resource/structure', 'datagrid');
 		
-		// Add the custom formatters for datagrids
-		variables.format.add__formatter(createObject('component', 'cf-compendium.inc.resource.format.datagrid').init());
-		
 		return this;
 	}
 	
