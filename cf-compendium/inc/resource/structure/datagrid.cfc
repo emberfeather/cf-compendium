@@ -23,6 +23,7 @@
 		var defaults = {
 			class = '',
 			format = {},
+			isHeader = false,
 			key = '',
 			label = '',
 			link = [],
@@ -286,7 +287,7 @@
 						<cfset counter = 0 />
 						
 						<cfloop array="#variables.columns#" index="col">
-							<td class="#col.key# #col.class# column-#counter++# capitalize">
+							<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++# capitalize">
 								<cfif structKeyExists(col, 'aggregate')>
 									<cfset currentKey = col.key & '-' & col.aggregate />
 									
@@ -399,7 +400,7 @@
 								<cfelse>
 									&nbsp;
 								</cfif>
-							</td>
+							</#(col.isHeader ? 'th' : 'td')#>
 						</cfloop>
 					</tr>
 				</cfoutput>
@@ -430,7 +431,7 @@
 										<cfloop array="#variables.columns#" index="col">
 											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 											
-											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+											<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine the value --->
 												<cfif col.key neq ''>
 													<cfset value = item['get' & col.key]() />
@@ -446,7 +447,7 @@
 												<cfelse>
 													#this.format(value, col.format)#
 												</cfif>
-											</td>
+											</#(col.isHeader ? 'th' : 'td')#>
 										</cfloop>
 									<cfelseif isStruct(item)>
 										<cfset counter = 0 />
@@ -454,7 +455,7 @@
 										<cfloop array="#variables.columns#" index="col">
 											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 											
-											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+											<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine Value --->
 												<cfif col.key neq ''>
 													<cfif structKeyExists(item, col.key)>
@@ -474,20 +475,20 @@
 												<cfelse>
 													#this.format(value, col.format)#
 												</cfif>
-											</td>
+											</#(col.isHeader ? 'th' : 'td')#>
 										</cfloop>
 									<cfelseif isSimpleValue(item)>
 										<cfloop array="#variables.columns#" index="col">
 											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 											
-											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+											<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(item, col, data, rowNum, counter, arguments.options)#
 												<cfelse>
 													#item#
 												</cfif>
-											</td>
+											</#(col.isHeader ? 'th' : 'td')#>
 										</cfloop>
 									<cfelse>
 										<cfthrow message="The data type passed in is not suported." detail="The type of the data in the array is not of type struct, object or simpleValue.">
@@ -511,7 +512,7 @@
 								<cfloop array="#variables.columns#" index="col">
 									<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 									
-									<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+									<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 										<!--- Determine Value --->
 										<cfif col.key neq ''>
 											<cfset value = arguments.data[col.key] />
@@ -527,7 +528,7 @@
 										<cfelse>
 											#this.format(value, col.format)#
 										</cfif>
-									</td>
+									</#(col.isHeader ? 'th' : 'td')#>
 								</cfloop>
 							</tr>
 						</cfoutput>
@@ -546,7 +547,7 @@
 										<!--- Mocking the data as an array of structs and hardcoding the row --->
 										<cfset title = col.title neq '' ? getValue([ local.current ], 1, col.title) : '' />
 										
-										<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+										<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 											<!--- Determine Value --->
 											<cfif col.key neq ''>
 												<cfset value = local.current[col.key] />
@@ -561,7 +562,7 @@
 											<cfelse>
 												#this.format(value, col.format)#
 											</cfif>
-										</td>
+										</#(col.isHeader ? 'th' : 'td')#>
 									</cfloop>
 								</tr>
 							</cfloop>
@@ -582,7 +583,7 @@
 									<cfloop array="#variables.columns#" index="col">
 										<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 										
-										<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+										<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 											<!--- Determine Value --->
 											<cfif col.key neq ''>
 												<cfset value = arguments.data[key][col.key] />
@@ -598,7 +599,7 @@
 											<cfelse>
 												#this.format(value, col.format)#
 											</cfif>
-										</td>
+										</#(col.isHeader ? 'th' : 'td')#>
 									</cfloop>
 								</tr>
 							</cfloop>
