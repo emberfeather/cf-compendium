@@ -131,7 +131,7 @@
 		elements. To keep the default elements available call super.formatElement in the default
 		case of the override function.
 	--->
-	<cffunction name="elementToHTML" access="private" returntype="string" output="false">
+	<cffunction name="elementToHTML" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfswitch expression="#arguments.element.elementType#">
