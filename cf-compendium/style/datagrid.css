@@ -22,7 +22,8 @@
 }
 
 .datagrid thead,
-.datagrid tfoot {
+.datagrid tfoot,
+.datagrid tbody th {
 	font-weight: bold;
 	background: #ededed;
 	text-align: left;
