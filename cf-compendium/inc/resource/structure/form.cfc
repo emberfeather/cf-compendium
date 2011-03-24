@@ -48,38 +48,10 @@
 		<cfargument name="elementType" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
-		<cfset var defaults = {
-			accessKey = '',
-			class = '',
-			contentEditable = '',
-			contextMenu = '',
-			desc = '',
-			dir = '',
-			disabled = false,
-			draggable = '',
-			elementClass = '',
-			hidden = '',
-			id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
-			label = '',
-			lang = '',
-			link = '',
-			name = '',
-			postElement = '',
-			preElement = '',
-			required = false,
-			size = '',
-			spellcheck = '',
-			tabIndex = '',
-			tip = '',
-			title = ''
-		} />
 		<cfset var element = '' />
 		
 		<!--- Extend the form options --->
-		<cfset element = variables.extender.extend(defaults, arguments.options) />
-		
-		<!--- Set the element type --->
-		<cfset element.elementType = arguments.elementType />
+		<cfset element = extendElement(argumentCollection = arguments) />
 		
 		<!--- Append the the element --->
 		<cfset arrayAppend(variables.elements, element) />
@@ -305,6 +277,42 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfthrow message="Unsupported Form Element" detail="The #arguments.element.elementType# type of element is currently unsupported." />
+	</cffunction>
+	
+	<cffunction name="extendElement" access="public" returntype="struct" output="false">
+		<cfargument name="elementType" type="string" required="true" />
+		<cfargument name="options" type="struct" default="#{}#" />
+		
+		<cfset local.element = variables.extender.extend({
+			accessKey = '',
+			class = '',
+			contentEditable = '',
+			contextMenu = '',
+			desc = '',
+			dir = '',
+			disabled = false,
+			draggable = '',
+			elementClass = '',
+			hidden = '',
+			id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
+			label = '',
+			lang = '',
+			link = '',
+			name = '',
+			postElement = '',
+			preElement = '',
+			required = false,
+			size = '',
+			spellcheck = '',
+			tabIndex = '',
+			tip = '',
+			title = ''
+		}, arguments.options) />
+		
+		<!--- Set the element type --->
+		<cfset local.element.elementType = arguments.elementType />
+		
+		<cfreturn local.element />
 	</cffunction>
 	
 	<!--- 
