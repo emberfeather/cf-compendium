@@ -1,4 +1,16 @@
 component extends="cf-compendium.inc.resource.base.formatter" {
+	public string function baseN(required any value, any options) {
+		if(!isNumeric(arguments.value)) {
+			return arguments.value;
+		}
+		
+		if(!structKeyExists(arguments.options, 'radix')) {
+			arguments.options.radix = 10;
+		}
+		
+		return formatBaseN(arguments.value, arguments.options.radix);
+	}
+	
 	public string function date(required any value, any options) {
 		if(!isDate(arguments.value)) {
 			return arguments.value;
