@@ -257,6 +257,10 @@ dt {
 	border-bottom: 1px solid #000;
 }
 
+.datagrid tbody th {
+	width: 1px;
+}
+
 .datagrid tfoot {
 	border-top: 1px solid #000;
 }
@@ -295,6 +299,10 @@ dt {
 .datagrid td.width-min {
 	width: 1px;
 	white-space: nowrap;
+}
+
+.datagrid td.no-pad {
+	padding: 0;
 }
 
 .datagrid a.delete {

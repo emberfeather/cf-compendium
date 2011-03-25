@@ -101,6 +101,26 @@
 		<cfreturn '' />
 	</cffunction>
 	
+	<cffunction name="createElement" access="private" returntype="string" output="false">
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="column" type="struct" required="true" />
+		<cfargument name="rowNum" type="numeric" required="true" />
+		
+		<cfset arguments.column.element.value = arguments.value />
+		<cfset arguments.column.element.id = arguments.column.key & '-' & arguments.rowNum />
+		<cfset arguments.column.element.name = arguments.column.key & '-' & arguments.rowNum />
+		
+		<cfif arguments.column.element.elementType eq 'checkbox' and not structKeyExists(arguments.column.element, 'options')>
+			<cfif arguments.value eq arguments.column.element.originalValue>
+				<cfset arguments.column.element.checked = true />
+			<cfelse>
+				<cfset structDelete(arguments.column.element, 'checked') />
+			</cfif>
+		</cfif>
+		
+		<cfreturn variables.theForm.theForm.elementToHtml(arguments.column.element) />
+	</cffunction>
+	
 	<cffunction name="createLink" access="private" returntype="string" output="false">
 		<cfargument name="text" type="any" required="true" />
 		<cfargument name="column" type="struct" required="true" />
@@ -227,6 +247,14 @@
 		<cfreturn value />
 	</cffunction>
 	
+	<cffunction name="setForm" access="public" returntype="void" output="false">
+		<cfargument name="theForm" type="component" required="true" />
+		<cfargument name="action" type="string" required="true" />
+		<cfargument name="options" type="struct" default="#{}#" />
+		
+		<cfset variables.theForm = arguments />
+	</cffunction>
+	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="data" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
@@ -257,6 +285,22 @@
 		<cfset var value = '' />
 		
 		<cfset arguments.options = extend(defaults, arguments.options) />
+		
+		<!--- Prepare for form elements if needed --->
+		<cfif structKeyExists(variables, 'theForm')>
+			<cfloop from="1" to="#arrayLen(variables.columns)#" index="i">
+				<cfif structKeyExists(variables.columns[i], 'element')>
+					<cfset variables.columns[i].element.options.mappings = (structKeyExists(variables.columns[i].element, 'mappings') ? variables.columns[i].element.mappings : {}) />
+					
+					<cfset variables.columns[i].element = variables.theForm.theForm.extendElement(argumentCollection = variables.columns[i].element) />
+					
+					<!--- Store the original value since it gets changed every loop through the data --->
+					<cfif structKeyExists(variables.columns[i].element, 'value')>
+						<cfset variables.columns[i].element.originalValue = variables.columns[i].element.value />
+					</cfif>
+				</cfif>
+			</cfloop>
+		</cfif>
 		
 		<cfsavecontent variable="htmlColumns">
 			<cfoutput>
@@ -405,6 +449,10 @@
 		</cfif>
 		
 		<cfsavecontent variable="html">
+			<cfif structKeyExists(variables, 'theForm')>
+				<cfoutput>#variables.theForm.theForm.getFormOpen(variables.theForm.action, variables.theForm.options)#</cfoutput>
+			</cfif>
+			
 			<table class="datagrid <cfoutput>#arguments.options.class#</cfoutput>">
 				<cfoutput>
 					<thead>
@@ -441,6 +489,8 @@
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
+												<cfelseif structKeyExists(col, 'element')>
+													#createElement(value, col, rowNum)#
 												<cfelse>
 													#this.format(value, col.format)#
 												</cfif>
@@ -469,6 +519,8 @@
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
+												<cfelseif structKeyExists(col, 'element')>
+													#createElement(value, col, rowNum)#
 												<cfelse>
 													#this.format(value, col.format)#
 												</cfif>
@@ -522,6 +574,8 @@
 										<!--- Check for a link --->
 										<cfif arrayLen(col.link)>
 											#createLink(value, col, data, rowNum, counter, arguments.options)#
+										<cfelseif structKeyExists(col, 'element')>
+											#createElement(value, col, rowNum)#
 										<cfelse>
 											#this.format(value, col.format)#
 										</cfif>
@@ -556,6 +610,8 @@
 											<cfif arrayLen(col.link)>
 												<!--- Mocking the data as an array of structs and hardcoding the row --->
 												#createLink(value, col, [ local.current ], 1, counter, arguments.options)#
+											<cfelseif structKeyExists(col, 'element')>
+												#createElement(value, col, rowNum)#
 											<cfelse>
 												#this.format(value, col.format)#
 											</cfif>
@@ -593,6 +649,8 @@
 											<!--- Check for a link --->
 											<cfif arrayLen(col.link)>
 												#createLink(value, col, data, rowNum, counter, arguments.options)#
+											<cfelseif structKeyExists(col, 'element')>
+												#createElement(value, col, rowNum)#
 											<cfelse>
 												#this.format(value, col.format)#
 											</cfif>
@@ -625,6 +683,13 @@
 					</cfoutput>
 				</cfif>
 			</table>
+			
+			<cfif structKeyExists(variables, 'theForm')>
+				<cfoutput>
+					#variables.theForm.theForm.getFormSubmit()#
+					#variables.theForm.theForm.getFormClose()#
+				</cfoutput>
+			</cfif>
 		</cfsavecontent>
 		
 		<cfreturn html />
