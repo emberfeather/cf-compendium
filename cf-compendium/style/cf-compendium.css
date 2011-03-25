@@ -257,6 +257,10 @@ dt {
 	border-bottom: 1px solid #000;
 }
 
+.datagrid tbody th {
+	width: 1px;
+}
+
 .datagrid tfoot {
 	border-top: 1px solid #000;
 }
