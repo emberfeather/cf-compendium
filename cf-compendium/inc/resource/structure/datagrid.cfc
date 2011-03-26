@@ -104,11 +104,19 @@
 	<cffunction name="createElement" access="private" returntype="string" output="false">
 		<cfargument name="value" type="string" required="true" />
 		<cfargument name="column" type="struct" required="true" />
+		<cfargument name="data" type="any" required="true" />
 		<cfargument name="rowNum" type="numeric" required="true" />
 		
 		<cfset arguments.column.element.value = arguments.value />
-		<cfset arguments.column.element.id = arguments.column.key & '-' & arguments.rowNum />
-		<cfset arguments.column.element.name = arguments.column.key & '-' & arguments.rowNum />
+		<cfset arguments.column.element.id = ( structKeyExists(arguments.column.element, 'id') ? arguments.column.element.id : arguments.column.key & '-' & arguments.rowNum ) />
+		<cfset arguments.column.element.name = ( structKeyExists(arguments.column.element, 'name') ? arguments.column.element.name : arguments.column.key & '-' & arguments.rowNum ) />
+		
+		<!--- Check for mappings --->
+		<cfif structKeyExists(arguments.column.element, 'mappings')>
+			<cfloop list="#structKeyList(arguments.column.element.mappings)#" index="local.i">
+				<cfset arguments.column.element[local.i] = getValue(arguments.data, arguments.rowNum, arguments.column.element.mappings[local.i]) />
+			</cfloop>
+		</cfif>
 		
 		<cfif arguments.column.element.elementType eq 'checkbox' and not structKeyExists(arguments.column.element, 'options')>
 			<cfif arguments.value eq arguments.column.element.originalValue>
@@ -290,14 +298,10 @@
 		<cfif structKeyExists(variables, 'theForm')>
 			<cfloop from="1" to="#arrayLen(variables.columns)#" index="i">
 				<cfif structKeyExists(variables.columns[i], 'element')>
-					<cfset variables.columns[i].element.options.mappings = (structKeyExists(variables.columns[i].element, 'mappings') ? variables.columns[i].element.mappings : {}) />
-					
 					<cfset variables.columns[i].element = variables.theForm.theForm.extendElement(argumentCollection = variables.columns[i].element) />
 					
 					<!--- Store the original value since it gets changed every loop through the data --->
-					<cfif structKeyExists(variables.columns[i].element, 'value')>
-						<cfset variables.columns[i].element.originalValue = variables.columns[i].element.value />
-					</cfif>
+					<cfset variables.columns[i].element.originalValue = (structKeyExists(variables.columns[i].element, 'value') ? variables.columns[i].element.value : '') />
 				</cfif>
 			</cfloop>
 		</cfif>
@@ -490,7 +494,7 @@
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
 												<cfelseif structKeyExists(col, 'element')>
-													#createElement(value, col, rowNum)#
+													#createElement(value, col, data, rowNum)#
 												<cfelse>
 													#this.format(value, col.format)#
 												</cfif>
@@ -520,7 +524,7 @@
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
 												<cfelseif structKeyExists(col, 'element')>
-													#createElement(value, col, rowNum)#
+													#createElement(value, col, data, rowNum)#
 												<cfelse>
 													#this.format(value, col.format)#
 												</cfif>
@@ -575,7 +579,7 @@
 										<cfif arrayLen(col.link)>
 											#createLink(value, col, data, rowNum, counter, arguments.options)#
 										<cfelseif structKeyExists(col, 'element')>
-											#createElement(value, col, rowNum)#
+											#createElement(value, col, data, rowNum)#
 										<cfelse>
 											#this.format(value, col.format)#
 										</cfif>
@@ -611,7 +615,7 @@
 												<!--- Mocking the data as an array of structs and hardcoding the row --->
 												#createLink(value, col, [ local.current ], 1, counter, arguments.options)#
 											<cfelseif structKeyExists(col, 'element')>
-												#createElement(value, col, rowNum)#
+												#createElement(value, col, data, rowNum)#
 											<cfelse>
 												#this.format(value, col.format)#
 											</cfif>
@@ -650,7 +654,7 @@
 											<cfif arrayLen(col.link)>
 												#createLink(value, col, data, rowNum, counter, arguments.options)#
 											<cfelseif structKeyExists(col, 'element')>
-												#createElement(value, col, rowNum)#
+												#createElement(value, col, data, rowNum)#
 											<cfelse>
 												#this.format(value, col.format)#
 											</cfif>
