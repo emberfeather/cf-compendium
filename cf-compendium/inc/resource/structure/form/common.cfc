@@ -2,7 +2,7 @@
 	Used to generate forms. This cfc is meant to be extended to have form elements with
 	custom formatting.
 --->
-<cfcomponent extends="cf-compendium.inc.resource.structure.form" output="false">
+<cfcomponent extends="cf-compendium.inc.resource.base.formElement" output="false">
 	<!--- 
 		Add an element to the form to be displayed.
 	--->
@@ -23,42 +23,42 @@
 		
 		@see http://www.w3.org/TR/html5/the-input-element.html#the-input-element
 	--->
-	<cffunction name="commonAttributesInput" access="private" returntype="string" output="false">
+	<cffunction name="attributesInput" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfreturn commonAttributes(arguments.element, [
-				'accept',
-				'alt',
-				'autocomplete',
-				'form',
-				'formaction',
-				'formenctype',
-				'formmethod',
-				'formnovalidate',
-				'formtarget',
-				'height',
-				'list',
-				'max',
-				'maxlength',
-				'min',
-				'pattern',
-				'placeholder',
-				'size',
-				'src',
-				'step',
-				'type',
-				'width'
-			], [
-				'autofocus',
-				'checked',
-				'disabled',
-				'multiple',
-				'readonly',
-				'required'
-			], [
-				'name',
-				'value'
-			]) />
+		<cfreturn variables.attributes.attributes(arguments.element, [
+			'accept',
+			'alt',
+			'autocomplete',
+			'form',
+			'formaction',
+			'formenctype',
+			'formmethod',
+			'formnovalidate',
+			'formtarget',
+			'height',
+			'list',
+			'max',
+			'maxlength',
+			'min',
+			'pattern',
+			'placeholder',
+			'size',
+			'src',
+			'step',
+			'type',
+			'width'
+		], [
+			'autofocus',
+			'checked',
+			'disabled',
+			'multiple',
+			'readonly',
+			'required'
+		], [
+			'name',
+			'value'
+		]) />
 	</cffunction>
 	
 	<!---
@@ -66,18 +66,18 @@
 		
 		@see http://www.w3.org/TR/html5/the-button-element.html#the-meter-element
 	--->
-	<cffunction name="commonAttributesMeter" access="private" returntype="string" output="false">
+	<cffunction name="attributesMeter" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfreturn commonAttributes(arguments.element, [
-				'form',
-				'high',
-				'low',
-				'max',
-				'min',
-				'optimum',
-				'value'
-			]) />
+		<cfreturn variables.attributes.attributes(arguments.element, [
+			'form',
+			'high',
+			'low',
+			'max',
+			'min',
+			'optimum',
+			'value'
+		]) />
 	</cffunction>
 	
 	<!---
@@ -85,18 +85,18 @@
 		
 		@see http://www.w3.org/TR/html5/the-button-element.html#the-select-element
 	--->
-	<cffunction name="commonAttributesSelect" access="private" returntype="string" output="false">
+	<cffunction name="attributesSelect" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfreturn commonAttributes(arguments.element, [
-				'form',
-				'name',
-				'size'
-			], [
-				'autofocus',
-				'disabled',
-				'multiple'
-			]) />
+		<cfreturn variables.attributes.attributes(arguments.element, [
+			'form',
+			'name',
+			'size'
+		], [
+			'autofocus',
+			'disabled',
+			'multiple'
+		]) />
 	</cffunction>
 	
 	<!---
@@ -104,127 +104,36 @@
 		
 		@see http://www.w3.org/TR/html5/the-textarea-element.html
 	--->
-	<cffunction name="commonAttributesTextarea" access="private" returntype="string" output="false">
+	<cffunction name="attributesTextarea" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfreturn commonAttributes(arguments.element, [
-				'cols',
-				'form',
-				'maxlength',
-				'name',
-				'placeholder',
-				'rows',
-				'wrap'
-			], [
-				'autofocus',
-				'disabled',
-				'readonly',
-				'required'
-			]) />
+		<cfreturn variables.attributes.attributes(arguments.element, [
+			'cols',
+			'form',
+			'maxlength',
+			'name',
+			'placeholder',
+			'rows',
+			'wrap'
+		], [
+			'autofocus',
+			'disabled',
+			'readonly',
+			'required'
+		]) />
 	</cffunction>
 	
-	<!--- 
-		Used to format the actual HTML element.
-		<p>
-		To add a custom element extend the form cfc and override the formatElement
-		function and create a switch statement with the proper functions calls to the new
-		elements. To keep the default elements available call super.formatElement in the default
-		case of the override function.
-	--->
-	<cffunction name="elementToHTML" access="public" returntype="string" output="false">
+	<cffunction name="elementButton" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
+		<cfset arguments.element.type = arguments.element.elementType />
 		
-		<cfswitch expression="#arguments.element.elementType#">
-			<cfcase value="button,color,email,file,hidden,image,number,password,range,reset,search,submit,tel,text,url">
-				<cfset arguments.element.type = arguments.element.elementType />
-				
-				<cfreturn elementInput(arguments.element) />
-			</cfcase>
-			<cfcase value="checkbox">
-				<cfreturn elementCheckbox(arguments.element) />
-			</cfcase>
-			<cfcase value="date">
-				<cfset arguments.element.type = arguments.element.elementType />
-				
-				<cfif isDate(arguments.element.value)>
-					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') />
-				</cfif>
-				
-				<cfreturn elementInput(arguments.element) />
-			</cfcase>
-			<cfcase value="datetime">
-				<cfset arguments.element.type = arguments.element.elementType />
-				
-				<cfif isDate(arguments.element.value)>
-					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') & 'T' & timeFormat(arguments.element.value, 'HH:mm:ss') & 'Z' />
-				</cfif>
-				
-				<cfreturn elementInput(arguments.element) />
-			</cfcase>
-			<cfcase value="datetime-local">
-				<cfset arguments.element.type = arguments.element.elementType />
-				
-				<cfif isDate(arguments.element.value)>
-					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') & 'T' & timeFormat(arguments.element.value, 'HH:mm:ss') />
-				</cfif>
-				
-				<cfreturn elementInput(arguments.element) />
-			</cfcase>
-			<cfcase value="meter">
-				<cfreturn elementMeter(arguments.element) />
-			</cfcase>
-			<cfcase value="month">
-				<cfset arguments.element.type = arguments.element.elementType />
-				
-				<cfif isDate(arguments.element.value)>
-					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm') />
-				</cfif>
-				
-				<cfreturn elementInput(arguments.element) />
-			</cfcase>
-			<cfcase value="radio">
-				<cfreturn elementRadio(arguments.element) />
-			</cfcase>
-			<cfcase value="select">
-				<cfreturn elementSelect(arguments.element) />
-			</cfcase>
-			<cfcase value="selectRange">
-				<cfreturn elementSelectRange(arguments.element) />
-			</cfcase>
-			<cfcase value="textarea">
-				<cfreturn elementTextarea(arguments.element) />
-			</cfcase>
-			<cfcase value="time">
-				<cfset arguments.element.type = arguments.element.elementType />
-				
-				<cfif isDate(arguments.element.value)>
-					<cfset arguments.element.value = timeFormat(arguments.element.value, 'HH:mm:ss.l') />
-				</cfif>
-				
-				<cfreturn elementInput(arguments.element) />
-			</cfcase>
-			<cfcase value="week">
-				<cfset arguments.element.type = arguments.element.elementType />
-				
-				<cfif isDate(arguments.element.value)>
-					<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy') & '-W' & week(arguments.element.value) />
-				</cfif>
-				
-				<cfreturn elementInput(arguments.element) />
-			</cfcase>
-			<cfcase value="custom">
-				<cfreturn elementCustom(arguments.element) />
-			</cfcase>
-			<cfdefaultcase>
-				<cfset super.elementToHTML(arguments.element) />
-			</cfdefaultcase>
-		</cfswitch>
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
 	<!--- 
 		Creates the checkbox form element.
 	--->
-	<cffunction name="elementCheckbox" access="private" returntype="string" output="false">
+	<cffunction name="elementCheckbox" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
@@ -294,7 +203,7 @@
 	<!--- 
 		Creates the checkbox form element.
 	--->
-	<cffunction name="elementCheckboxSingle" access="private" returntype="string" output="false">
+	<cffunction name="elementCheckboxSingle" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset arguments.element.type = 'checkbox' />
@@ -302,10 +211,18 @@
 		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
+	<cffunction name="elementColor" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
 	<!--- 
 		Creates the custom form element.
 	--->
-	<cffunction name="elementCustom" access="private" returntype="string" output="false">
+	<cffunction name="elementCustom" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
@@ -313,7 +230,7 @@
 		<cfset formatted = '<div ' />
 		
 		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		<cfset formatted &= variables.attributes.attributesHtml(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -324,10 +241,78 @@
 		<cfreturn formatted />
 	</cffunction>
 	
+	<cffunction name="elementDate" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfif isDate(arguments.element.value)>
+			<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') />
+		</cfif>
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementDateTime" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfif isDate(arguments.element.value)>
+			<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') & 'T' & timeFormat(arguments.element.value, 'HH:mm:ss') & 'Z' />
+		</cfif>
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementDateTimeLocal" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfif isDate(arguments.element.value)>
+			<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm-dd') & 'T' & timeFormat(arguments.element.value, 'HH:mm:ss') />
+		</cfif>
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementEmail" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementFile" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementHidden" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementImage" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
 	<!--- 
 		Creates the input form element.
 	--->
-	<cffunction name="elementInput" access="private" returntype="string" output="false">
+	<cffunction name="elementInput" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
@@ -335,10 +320,10 @@
 		<cfset formatted = '<input ' />
 		
 		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		<cfset formatted &= variables.attributes.attributesHtml(arguments.element) />
 		
 		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesInput(arguments.element) />
+		<cfset formatted &= attributesInput(arguments.element) />
 		
 		<cfset formatted &= '/>' />
 		
@@ -348,7 +333,7 @@
 	<!--- 
 		Creates the meter form element.
 	--->
-	<cffunction name="elementMeter" access="private" returntype="string" output="false">
+	<cffunction name="elementMeter" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
@@ -356,10 +341,10 @@
 		<cfset formatted = '<meter ' />
 		
 		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		<cfset formatted &= variables.attributes.attributesHtml(arguments.element) />
 		
 		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesMeter(arguments.element) />
+		<cfset formatted &= attributesMeter(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -372,10 +357,38 @@
 		<cfreturn formatted />
 	</cffunction>
 	
+	<cffunction name="elementMonth" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfif isDate(arguments.element.value)>
+			<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy-mm') />
+		</cfif>
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementNumber" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementPassword" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
 	<!--- 
 		Creates the radio form element.
 	--->
-	<cffunction name="elementRadio" access="private" returntype="string" output="false">
+	<cffunction name="elementRadio" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
@@ -447,7 +460,7 @@
 	<!--- 
 		Creates the radio form element.
 	--->
-	<cffunction name="elementRadioSingle" access="private" returntype="string" output="false">
+	<cffunction name="elementRadioSingle" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset arguments.element.type = 'radio' />
@@ -455,10 +468,34 @@
 		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
+	<cffunction name="elementRange" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementReset" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementSearch" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
 	<!--- 
 		Creates the select form element.
 	--->
-	<cffunction name="elementSelect" access="private" returntype="string" output="false">
+	<cffunction name="elementSelect" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
@@ -482,10 +519,10 @@
 		<cfset formatted = '<select ' />
 		
 		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		<cfset formatted &= variables.attributes.attributesHtml(arguments.element) />
 		
 		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesSelect(arguments.element) />
+		<cfset formatted &= attributesSelect(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -522,7 +559,7 @@
 	<!--- 
 		Creates the select form element.
 	--->
-	<cffunction name="elementSelectRange" access="private" returntype="string" output="false">
+	<cffunction name="elementSelectRange" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
@@ -541,10 +578,10 @@
 		<cfset formatted = '<select ' />
 		
 		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		<cfset formatted &= variables.attributes.attributesHtml(arguments.element) />
 		
 		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesSelect(arguments.element) />
+		<cfset formatted &= attributesSelect(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -566,10 +603,34 @@
 		<cfreturn formatted />
 	</cffunction>
 	
+	<cffunction name="elementSubmit" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementTel" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementText" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
 	<!--- 
 		Creates the text area form element.
 	--->
-	<cffunction name="elementTextarea" access="private" returntype="string" output="false">
+	<cffunction name="elementTextarea" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
@@ -577,10 +638,10 @@
 		<cfset formatted = '<textarea ' />
 		
 		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(arguments.element) />
+		<cfset formatted &= variables.attributes.attributesHtml(arguments.element) />
 		
 		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesTextarea(arguments.element) />
+		<cfset formatted &= attributesTextarea(arguments.element) />
 		
 		<cfset formatted &= '>' />
 		
@@ -589,5 +650,37 @@
 		<cfset formatted &= '</textarea>' />
 		
 		<cfreturn formatted />
+	</cffunction>
+	
+	<cffunction name="elementTime" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfif isDate(arguments.element.value)>
+			<cfset arguments.element.value = timeFormat(arguments.element.value, 'HH:mm:ss.l') />
+		</cfif>
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementUrl" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfreturn elementInput(arguments.element) />
+	</cffunction>
+	
+	<cffunction name="elementWeek" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset arguments.element.type = arguments.element.elementType />
+		
+		<cfif isDate(arguments.element.value)>
+			<cfset arguments.element.value = dateFormat(arguments.element.value, 'yyyy') & '-W' & week(arguments.element.value) />
+		</cfif>
+		
+		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 </cfcomponent>
