@@ -56,7 +56,11 @@
 		
 		<cfset var element = '' />
 		
-		<!--- TODO extend via formelements first --->
+		<cfloop from="#arrayLen(variables.formElements)#" to="1" step="-1" index="local.i">
+			<cfif structKeyExists(variables.formElements[local.i], 'addElement')>
+				<cfset variables.formElements[local.i].addElement(this, arguments.elementType, arguments.options) />
+			</cfif>
+		</cfloop>
 		
 		<!--- Extend the form options --->
 		<cfset element = extendElement(argumentCollection = arguments) />
@@ -405,6 +409,12 @@
 		<cfset addSection() />
 		
 		<cfreturn arrayLen(variables.sections) />
+	</cffunction>
+	
+	<cffunction name="setIsMultipart" access="public" returntype="void" output="false">
+		<cfargument name="isMultipart" type="boolean" required="true" />
+		
+		<cfset variables.isMultipart = arguments.isMultipart />
 	</cffunction>
 	
 	<!--- 

@@ -7,14 +7,13 @@
 		Add an element to the form to be displayed.
 	--->
 	<cffunction name="addElement" access="public" returntype="void" output="false">
+		<cfargument name="theForm" type="component" required="true" />
 		<cfargument name="elementType" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
-		<cfset super.addElement(argumentCollection=arguments) />
-		
 		<!--- Check for a file form type --->
 		<cfif arguments.elementType eq 'file'>
-			<cfset variables.isMultipart = true />
+			<cfset arguments.theForm.setIsMultipart(true) />
 		</cfif>
 	</cffunction>
 	
