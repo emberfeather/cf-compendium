@@ -15,6 +15,10 @@
 		<cfif arguments.elementType eq 'file'>
 			<cfset arguments.theForm.setIsMultipart(true) />
 		</cfif>
+		
+		<cfif arguments.elementType eq 'hidden' or arguments.elementType eq 'datagrid'>
+			<cfset arguments.options.noLabel = true />
+		</cfif>
 	</cffunction>
 	
 	<!---
@@ -238,6 +242,14 @@
 		<cfset formatted &= '</div>' />
 		
 		<cfreturn formatted />
+	</cffunction>
+	
+	<cffunction name="elementDataGrid" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfparam name="arguments.element.form" default="#{}#" />
+		
+		<cfreturn arguments.element.datagrid.toHTML( arguments.element.value, arguments.element.form ) />
 	</cffunction>
 	
 	<cffunction name="elementDate" access="public" returntype="string" output="false">
