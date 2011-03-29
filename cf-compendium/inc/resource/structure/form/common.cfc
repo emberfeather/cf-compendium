@@ -16,7 +16,7 @@
 			<cfset arguments.theForm.setIsMultipart(true) />
 		</cfif>
 		
-		<cfif arguments.elementType eq 'hidden' or arguments.elementType eq 'datagrid'>
+		<cfif arguments.elementType eq 'hidden'>
 			<cfset arguments.options.noLabel = true />
 		</cfif>
 	</cffunction>
@@ -247,9 +247,9 @@
 	<cffunction name="elementDataGrid" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfparam name="arguments.element.form" default="#{}#" />
+		<cfparam name="arguments.element.options" default="#{}#" />
 		
-		<cfreturn arguments.element.datagrid.toHTML( arguments.element.value, arguments.element.form ) />
+		<cfreturn '<div class="wrapper">' & arguments.element.datagrid.toHTML( arguments.element.value, arguments.element.options ) & '</div>' />
 	</cffunction>
 	
 	<cffunction name="elementDate" access="public" returntype="string" output="false">
