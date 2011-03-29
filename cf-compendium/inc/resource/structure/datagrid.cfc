@@ -108,8 +108,8 @@
 		<cfargument name="rowNum" type="numeric" required="true" />
 		
 		<cfset arguments.column.element.value = arguments.value />
-		<cfset arguments.column.element.id = ( structKeyExists(arguments.column.element, 'id') ? arguments.column.element.id : arguments.column.key & '-' & arguments.rowNum ) />
-		<cfset arguments.column.element.name = ( structKeyExists(arguments.column.element, 'name') ? arguments.column.element.name : arguments.column.key & '-' & arguments.rowNum ) />
+		<cfset arguments.column.element.id = arguments.column.key & '-' & arguments.rowNum />
+		<cfset arguments.column.element.name = arguments.column.key & '-' & arguments.rowNum />
 		
 		<!--- Check for mappings --->
 		<cfif structKeyExists(arguments.column.element, 'mappings')>

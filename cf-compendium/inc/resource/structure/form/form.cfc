@@ -259,7 +259,7 @@
 		</cfif>
 		
 		<!--- set default id --->
-		<cfif local.result.id eq ''>
+		<cfif !structKeyExists(local.result, 'id')>
 			<cfset local.result.id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1 />
 		</cfif>
 		
