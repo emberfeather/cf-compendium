@@ -19,10 +19,6 @@
 		<cfif arguments.elementType eq 'hidden'>
 			<cfset arguments.options.noLabel = true />
 		</cfif>
-		
-		<cfif arguments.elementType eq 'datagrid'>
-			<cfset arguments.options.showForm = false />
-		</cfif>
 	</cffunction>
 	
 	<!---
@@ -252,6 +248,9 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfparam name="arguments.element.options" default="#{}#" />
+		
+		<!--- Do not output the form tags --->
+		<cfset arguments.element.options.showForm = false />
 		
 		<cfreturn '<div class="wrapper">' & arguments.element.datagrid.toHTML( arguments.element.value, arguments.element.options ) & '</div>' />
 	</cffunction>
