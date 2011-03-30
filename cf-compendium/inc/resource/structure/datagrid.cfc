@@ -299,8 +299,8 @@
 		<!--- Make sure the form only shows when there is a form to display --->
 		<cfset arguments.options.showForm = arguments.options.showForm and structKeyExists(variables, 'theForm') />
 		
-		<!--- Prepare for form elements if needed --->
-		<cfif arguments.options.showForm>
+		<!--- Prepare for form elements if there is a form --->
+		<cfif structKeyExists(variables, 'theForm')>
 			<cfloop from="1" to="#arrayLen(variables.columns)#" index="i">
 				<cfif structKeyExists(variables.columns[i], 'element')>
 					<cfset variables.columns[i].element = variables.theForm.theForm.extendElement(argumentCollection = variables.columns[i].element) />
