@@ -107,9 +107,11 @@
 		<cfargument name="data" type="any" required="true" />
 		<cfargument name="rowNum" type="numeric" required="true" />
 		
+		<cfset local.prefix = structKeyExists(arguments.column, 'prefix') ? arguments.column.prefix & '-' : '' />
+		
 		<cfset arguments.column.element.value = arguments.value />
-		<cfset arguments.column.element.id = arguments.column.key & '-' & arguments.rowNum />
-		<cfset arguments.column.element.name = arguments.column.key & '-' & arguments.rowNum />
+		<cfset arguments.column.element.id = local.prefix & arguments.column.key & '-' & arguments.rowNum />
+		<cfset arguments.column.element.name = local.prefix & arguments.column.key & '-' & arguments.rowNum />
 		
 		<!--- Check for mappings --->
 		<cfif structKeyExists(arguments.column.element, 'mappings')>
@@ -257,7 +259,7 @@
 	
 	<cffunction name="setForm" access="public" returntype="void" output="false">
 		<cfargument name="theForm" type="component" required="true" />
-		<cfargument name="action" type="string" required="true" />
+		<cfargument name="action" type="string" default="." />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset variables.theForm = arguments />
@@ -271,13 +273,6 @@
 		<cfset var col = '' />
 		<cfset var counter = '' />
 		<cfset var currentKey = '' />
-		<cfset var defaults = {
-			class = '',
-			linkBase = '',
-			minimumRows = 15,
-			numPerPage = 30,
-			startRow = 1
-		} />
 		<cfset var derived = {} />
 		<cfset var html = '' />
 		<cfset var htmlColumns = '' />
@@ -292,10 +287,20 @@
 		<cfset var title = '' />
 		<cfset var value = '' />
 		
-		<cfset arguments.options = extend(defaults, arguments.options) />
+		<cfset arguments.options = extend({
+			class = '',
+			linkBase = '',
+			minimumRows = 15,
+			numPerPage = 30,
+			startRow = 1,
+			showForm = true
+		}, arguments.options) />
+		
+		<!--- Make sure the form only shows when there is a form to display --->
+		<cfset arguments.options.showForm = arguments.options.showForm and structKeyExists(variables, 'theForm') />
 		
 		<!--- Prepare for form elements if needed --->
-		<cfif structKeyExists(variables, 'theForm')>
+		<cfif arguments.options.showForm>
 			<cfloop from="1" to="#arrayLen(variables.columns)#" index="i">
 				<cfif structKeyExists(variables.columns[i], 'element')>
 					<cfset variables.columns[i].element = variables.theForm.theForm.extendElement(argumentCollection = variables.columns[i].element) />
@@ -453,7 +458,7 @@
 		</cfif>
 		
 		<cfsavecontent variable="html">
-			<cfif structKeyExists(variables, 'theForm')>
+			<cfif arguments.options.showForm>
 				<cfoutput>#variables.theForm.theForm.getFormOpen(variables.theForm.action, variables.theForm.options)#</cfoutput>
 			</cfif>
 			
@@ -688,7 +693,7 @@
 				</cfif>
 			</table>
 			
-			<cfif structKeyExists(variables, 'theForm')>
+			<cfif arguments.options.showForm>
 				<cfoutput>
 					#variables.theForm.theForm.getFormSubmit()#
 					#variables.theForm.theForm.getFormClose()#

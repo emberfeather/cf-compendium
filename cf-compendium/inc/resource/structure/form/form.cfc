@@ -425,8 +425,10 @@
 		
 		<cfset var formatted = '' />
 		
+		<cfset showLabel = not structKeyExists(arguments.element, 'noLabel') or arguments.element.noLabel eq false />
+		
 		<!--- hidden elements should not be shown --->
-		<cfif arguments.element.elementType neq 'hidden'>
+		<cfif showLabel>
 			<!--- Start the tag --->
 			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType & ' ' & arguments.element.name & ' ' & arguments.element.elementClass & ' ' & (arguments.element.required ? 'required' : '') & '">' />
 			
@@ -461,7 +463,7 @@
 		<cfset formatted &= elementToHTML(arguments.element) />
 		
 		<!--- hidden elements should not be shown --->
-		<cfif arguments.element.elementType neq 'hidden'>
+		<cfif showLabel>
 			<!--- Add the post element text --->
 			<cfset formatted &= arguments.element.postElement />
 			
