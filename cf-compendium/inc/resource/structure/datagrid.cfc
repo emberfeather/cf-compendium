@@ -191,12 +191,16 @@
 		<cfreturn html />
 	</cffunction>
 <cfscript>
-	private string function format( required string value, struct format = {} ) {
+	private string function format( required string value, struct format = {}, boolean isHeader = false ) {
 		local.result = '';
 		local.keys = listToArray(structKeyList(arguments.format));
 		
 		for(local.i = 1; local.i <= arrayLen(local.keys); local.i++) {
 			arguments.value = variables.format[local.keys[local.i]](arguments.value, arguments.format[local.keys[local.i]]);
+		}
+		
+		if(arguments.isHeader) {
+			arguments.value = variables.label.get(arguments.value, arguments.value);
 		}
 		
 		return arguments.value;
@@ -501,7 +505,7 @@
 												<cfelseif structKeyExists(col, 'element')>
 													#createElement(value, col, data, rowNum)#
 												<cfelse>
-													#this.format(value, col.format)#
+													#this.format(value, col.format, col.isHeader)#
 												</cfif>
 											</#(col.isHeader ? 'th' : 'td')#>
 										</cfloop>
@@ -531,7 +535,7 @@
 												<cfelseif structKeyExists(col, 'element')>
 													#createElement(value, col, data, rowNum)#
 												<cfelse>
-													#this.format(value, col.format)#
+													#this.format(value, col.format, col.isHeader)#
 												</cfif>
 											</#(col.isHeader ? 'th' : 'td')#>
 										</cfloop>
@@ -586,7 +590,7 @@
 										<cfelseif structKeyExists(col, 'element')>
 											#createElement(value, col, data, rowNum)#
 										<cfelse>
-											#this.format(value, col.format)#
+											#this.format(value, col.format, col.isHeader)#
 										</cfif>
 									</#(col.isHeader ? 'th' : 'td')#>
 								</cfloop>
@@ -622,7 +626,7 @@
 											<cfelseif structKeyExists(col, 'element')>
 												#createElement(value, col, data, rowNum)#
 											<cfelse>
-												#this.format(value, col.format)#
+												#this.format(value, col.format, col.isHeader)#
 											</cfif>
 										</#(col.isHeader ? 'th' : 'td')#>
 									</cfloop>
@@ -661,7 +665,7 @@
 											<cfelseif structKeyExists(col, 'element')>
 												#createElement(value, col, data, rowNum)#
 											<cfelse>
-												#this.format(value, col.format)#
+												#this.format(value, col.format, col.isHeader)#
 											</cfif>
 										</#(col.isHeader ? 'th' : 'td')#>
 									</cfloop>
