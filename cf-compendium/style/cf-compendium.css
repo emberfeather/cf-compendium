@@ -216,6 +216,15 @@ dt {
 	width: 15%;
 	min-width: 16em;
 }
+
+.form .element.datagrid th input[type=text],
+.form .element.datagrid th input[type=email],
+.form .element.datagrid th input[type=url],
+.form .element.datagrid th input[type=password],
+.form .element.datagrid th input[type=file] {
+	width: 35%;
+	min-width: 190px;
+}
 .list {
 	line-height: 1.5em;
 	list-style: none;
