@@ -19,14 +19,20 @@
 		<cfset variables.isMultipart = false />
 		
 		<!--- Set the variables for the form --->
-		<cfset variables.sections = arrayNew(1) />
-		<cfset variables.tabs = arrayNew(1) />
-		<cfset variables.fieldsets = arrayNew(1) />
-		<cfset variables.elements = arrayNew(1) />
+		<cfset variables.sections = [] />
+		<cfset variables.tabs = [] />
+		<cfset variables.fieldsets = [] />
+		<cfset variables.elements = [] />
+		
+		<!--- Holder for the dynamic form elements --->
+		<cfset variables.formElements = [] />
+		
+		<cfset addFormElement(createObject('component', 'cf-compendium.inc.resource.structure.form.common').init()) />
 		
 		<!--- Create an objects --->
 		<cfset variables.extender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
+		<cfset variables.attributes = createObject('component', 'cf-compendium.inc.resource.structure.form.attributes').init() />
 		
 		<!--- Set base bundle for translation --->
 		<cfset addBundle('/cf-compendium/i18n/inc/resource/structure', 'form') />
@@ -48,38 +54,16 @@
 		<cfargument name="elementType" type="string" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
 		
-		<cfset var defaults = {
-			accessKey = '',
-			class = '',
-			contentEditable = '',
-			contextMenu = '',
-			desc = '',
-			dir = '',
-			disabled = false,
-			draggable = '',
-			elementClass = '',
-			hidden = '',
-			id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1,
-			label = '',
-			lang = '',
-			link = '',
-			name = '',
-			postElement = '',
-			preElement = '',
-			required = false,
-			size = '',
-			spellcheck = '',
-			tabIndex = '',
-			tip = '',
-			title = ''
-		} />
 		<cfset var element = '' />
 		
-		<!--- Extend the form options --->
-		<cfset element = variables.extender.extend(defaults, arguments.options) />
+		<cfloop from="#arrayLen(variables.formElements)#" to="1" step="-1" index="local.i">
+			<cfif structKeyExists(variables.formElements[local.i], 'addElement')>
+				<cfset variables.formElements[local.i].addElement(this, arguments.elementType, arguments.options) />
+			</cfif>
+		</cfloop>
 		
-		<!--- Set the element type --->
-		<cfset element.elementType = arguments.elementType />
+		<!--- Extend the form options --->
+		<cfset element = extendElement(argumentCollection = arguments) />
 		
 		<!--- Append the the element --->
 		<cfset arrayAppend(variables.elements, element) />
@@ -114,6 +98,12 @@
 			<!--- Add the fieldset to the array --->
 			<cfset arrayAppend(variables.fieldsets, fieldset) />
 		</cfif>
+	</cffunction>
+	
+	<cffunction name="addFormElement" access="public" returntype="void" output="false">
+		<cfargument name="formElement" type="component" required="true" />
+		
+		<cfset arrayAppend(variables.formElements, arguments.formElement) />
 	</cffunction>
 	
 	<!--- 
@@ -180,58 +170,20 @@
 		</cfif>
 	</cffunction>
 	
-	<cffunction name="commonAttributes" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		<cfargument name="valueAttributes" type="array" default="#[]#" />
-		<cfargument name="booleanAttributes" type="array" default="#[]#" />
-		<cfargument name="requiredValueAttributes" type="array" default="#[]#" />
-		
-		<cfset var formatted = '' />
-		<cfset var keys = '' />
-		<cfset var i = '' />
-		
-		<cfloop from="1" to="#arrayLen(arguments.valueAttributes)#" index="i">
-			<cfif structKeyExists(arguments.element, arguments.valueAttributes[i]) and arguments.element[arguments.valueAttributes[i]] neq ''>
-				<cfset formatted &= arguments.valueAttributes[i] & '="' & arguments.element[arguments.valueAttributes[i]] & '" ' />
-			</cfif>
-		</cfloop>
-		
-		<cfloop from="1" to="#arrayLen(arguments.booleanAttributes)#" index="i">
-			<cfif structKeyExists(arguments.element, arguments.booleanAttributes[i]) and arguments.element[arguments.booleanAttributes[i]] eq true>
-				<cfset formatted &= arguments.booleanAttributes[i] & ' ' />
-			</cfif>
-		</cfloop>
-		
-		<cfloop from="1" to="#arrayLen(arguments.requiredValueAttributes)#" index="i">
-			<cfif structKeyExists(arguments.element, arguments.requiredValueAttributes[i])>
-				<cfset formatted &= arguments.requiredValueAttributes[i] & '="' & arguments.element[arguments.requiredValueAttributes[i]] & '" ' />
-			</cfif>
-		</cfloop>
-		
-		<!--- data-* attributes --->
-		<cfif structKeyExists(arguments.element, 'data') and isStruct(arguments.element.data)>
-			<cfloop collection="#arguments.element.data#" item="i">
-				<cfset formatted &= 'data-' & i & '="' & arguments.element.data[i] & '" ' />
-			</cfloop>
-		</cfif>
-		
-		<cfreturn formatted />
-	</cffunction>
-	
 	<!---
 		Common Attributes for the fieldset element
 		
 		@see http://www.w3.org/TR/html5/forms.html#the-fieldset-element
 	--->
-	<cffunction name="commonAttributesFieldset" access="private" returntype="string" output="false">
+	<cffunction name="attributesFieldset" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfreturn commonAttributes(arguments.element, [
-				'form',
-				'name'
-			], [
-				'disabled'
-			]) />
+		<cfreturn variables.attributes.attributes(arguments.element, [
+			'form',
+			'name'
+		], [
+			'disabled'
+		]) />
 	</cffunction>
 	
 	<!---
@@ -239,46 +191,20 @@
 		
 		@see http://www.w3.org/TR/html5/forms.html#the-form-element
 	--->
-	<cffunction name="commonAttributesForm" access="private" returntype="string" output="false">
+	<cffunction name="attributesForm" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfreturn commonAttributes(arguments.element, [
-				'accept-charset',
-				'action',
-				'autocomplete',
-				'enctype',
-				'method',
-				'name',
-				'target'
-			], [
-				'novalidate'
-			]) />
-	</cffunction>
-	
-	<!---
-		Common Attributes in HTML
-		
-		@see http://www.w3.org/TR/html5/elements.html#global-attributes
-	--->
-	<cffunction name="commonAttributesHtml" access="private" returntype="string" output="false">
-		<cfargument name="element" type="struct" required="true" />
-		
-		<cfreturn commonAttributes(arguments.element, [
-				'accesskey',
-				'class',
-				'contenteditable',
-				'contextmenu',
-				'dir',
-				'draggable',
-				'id',
-				'lang',
-				'spellcheck',
-				'style',
-				'tabindex',
-				'title'
-			], [
-				'hidden'
-			]) />
+		<cfreturn variables.attributes.attributes(arguments.element, [
+			'accept-charset',
+			'action',
+			'autocomplete',
+			'enctype',
+			'method',
+			'name',
+			'target'
+		], [
+			'novalidate'
+		]) />
 	</cffunction>
 	
 	<!---
@@ -286,13 +212,13 @@
 		
 		@see http://www.w3.org/TR/html5/forms.html#the-label-element
 	--->
-	<cffunction name="commonAttributesLabel" access="private" returntype="string" output="false">
+	<cffunction name="attributesLabel" access="private" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
-		<cfreturn commonAttributes(arguments.element, [
-				'for',
-				'form'
-			]) />
+		<cfreturn variables.attributes.attributes(arguments.element, [
+			'for',
+			'form'
+		]) />
 	</cffunction>
 	
 	<!--- 
@@ -301,10 +227,43 @@
 		The base form component does not have any functionality for formatting form
 		elements. The component needs to be extended to show the elements.
 	--->
-	<cffunction name="elementToHTML" access="private" returntype="string" output="false">
+	<cffunction name="elementToHTML" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		
+		<cfloop from="#arrayLen(variables.formElements)#" to="1" step="-1" index="local.i">
+			<cfif structKeyExists(variables.formElements[local.i], 'element' & arguments.element.elementType)>
+				<cfreturn variables.formElements[local.i]['element' & arguments.element.elementType](argumentCollection = arguments) />
+			</cfif>
+		</cfloop>
+		
 		<cfthrow message="Unsupported Form Element" detail="The #arguments.element.elementType# type of element is currently unsupported." />
+	</cffunction>
+	
+	<cffunction name="extendElement" access="public" returntype="struct" output="false">
+		<cfargument name="elementType" type="string" required="true" />
+		<cfargument name="options" type="struct" default="#{}#" />
+		
+		<cfset local.result = '' />
+		
+		<cfloop from="#arrayLen(variables.formElements)#" to="1" step="-1" index="local.i">
+			<cfif structKeyExists(variables.formElements[local.i], 'extend' & arguments.elementType)>
+				<cfset local.result = variables.formElements[local.i]['extend' & arguments.elementType](argumentCollection = arguments) />
+				
+				<cfbreak />
+			</cfif>
+		</cfloop>
+		
+		<cfif not isStruct(local.result)>
+			<!--- default to the common extend --->
+			<cfset local.result = variables.formElements[1].extendElement(argumentCollection = arguments) />
+		</cfif>
+		
+		<!--- set default id --->
+		<cfif !structKeyExists(local.result, 'id')>
+			<cfset local.result.id = variables.id & '-section' & arrayLen(variables.sections) + 1 & '-tab' & arrayLen(variables.tabs) + 1 & '-element' & arrayLen(variables.elements) + 1 />
+		</cfif>
+		
+		<cfreturn local.result />
 	</cffunction>
 	
 	<!--- 
@@ -365,10 +324,10 @@
 		<cfset formatted &= '<form ' />
 		
 		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(extendedOptions) />
+		<cfset formatted &= variables.attributes.attributesHtml(extendedOptions) />
 		
 		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesForm(extendedOptions) />
+		<cfset formatted &= attributesForm(extendedOptions) />
 		
 		<!--- Close Tag --->
 		<cfset formatted &= '>' />
@@ -452,6 +411,12 @@
 		<cfreturn arrayLen(variables.sections) />
 	</cffunction>
 	
+	<cffunction name="setIsMultipart" access="public" returntype="void" output="false">
+		<cfargument name="isMultipart" type="boolean" required="true" />
+		
+		<cfset variables.isMultipart = arguments.isMultipart />
+	</cffunction>
+	
 	<!--- 
 		Formats the given element into html output.
 	--->
@@ -460,8 +425,10 @@
 		
 		<cfset var formatted = '' />
 		
+		<cfset local.showLabel = not structKeyExists(arguments.element, 'noLabel') or arguments.element.noLabel eq false />
+		
 		<!--- hidden elements should not be shown --->
-		<cfif arguments.element.elementType neq 'hidden'>
+		<cfif local.showLabel>
 			<!--- Start the tag --->
 			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType & ' ' & arguments.element.name & ' ' & arguments.element.elementClass & ' ' & (arguments.element.required ? 'required' : '') & '">' />
 			
@@ -480,10 +447,10 @@
 				<cfset formatted &= '<label ' />
 				
 				<!--- Common HTML Attributes --->
-				<cfset formatted &= commonAttributesHtml(arguments.element.label) />
+				<cfset formatted &= variables.attributes.attributesHtml(arguments.element.label) />
 				
 				<!--- Common element attributes --->
-				<cfset formatted &= commonAttributesLabel(arguments.element.label) />
+				<cfset formatted &= attributesLabel(arguments.element.label) />
 				
 				<cfset formatted &= '>' & variables.label.get(arguments.element.label.value) & ':</label>' />
 			</cfif>
@@ -496,7 +463,7 @@
 		<cfset formatted &= elementToHTML(arguments.element) />
 		
 		<!--- hidden elements should not be shown --->
-		<cfif arguments.element.elementType neq 'hidden'>
+		<cfif local.showLabel>
 			<!--- Add the post element text --->
 			<cfset formatted &= arguments.element.postElement />
 			
@@ -523,10 +490,10 @@
 		<cfset formatted = '<fieldset ' />
 		
 		<!--- Common HTML Attributes --->
-		<cfset formatted &= commonAttributesHtml(arguments.fieldset) />
+		<cfset formatted &= variables.attributes.attributesHtml(arguments.fieldset) />
 		
 		<!--- Common Element Attributes --->
-		<cfset formatted &= commonAttributesFieldset(arguments.fieldset) />
+		<cfset formatted &= attributesFieldset(arguments.fieldset) />
 		
 		<!--- End the start tag --->
 		<cfset formatted &= '>' />
@@ -539,7 +506,7 @@
 		</cfif>
 		
 		<cfif structKeyExists(arguments.fieldset.legend, 'value') and arguments.fieldset.legend.value neq ''>
-			<cfset formatted &= '<legend ' & commonAttributes(arguments.fieldset.legend) & '>' />
+			<cfset formatted &= '<legend ' & variables.attributes.attributes(arguments.fieldset.legend) & '>' />
 			
 			<cfset formatted &= variables.label.get(arguments.fieldset.legend.value) />
 			
@@ -715,9 +682,6 @@
 		<cfreturn showForm( argumentCollection = arguments ) />
 	</cffunction>
 	
-	<!---
-		Public facing function to get the html for a form.
-	--->
 	<cffunction name="_toString" access="public" returntype="string" output="false">
 		<cfreturn toHtml() />
 	</cffunction>

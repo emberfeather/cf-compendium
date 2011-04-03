@@ -7,7 +7,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Tests to ensure that the form throws an error if requested without an action.
 	 */
 	public void function testShowForm_SansAction() {
-		var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n);
+		var theForm = createObject('component', 'cf-compendium.inc.resource.structure.form.form').init('test', variables.i18n);
 		
 		// Hidden form field
 		theForm.addElement('hidden', {
@@ -25,7 +25,7 @@ component extends="mxunit.framework.TestCase" {
 	 * Tests to ensure that the form throws an error if requested without any elements added.
 	 */
 	public void function testShowForm_SansElement() {
-		var theForm = createObject('component', 'cf-compendium.inc.resource.structure.formStandard').init('test', variables.i18n);
+		var theForm = createObject('component', 'cf-compendium.inc.resource.structure.form.form').init('test', variables.i18n);
 		
 		expectException('any', 'toHTML should have thrown an error. [no elements to show]');
 		

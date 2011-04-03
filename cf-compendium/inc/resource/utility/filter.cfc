@@ -58,8 +58,6 @@
 		<cfargument name="values" type="struct" required="true" />
 		<cfargument name="filter" type="struct" required="true" />
 		
-		
-		
 		<!--- Check if it is a text filter --->
 		<cfif not isObject(arguments.filter.options)>
 			<cfreturn filterText(arguments.values, arguments.filter) />

@@ -6,6 +6,7 @@
 		variables.i18n = arguments.i18n;
 		variables.locale = arguments.locale;
 		variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale);
+		variables.format = createObject('component', 'cf-compendium.inc.resource.format.format').init(arguments.i18n, arguments.locale);
 		
 		variables.columns = [];
 		
@@ -18,13 +19,13 @@
 	public void function addColumn(struct options = {}) {
 		var defaults = {
 			class = '',
-			format = '',
+			format = {},
+			isHeader = false,
 			key = '',
 			label = '',
 			link = [],
 			linkClass = [],
 			title = '',
-			type = 'text',
 			value = ''
 		};
 		
@@ -42,6 +43,11 @@
 	
 	public void function addBundle(required string path, required string name) {
 		variables.label.addBundle(argumentCollection = arguments);
+		variables.format.add__bundle(argumentCollection = arguments);
+	}
+	
+	public void function addFormatter(required component formatter) {
+		variables.format.add__formatter(arguments.formatter);
 	}
 </cfscript>
 	<cffunction name="calculateDerived" access="private" returntype="string" output="false">
@@ -93,6 +99,36 @@
 		</cfswitch>
 		
 		<cfreturn '' />
+	</cffunction>
+	
+	<cffunction name="createElement" access="private" returntype="string" output="false">
+		<cfargument name="value" type="string" required="true" />
+		<cfargument name="column" type="struct" required="true" />
+		<cfargument name="data" type="any" required="true" />
+		<cfargument name="rowNum" type="numeric" required="true" />
+		
+		<cfset local.prefix = structKeyExists(arguments.column, 'prefix') ? arguments.column.prefix & '-' : '' />
+		
+		<cfset arguments.column.element.value = arguments.value />
+		<cfset arguments.column.element.id = local.prefix & arguments.column.key & '-' & arguments.rowNum />
+		<cfset arguments.column.element.name = local.prefix & arguments.column.key & '-' & arguments.rowNum />
+		
+		<!--- Check for mappings --->
+		<cfif structKeyExists(arguments.column.element, 'mappings')>
+			<cfloop list="#structKeyList(arguments.column.element.mappings)#" index="local.i">
+				<cfset arguments.column.element[local.i] = getValue(arguments.data, arguments.rowNum, arguments.column.element.mappings[local.i]) />
+			</cfloop>
+		</cfif>
+		
+		<cfif arguments.column.element.elementType eq 'checkbox' and not structKeyExists(arguments.column.element, 'options')>
+			<cfif arguments.value eq arguments.column.element.originalValue>
+				<cfset arguments.column.element.checked = true />
+			<cfelse>
+				<cfset structDelete(arguments.column.element, 'checked') />
+			</cfif>
+		</cfif>
+		
+		<cfreturn variables.theForm.theForm.elementToHtml(arguments.column.element) />
 	</cffunction>
 	
 	<cffunction name="createLink" access="private" returntype="string" output="false">
@@ -147,7 +183,7 @@
 					
 					<cfset href = theUrl['getDGCol#arguments.colNum#Link#i#']() />
 					
-					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#formatValue(arguments.column, arguments.text)#</a>
+					<a href="#href#" class="#(arrayLen(arguments.column.linkClass) gte i ? arguments.column.linkClass[i] : '')#">#this.format(arguments.text, arguments.column.format)#</a>
 				</cfloop>
 			</cfoutput>
 		</cfsavecontent>
@@ -155,30 +191,19 @@
 		<cfreturn html />
 	</cffunction>
 <cfscript>
-	private string function formatValue(required struct column, required string value) {
-		switch (arguments.column.type) {
-			case 'checkbox':
-				return '<input type="checkbox" name="checkboxSelect[]" value="' & arguments.value & '" />';
-			
-			// Use the format as a holder for a formatter
-			case 'custom':
-				return arguments.column.format.toHTML(arguments.value);
-			
-			case 'date':
-				return dateFormat(arguments.value, arguments.column.format);
-			
-			case 'time':
-				return timeFormat(arguments.value, arguments.column.format);
-			
-			case 'raw':
-				return arguments.value;
-			
-			case 'uuid':
-				return left(arguments.value, 8);
-			
-			default:
-				return htmlEditFormat(arguments.value);
+	private string function format( required string value, struct format = {}, boolean isHeader = false ) {
+		local.result = '';
+		local.keys = listToArray(structKeyList(arguments.format));
+		
+		for(local.i = 1; local.i <= arrayLen(local.keys); local.i++) {
+			arguments.value = variables.format[local.keys[local.i]](arguments.value, arguments.format[local.keys[local.i]]);
 		}
+		
+		if(arguments.isHeader) {
+			arguments.value = variables.label.get(arguments.value, arguments.value);
+		}
+		
+		return arguments.value;
 	}
 	
 	public string function getNestedValue( required struct data, required string key ) {
@@ -236,6 +261,14 @@
 		<cfreturn value />
 	</cffunction>
 	
+	<cffunction name="setForm" access="public" returntype="void" output="false">
+		<cfargument name="theForm" type="component" required="true" />
+		<cfargument name="action" type="string" default="." />
+		<cfargument name="options" type="struct" default="#{}#" />
+		
+		<cfset variables.theForm = arguments />
+	</cffunction>
+	
 	<cffunction name="toHTML" access="public" returntype="string" output="false">
 		<cfargument name="data" type="any" required="true" />
 		<cfargument name="options" type="struct" default="#{}#" />
@@ -244,13 +277,6 @@
 		<cfset var col = '' />
 		<cfset var counter = '' />
 		<cfset var currentKey = '' />
-		<cfset var defaults = {
-			class = '',
-			linkBase = '',
-			minimumRows = 15,
-			numPerPage = 30,
-			startRow = 1
-		} />
 		<cfset var derived = {} />
 		<cfset var html = '' />
 		<cfset var htmlColumns = '' />
@@ -265,7 +291,29 @@
 		<cfset var title = '' />
 		<cfset var value = '' />
 		
-		<cfset arguments.options = extend(defaults, arguments.options) />
+		<cfset arguments.options = extend({
+			class = '',
+			linkBase = '',
+			minimumRows = 15,
+			numPerPage = 30,
+			startRow = 1,
+			showForm = true
+		}, arguments.options) />
+		
+		<!--- Make sure the form only shows when there is a form to display --->
+		<cfset arguments.options.showForm = arguments.options.showForm and structKeyExists(variables, 'theForm') />
+		
+		<!--- Prepare for form elements if there is a form --->
+		<cfif structKeyExists(variables, 'theForm')>
+			<cfloop from="1" to="#arrayLen(variables.columns)#" index="i">
+				<cfif structKeyExists(variables.columns[i], 'element')>
+					<cfset variables.columns[i].element = variables.theForm.theForm.extendElement(argumentCollection = variables.columns[i].element) />
+					
+					<!--- Store the original value since it gets changed every loop through the data --->
+					<cfset variables.columns[i].element.originalValue = (structKeyExists(variables.columns[i].element, 'value') ? variables.columns[i].element.value : '') />
+				</cfif>
+			</cfloop>
+		</cfif>
 		
 		<cfsavecontent variable="htmlColumns">
 			<cfoutput>
@@ -293,7 +341,7 @@
 						<cfset counter = 0 />
 						
 						<cfloop array="#variables.columns#" index="col">
-							<td class="#col.key# #col.class# column-#counter++# capitalize">
+							<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++# capitalize">
 								<cfif structKeyExists(col, 'aggregate')>
 									<cfset currentKey = col.key & '-' & col.aggregate />
 									
@@ -406,7 +454,7 @@
 								<cfelse>
 									&nbsp;
 								</cfif>
-							</td>
+							</#(col.isHeader ? 'th' : 'td')#>
 						</cfloop>
 					</tr>
 				</cfoutput>
@@ -414,6 +462,10 @@
 		</cfif>
 		
 		<cfsavecontent variable="html">
+			<cfif arguments.options.showForm>
+				<cfoutput>#variables.theForm.theForm.getFormOpen(variables.theForm.action, variables.theForm.options)#</cfoutput>
+			</cfif>
+			
 			<table class="datagrid <cfoutput>#arguments.options.class#</cfoutput>">
 				<cfoutput>
 					<thead>
@@ -437,7 +489,7 @@
 										<cfloop array="#variables.columns#" index="col">
 											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 											
-											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+											<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine the value --->
 												<cfif col.key neq ''>
 													<cfset value = item['get' & col.key]() />
@@ -450,10 +502,12 @@
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
+												<cfelseif structKeyExists(col, 'element')>
+													#createElement(value, col, data, rowNum)#
 												<cfelse>
-													#formatValue(col, value)#
+													#this.format(value, col.format, col.isHeader)#
 												</cfif>
-											</td>
+											</#(col.isHeader ? 'th' : 'td')#>
 										</cfloop>
 									<cfelseif isStruct(item)>
 										<cfset counter = 0 />
@@ -461,7 +515,7 @@
 										<cfloop array="#variables.columns#" index="col">
 											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 											
-											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+											<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Determine Value --->
 												<cfif col.key neq ''>
 													<cfif structKeyExists(item, col.key)>
@@ -478,23 +532,25 @@
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(value, col, data, rowNum, counter, arguments.options)#
+												<cfelseif structKeyExists(col, 'element')>
+													#createElement(value, col, data, rowNum)#
 												<cfelse>
-													#formatValue(col, value)#
+													#this.format(value, col.format, col.isHeader)#
 												</cfif>
-											</td>
+											</#(col.isHeader ? 'th' : 'td')#>
 										</cfloop>
 									<cfelseif isSimpleValue(item)>
 										<cfloop array="#variables.columns#" index="col">
 											<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 											
-											<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+											<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(item, col, data, rowNum, counter, arguments.options)#
 												<cfelse>
 													#item#
 												</cfif>
-											</td>
+											</#(col.isHeader ? 'th' : 'td')#>
 										</cfloop>
 									<cfelse>
 										<cfthrow message="The data type passed in is not suported." detail="The type of the data in the array is not of type struct, object or simpleValue.">
@@ -518,7 +574,7 @@
 								<cfloop array="#variables.columns#" index="col">
 									<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 									
-									<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+									<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 										<!--- Determine Value --->
 										<cfif col.key neq ''>
 											<cfset value = arguments.data[col.key] />
@@ -531,10 +587,12 @@
 										<!--- Check for a link --->
 										<cfif arrayLen(col.link)>
 											#createLink(value, col, data, rowNum, counter, arguments.options)#
+										<cfelseif structKeyExists(col, 'element')>
+											#createElement(value, col, data, rowNum)#
 										<cfelse>
-											#formatValue(col, value)#
+											#this.format(value, col.format, col.isHeader)#
 										</cfif>
-									</td>
+									</#(col.isHeader ? 'th' : 'td')#>
 								</cfloop>
 							</tr>
 						</cfoutput>
@@ -553,7 +611,7 @@
 										<!--- Mocking the data as an array of structs and hardcoding the row --->
 										<cfset title = col.title neq '' ? getValue([ local.current ], 1, col.title) : '' />
 										
-										<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+										<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 											<!--- Determine Value --->
 											<cfif col.key neq ''>
 												<cfset value = local.current[col.key] />
@@ -565,10 +623,12 @@
 											<cfif arrayLen(col.link)>
 												<!--- Mocking the data as an array of structs and hardcoding the row --->
 												#createLink(value, col, [ local.current ], 1, counter, arguments.options)#
+											<cfelseif structKeyExists(col, 'element')>
+												#createElement(value, col, data, rowNum)#
 											<cfelse>
-												#formatValue(col, value)#
+												#this.format(value, col.format, col.isHeader)#
 											</cfif>
-										</td>
+										</#(col.isHeader ? 'th' : 'td')#>
 									</cfloop>
 								</tr>
 							</cfloop>
@@ -589,7 +649,7 @@
 									<cfloop array="#variables.columns#" index="col">
 										<cfset title = col.title neq '' ? getValue(data, rowNum, col.title) : '' />
 										
-										<td class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
+										<#(col.isHeader ? 'th' : 'td')# class="#col.key# #col.class# column-#counter++#" <cfif title != ''>data-title="#title#"</cfif>>
 											<!--- Determine Value --->
 											<cfif col.key neq ''>
 												<cfset value = arguments.data[key][col.key] />
@@ -602,10 +662,12 @@
 											<!--- Check for a link --->
 											<cfif arrayLen(col.link)>
 												#createLink(value, col, data, rowNum, counter, arguments.options)#
+											<cfelseif structKeyExists(col, 'element')>
+												#createElement(value, col, data, rowNum)#
 											<cfelse>
-												#formatValue(col, value)#
+												#this.format(value, col.format, col.isHeader)#
 											</cfif>
-										</td>
+										</#(col.isHeader ? 'th' : 'td')#>
 									</cfloop>
 								</tr>
 							</cfloop>
@@ -634,6 +696,13 @@
 					</cfoutput>
 				</cfif>
 			</table>
+			
+			<cfif arguments.options.showForm>
+				<cfoutput>
+					#variables.theForm.theForm.getFormSubmit()#
+					#variables.theForm.theForm.getFormClose()#
+				</cfoutput>
+			</cfif>
 		</cfsavecontent>
 		
 		<cfreturn html />

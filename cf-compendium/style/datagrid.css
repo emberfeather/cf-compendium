@@ -22,7 +22,8 @@
 }
 
 .datagrid thead,
-.datagrid tfoot {
+.datagrid tfoot,
+.datagrid tbody th {
 	font-weight: bold;
 	background: #ededed;
 	text-align: left;
@@ -30,6 +31,10 @@
 
 .datagrid thead {
 	border-bottom: 1px solid #000;
+}
+
+.datagrid tbody th {
+	width: 1px;
 }
 
 .datagrid tfoot {
@@ -70,6 +75,10 @@
 .datagrid td.width-min {
 	width: 1px;
 	white-space: nowrap;
+}
+
+.datagrid td.no-pad {
+	padding: 0;
 }
 
 .datagrid a.delete {
