@@ -10,8 +10,7 @@ component extends="cf-compendium.inc.resource.base.object" {
 		variables.source = arguments.source;
 		variables.options = extend({
 			empty: {
-				defaultValue: '',
-				hidden: false
+				defaultValue: ''
 			},
 			wrap: {
 				outerContainer: 'dl',
