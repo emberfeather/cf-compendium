@@ -344,6 +344,10 @@ dt {
 	color: #FF3333;
 	margin-right: 1em;
 }
+dl.detail {
+	margin-bottom: 2em;
+}
+
 dl.detail dt {
 	text-transform: capitalize;
 }
