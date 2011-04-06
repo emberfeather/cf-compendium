@@ -9,7 +9,10 @@ component extends="cf-compendium.inc.resource.base.object" {
 		
 		variables.source = arguments.source;
 		variables.options = extend({
-			emptyDefault: '',
+			empty: {
+				defaultValue: '',
+				hidden: false
+			},
 			wrap: {
 				outerContainer: 'dl',
 				innerContainer: 'dl',
@@ -50,7 +53,7 @@ component extends="cf-compendium.inc.resource.base.object" {
 		local.result = '';
 		
 		for(local.i = 1; local.i <= arrayLen(arguments.keys); local.i++) {
-			local.result &= wrapTag(variables.label.get(arguments.keys[local.i]), arguments.options.wrap.label);
+			local.label = wrapTag(variables.label.get(arguments.keys[local.i]), arguments.options.wrap.label);
 			
 			local.areSubValues = arrayLen(arguments.options.value.keys);
 			
@@ -64,18 +67,18 @@ component extends="cf-compendium.inc.resource.base.object" {
 				);
 			
 			if(isArray(local.value) && !local.areSubValues) {
-				local.result &= displayArray(arguments.keys[local.i], local.value, arguments.options);
+				local.result &= local.label & displayArray(arguments.keys[local.i], local.value, arguments.options);
 			} else if(isStruct(local.value) && !local.areSubValues) {
-				local.result &= displayStruct(arguments.keys[local.i], local.value, arguments.options);
+				local.result &= local.label & displayStruct(arguments.keys[local.i], local.value, arguments.options);
 			} else if(isSimpleValue(local.value)) {
 				// Allow for having the value be a label key to show a message
 				local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
 			}
 			
 			if(!isArray(local.value) && !isStruct(local.value) && (!local.areSubValues || local.value != '')) {
-				if( local.value == '' && arguments.options.emptyDefault != '' ) {
+				if( local.value == '' && arguments.options.empty.defaultValue != '' ) {
 					// Allow for empty override
-					local.value = variables.label.get(arguments.options.emptyDefault, arguments.options.emptyDefault);
+					local.value = variables.label.get(arguments.options.empty.defaultValue, arguments.options.empty.defaultValue);
 				}
 				
 				if(local.value != '') {
@@ -83,7 +86,7 @@ component extends="cf-compendium.inc.resource.base.object" {
 						local.value = this.format(local.value, arguments.options.format);
 					}
 					
-					local.result &= wrapTag(local.value, arguments.options.wrap.value);
+					local.result &= local.label & wrapTag(local.value, arguments.options.wrap.value);
 				}
 			}
 			
@@ -113,9 +116,9 @@ component extends="cf-compendium.inc.resource.base.object" {
 						if( local.value != '') {
 							// Allow for having the value be a label key to show a message
 							local.value = variables.label.get(arguments.keys[local.i] & '.' & local.value, local.value);
-						} else if( local.value == '' && arguments.options.emptyDefault != '' ) {
+						} else if( local.value == '' && arguments.options.empty.defaultValue != '' ) {
 							// Allow for empty override
-							local.value = variables.label.get(arguments.options.emptyDefault, arguments.options.emptyDefault);
+							local.value = variables.label.get(arguments.options.empty.defaultValue, arguments.options.empty.defaultValue);
 						}
 						
 						if(structKeyExists(arguments.options, 'format')) {
@@ -130,7 +133,9 @@ component extends="cf-compendium.inc.resource.base.object" {
 					}
 				}
 				
-				local.result &= wrapTag(local.sub, arguments.options.wrap.innerContainer);
+				if(len(trim(local.sub))) {
+					local.result &= wrapTag(local.sub, arguments.options.wrap.innerContainer);
+				}
 			}
 		}
 		
