@@ -138,7 +138,7 @@ component extends="cf-compendium.inc.resource.base.object" {
 			}
 		}
 		
-		return wrapTag(local.result, arguments.options.wrap.outerContainer);
+		return wrapTag(local.result, arguments.options.wrap.outerContainer, 'detail');
 	}
 	
 	public string function displayArray( required string key, required array value, struct options = {} ) {
@@ -279,9 +279,9 @@ component extends="cf-compendium.inc.resource.base.object" {
 		variables.mappings[arguments.path] = arguments.value;
 	}
 	
-	private string function wrapTag( required string value, string tag = '' ) {
+	private string function wrapTag( required string value, string tag = 'div', string class = '' ) {
 		if (arguments.tag != '') {
-			return '<' & arguments.tag & '>' & arguments.value & '</' & arguments.tag & '>';
+			return chr(10) & '<' & arguments.tag & ' class="' & arguments.class & '">' & chr(10) & arguments.value & chr(10) & '</' & arguments.tag & '>';
 		}
 		
 		return arguments.value;

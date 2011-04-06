@@ -344,6 +344,13 @@ dt {
 	color: #FF3333;
 	margin-right: 1em;
 }
+dl.detail dt {
+	text-transform: capitalize;
+}
+
+dl.detail dd {
+	margin: .5em 0 .5em 3em;
+}
 /*
 	These are for the CODE snippet styling
 */

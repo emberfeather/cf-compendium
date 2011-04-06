@@ -29,6 +29,7 @@
 			<fileset dir="${build.style}" includes="form.css" />
 			<fileset dir="${build.style}" includes="list.css" />
 			<fileset dir="${build.style}" includes="datagrid.css" />
+			<fileset dir="${build.style}" includes="detail.css" />
 			<fileset dir="${build.style}" includes="code.css" />
 		</concat>
 		
