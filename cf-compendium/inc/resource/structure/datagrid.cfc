@@ -547,6 +547,8 @@
 												<!--- Check for a link --->
 												<cfif arrayLen(col.link)>
 													#createLink(item, col, data, rowNum, counter, arguments.options)#
+												<cfelseif structKeyExists(col, 'element')>
+													#createElement(item, col, data, rowNum)#
 												<cfelse>
 													#item#
 												</cfif>
