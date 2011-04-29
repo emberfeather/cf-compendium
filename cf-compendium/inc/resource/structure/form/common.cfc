@@ -184,7 +184,7 @@
 					<cfset arguments.element.id = originalID & '_' & j />
 					
 					<cfif isArray(originalValue)>
-						<cfset arguments.element.checked = arrayFindNoCase(originalValue, option.value) />
+						<cfset arguments.element.checked = arrayFindNoCase(originalValue, option.value) gt 0 />
 					<cfelse>
 						<cfset arguments.element.checked = originalValue eq option.value />
 					</cfif>
