@@ -7,11 +7,37 @@
 	$(function() {
 		var elements = $('.form .element');
 		
-		// Add the deletion functionality
+		// Add the deletion buttons
 		attachDeletion(elements);
 		
-		// Add the duplicate functionality
+		// Add the duplicate buttons
 		attachDuplication(elements);
+		
+		// Bind to the events
+		$(elements).live({
+			'delete': function(){
+				$(this).removeElement();
+			},
+			'duplicate': function(){
+				$(this).duplicateElement();
+			}
+		});
+		
+		$('button.delete', elements).live({
+			click: function(event) {
+				$(this).trigger('delete');
+				
+				return false;
+			}
+		});
+		
+		$('button.duplicate', elements).live({
+			click: function(event) {
+				$(this).trigger('duplicate');
+				
+				return false;
+			}
+		});
 		
 		// Make the modifiers into button sets
 		$('.modifiers', elements).buttonset();
@@ -26,35 +52,35 @@
 	 */
 	$.fn.duplicateElement = function() {
 		return this.each(function(){
-			original = $(this);
-			
-			// Clone the element
-			clone = $(this).clone(true).addClass('clone');
+			var original = $(this);
+			var cloned = original.clone().addClass('clone');
 			
 			// Increment the clone counters
 			original.data('cloneLength', (original.data('cloneLength') || 0) + 1);
 			original.data('cloneCount', (original.data('cloneCount') || 0) + 1);
 			
 			// Include reference back to original
-			clone.data('original', original);
+			cloned.data('original', original);
 			
 			// Remove the duplication class
-			$('.allowDuplication', clone).removeClass('allowDuplication');
+			$('.allowDuplication', cloned).removeClass('allowDuplication');
 			
 			// Remove the duplication link
-			$('.duplicate', clone).remove();
+			$('.duplicate', cloned).remove();
 			
 			// Remove any values in the inputs
-			$('input[type=text], input[type=password], input[type=file]', clone).val('');
+			$('input[type=text], input[type=password], input[type=file]', cloned).val('');
 			
 			// Make all the ids and names unique using the clone counter
-			makeUnique(clone, 'clone' + original.data('cloneCount'));
+			makeUnique(cloned, 'clone' + original.data('cloneCount'));
 			
 			// Add after the current element
-			$(this).after(clone);
+			original.after(cloned);
+			
+			cloned.trigger('afterduplicate', { original: original });
 			
 			// Set the focus on the input in the clone
-			$('input', clone).focus();
+			$('input', cloned).focus();
 		});
 	};
 	
@@ -117,21 +143,13 @@
 	function attachDeletion( elements ) {
 		// Create the deletion link
 		var deleteBtn = $('<button />', {
-			text: 'Remove', // TODO use i18n
-			click: function(event) {
-				$(this)
-					.parents('.element')
-					.removeElement();
-				
-				return false;
-			},
-			className: 'delete'
+			text: 'Remove' // TODO use i18n
 		}).button({
 			icons: {
 				primary: 'ui-icon-circle-minus'
 			},
 			text: false
-		});
+		}).addClass('delete');
 		
 		// Since the .attr() will not work for setting the type
 		deleteBtn[0].setAttribute('type', 'button');
@@ -148,21 +166,13 @@
 	function attachDuplication( elements ) {
 		// Create the duplication link
 		var duplicateBtn = $('<button />', {
-			text: 'Add multiple', // TODO use i18n
-			click: function() {
-				$(this)
-					.parents('.element')
-					.duplicateElement();
-				
-				return false;
-			},
-			className: 'duplicate'
+			text: 'Add multiple' // TODO use i18n
 		}).button({
 			icons: {
 				primary: 'ui-icon-circle-plus'
 			},
 			text: false
-		});
+		}).addClass('duplicate');
 		
 		// Since the .attr() will not work for setting the type
 		duplicateBtn[0].setAttribute('type', 'button');
