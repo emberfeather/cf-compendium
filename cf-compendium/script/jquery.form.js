@@ -125,9 +125,7 @@
 		
 		// If there isn't any modifiers container add make a new one
 		if( !modifiers.length ) {
-			modifiers = $('<span />', {
-				className: 'modifiers'
-			});
+			modifiers = $('<span />').addClass('modifiers');
 			
 			// Add the modifiers after the element
 			element.after(modifiers);
