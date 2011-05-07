@@ -181,12 +181,15 @@
 					<cfset option = group.options[j] />
 					
 					<cfset arguments.element.value = option.value />
-					<cfset arguments.element.checked = originalValue eq option.value />
 					<cfset arguments.element.id = originalID & '_' & j />
 					
-					<cfset formatted &= elementCheckboxSingle(arguments.element) />
+					<cfif isArray(originalValue)>
+						<cfset arguments.element.checked = arrayFindNoCase(originalValue, option.value) gt 0 />
+					<cfelse>
+						<cfset arguments.element.checked = originalValue eq option.value />
+					</cfif>
 					
-					<cfset formatted &= ' <label for="' & arguments.element.id & '">' & option.title & '</label>' />
+					<cfset formatted &= ' <label>' & elementCheckboxSingle(arguments.element) & option.title & '</label>' />
 				</cfloop>
 				
 				<cfif group.label neq ''>
@@ -452,9 +455,7 @@
 					<cfset arguments.element.checked = originalValue eq option.value />
 					<cfset arguments.element.id = originalID & '_' & j />
 					
-					<cfset formatted &= elementRadioSingle(arguments.element) />
-					
-					<cfset formatted &= ' <label for="' & arguments.element.id & '">' & option.title & '</label>' />
+					<cfset formatted &= ' <label>' & elementRadioSingle(arguments.element) & option.title & '</label>' />
 				</cfloop>
 				
 				<cfif group.label neq ''>
