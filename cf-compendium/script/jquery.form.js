@@ -39,11 +39,12 @@
 			}
 		});
 		
-		// Make the modifiers into button sets
 		$('.modifiers', elements).buttonset();
 		
-		// Make the autocomplete elements into autocompletes
 		elements.find('.autocomplete').each(createAutocomplete).end();
+		
+		// Uses ISO 8601 Date Format
+		$('input[type="date"]', elements).datepicker({ dateFormat: 'yy-mm-dd' });
 	});
 	
 	/**
