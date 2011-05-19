@@ -25,14 +25,34 @@ component extends="mxunit.framework.TestCase" {
 		variables.introspect = createObject('component', 'cf-compendium.inc.resource.utility.introspect').init(variables.source);
 	}
 	
-	public void function testReturnNestedStructObjectValue() {
-		assertEquals(variables.source.C.C1.getC1a(), variables.introspect.get('C.C1.C1a'));
-		assertEquals(variables.source.C.C2.getC2a(), variables.introspect.get('C.C2.C2a'));
+	public void function testReturnBlankOnMissingNestedObjectStruct() {
+		assertEquals('', variables.introspect.get('B.B1.Foo'));
+		assertEquals('', variables.introspect.get('B.B2.Foo.Bar'));
+	}
+	
+	public void function testReturnBlankOnMissingNestedStructObject() {
+		assertEquals('', variables.introspect.get('A.A1.Foo'));
+		assertEquals('', variables.introspect.get('A.A2.Foo.Bar'));
+	}
+	
+	public void function testReturnBlankOnMissingSimpleObject() {
+		assertEquals('', variables.introspect.get('B.Foo'));
+		assertEquals('', variables.introspect.get('B.Foo.Bar'));
+	}
+	
+	public void function testReturnBlankOnMissingSimpleStruct() {
+		assertEquals('', variables.introspect.get('A.Foo'));
+		assertEquals('', variables.introspect.get('A.Foo.Bar'));
 	}
 	
 	public void function testReturnNestedObjectStructValue() {
 		assertEquals(variables.source.D.getD1().D1a, variables.introspect.get('D.D1.D1a'));
 		assertEquals(variables.source.D.getD2().D2a, variables.introspect.get('D.D2.D2a'));
+	}
+	
+	public void function testReturnNestedStructObjectValue() {
+		assertEquals(variables.source.C.C1.getC1a(), variables.introspect.get('C.C1.C1a'));
+		assertEquals(variables.source.C.C2.getC2a(), variables.introspect.get('C.C2.C2a'));
 	}
 	
 	public void function testReturnSimpleObjectValue() {
