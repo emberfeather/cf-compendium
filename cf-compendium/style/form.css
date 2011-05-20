@@ -26,6 +26,21 @@
 	min-width: 250px;
 }
 
+.form input[type=number] {
+	width: 5%;
+	min-width: 50px;
+}
+
+.form input[type=number] {
+	width: 5%;
+	min-width: 50px;
+}
+
+.form input[type=date] {
+	width: 10%;
+	min-width: 85px;
+}
+
 .form input[type=submit],
 .form input[type=reset],
 .form button {
