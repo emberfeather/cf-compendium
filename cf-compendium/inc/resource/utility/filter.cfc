@@ -29,13 +29,13 @@
 	
 	<cffunction name="addFilter" access="public" returntype="void" output="false">
 		<cfargument name="key" type="string" required="true" />
-		<cfargument name="options" type="component" required="false" />
+		<cfargument name="options" type="any" required="false" />
 		
 		<cfset var filter = {
-				label = variables.label.get(arguments.key),
-				key = trim(arguments.key),
-				options = ''
-			} />
+			label = variables.label.get(arguments.key),
+			key = trim(arguments.key),
+			options = ''
+		} />
 		
 		<!--- Ensure the key is not blank --->
 		<cfif filter.key eq ''>
@@ -187,8 +187,17 @@
 		
 		<cfset var html = '' />
 		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
+		<cfset var type = ( isStruct(arguments.filter.options) and structKeyExists(arguments.filter.options, 'type') ? arguments.filter.options['type'] : 'text' ) />
 		
-		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <input type="text" name="' & arguments.filter.key & '" value="' & value & '" /></label>' />
+		<cfswitch expression="#type#">
+			<cfcase value="date">
+				<cfif len(value) and isDate(value)>
+					<cfset value = dateFormat(value, 'yyyy-mm-dd') />
+				</cfif>
+			</cfcase>
+		</cfswitch>
+		
+		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <input type="' & type & '" name="' & arguments.filter.key & '" value="' & value & '" /></label>' />
 		
 		<cfreturn html />
 	</cffunction>
