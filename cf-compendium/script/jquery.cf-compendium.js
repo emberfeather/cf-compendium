@@ -342,7 +342,7 @@ jQuery.cookie = function(key, value, options) {
 	 * Adds the given option to the element inside an modifiers span.
 	 */
 	function addOption (element, option) {
-		var elementRow = element.parent('.element');
+		var elementRow = element.parents('.element');
 		var modifiers = $('.modifiers', elementRow);
 		
 		// If there isn't any modifiers container add make a new one
