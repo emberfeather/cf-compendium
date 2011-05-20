@@ -39,11 +39,12 @@
 			}
 		});
 		
-		// Make the modifiers into button sets
 		$('.modifiers', elements).buttonset();
 		
-		// Make the autocomplete elements into autocompletes
 		elements.find('.autocomplete').each(createAutocomplete).end();
+		
+		// Uses ISO 8601 Date Format
+		$('input[type="date"]', elements).datepicker({ dateFormat: 'yy-mm-dd' });
 	});
 	
 	/**
@@ -120,7 +121,7 @@
 	 * Adds the given option to the element inside an modifiers span.
 	 */
 	function addOption (element, option) {
-		var elementRow = element.parent('.element');
+		var elementRow = element.parents('.element');
 		var modifiers = $('.modifiers', elementRow);
 		
 		// If there isn't any modifiers container add make a new one
