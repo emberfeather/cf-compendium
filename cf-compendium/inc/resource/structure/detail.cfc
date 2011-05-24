@@ -197,7 +197,7 @@ component extends="cf-compendium.inc.resource.base.object" {
 		return local.result;
 	}
 	
-	private string function format( required string value, struct format = {} ) {
+	public string function format( required string value, struct format = {} ) {
 		local.result = '';
 		local.keys = listToArray(structKeyList(arguments.format));
 		
