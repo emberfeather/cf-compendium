@@ -152,7 +152,8 @@ dt {
 	min-width: 50px;
 }
 
-.form input[type=date] {
+.form input[type=date],
+.form input[type=month] {
 	width: 10%;
 	min-width: 85px;
 }

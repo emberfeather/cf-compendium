@@ -264,8 +264,9 @@ jQuery.cookie = function(key, value, options) {
 		
 		elements.find('.autocomplete').each(createAutocomplete).end();
 		
-		// Uses ISO 8601 Date Format
+		// Uses RFC 3339 Date Format
 		$('input[type="date"]', elements).datepicker({ dateFormat: 'yy-mm-dd' });
+		$('input[type="month"]', elements).datepicker({ dateFormat: 'yy-mm' });
 	});
 	
 	/**
