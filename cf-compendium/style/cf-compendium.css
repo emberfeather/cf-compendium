@@ -208,6 +208,10 @@ dt {
 	text-align: center;
 }
 
+.form .element.recaptcha input[type=text] {
+	min-width: 100px;
+}
+
 /**
  * DataGrid Integration
  */
