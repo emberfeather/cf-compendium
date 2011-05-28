@@ -496,10 +496,18 @@
 		
 		<cfset local.html = '' />
 		<cfset local.error = (structKeyExists(arguments.element, 'error') and len(arguments.element.error) ? '&amp;error=' & arguments.element.error : '') />
+		<cfset local.theme = (structKeyExists(arguments.element, 'theme') and len(arguments.element.theme) ? arguments.element.theme : '') />
 		
 		<cfsavecontent variable="local.html">
 			<cfoutput>
 				<div class="options">
+					<cfif local.theme neq ''>
+						<script type="text/javascript">
+							var RecaptchaOptions = {
+								theme : '#arguments.element.theme#'
+							};
+						</script>
+					</cfif>
 					<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=#arguments.element.value##local.error#"></script>
 					
 					<noscript>
