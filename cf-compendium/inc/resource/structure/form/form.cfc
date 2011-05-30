@@ -27,12 +27,12 @@
 		<!--- Holder for the dynamic form elements --->
 		<cfset variables.formElements = [] />
 		
-		<cfset addFormElement(createObject('component', 'cf-compendium.inc.resource.structure.form.common').init()) />
-		
 		<!--- Create an objects --->
 		<cfset variables.extender = createObject('component', 'cf-compendium.inc.resource.utility.extend').init() />
 		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
 		<cfset variables.attributes = createObject('component', 'cf-compendium.inc.resource.structure.form.attributes').init() />
+		
+		<cfset addFormElement(createObject('component', 'cf-compendium.inc.resource.structure.form.common').init()) />
 		
 		<!--- Set base bundle for translation --->
 		<cfset addBundle('/cf-compendium/i18n/inc/resource/structure', 'form') />
@@ -102,6 +102,8 @@
 	
 	<cffunction name="addFormElement" access="public" returntype="void" output="false">
 		<cfargument name="formElement" type="component" required="true" />
+		
+		<cfset arguments.formElement.set__label(variables.label) />
 		
 		<cfset arrayAppend(variables.formElements, arguments.formElement) />
 	</cffunction>
