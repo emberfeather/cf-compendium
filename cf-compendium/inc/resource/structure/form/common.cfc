@@ -491,6 +491,38 @@
 		<cfreturn elementInput(arguments.element) />
 	</cffunction>
 	
+	<cffunction name="elementReCaptcha" access="public" returntype="string" output="false">
+		<cfargument name="element" type="struct" required="true" />
+		
+		<cfset local.html = '' />
+		<cfset local.error = (structKeyExists(arguments.element, 'error') and len(arguments.element.error) ? '&amp;error=' & arguments.element.error : '') />
+		<cfset local.theme = (structKeyExists(arguments.element, 'theme') and len(arguments.element.theme) ? arguments.element.theme : '') />
+		
+		<cfsavecontent variable="local.html">
+			<cfoutput>
+				<div class="options">
+					<cfif local.theme neq ''>
+						<script type="text/javascript">
+							var RecaptchaOptions = {
+								theme : '#arguments.element.theme#'
+							};
+						</script>
+					</cfif>
+					<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=#arguments.element.value##local.error#"></script>
+					
+					<noscript>
+						<iframe src="http://www.google.com/recaptcha/api/noscript?k=#arguments.element.value##local.error#" height="300" width="500" frameborder="0"></iframe>
+						<br>
+						<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
+						<input type="hidden" name="recaptcha_response_field" value="manual_challenge">
+					</noscript>
+				</div>
+			</cfoutput>
+		</cfsavecontent>
+		
+		<cfreturn local.html />
+	</cffunction>
+	
 	<cffunction name="elementReset" access="public" returntype="string" output="false">
 		<cfargument name="element" type="struct" required="true" />
 		

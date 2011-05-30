@@ -65,6 +65,8 @@ component extends="cf-compendium.inc.resource.base.object" {
 			
 			if(isArray(local.value) && !local.areSubValues) {
 				local.result &= local.label & displayArray(arguments.keys[local.i], local.value, arguments.options);
+			} else if(isObject(local.value) && !local.areSubValues) {
+				local.result &= local.label & displayObject(arguments.keys[local.i], local.value, arguments.options);
 			} else if(isStruct(local.value) && !local.areSubValues) {
 				local.result &= local.label & displayStruct(arguments.keys[local.i], local.value, arguments.options);
 			} else if(isSimpleValue(local.value)) {
@@ -125,6 +127,8 @@ component extends="cf-compendium.inc.resource.base.object" {
 						local.sub &= wrapTag(local.value, arguments.options.wrap.value);
 					} else if(isArray(local.value)) {
 						local.sub &= displayArray(arguments.keys[local.i], local.value, arguments.options);
+					} else if(isObject(local.value)) {
+						local.sub &= displayObject(arguments.keys[local.i], local.value, arguments.options);
 					} else if(isStruct(local.value)) {
 						local.sub &= displayStruct(arguments.keys[local.i], local.value, arguments.options);
 					}
@@ -143,6 +147,9 @@ component extends="cf-compendium.inc.resource.base.object" {
 		local.result = '';
 		
 		for(local.j = 1; local.j <= arrayLen(arguments.value); local.j++) {
+			writeDump(arguments.value);
+			abort;
+			
 			// Allow for having the value be a label key to show a message
 			if(variables.label.has(arguments.value[local.j])) {
 				arguments.value[local.j] = variables.label.get(arguments.value[local.j]);
@@ -160,6 +167,38 @@ component extends="cf-compendium.inc.resource.base.object" {
 			}
 			
 			local.result &= wrapTag(arguments.value[local.j], arguments.options.wrap.value);
+		}
+		
+		local.result = wrapTag(local.result, arguments.options.wrap.innerContainer);
+		
+		return local.result;
+	}
+	
+	public string function displayObject( required string key, required struct value, struct options = {} ) {
+		local.keys = listToArray(listSort(arguments.value.get__keyList(), 'text'));
+		local.result = '';
+		
+		for(local.i = 1; local.i <= arrayLen(local.keys); local.i++) {
+			if(variables.label.has(local.keys[local.i])) {
+				local.label = variables.label.get(local.keys[local.i]);
+			} else {
+				local.label = variables.label.get(arguments.key & '.' & local.keys[local.i], local.keys[local.i]);
+			}
+			
+			local.result &= wrapTag(local.label, arguments.options.wrap.label);
+			
+			local.altValue = arguments.value['get' & local.keys[local.i]]();
+			
+			// Allow for having the value be a label key to show a message
+			if( local.altValue != '') {
+				local.altValue = variables.label.get(arguments.key & '.' & local.keys[local.i] & '.' & local.altValue, local.altValue);
+			}
+			
+			if(structKeyExists(arguments.options, 'format')) {
+				local.altValue = this.format(local.altValue, arguments.options.format);
+			}
+			
+			local.result &= wrapTag(local.altValue, arguments.options.wrap.value);
 		}
 		
 		local.result = wrapTag(local.result, arguments.options.wrap.innerContainer);

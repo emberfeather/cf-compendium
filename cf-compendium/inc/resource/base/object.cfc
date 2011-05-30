@@ -56,7 +56,7 @@
 		<cfset var result = '' />
 		
 		<!--- Do a regex on the name --->
-		<cfset result = reFindNoCase('^(get|set|addUnique|add|length|has|reset)(.+)', arguments.missingMethodName, 1, true) />
+		<cfset result = reFindNoCase('^(get|set|addUnique|add|length|has|reset|unset)(.+)', arguments.missingMethodName, 1, true) />
 		
 		<!--- If we find don't find anything --->
 		<cfif not result.pos[1]>
@@ -190,8 +190,13 @@
 			</cfcase>
 			
 			<cfcase value="set">
-				<!--- Set the value --->
 				<cfset variables.instance[attribute] = arguments.missingMethodArguments[1] />
+			</cfcase>
+			
+			<cfcase value="unset">
+				<cfif structKeyExists(variables.instance, attribute)>
+					<cfset structDelete(variables.instance, attribute) />
+				</cfif>
 			</cfcase>
 		</cfswitch>
 	</cffunction>

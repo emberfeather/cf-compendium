@@ -152,7 +152,8 @@ dt {
 	min-width: 50px;
 }
 
-.form input[type=date] {
+.form input[type=date],
+.form input[type=month] {
 	width: 10%;
 	min-width: 85px;
 }
@@ -205,6 +206,10 @@ dt {
 .form .submit {
 	margin: .5em 0;
 	text-align: center;
+}
+
+.form .element.recaptcha input[type=text] {
+	min-width: 100px;
 }
 
 /**
