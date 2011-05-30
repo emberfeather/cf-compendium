@@ -13,8 +13,16 @@
 	min-width: 17em;
 	float: left;
 	clear: both;
-	text-transform: capitalize;
 	padding: 0 1em;
+}
+
+.form label,
+.form .groupLabel {
+	text-transform: capitalize;
+}
+
+.form .groupLabel {
+	font-weight: bold;
 }
 
 .form input[type=text],

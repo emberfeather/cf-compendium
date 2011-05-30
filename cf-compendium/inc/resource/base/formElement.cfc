@@ -39,4 +39,10 @@
 		
 		<cfreturn local.element />
 	</cffunction>
+	
+	<cffunction name="set__label" access="public" returntype="void" output="false">
+		<cfargument name="label" type="component" required="true" />
+		
+		<cfset variables.label = arguments.label />
+	</cffunction>
 </cfcomponent>

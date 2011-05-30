@@ -174,7 +174,7 @@
 				<cfset group = optGroups[i] />
 				
 				<cfif group.label neq ''>
-					<cfset formatted &= '<div><div>' & variables.label.get(group.label) & '</div>' />
+					<cfset formatted &= '<div><div class="groupLabel">' & variables.label.get(group.label) & '</div>' />
 				</cfif>
 				
 				<cfloop from="1" to="#arrayLen(group.options)#" index="j">
@@ -445,7 +445,7 @@
 				<cfif group.label neq ''>
 					<cfset formatted &= '<div>' />
 					
-					<cfset formatted &= '<div>' & variables.label.get(group.label) & '</div>' />
+					<cfset formatted &= '<div class="groupLabel">' & variables.label.get(group.label) & '</div>' />
 				</cfif>
 				
 				<cfloop from="1" to="#arrayLen(group.options)#" index="j">
