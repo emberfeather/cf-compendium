@@ -55,6 +55,15 @@
 	$.fn.duplicateElement = function() {
 		return this.each(function(){
 			var original = $(this);
+			var last = original;
+			var isDatagrid = hasDatagrid(original);
+			
+			// Datagrids clone the last row only
+			if(isDatagrid) {
+				last = $('tr:last', original);
+				original = $('tr:not(.clone):last', original);
+			}
+			
 			var cloned = original.clone().addClass('clone');
 			
 			// Increment the clone counters
@@ -74,15 +83,15 @@
 			$('input[type=text], input[type=password], input[type=file]', cloned).val('');
 			
 			// Make all the ids and names unique using the clone counter
-			makeUnique(cloned, 'clone' + original.data('cloneCount'));
+			makeUnique(cloned, 'clone' + zeroFill(original.data('cloneCount'), 4));
 			
 			// Add after the current element
-			original.after(cloned);
+			last.after(cloned);
 			
 			cloned.trigger('afterduplicate', { original: original });
 			
 			// Set the focus on the input in the clone
-			$('input', cloned).focus();
+			$('input:first', cloned).focus();
 		});
 	};
 	
@@ -211,5 +220,19 @@
 			minLength: element.data('minLength') || 0,
 			delay: element.data('delay') || 300
 		});
+	}
+	
+	function hasDatagrid(element) {
+		return $('table.datagrid', element).length > 0;
+	}
+	
+	function zeroFill( number, width ) {
+		width -= number.toString().length;
+		
+		if ( width > 0 ) {
+			return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+		}
+		
+		return number;
 	}
 }(jQuery));
