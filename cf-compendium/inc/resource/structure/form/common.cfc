@@ -255,7 +255,9 @@
 		<!--- Do not output the form tags --->
 		<cfset arguments.element.options.showForm = false />
 		
-		<cfreturn '<div class="wrapper">' & arguments.element.datagrid.toHTML( arguments.element.value, arguments.element.options ) & '</div>' />
+		<cfset arguments.element.class = (structKeyExists(arguments.element, 'class') ? arguments.element.class : '') & ' wrapper' />
+		
+		<cfreturn '<div #variables.attributes.attributesHtml(arguments.element)#>' & arguments.element.datagrid.toHTML( arguments.element.value, arguments.element.options ) & '</div>' />
 	</cffunction>
 	
 	<cffunction name="elementDate" access="public" returntype="string" output="false">
