@@ -281,8 +281,8 @@ jQuery.cookie = function(key, value, options) {
 			
 			// Datagrids clone the last row only
 			if(isDatagrid) {
-				last = $('tr:last', original);
-				original = $('tr:not(.clone):last', original);
+				last = $('tbody tr:last', original);
+				original = $('tbody tr:not(.clone):last', original);
 			}
 			
 			var cloned = original.clone().addClass('clone');
