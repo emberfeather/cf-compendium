@@ -80,7 +80,7 @@
 			$('.duplicate', cloned).remove();
 			
 			// Remove any values in the inputs
-			$('input[type=text], input[type=password], input[type=file]', cloned).val('');
+			$('input', cloned).val('');
 			
 			// Make all the ids and names unique using the clone counter
 			makeUnique(cloned, 'clone' + zeroFill(original.data('cloneCount'), 4));
