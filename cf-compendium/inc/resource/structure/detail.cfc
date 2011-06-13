@@ -147,9 +147,6 @@ component extends="cf-compendium.inc.resource.base.object" {
 		local.result = '';
 		
 		for(local.j = 1; local.j <= arrayLen(arguments.value); local.j++) {
-			writeDump(arguments.value);
-			abort;
-			
 			// Allow for having the value be a label key to show a message
 			if(variables.label.has(arguments.value[local.j])) {
 				arguments.value[local.j] = variables.label.get(arguments.value[local.j]);

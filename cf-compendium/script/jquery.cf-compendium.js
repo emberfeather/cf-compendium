@@ -276,6 +276,15 @@ jQuery.cookie = function(key, value, options) {
 	$.fn.duplicateElement = function() {
 		return this.each(function(){
 			var original = $(this);
+			var last = original;
+			var isDatagrid = hasDatagrid(original);
+			
+			// Datagrids clone the last row only
+			if(isDatagrid) {
+				last = $('tbody tr:last', original);
+				original = $('tbody tr:not(.clone):last', original);
+			}
+			
 			var cloned = original.clone().addClass('clone');
 			
 			// Increment the clone counters
@@ -292,18 +301,18 @@ jQuery.cookie = function(key, value, options) {
 			$('.duplicate', cloned).remove();
 			
 			// Remove any values in the inputs
-			$('input[type=text], input[type=password], input[type=file]', cloned).val('');
+			$('input', cloned).val('');
 			
 			// Make all the ids and names unique using the clone counter
-			makeUnique(cloned, 'clone' + original.data('cloneCount'));
+			makeUnique(cloned, 'clone' + zeroFill(original.data('cloneCount'), 4));
 			
 			// Add after the current element
-			original.after(cloned);
+			last.after(cloned);
 			
 			cloned.trigger('afterduplicate', { original: original });
 			
 			// Set the focus on the input in the clone
-			$('input', cloned).focus();
+			$('input:first', cloned).focus();
 		});
 	};
 	
@@ -432,6 +441,20 @@ jQuery.cookie = function(key, value, options) {
 			minLength: element.data('minLength') || 0,
 			delay: element.data('delay') || 300
 		});
+	}
+	
+	function hasDatagrid(element) {
+		return $('table.datagrid', element).length > 0;
+	}
+	
+	function zeroFill( number, width ) {
+		width -= number.toString().length;
+		
+		if ( width > 0 ) {
+			return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+		}
+		
+		return number;
 	}
 }(jQuery));
 /**

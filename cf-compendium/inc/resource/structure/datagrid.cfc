@@ -110,8 +110,8 @@
 		<cfset local.prefix = structKeyExists(arguments.column, 'prefix') ? arguments.column.prefix & '-' : '' />
 		
 		<cfset arguments.column.element.value = arguments.value />
-		<cfset arguments.column.element.id = local.prefix & arguments.column.key & '-' & arguments.rowNum />
-		<cfset arguments.column.element.name = local.prefix & arguments.column.key & '-' & arguments.rowNum />
+		<cfset arguments.column.element.id = local.prefix & arguments.column.key & '-' & numberFormat(arguments.rowNum, '0000') />
+		<cfset arguments.column.element.name = local.prefix & arguments.column.key & '-' & numberFormat(arguments.rowNum, '0000') />
 		
 		<!--- Check for mappings --->
 		<cfif structKeyExists(arguments.column.element, 'mappings')>
