@@ -132,7 +132,7 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 	}
 	
 	public string function url(required any value, any options) {
-		if(!len(arguments.value)) {
+		if(!len(arguments.value) || !reFindNoCase('^(http(|s)://|/|\./)', arguments.value)) {
 			return arguments.value;
 		}
 		
