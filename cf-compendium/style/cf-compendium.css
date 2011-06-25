@@ -338,13 +338,12 @@ dt {
 	clear: both;
 }
 
-.datagrid tr:nth-child(even) {
+.datagrid tr:nth-child(even) td {
 	background: #f2f2f2;
 }
 
-.datagrid td:hover,
-.datagrid th:hover,
-.datagrid tr:hover {
+.datagrid tr:hover th,
+.datagrid tr:hover td {
 	background: #d7eafe;
 }
 
