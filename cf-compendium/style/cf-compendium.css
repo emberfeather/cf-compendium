@@ -317,8 +317,14 @@ dt {
 	text-align: left;
 }
 
-.datagrid thead {
-	border-bottom: 1px solid #000;
+.datagrid th,
+.datagrid td {
+	border-left: 1px solid #999;
+}
+
+.datagrid th:first-child,
+.datagrid td:first-child {
+	border-left: none;
 }
 
 .datagrid tbody th {
