@@ -5,6 +5,10 @@
 	border-spacing: 0;
 }
 
+.datagrid.flexible {
+	width: auto;
+}
+
 .datagrid table,
 .datagrid tbody,
 .datagrid tfoot,
@@ -29,6 +33,10 @@
 	text-align: left;
 }
 
+.datagrid thead {
+	border-bottom: 1px solid #999;
+}
+
 .datagrid th,
 .datagrid td {
 	border-left: 1px solid #999;
@@ -44,7 +52,7 @@
 }
 
 .datagrid tfoot {
-	border-top: 1px solid #000;
+	border-top: 1px solid #999;
 }
 
 .datagrid th,
@@ -77,13 +85,17 @@
 	visibility: visible;
 }
 
-.datagrid td.width-min {
+.datagrid .width-min {
 	width: 1px;
 	white-space: nowrap;
 }
 
-.datagrid td.no-pad {
+.datagrid .no-pad {
 	padding: 0;
+}
+
+.datagrid .no-break {
+	white-space: nowrap;
 }
 
 .datagrid a.delete {
