@@ -131,6 +131,14 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		return timeFormat(arguments.value, arguments.options.mask);
 	}
 	
+	public string function url(required any value, any options) {
+		if(!len(arguments.value)) {
+			return arguments.value;
+		}
+		
+		return '<a href="' & arguments.value & '">' & arguments.value & '</a>';
+	}
+	
 	public string function uuid(required any value, any options) {
 		if(len(arguments.value) <= 8) {
 			return arguments.value;
