@@ -37,13 +37,13 @@
 	border-bottom: 1px solid #999;
 }
 
-.datagrid th,
-.datagrid td {
+.datagrid.vertical th,
+.datagrid.vertical td {
 	border-left: 1px solid #999;
 }
 
-.datagrid th:first-child,
-.datagrid td:first-child {
+.datagrid.vertical th:first-child,
+.datagrid.vertical td:first-child {
 	border-left: none;
 }
 
