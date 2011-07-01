@@ -302,6 +302,7 @@ jQuery.cookie = function(key, value, options) {
 			
 			// Remove any values in the inputs
 			$('input', cloned).val('');
+			$('input[type="checkbox"]', cloned).attr('checked', false);
 			
 			// Make all the ids and names unique using the clone counter
 			makeUnique(cloned, 'clone' + zeroFill(original.data('cloneCount'), 4));
