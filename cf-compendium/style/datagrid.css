@@ -47,6 +47,11 @@
 	border-left: none;
 }
 
+.datagrid.horizontal th,
+.datagrid.horizontal td {
+	border-bottom: 1px solid #999;
+}
+
 .datagrid tbody th {
 	width: 1px;
 }
