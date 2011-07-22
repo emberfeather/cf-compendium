@@ -46,6 +46,9 @@
 		// Uses RFC 3339 Date Format
 		$('input[type="date"]', elements).datepicker({ dateFormat: 'yy-mm-dd' });
 		$('input[type="month"]', elements).datepicker({ dateFormat: 'yy-mm' });
+		
+		// Make elastic textareas
+		$('.elastic', elements).elastic();
 	});
 	
 	/**
