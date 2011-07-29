@@ -140,7 +140,6 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
-		<cfset var defaults = {} />
 		<cfset var group = '' />
 		<cfset var i = '' />
 		<cfset var j = '' />
@@ -149,12 +148,11 @@
 		<cfset var originalID = '' />
 		<cfset var originalValue = '' />
 		
-		<!--- Set defaults --->
-		<cfset defaults.checked = false />
-		<cfset defaults.value = '' />
-		
 		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		<cfset arguments.element = variables.extender.extend({
+			checked: false,
+			value: ''
+		}, arguments.element) />
 		
 		<!--- Check if we are showing a single element or many options --->
 		<cfif structKeyExists(arguments.element, 'options')>
@@ -411,7 +409,6 @@
 		<cfargument name="element" type="struct" required="true" />
 		
 		<cfset var formatted = '' />
-		<cfset var defaults = {} />
 		<cfset var group = '' />
 		<cfset var i = '' />
 		<cfset var j = '' />
@@ -420,12 +417,11 @@
 		<cfset var originalID = '' />
 		<cfset var originalValue = '' />
 		
-		<!--- Set defaults --->
-		<cfset defaults.checked = false />
-		<cfset defaults.value = '' />
-		
 		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		<cfset arguments.element = variables.extender.extend({
+			checked: false,
+			value: ''
+		}, arguments.element) />
 		
 		<!--- Check if we are showing a single element or many options --->
 		<cfif structKeyExists(arguments.element, 'options')>
@@ -551,14 +547,13 @@
 		<cfset var group = '' />
 		<cfset var option = '' />
 		<cfset var optGroups = '' />
-		<cfset var defaults = {
-				multiple = false,
-				size = 10,
-				value = ''
-			} />
 		
 		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		<cfset arguments.element = variables.extender.extend({
+			multiple = false,
+			size = 10,
+			value = ''
+		}, arguments.element) />
 		
 		<!--- check for options --->
 		<cfif not structKeyExists( arguments.element, 'options' )>
@@ -613,16 +608,15 @@
 		
 		<cfset var formatted = '' />
 		<cfset var i = '' />
-		<cfset var defaults = {
-				multiple = false,
-				size = 10,
-				rangeMin = 1,
-				rangeMax = 100,
-				rangeStep = 1
-			} />
 		
 		<!--- Extend the form options --->
-		<cfset arguments.element = variables.extender.extend(defaults, arguments.element) />
+		<cfset arguments.element = variables.extender.extend({
+			multiple = false,
+			size = 10,
+			rangeMin = 1,
+			rangeMax = 100,
+			rangeStep = 1
+		}, arguments.element) />
 		
 		<cfset formatted = '<select ' />
 		
