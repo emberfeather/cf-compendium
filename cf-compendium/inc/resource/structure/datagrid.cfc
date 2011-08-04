@@ -240,8 +240,14 @@
 			<cfset value = ( isObject(arguments.data[arguments.key][arguments.rowNum]) ? toString(arguments.data[arguments.key][arguments.rowNum]) : arguments.data[arguments.key][arguments.rowNum]) />
 		<cfelseif isArray(arguments.data) and isObject(arguments.data[arguments.rowNum]) and arguments.data[arguments.rowNum].has__Key(arguments.key)>
 			<cfinvoke component="#arguments.data[arguments.rowNum]#" method="get#arguments.key#" returnvariable="value" />
-		<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum]) and structKeyExists(arguments.data[arguments.rowNum], arguments.key)>
-			<cfset value = arguments.data[arguments.rowNum][arguments.key] />
+		<cfelseif isArray(arguments.data) and isStruct(arguments.data[arguments.rowNum])>
+			<cfif structKeyExists(arguments.data[arguments.rowNum], arguments.key)>
+				<cfset value = arguments.data[arguments.rowNum][arguments.key] />
+			<cfelse>
+				<cfset local.introspect = createObject('component', 'cf-compendium.inc.resource.utility.introspect').init(arguments.data[arguments.rowNum]) />
+				
+				<cfset value = local.introspect.get(arguments.key, arguments.key) />
+			</cfif>
 		<cfelseif isArray(arguments.data) and arguments.key eq '__value'>
 			<cfset value = arguments.data[arguments.rowNum] />
 		<cfelseif isStruct(arguments.data)>
