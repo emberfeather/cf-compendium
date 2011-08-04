@@ -12,7 +12,7 @@ component extends="cf-compendium.inc.resource.base.object" {
 		return this;
 	}
 	
-	public any function get( required string key ) {
+	public any function get( required string key, string defaultValue = '' ) {
 		local.source = variables.source;
 		local.keys = listToArray(structKeyList(variables.mappings));
 		local.keyLength = len(arguments.key);
@@ -32,10 +32,10 @@ component extends="cf-compendium.inc.resource.base.object" {
 			}
 		}
 		
-		return getValue(local.source, arguments.key);
+		return getValue(local.source, arguments.key, arguments.defaultValue);
 	}
 	
-	private any function getValue( required struct data, required string key ) {
+	private any function getValue( required struct data, required string key, required string defaultValue ) {
 		if(arguments.key == '') {
 			return arguments.data;
 		}
@@ -63,15 +63,15 @@ component extends="cf-compendium.inc.resource.base.object" {
 		if(structKeyExists(arguments.data, local.currentKey)
 			&& isStruct(arguments.data[local.currentKey])
 			) {
-			return getValue( arguments.data[local.currentKey], local.nextKey );
+			return getValue( arguments.data[local.currentKey], local.nextKey, arguments.defaultValue );
 		} else if( isObject(arguments.data)
 			&& arguments.data['has' & local.currentKey]()
 			&& isStruct(arguments.data['get' & local.currentKey]())
 			) {
-			return getValue( arguments.data['get' & local.currentKey](), local.nextKey );
+			return getValue( arguments.data['get' & local.currentKey](), local.nextKey, arguments.defaultValue );
 		}
 		
-		return '';
+		return arguments.defaultValue;
 	}
 	
 	public void function map(required string path, required struct value) {
