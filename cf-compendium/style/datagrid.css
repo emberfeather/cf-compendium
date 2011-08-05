@@ -107,3 +107,7 @@
 	color: #FF3333;
 	margin-right: 1em;
 }
+
+.datagrid a:last-child.delete {
+	margin-right: 0;
+}

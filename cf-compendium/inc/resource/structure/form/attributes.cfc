@@ -34,7 +34,11 @@
 		<!--- data-* attributes --->
 		<cfif structKeyExists(arguments.element, 'data') and isStruct(arguments.element.data)>
 			<cfloop collection="#arguments.element.data#" item="i">
-				<cfset formatted &= 'data-' & i & '="' & arguments.element.data[i] & '" ' />
+				<cfif not isSimpleValue(arguments.element.data[i])>
+					<cfset arguments.element.data[i] = serializeJson(arguments.element.data[i]) />
+				</cfif>
+				
+				<cfset formatted &= 'data-' & i & '=''' & arguments.element.data[i] & ''' ' />
 			</cfloop>
 		</cfif>
 		
