@@ -185,6 +185,10 @@ dt {
 	max-height: 15em;
 }
 
+.form .tall textarea {
+	height: 30em;
+}
+
 .form .element {
 	padding: .5em;
 }
