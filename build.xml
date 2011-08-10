@@ -21,6 +21,7 @@
 			<fileset dir="${build.script}" includes="jquery.form.js" />
 			<fileset dir="${build.script}" includes="jquery.list.js" />
 			<fileset dir="${build.script}" includes="jquery.datagrid.js" />
+			<fileset dir="${build.script}" includes="jquery.chosen-min.js" />
 			<fileset dir="${build.script}" includes="jquery.elastic.js" />
 		</concat>
 		

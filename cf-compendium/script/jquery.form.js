@@ -49,6 +49,9 @@
 		
 		// Make elastic textareas
 		$('.elastic', elements).elastic();
+		
+		// Make chosen selects
+		$('.chosen', elements).chosen();
 	});
 	
 	/**
