@@ -560,6 +560,10 @@
 			<cfthrow message="Need options for select element" detail="Need to pass options to the select type of element" />
 		</cfif>
 		
+		<cfif not isArray(arguments.element.value)>
+			<cfset arguments.element.value = [ arguments.element.value ] />
+		</cfif>
+		
 		<cfset formatted = '<select ' />
 		
 		<!--- Common HTML Attributes --->
@@ -583,7 +587,7 @@
 				<cfset formatted &= '<option value="' & option.value & '"' />
 				
 				<!--- Selected --->
-				<cfif option.value eq arguments.element.value>
+				<cfif arrayFindNoCase(arguments.element.value, option.value)>
 					<cfset formatted &= ' selected="selected"' />
 				</cfif>
 				

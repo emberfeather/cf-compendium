@@ -33,6 +33,7 @@
 			<fileset dir="${build.style}" includes="datagrid.css" />
 			<fileset dir="${build.style}" includes="detail.css" />
 			<fileset dir="${build.style}" includes="code.css" />
+			<fileset dir="${build.style}" includes="chosen.css" />
 		</concat>
 		
 		<!-- Use the master minify -->

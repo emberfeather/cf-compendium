@@ -29,6 +29,7 @@
 .form input[type=email],
 .form input[type=url],
 .form input[type=password],
+.form select,
 .form input[type=file] {
 	width: 40%;
 	min-width: 250px;
