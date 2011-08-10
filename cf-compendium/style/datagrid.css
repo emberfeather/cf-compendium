@@ -103,6 +103,10 @@
 	white-space: nowrap;
 }
 
+.datagrid .align-right a {
+	margin-left: .5em;
+}
+
 .datagrid a.delete {
 	color: #FF3333;
 	margin-right: 1em;
