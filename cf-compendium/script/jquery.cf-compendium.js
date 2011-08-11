@@ -268,6 +268,16 @@ jQuery.cookie = function(key, value, options) {
 		$('input[type="date"]', elements).datepicker({ dateFormat: 'yy-mm-dd' });
 		$('input[type="month"]', elements).datepicker({ dateFormat: 'yy-mm' });
 		
+		// Make elements sortable
+		if(elements.filter('.sortable').length) {
+			$('.form').sortable({
+				items: '.element.sortable'
+			});
+		}
+		
+		// Remove sortable filter
+		elements.end();
+		
 		// Make elastic textareas
 		$('.elastic', elements).elastic();
 		

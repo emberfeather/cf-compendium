@@ -217,6 +217,10 @@ dt {
 	white-space: nowrap;
 }
 
+.form .element.sortable > label:hover {
+	cursor: move;
+}
+
 .form .required {
 	color: #E3170D;
 }
