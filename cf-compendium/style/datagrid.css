@@ -90,6 +90,10 @@
 	visibility: visible;
 }
 
+.datagrid .phantom.align-right {
+	white-space: nowrap;
+}
+
 .datagrid .width-min {
 	width: 1px;
 	white-space: nowrap;

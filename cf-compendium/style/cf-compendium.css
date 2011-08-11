@@ -145,6 +145,7 @@ dt {
 .form input[type=email],
 .form input[type=url],
 .form input[type=password],
+.form select,
 .form input[type=file] {
 	width: 40%;
 	min-width: 250px;
@@ -384,6 +385,10 @@ dt {
 
 .datagrid.active tr:hover .phantom a {
 	visibility: visible;
+}
+
+.datagrid .phantom.align-right {
+	white-space: nowrap;
 }
 
 .datagrid .width-min {
