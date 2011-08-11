@@ -35,6 +35,14 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		return dollarFormat(arguments.value);
 	}
 	
+	public string function email(required any value, any options) {
+		if(!len(arguments.value)) {
+			return arguments.value;
+		}
+		
+		return '<a href="mailto:' & arguments.value & '">' & arguments.value & '</a>';
+	}
+	
 	public string function htmlEdit(required string value, any options) {
 		return htmlEditFormat(arguments.value);
 	}
