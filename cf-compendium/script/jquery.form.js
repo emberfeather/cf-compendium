@@ -46,6 +46,16 @@
 		// Uses RFC 3339 Date Format
 		$('input[type="date"]', elements).datepicker({ dateFormat: 'yy-mm-dd' });
 		$('input[type="month"]', elements).datepicker({ dateFormat: 'yy-mm' });
+		$('input[type="datetime"]', elements).datetimepicker({
+			dateFormat: 'yy-mm-dd',
+			separator: 'T',
+			timeFormat: 'hh:mm:ssz',
+			timezoneIso8609: true
+		});
+		$('input[type="time"]', elements).timepicker({
+			timeFormat: 'hh:mm:ssz',
+			timezoneIso8609: true
+		});
 		
 		// Make elements sortable
 		if(elements.filter('.sortable').length) {
