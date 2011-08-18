@@ -234,6 +234,14 @@ dt {
 	min-width: 100px;
 }
 
+.form .element .phantom {
+	visibility: hidden;
+}
+
+.form .element:hover .phantom {
+	visibility: visible;
+}
+
 /**
  * DataGrid Integration
  */
