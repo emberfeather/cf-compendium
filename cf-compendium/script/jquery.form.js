@@ -223,13 +223,20 @@
 	 * Used to replace any names and ids with new unique names
 	 */
 	function makeUnique(element, unique) {
-		// Function for adjusting the attribute value with the new unique value
-		adjust = function(index, attr){
+		var adjust = function (index, attr){
 			if (attr === undefined) {
 				return;
 			}
 			
-			return (attr === '' ? '' : attr + '-' + unique);
+			if(attr.length > 2 && attr.substr(-2) === '[]') {
+				// Don't modify arrays
+				return attr;
+			} else if(attr.length) {
+				// Make it unique
+				return attr + '-' + unique;
+			}
+			
+			return '';
 		};
 		
 		// Change all sensitive attributes
