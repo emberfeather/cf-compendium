@@ -69,7 +69,7 @@
 	clear: both;
 }
 
-.datagrid tr:nth-child(even) td {
+.datagrid tbody tr:nth-child(odd) td {
 	background: #f2f2f2;
 }
 
