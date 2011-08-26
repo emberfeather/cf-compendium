@@ -69,7 +69,7 @@
 	clear: both;
 }
 
-.datagrid tr:nth-child(even) td {
+.datagrid tbody tr:nth-child(odd) td {
 	background: #f2f2f2;
 }
 
@@ -90,6 +90,10 @@
 	visibility: visible;
 }
 
+.datagrid .phantom.align-right {
+	white-space: nowrap;
+}
+
 .datagrid .width-min {
 	width: 1px;
 	white-space: nowrap;
@@ -101,6 +105,10 @@
 
 .datagrid .no-break {
 	white-space: nowrap;
+}
+
+.datagrid .align-right a {
+	margin-left: .5em;
 }
 
 .datagrid a.delete {

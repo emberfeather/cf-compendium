@@ -29,6 +29,7 @@
 .form input[type=email],
 .form input[type=url],
 .form input[type=password],
+.form select,
 .form input[type=file] {
 	width: 40%;
 	min-width: 250px;
@@ -89,6 +90,11 @@
 	overflow: hidden;
 }
 
+.form .element .description {
+	padding: .5em 1em;
+	line-height: 1.5em;
+}
+
 .form .element .options label {
 	clear: none;
 	display: inline;
@@ -98,6 +104,10 @@
 	min-width: 0;
 	padding: 0 1em 0 0;
 	white-space: nowrap;
+}
+
+.form .element.sortable > label:hover {
+	cursor: move;
 }
 
 .form .required {
@@ -111,6 +121,14 @@
 
 .form .element.recaptcha input[type=text] {
 	min-width: 100px;
+}
+
+.form .element .phantom {
+	visibility: hidden;
+}
+
+.form .element:hover .phantom {
+	visibility: visible;
 }
 
 /**
@@ -146,3 +164,14 @@
 	width: 35%;
 	min-width: 190px;
 }
+
+/**
+ * jQuery UI TimePicker Addon
+ */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; }
+.ui-timepicker-div dl dd { margin: -25px 10px 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+

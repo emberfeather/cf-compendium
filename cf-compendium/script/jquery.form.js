@@ -46,9 +46,32 @@
 		// Uses RFC 3339 Date Format
 		$('input[type="date"]', elements).datepicker({ dateFormat: 'yy-mm-dd' });
 		$('input[type="month"]', elements).datepicker({ dateFormat: 'yy-mm' });
+		$('input[type="datetime"]', elements).datetimepicker({
+			dateFormat: 'yy-mm-dd',
+			separator: 'T',
+			timeFormat: 'hh:mm:ssz',
+			timezoneIso8609: true
+		});
+		$('input[type="time"]', elements).timepicker({
+			timeFormat: 'hh:mm:ssz',
+			timezoneIso8609: true
+		});
+		
+		// Make elements sortable
+		if(elements.filter('.sortable').length) {
+			$('.form').sortable({
+				items: '.element.sortable'
+			});
+		}
+		
+		// Remove sortable filter
+		elements.end();
 		
 		// Make elastic textareas
 		$('.elastic', elements).elastic();
+		
+		// Make chosen selects
+		$('.chosen', elements).chosen();
 	});
 	
 	/**
@@ -200,13 +223,20 @@
 	 * Used to replace any names and ids with new unique names
 	 */
 	function makeUnique(element, unique) {
-		// Function for adjusting the attribute value with the new unique value
-		adjust = function(index, attr){
+		var adjust = function (index, attr){
 			if (attr === undefined) {
 				return;
 			}
 			
-			return (attr === '' ? '' : attr + '-' + unique);
+			if(attr.length > 2 && attr.substr(-2) === '[]') {
+				// Don't modify arrays
+				return attr;
+			} else if(attr.length) {
+				// Make it unique
+				return attr + '-' + unique;
+			}
+			
+			return '';
 		};
 		
 		// Change all sensitive attributes

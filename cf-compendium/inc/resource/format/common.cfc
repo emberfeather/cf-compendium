@@ -11,6 +11,14 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		return formatBaseN(arguments.value, arguments.options.radix);
 	}
 	
+	public string function boolean(required any value, any options) {
+		if(!isBoolean(arguments.value)) {
+			return arguments.value;
+		}
+		
+		return arguments.value ? 'True' : 'False';
+	}
+	
 	public string function date(required any value, any options) {
 		if(!isDate(arguments.value)) {
 			return arguments.value;
@@ -33,6 +41,14 @@ component extends="cf-compendium.inc.resource.base.formatter" {
 		}
 		
 		return dollarFormat(arguments.value);
+	}
+	
+	public string function email(required any value, any options) {
+		if(!len(arguments.value)) {
+			return arguments.value;
+		}
+		
+		return '<a href="mailto:' & arguments.value & '">' & arguments.value & '</a>';
 	}
 	
 	public string function htmlEdit(required string value, any options) {
