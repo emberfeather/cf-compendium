@@ -354,6 +354,8 @@
 		<!--- Set defaults for form --->
 		<cfset defaults.class = '' />
 		<cfset defaults.submit = 'Submit' />
+		<cfset defaults.postSubmit = '' />
+		<cfset defaults.preSubmit = '' />
 		<cfset defaults.reset = '' />
 		
 		<!--- Extend the form options --->
@@ -367,6 +369,9 @@
 		
 		<!--- Close --->
 		<cfset formatted &= '>' />
+		
+		<!--- Pre Submit --->
+		<cfset formatted &= extendedOptions.preSubmit />
 		
 		<!--- Submit --->
 		<cfif extendedOptions.submit neq ''>
@@ -393,6 +398,9 @@
 			
 			<cfset formatted &= elementToHTML(extendedOptions.reset) />
 		</cfif>
+		
+		<!--- Post Submit --->
+		<cfset formatted &= extendedOptions.postSubmit />
 		
 		<!--- Close --->
 		<cfset formatted &= '</div>' />
