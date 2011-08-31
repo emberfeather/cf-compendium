@@ -398,8 +398,8 @@ dt {
 	background: #f2f2f2;
 }
 
-.datagrid tr:hover th,
-.datagrid tr:hover td {
+.datagrid tbody tr:hover th,
+.datagrid tbody tr:hover td {
 	background: #d7eafe;
 }
 
