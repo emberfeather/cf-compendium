@@ -463,6 +463,11 @@
 				<cfset formatted &= attributesLabel(arguments.element.label) />
 				
 				<cfset formatted &= '>' & variables.label.get(arguments.element.label.value) & ':</label>' />
+				
+				<!--- Default the placeholder to the label --->
+				<cfif not structKeyExists(arguments.element, 'placeholder') or arguments.element.placeholder eq ''>
+					<cfset arguments.element.placeholder = variables.label.get(arguments.element.label.value) />
+				</cfif>
 			</cfif>
 			
 			<!--- Add the pre element text --->
