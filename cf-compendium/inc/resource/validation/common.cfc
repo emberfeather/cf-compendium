@@ -306,7 +306,7 @@ component extends="cf-compendium.inc.resource.base.validator" {
 			}
 			
 			// Check for valid characters
-			if (not reFind('^(([A-Za-z0-9!##$%&\''*+/=?^_`{|}~-][A-Za-z0-9!##$%&\''*+/=?^_`{|}~-]{0,63})|("[^\\\"]{0,62}"))$', local.parts[local.i])) {
+			if (not reFind('^(([A-Za-z0-9!##$%&''*+/=?^_`{|}~-][A-Za-z0-9!##$%&''*+/=?^_`{|}~-]{0,63})|("[^\\\"]{0,62}"))$', local.parts[local.i])) {
 				__throwValidation('validEmail_localPart', arguments.label);
 			}
 		}
