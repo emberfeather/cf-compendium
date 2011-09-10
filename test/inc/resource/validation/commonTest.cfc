@@ -8,7 +8,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testID_invalid_nonNumeric() {
-		expectException('validation', 'Set should have thrown an error. ["val" is not numeric]');
+		expectException('validation', 'Should have thrown an error. ["val" is not numeric]');
 		
 		variables.validator.ID('testing', "val", '');
 	}
@@ -28,7 +28,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIn_invalid_notInList() {
-		expectException('validation', 'Set should have thrown an error. ["val" is not in "is,it,in,here"]');
+		expectException('validation', 'Should have thrown an error. ["val" is not in "is,it,in,here"]');
 		
 		variables.validator.in('testing', 'val', 'is,it,in,here');
 	}
@@ -42,7 +42,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotIn_invalid_inList() {
-		expectException('validation', 'Set should have thrown an error. ["val" is in "val,is,in,here"');
+		expectException('validation', 'Should have thrown an error. ["val" is in "val,is,in,here"');
 		
 		variables.validator.notIn('testing', 'val', 'val,is,in,here');
 	}
@@ -56,19 +56,19 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIsAlpha_invalid_number() {
-		expectException('validation', 'Set should have thrown an error. [contains number]');
+		expectException('validation', 'Should have thrown an error. [contains number]');
 		
 		variables.validator.isAlpha('testing', "val18", {});
 	}
 	
 	public void function testIsAlpha_invalid_space() {
-		expectException('validation', 'Set should have thrown an error. [contains space]');
+		expectException('validation', 'Should have thrown an error. [contains space]');
 		
 		variables.validator.isAlpha('testing', "val ue", {});
 	}
 	
 	public void function testIsAlpha_invalid_unicode() {
-		expectException('validation', 'Set should have thrown an error. [contains unicode]');
+		expectException('validation', 'Should have thrown an error. [contains unicode]');
 		
 		variables.validator.isAlpha('testing', "vàlue", {});
 	}
@@ -86,13 +86,13 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIsAlphanumeric_invalid_space() {
-		expectException('validation', 'Set should have thrown an error. [contains space]');
+		expectException('validation', 'Should have thrown an error. [contains space]');
 		
 		variables.validator.isAlphanumeric('testing', "val ue63", {});
 	}
 	
 	public void function testIsAlphanumeric_invalid_unicode() {
-		expectException('validation', 'Set should have thrown an error. [contains unicode]');
+		expectException('validation', 'Should have thrown an error. [contains unicode]');
 		
 		variables.validator.isAlphanumeric('testing', "vàlue", {});
 	}
@@ -110,7 +110,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIsBoolean_invalid_string() {
-		expectException('validation', 'Set should have thrown an error. [val is not boolean]');
+		expectException('validation', 'Should have thrown an error. [val is not boolean]');
 		
 		variables.validator.isBoolean('testing', "val", '');
 	}
@@ -128,7 +128,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testIsNumber_invalid_string() {
-		expectException('validation', 'Set should have thrown an error. [val is not numeric]');
+		expectException('validation', 'Should have thrown an error. [val is not numeric]');
 		
 		variables.validator.isNumber('testing', "val", '');
 	}
@@ -142,7 +142,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testMaxLength_invalid_overLength() {
-		expectException('validation', 'Set should have thrown an error. [the length is greater than 2]');
+		expectException('validation', 'Should have thrown an error. [the length is greater than 2]');
 		
 		variables.validator.maxLength('testing', "val", 2);
 	}
@@ -156,7 +156,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testMinLength_invalid_underLength() {
-		expectException('validation', 'Set should have thrown an error. [the length of val is less than 4]');
+		expectException('validation', 'Should have thrown an error. [the length of val is less than 4]');
 		
 		variables.validator.minLength('testing', "val", 4);
 	}
@@ -170,7 +170,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotEmpty_invalid_empty() {
-		expectException('validation', 'Set should have thrown an error. [is empty]');
+		expectException('validation', 'Should have thrown an error. [is empty]');
 		
 		variables.validator.notEmpty('testing', '', '');
 	}
@@ -180,7 +180,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotFuture_invalid_future() {
-		expectException('validation', 'Set should have thrown an error. [Now()+1 is in the future]');
+		expectException('validation', 'Should have thrown an error. [Now()+1 is in the future]');
 		
 		variables.validator.notFuture('testing', Now() + 1, '');
 	}
@@ -194,7 +194,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotGreaterThan_invalid_greaterThan() {
-		expectException('validation', 'Set should have thrown an error. [3 is greater than 2]');
+		expectException('validation', 'Should have thrown an error. [3 is greater than 2]');
 		
 		variables.validator.notGreaterThan('testing', 3, 2);
 	}
@@ -208,7 +208,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotLessThan_invalid_lessThan() {
-		expectException('validation', 'Set should have thrown an error. [2 is less than 3]');
+		expectException('validation', 'Should have thrown an error. [2 is less than 3]');
 		
 		variables.validator.notLessThan('testing', 2, 3);
 	}
@@ -222,7 +222,7 @@ component extends="mxunit.framework.TestCase" {
 	}
 	
 	public void function testNotPast_invalid_past() {
-		expectException('validation', 'Set should have thrown an error. [Now()-1 is in the past]');
+		expectException('validation', 'Should have thrown an error. [Now()-1 is in the past]');
 		
 		variables.validator.notPast('testing', Now() - 1, '');
 	}
@@ -235,26 +235,205 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.notPast('testing', Now() + 1, '');
 	}
 	
-	public void function testValidEmail_invalid_noDomain() {
-		expectException('validation', 'Set should have thrown an error. [test@test is not a valid email]');
+	public void function testValidEmail_invalid_controlCharacter() {
+		expectException('validation', 'Should have thrown an error. [contains a control character]');
 		
-		variables.validator.validEmail('testing', 'test@test', '');
+		variables.validator.validEmail('testing', 'te#chr(10)#st@test', '');
+	}
+	
+	public void function testValidEmail_invalid_domain_short_1() {
+		expectException('validation', 'Should have thrown an error. [too short domain]');
+		
+		variables.validator.validEmail('testing', 'test@.', '');
+	}
+	
+	public void function testValidEmail_invalid_domain_short_2() {
+		expectException('validation', 'Should have thrown an error. [too short domain]');
+		
+		variables.validator.validEmail('testing', 'test@example.', '');
+	}
+	
+	public void function testValidEmail_invalid_domain_short_3() {
+		expectException('validation', 'Should have thrown an error. [too short domain]');
+		
+		variables.validator.validEmail('testing', 'test@.org', '');
+	}
+	
+	public void function testValidEmail_invalid_domain_long_() {
+		expectException('validation', 'Should have thrown an error. [too long domain]');
+		
+		variables.validator.validEmail('testing', 'test@123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012.com', '');
+	}
+	
+	public void function testValidEmail_invalid_domain_tooFewLabels() {
+		expectException('validation', 'Should have thrown an error. [too few domain labels]');
+		
+		variables.validator.validEmail('testing', 'test@example', '');
+	}
+	
+	public void function testValidEmail_invalid_domain_unpartneredIPBracket_1() {
+		expectException('validation', 'Should have thrown an error. [unpaired brackets]');
+		
+		variables.validator.validEmail('testing', 'test@[123.123.123.123', '');
+	}
+	
+	public void function testValidEmail_invalid_domain_unpartneredIPBracket_2() {
+		expectException('validation', 'Should have thrown an error. [unpaired brackets]');
+		
+		variables.validator.validEmail('testing', 'test@123.123.123.123]', '');
+	}
+	
+	public void function testValidEmail_invalid_localPart_blankAtom_beginning() {
+		expectException('validation', 'Should have thrown an error. [blank atom part]');
+		
+		variables.validator.validEmail('testing', '.test@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_localPart_blankAtom_middle() {
+		expectException('validation', 'Should have thrown an error. [blank atom part]');
+		
+		variables.validator.validEmail('testing', 'test..test@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_localPart_blankAtom_end() {
+		expectException('validation', 'Should have thrown an error. [blank atom part]');
+		
+		variables.validator.validEmail('testing', 'test.@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_localPart_character_1() {
+		expectException('validation', 'Should have thrown an error. [contains invalid characters]');
+		
+		variables.validator.validEmail('testing', '-- test --@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_localPart_character_2() {
+		expectException('validation', 'Should have thrown an error. [contains invalid characters]');
+		
+		variables.validator.validEmail('testing', '[test]@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_localPart_character_3() {
+		expectException('validation', 'Should have thrown an error. [contains invalid characters]');
+		
+		variables.validator.validEmail('testing', '"test"test"@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_localPart_character_4() {
+		expectException('validation', 'Should have thrown an error. [contains invalid characters]');
+		
+		variables.validator.validEmail('testing', '()[]\;:,<>@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_localPart_length() {
+		expectException('validation', 'Should have thrown an error. [contains a too long local part]');
+		
+		variables.validator.validEmail('testing', '12345678901234567890123456789012345678901234567890123456789012345@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_length() {
+		expectException('validation', 'Should have thrown an error. [too long]');
+		
+		variables.validator.validEmail('testing', '12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_multipleAt_1() {
+		expectException('validation', 'Should have thrown an error. [contains multiple @ characters out of quotes]');
+		
+		variables.validator.validEmail('testing', 'test@test@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_multipleAt_2() {
+		expectException('validation', 'Should have thrown an error. [contains multiple @ characters out of quotes]');
+		
+		variables.validator.validEmail('testing', 'test@@example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_noAt() {
+		expectException('validation', 'Should have thrown an error. [missing @ symbol]');
+		
+		variables.validator.validEmail('testing', 'test.example.com', '');
+	}
+	
+	public void function testValidEmail_invalid_noDomain() {
+		expectException('validation', 'Should have thrown an error. [test@test is not a valid email]');
+		
+		variables.validator.validEmail('testing', 'test@', '');
+	}
+	
+	public void function testValidEmail_invalid_noLocalPart() {
+		expectException('validation', 'Should have thrown an error. [test@test is not a valid email]');
+		
+		variables.validator.validEmail('testing', '@test.com', '');
 	}
 	
 	public void function testValidEmail_valid_blank() {
 		variables.validator.validEmail('testing', '', '');
 	}
 	
-	public void function testValidEmail_valid_fullEmail() {
+	public void function testValidEmail_valid_domain_ip() {
+		variables.validator.validEmail('testing', 'test@123.123.123.123', '');
+	}
+	
+	public void function testValidEmail_valid_domain_ipBracket() {
+		variables.validator.validEmail('testing', 'test@[123.123.123.123]', '');
+	}
+	
+	public void function testValidEmail_valid_domain_multipleLabel() {
+		variables.validator.validEmail('testing', 'test@example.example.com', '');
+		variables.validator.validEmail('testing', 'test@example.example.example.com', '');
+	}
+	
+	public void function testValidEmail_valid_email_normal() {
 		variables.validator.validEmail('testing', 'test@test.com', '');
 	}
 	
-	public void function testValidEmail_valid_fullEmail_complex() {
-		variables.validator.validEmail('testing', 'test.everything+more@test.com', '');
+	public void function testValidEmail_valid_localPart_atomised() {
+		variables.validator.validEmail('testing', 'test.test@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_localPart_number() {
+		variables.validator.validEmail('testing', '1234567890@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_localPart_obsolete() {
+		variables.validator.validEmail('testing', 'test."test"@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_localPart_qmail() {
+		variables.validator.validEmail('testing', 'test-test@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_localPart_quoted() {
+		variables.validator.validEmail('testing', '"[[ test ]]"@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_localPart_quotedAt() {
+		variables.validator.validEmail('testing', '"test@test"@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_localPart_tagged() {
+		variables.validator.validEmail('testing', 'test+test@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_localPart_uppercase() {
+		variables.validator.validEmail('testing', 'TEST@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_fullEmail_localPart_unusual_1() {
+		variables.validator.validEmail('testing', 't*est@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_fullEmail_localPart_unusual_2() {
+		variables.validator.validEmail('testing', '+1~1+@example.com', '');
+	}
+	
+	public void function testValidEmail_valid_fullEmail_localPart_unusual_3() {
+		variables.validator.validEmail('testing', '{_test_}@example.com', '');
 	}
 	
 	public void function testValidURL_invalid_noProtocol() {
-		expectException('validation', 'Set should have thrown an error. [test.com is not a valid url without a protocol]');
+		expectException('validation', 'Should have thrown an error. [test.com is not a valid url without a protocol]');
 		
 		variables.validator.validURL('testing', 'test.com', '');
 	}
