@@ -298,7 +298,7 @@
 		<cfset defaults = {
 				'accept-charset' = '',
 				'action' = arguments.action,
-				'autocomplete' = true,
+				'autocomplete' = 'on',
 				'class' = '',
 				'enctype' = '',
 				'method' = 'POST',
