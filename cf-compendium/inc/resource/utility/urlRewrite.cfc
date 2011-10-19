@@ -44,4 +44,22 @@ component extends="cf-compendium.inc.resource.utility.url" {
 		
 		return super.__get(argumentCollection = arguments);
 	}
+	
+	/**
+	 * Searches a location or the master for a specific variable.
+	 **/
+	private string function __search(string locationName = '', required string variableName) {
+		local.currentLocation = __findLocation(arguments.locationName);
+		
+		if(structKeyExists(local.currentLocation, arguments.variableName)) {
+			// Strip trailing slashes from the value of the rewrite base
+			if(variables.urlOptions.rewriteBase == arguments.variableName) {
+				local.currentLocation[arguments.variableName] = reReplace(local.currentLocation[arguments.variableName], '[/]*$', '');
+			}
+			
+			return local.currentLocation[arguments.variableName];
+		}
+		
+		return '';
+	}
 }
