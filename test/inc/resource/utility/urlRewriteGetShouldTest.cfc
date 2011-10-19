@@ -7,13 +7,13 @@ component extends="mxunit.framework.TestCase" {
 		variables.theUrl.setALocation('chicken', 'awesome');
 		variables.theUrl.setALocation('_base', '/total/coolness');
 		
-		assertEquals('/total/coolness?chicken=awesome', variables.theUrl.getALocation());
+		assertEquals('/total/coolness/?chicken=awesome', variables.theUrl.getALocation());
 	}
 	
 	public void function testWithBaseOnly() {
 		variables.theUrl.setALocation('_base', '/total/coolness');
 		
-		assertEquals('/total/coolness?', variables.theUrl.getALocation());
+		assertEquals('/total/coolness/?', variables.theUrl.getALocation());
 	}
 	
 	public void function testWithBaseTrailingSlash() {
@@ -31,7 +31,7 @@ component extends="mxunit.framework.TestCase" {
 		
 		variables.theUrl.setALocation('_test', '/tastes')
 		
-		assertEquals('/tastes?chicken=awesome', variables.theUrl.getALocation(false, { rewriteBase = '_test' }));
+		assertEquals('/tastes/?chicken=awesome', variables.theUrl.getALocation(false, { rewriteBase = '_test' }));
 	}
 	
 	public void function testWithoutBaseValue() {
@@ -45,20 +45,20 @@ component extends="mxunit.framework.TestCase" {
 		variables.theUrl.setALocation('beef', 'super');
 		variables.theUrl.setALocation('_base', '/total/coolness');
 		
-		assertEquals('/admin/total/coolness?beef=super', variables.theUrl.getALocation(false, { start = '/admin' }));
+		assertEquals('/admin/total/coolness/?beef=super', variables.theUrl.getALocation(false, { start = '/admin' }));
 	}
 	
 	public void function testWithStart() {
 		variables.theUrl.setALocation('chicken', 'awesome');
 		variables.theUrl.setALocation('_base', '/total/coolness');
 		
-		assertEquals('/admin/total/coolness?chicken=awesome', variables.theUrl.getALocation(false, { start = '/admin' }));
+		assertEquals('/admin/total/coolness/?chicken=awesome', variables.theUrl.getALocation(false, { start = '/admin' }));
 	}
 	
 	public void function testWithStartTrailingSlash() {
 		variables.theUrl.setALocation('chicken', 'awesome');
 		variables.theUrl.setALocation('_base', '/total/coolness');
 		
-		assertEquals('/admin/total/coolness?chicken=awesome', variables.theUrl.getALocation(false, { start = '/admin/' }));
+		assertEquals('/admin/total/coolness/?chicken=awesome', variables.theUrl.getALocation(false, { start = '/admin/' }));
 	}
 }
