@@ -506,10 +506,10 @@
 							};
 						</script>
 					</cfif>
-					<script type="text/javascript" src="http://www.google.com/recaptcha/api/challenge?k=#arguments.element.value##local.error#"></script>
+					<script type="text/javascript" src="//www.google.com/recaptcha/api/challenge?k=#arguments.element.value##local.error#"></script>
 					
 					<noscript>
-						<iframe src="http://www.google.com/recaptcha/api/noscript?k=#arguments.element.value##local.error#" height="300" width="500" frameborder="0"></iframe>
+						<iframe src="//www.google.com/recaptcha/api/noscript?k=#arguments.element.value##local.error#" height="300" width="500" frameborder="0"></iframe>
 						<br>
 						<textarea name="recaptcha_challenge_field" rows="3" cols="40"></textarea>
 						<input type="hidden" name="recaptcha_response_field" value="manual_challenge">
