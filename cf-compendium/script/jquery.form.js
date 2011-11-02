@@ -66,12 +66,6 @@
 		
 		// Remove sortable filter
 		elements.end();
-		
-		// Make elastic textareas
-		$('.elastic', elements).elastic();
-		
-		// Make chosen selects
-		$('.chosen', elements).chosen();
 	});
 	
 	/**
