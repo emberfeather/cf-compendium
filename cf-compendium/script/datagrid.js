@@ -3,7 +3,15 @@
  * 
  * Used to unobtrusively enhance the datagrid experience for the user.
  */
-(function($) {
+(function(factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD Registration
+		define('cf-compendium/script/datagrid', [ 'jquery' ], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function($) {
 	var confirmDialog;
 	
 	$.fn.datagrid = function(options) {
@@ -73,4 +81,4 @@
 			}
 		});
 	}
-}(jQuery));
+}));

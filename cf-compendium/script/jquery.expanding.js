@@ -1,92 +1,121 @@
-(function ($) {
+(function(factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD Registration
+		define([ 'jquery' ], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+	$.expandingTextarea = $.extend({
+		autoInitialize : true,
+		initialSelector : "textarea.expanding"
+	}, $.expandingTextarea || {});
 
-    var cloneCSSProperties = [
-        'lineHeight', 'textDecoration', 'letterSpacing',
-        'fontSize', 'fontFamily', 'fontStyle', 
-        'fontWeight', 'textTransform', 'textAlign', 
-        'direction', 'wordSpacing', 'fontSizeAdjust', 
-        'whiteSpace', 'wordWrap', 
-        'borderLeftWidth', 'borderRightWidth',
-        'borderTopWidth','borderBottomWidth',
-        'paddingLeft', 'paddingRight',
-        'paddingTop','paddingBottom',
-        'marginLeft', 'marginRight',
-        'marginTop','marginBottom'
-    ];
-    
-    var textareaCSS = {
-        position: "absolute",
-        height: "100%",
-        resize: "none",
-        margin: "0"
-    };
-    
-    var preCSS = {
-        visibility: "hidden",
-        margin: "0",
-        border: "0 solid"
-    };
-    
-    var containerCSS = {
-        position: "relative",
-        margin: "0",
-        padding: "0"
-    };
-    
-    var initializedDocuments = { };
-    
-    function resize(textarea) {
-        $(textarea).parent().find("div").text(textarea.value + ' ');
-    }
-  
-    function initialize(document) {
-        // Only need to initialize events once per document
-        if (!initializedDocuments[document]) {
-            initializedDocuments[document] = true;
-            
-            $(document).delegate(
-                ".expandingText textarea", 
-                "input propertychange", 
-                function () {
-                    resize(this);
-                }
-            );
-        }
-    }
+	var cloneCSSProperties = [ 'lineHeight', 'textDecoration',
+			'letterSpacing', 'fontSize', 'fontFamily', 'fontStyle',
+			'fontWeight', 'textTransform', 'textAlign',
+			'direction', 'wordSpacing', 'fontSizeAdjust',
+			'wordWrap', 'borderLeftWidth', 'borderRightWidth',
+			'borderTopWidth', 'borderBottomWidth', 'paddingLeft',
+			'paddingRight', 'paddingTop', 'paddingBottom',
+			'marginLeft', 'marginRight', 'marginTop',
+			'marginBottom', 'boxSizing', 'webkitBoxSizing',
+			'mozBoxSizing', 'msBoxSizing' ];
 
-    $.fn.expandingTextarea = function () {
+	var textareaCSS = {
+		position : "absolute",
+		height : "100%",
+		resize : "none"
+	};
 
-        return this.filter("textarea").not(".expanding-init").each(function () {
-            
-            initialize(this.ownerDocument || document);
-            
-            var textarea = $(this).addClass("expanding-init");
+	var preCSS = {
+		visibility : "hidden",
+		border : "0 solid",
+		whiteSpace : "pre-wrap"
+	};
 
-            textarea.wrap("<div class='expandingText'></div>");
-            textarea.after("<pre class='textareaClone'><div></div></pre>");
+	var containerCSS = {
+		position : "relative"
+	};
 
-            var container = textarea.parent().css(containerCSS);
-            var pre = container.find("pre").css(preCSS);
+	function resize() {
+		$(this).closest('.expandingText').find("div").text(
+				this.value + ' ');
+	}
 
-            textarea.css(textareaCSS);
-            
-            $.each(cloneCSSProperties, function (i, p) {
-                var val = textarea.css(p);
-                
-                // Only set if different to prevent overriding percentage css values
-                if (pre.css(p) !== val) {
-                    pre.css(p, val);
-                }
-            });
-            
-            resize(this);
-        });
-    };
+	$.fn.expandingTextarea = function(o) {
 
-    $.fn.expandingTextarea.initialSelector = "textarea.expanding";
+		if (o === "resize") {
+			return this.trigger("input.expanding");
+		}
 
-    $(function () {
-        $($.fn.expandingTextarea.initialSelector).expandingTextarea();
-    });
+		if (o === "destroy") {
+			this.filter(".expanding-init").each(
+					function() {
+						var textarea = $(this).removeClass(
+								'expanding-init');
+						var container = textarea
+								.closest('.expandingText');
 
-})(jQuery);
+						container.before(textarea).remove();
+						textarea.attr(
+								'style',
+								textarea.data('expanding-styles')
+										|| '').removeData(
+								'expanding-styles');
+					});
+
+			return this;
+		}
+
+		this
+				.filter("textarea")
+				.not(".expanding-init")
+				.each(
+						function() {
+							var textarea = $(this).addClass(
+									"expanding-init");
+
+							textarea
+									.wrap("<div class='expandingText'></div>");
+							textarea
+									.after("<pre class='textareaClone'><div></div></pre>");
+
+							var container = textarea.parent().css(
+									containerCSS);
+							var pre = container.find("pre").css(
+									preCSS);
+
+							// Store the original styles in case of destroying.
+							textarea.data('expanding-styles',
+									textarea.attr('style'));
+							textarea.css(textareaCSS);
+
+							$.each(cloneCSSProperties, function(i,
+									p) {
+								var val = textarea.css(p);
+
+								// Only set if different to prevent overriding percentage css values.
+								if (pre.css(p) !== val) {
+									pre.css(p, val);
+								}
+							});
+
+							textarea
+									.bind(
+											"input.expanding propertychange.expanding",
+											resize);
+							resize.apply(this);
+						});
+
+		return this;
+	};
+
+	$(function() {
+		if ($.expandingTextarea.autoInitialize) {
+			$($.expandingTextarea.initialSelector)
+					.expandingTextarea();
+		}
+	});
+}));
