@@ -32,7 +32,7 @@
 		<cfargument name="options" type="any" required="false" />
 		
 		<cfset var filter = {
-			label = variables.label.get(arguments.key),
+			label = variables.label.get(arguments.key, ''),
 			key = trim(arguments.key),
 			options = ''
 		} />
@@ -100,7 +100,9 @@
 		<cfset var option = '' />
 		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
-		<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		<cfif filter.label neq ''>
+			<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		</cfif>
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfloop array="#group.options#" index="option">
@@ -127,7 +129,9 @@
 		<cfset var option = '' />
 		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
-		<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		<cfif filter.label neq ''>
+			<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		</cfif>
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfloop array="#group.options#" index="option">
@@ -154,7 +158,13 @@
 		<cfset var option = '' />
 		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
-		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
+		<cfset html &= '<label class="capitalize">' />
+		
+		<cfif filter.label neq ''>
+			<cfset html &= '<strong>' & filter.label & ':</strong>' />
+		</cfif>
+		
+		<cfset html &= '<select name="' & arguments.filter.key & '">' />
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfif group.label neq ''>
@@ -197,7 +207,13 @@
 			</cfcase>
 		</cfswitch>
 		
-		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <input type="' & type & '" name="' & arguments.filter.key & '" value="' & value & '" /></label>' />
+		<cfset html &= '<label class="capitalize">' />
+		
+		<cfif filter.label neq ''>
+			<cfset html &= '<strong>' & filter.label & ': </strong>' />
+		</cfif>
+		
+		<cfset html &= '<input type="' & type & '" name="' & arguments.filter.key & '" value="' & value & '" /></label>' />
 		
 		<cfreturn html />
 	</cffunction>
