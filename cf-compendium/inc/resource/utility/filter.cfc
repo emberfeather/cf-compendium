@@ -214,6 +214,10 @@
 		<cfreturn html />
 	</cffunction>
 	
+	<cffunction name="getLabel" access="public" returntype="component" output="false">
+		<cfreturn variables.label />
+	</cffunction>
+	
 	<cffunction name="length" access="public" returntype="numeric" output="false">
 		<cfreturn variables.numFilters />
 	</cffunction>
