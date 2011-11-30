@@ -295,7 +295,7 @@
 		</cfloop>
 		
 		<!--- Wrap with the filter div --->
-		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theUrl.getFilter() & '">' & html & '<input type="submit" value="' & variables.label.get(arguments.options.submit) & '"></form></div>' />
+		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theUrl.getFilter() & '">' & html & '<div class="submit"><input type="submit" value="' & variables.label.get(arguments.options.submit) & '" /></div></form></div>' />
 		
 		<cfreturn html />
 	</cffunction>
