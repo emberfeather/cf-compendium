@@ -2,9 +2,11 @@
 	<cffunction name="init" access="public" returntype="component" output="false">
 		<cfargument name="i18n" type="component" required="true" />
 		<cfargument name="locale" type="string" default="en_US" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset variables.i18n = arguments.i18n />
 		<cfset variables.locale = arguments.locale />
+		<cfset variables.options = arguments.options />
 		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
 		
 		<cfset variables.filters = [] />
@@ -73,7 +75,11 @@
 						<cfreturn filterRadio(arguments.values, arguments.filter) />
 					</cfcase>
 					<cfdefaultcase>
-						<cfreturn filterSelect(arguments.values, arguments.filter) />
+						<cfif structKeyExists(variables.options, 'useListView') and variables.options.useListView>
+							<cfreturn filterList(arguments.values, arguments.filter) />
+						<cfelse>
+							<cfreturn filterSelect(arguments.values, arguments.filter) />
+						</cfif>
 					</cfdefaultcase>
 				</cfswitch>
 			<cfelse>
@@ -83,7 +89,11 @@
 						<cfreturn filterCheckbox(arguments.values, arguments.filter) />
 					</cfcase>
 					<cfdefaultcase>
-						<cfreturn filterSelect(arguments.values, arguments.filter) />
+						<cfif structKeyExists(variables.options, 'useListView') and variables.options.useListView>
+							<cfreturn filterList(arguments.values, arguments.filter) />
+						<cfelse>
+							<cfreturn filterSelect(arguments.values, arguments.filter) />
+						</cfif>s
 					</cfdefaultcase>
 				</cfswitch>
 			</cfif>
@@ -114,6 +124,39 @@
 				
 				<cfset html &= ' /> <label for="filter-' & arguments.filter.key & '">' & option.title & '</label>' />
 			</cfloop>
+		</cfloop>
+		
+		<cfreturn html />
+	</cffunction>
+	
+	<cffunction name="filterList" access="private" returntype="string" output="false">
+		<cfargument name="values" type="struct" required="true" />
+		<cfargument name="filter" type="struct" required="true" />
+		
+		<cfset var group = '' />
+		<cfset var html = '' />
+		<cfset var optGroups = arguments.filter.options.get() />
+		<cfset var option = '' />
+		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
+		
+		<cfif filter.label neq ''>
+			<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		</cfif>
+		
+		<cfloop array="#optGroups#" index="group">
+			<cfset html &= '<ul>' />
+			
+			<cfloop array="#group.options#" index="option">
+				<cfset html &= '<li><label><input type="radio" id="filter-' & arguments.filter.key & '-' & option.value & '" name="' & arguments.filter.key & '" value="' & option.value & '"' />
+				
+				<cfif option.value eq value>
+					<cfset html &= ' class="checked"' />
+				</cfif>
+				
+				<cfset html &= '>' & option.title & '</label></li>' />
+			</cfloop>
+			
+			<cfset html &= '</ul>' />
 		</cfloop>
 		
 		<cfreturn html />
