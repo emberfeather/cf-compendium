@@ -2,9 +2,11 @@
 	<cffunction name="init" access="public" returntype="component" output="false">
 		<cfargument name="i18n" type="component" required="true" />
 		<cfargument name="locale" type="string" default="en_US" />
+		<cfargument name="options" type="struct" default="#{}#" />
 		
 		<cfset variables.i18n = arguments.i18n />
 		<cfset variables.locale = arguments.locale />
+		<cfset variables.options = arguments.options />
 		<cfset variables.label = createObject('component', 'cf-compendium.inc.resource.i18n.label').init(arguments.i18n, arguments.locale) />
 		
 		<cfset variables.filters = [] />
@@ -32,7 +34,7 @@
 		<cfargument name="options" type="any" required="false" />
 		
 		<cfset var filter = {
-			label = variables.label.get(arguments.key),
+			label = variables.label.get(arguments.key, ''),
 			key = trim(arguments.key),
 			options = ''
 		} />
@@ -73,7 +75,11 @@
 						<cfreturn filterRadio(arguments.values, arguments.filter) />
 					</cfcase>
 					<cfdefaultcase>
-						<cfreturn filterSelect(arguments.values, arguments.filter) />
+						<cfif structKeyExists(variables.options, 'useListView') and variables.options.useListView>
+							<cfreturn filterList(arguments.values, arguments.filter) />
+						<cfelse>
+							<cfreturn filterSelect(arguments.values, arguments.filter) />
+						</cfif>
 					</cfdefaultcase>
 				</cfswitch>
 			<cfelse>
@@ -83,7 +89,11 @@
 						<cfreturn filterCheckbox(arguments.values, arguments.filter) />
 					</cfcase>
 					<cfdefaultcase>
-						<cfreturn filterSelect(arguments.values, arguments.filter) />
+						<cfif structKeyExists(variables.options, 'useListView') and variables.options.useListView>
+							<cfreturn filterList(arguments.values, arguments.filter) />
+						<cfelse>
+							<cfreturn filterSelect(arguments.values, arguments.filter) />
+						</cfif>s
 					</cfdefaultcase>
 				</cfswitch>
 			</cfif>
@@ -100,18 +110,53 @@
 		<cfset var option = '' />
 		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
-		<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		<cfif filter.label neq ''>
+			<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		</cfif>
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfloop array="#group.options#" index="option">
-				<cfset html &= '<label><input type="checkbox" name="' & arguments.filter.key & '" value="' & option.value & '"' />
+				<cfset html &= '<input type="checkbox" id="filter-' & arguments.filter.key & '" name="' & arguments.filter.key & '" value="' & option.value & '"' />
 				
 				<cfif option.value eq value>
 					<cfset html &= ' checked="checked"' />
 				</cfif>
 				
-				<cfset html &= ' /> ' & option.title & '</label>' />
+				<cfset html &= ' /> <label for="filter-' & arguments.filter.key & '">' & option.title & '</label>' />
 			</cfloop>
+		</cfloop>
+		
+		<cfreturn html />
+	</cffunction>
+	
+	<cffunction name="filterList" access="private" returntype="string" output="false">
+		<cfargument name="values" type="struct" required="true" />
+		<cfargument name="filter" type="struct" required="true" />
+		
+		<cfset var group = '' />
+		<cfset var html = '' />
+		<cfset var optGroups = arguments.filter.options.get() />
+		<cfset var option = '' />
+		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
+		
+		<cfif filter.label neq ''>
+			<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		</cfif>
+		
+		<cfloop array="#optGroups#" index="group">
+			<cfset html &= '<ul>' />
+			
+			<cfloop array="#group.options#" index="option">
+				<cfset html &= '<li><label><input type="radio" id="filter-' & arguments.filter.key & '-' & option.value & '" name="' & arguments.filter.key & '" value="' & option.value & '"' />
+				
+				<cfif option.value eq value>
+					<cfset html &= ' class="checked"' />
+				</cfif>
+				
+				<cfset html &= '>' & option.title & '</label></li>' />
+			</cfloop>
+			
+			<cfset html &= '</ul>' />
 		</cfloop>
 		
 		<cfreturn html />
@@ -127,17 +172,19 @@
 		<cfset var option = '' />
 		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
-		<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		<cfif filter.label neq ''>
+			<cfset html &= '<strong class="capitalize">' & filter.label & ':</strong> ' />
+		</cfif>
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfloop array="#group.options#" index="option">
-				<cfset html &= '<label><input type="radio" name="' & arguments.filter.key & '" value="' & option.value & '"' />
+				<cfset html &= '<input type="radio" id="filter-' & arguments.filter.key & '-' & option.value & '" name="' & arguments.filter.key & '" value="' & option.value & '"' />
 				
 				<cfif option.value eq value>
 					<cfset html &= ' checked="checked"' />
 				</cfif>
 				
-				<cfset html &= ' /> ' & option.title & '</label>' />
+				<cfset html &= ' /> <label for="filter-' & arguments.filter.key & '-' & option.value & '">' & option.title & '</label>' />
 			</cfloop>
 		</cfloop>
 		
@@ -154,7 +201,11 @@
 		<cfset var option = '' />
 		<cfset var value = ( structKeyExists(arguments.values, arguments.filter.key) ? arguments.values[arguments.filter.key] : '' ) />
 		
-		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <select name="' & arguments.filter.key & '">' />
+		<cfif filter.label neq ''>
+			<cfset html &= '<label class="capitalize" for="filter-' & arguments.filter.key & '"><strong>' & filter.label & ':</strong></label>' />
+		</cfif>
+		
+		<cfset html &= '<select id="filter-' & arguments.filter.key & '" name="' & arguments.filter.key & '">' />
 		
 		<cfloop array="#optGroups#" index="group">
 			<cfif group.label neq ''>
@@ -176,7 +227,7 @@
 			</cfif>
 		</cfloop>
 		
-		<cfset html &= '</select></label>' />
+		<cfset html &= '</select>' />
 		
 		<cfreturn html />
 	</cffunction>
@@ -197,9 +248,17 @@
 			</cfcase>
 		</cfswitch>
 		
-		<cfset html &= '<label class="capitalize"><strong>' & filter.label & ':</strong> <input type="' & type & '" name="' & arguments.filter.key & '" value="' & value & '" /></label>' />
+		<cfif filter.label neq ''>
+			<cfset html &= '<label for="filter-' & arguments.filter.key & '" class="capitalize"><strong>' & filter.label & ': </strong></label>' />
+		</cfif>
+		
+		<cfset html &= '<input id="filter-' & arguments.filter.key & '" type="' & type & '" name="' & arguments.filter.key & '" value="' & value & '" />' />
 		
 		<cfreturn html />
+	</cffunction>
+	
+	<cffunction name="getLabel" access="public" returntype="component" output="false">
+		<cfreturn variables.label />
 	</cffunction>
 	
 	<cffunction name="length" access="public" returntype="numeric" output="false">
@@ -236,7 +295,7 @@
 		</cfloop>
 		
 		<!--- Wrap with the filter div --->
-		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theUrl.getFilter() & '">' & html & '<input type="submit" value="' & variables.label.get(arguments.options.submit) & '"></form></div>' />
+		<cfset html = '<div class="filter"><form method="POST" action="' & arguments.theUrl.getFilter() & '">' & html & '<div class="submit"><input type="submit" value="' & variables.label.get(arguments.options.submit) & '" /></div></form></div>' />
 		
 		<cfreturn html />
 	</cffunction>

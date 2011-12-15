@@ -16,8 +16,15 @@
 * .ui-timepicker-div dl dd{ margin: -25px 10px 10px 65px; }
 * .ui-timepicker-div td { font-size: 90%; }
 */
-
-(function($) {
+(function(factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD Registration
+		define([ 'jquery', 'jqueryui' ], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function($) {
 
 $.extend($.ui, { timepicker: { version: "0.9.7" } });
 
@@ -1243,4 +1250,4 @@ function extendRemove(target, props) {
 $.timepicker = new Timepicker(); // singleton instance
 $.timepicker.version = "0.9.7";
 
-})(jQuery);
+}));
