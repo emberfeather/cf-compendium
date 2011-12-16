@@ -241,6 +241,12 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.validEmail('testing', 'te#chr(10)#st@test', '');
 	}
 	
+	public void function testValidEmail_invalid_domain_character() {
+		expectException('validation', 'Should have thrown an error. [invalid domain character]');
+		
+		variables.validator.validEmail('testing', 'test@somewhere\com', '');
+	}
+	
 	public void function testValidEmail_invalid_domain_short_1() {
 		expectException('validation', 'Should have thrown an error. [too short domain]');
 		
@@ -259,7 +265,7 @@ component extends="mxunit.framework.TestCase" {
 		variables.validator.validEmail('testing', 'test@.org', '');
 	}
 	
-	public void function testValidEmail_invalid_domain_long_() {
+	public void function testValidEmail_invalid_domain_long() {
 		expectException('validation', 'Should have thrown an error. [too long domain]');
 		
 		variables.validator.validEmail('testing', 'test@123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012.com', '');
