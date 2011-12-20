@@ -12,7 +12,15 @@
  * Requires:
  *     jQuery >= 1.5
  */
-(function($){
+(function(factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD Registration
+		define([ 'jquery' ], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function($){
 	$.wait = function(time) {
 		var dfd = $.Deferred();
 		
@@ -22,4 +30,4 @@
 		
 		return dfd;
 	};
-}(jQuery));
+}));

@@ -27,8 +27,14 @@ component extends="cf-compendium.inc.resource.utility.url" {
 				arguments.options.start = reReplace(arguments.options.start, '[/]*$', '');
 			}
 			
+			// Add a starting slash to the rewrite
 			if( left(currentLocation[arguments.options.rewriteBase], 1) != '/' ) {
 				currentLocation[arguments.options.rewriteBase] = '/' & currentLocation[arguments.options.rewriteBase];
+			}
+			
+			// Add a trailing slash to the rewrite
+			if( right(currentLocation[arguments.options.rewriteBase], 1) != '/' ) {
+				currentLocation[arguments.options.rewriteBase] &= '/';
 			}
 			
 			arguments.options.start &= currentLocation[arguments.options.rewriteBase];
@@ -36,14 +42,24 @@ component extends="cf-compendium.inc.resource.utility.url" {
 			arguments.options.keys = listDeleteAt(arguments.options.keys, locate);
 		}
 		
-		try {
-			return super.__get(argumentCollection = arguments);
-		} catch(any e) {
-			writeDump(var = currentLocation, label = 'Rewrite currentlocation');
-			writeDump(var = arguments.options.keys, label = 'Rewrite arguments.options.keys');
-			writeDump(var = variables.locations, label = 'Rewrite variables.locations');
-			writeDump(e);
-			abort;
+		return super.__get(argumentCollection = arguments);
+	}
+	
+	/**
+	 * Searches a location or the master for a specific variable.
+	 **/
+	private string function __search(string locationName = '', required string variableName) {
+		local.currentLocation = __findLocation(arguments.locationName);
+		
+		if(structKeyExists(local.currentLocation, arguments.variableName)) {
+			// Strip trailing slashes from the value of the rewrite base
+			if(variables.urlOptions.rewriteBase == arguments.variableName) {
+				local.currentLocation[arguments.variableName] = reReplace(local.currentLocation[arguments.variableName], '[/]*$', '');
+			}
+			
+			return local.currentLocation[arguments.variableName];
 		}
+		
+		return '';
 	}
 }

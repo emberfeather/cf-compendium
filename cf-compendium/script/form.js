@@ -3,7 +3,15 @@
  * 
  * Used to unobtrusively enhance the form experience for the user.
  */
-(function($) {
+(function(factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD Registration
+		define('cf-compendium/script/form', [ 'jquery' ], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function($) {
 	$(function() {
 		var elements = $('.form .element');
 		
@@ -66,12 +74,6 @@
 		
 		// Remove sortable filter
 		elements.end();
-		
-		// Make elastic textareas
-		$('.elastic', elements).elastic();
-		
-		// Make chosen selects
-		$('.chosen', elements).chosen();
 	});
 	
 	/**
@@ -269,4 +271,4 @@
 		
 		return number;
 	}
-}(jQuery));
+}));

@@ -298,7 +298,7 @@
 		<cfset defaults = {
 				'accept-charset' = '',
 				'action' = arguments.action,
-				'autocomplete' = true,
+				'autocomplete' = 'on',
 				'class' = '',
 				'enctype' = '',
 				'method' = 'POST',
@@ -440,7 +440,7 @@
 		<!--- hidden elements should not be shown --->
 		<cfif local.showLabel>
 			<!--- Start the tag --->
-			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType & ' ' & arguments.element.name & ' ' & arguments.element.elementClass & ' ' & (arguments.element.required ? 'required' : '') & '">' />
+			<cfset formatted = '<div class="element respect-float ' & arguments.element.elementType & ' ' & __cleanClass(arguments.element.name) & ' ' & arguments.element.elementClass & ' ' & (arguments.element.required ? 'required' : '') & '">' />
 			
 			<!--- Output the label --->
 			<cfif not isStruct(arguments.element.label)>
@@ -699,6 +699,16 @@
 	
 	<cffunction name="_toString" access="public" returntype="string" output="false">
 		<cfreturn toHtml() />
+	</cffunction>
+	
+	<cffunction name="__cleanClass" access="private" returntype="string" output="false">
+		<cfargument name="class" type="string" required="true" />
+		
+		<cfif len(arguments.class) gt 2 and right(arguments.class, 2) eq '[]'>
+			<cfset arguments.class = left(arguments.class, len(arguments.class) - 2) />
+		</cfif>
+		
+		<cfreturn arguments.class />
 	</cffunction>
 	
 	<!--- 
